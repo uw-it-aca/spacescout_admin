@@ -20,20 +20,32 @@ def csv_to_json(data):
                     location_data[entry] = current[entry]
                 elif entry == 'available_hours':
                     #assumes "M: 07:30-17:030, T: 07:30-17:30, etc" format
-                    days = current[entry].split(", ")
+                    days = current[entry]
+                    #remove (aut, wnt, spr) indicator in some entries
+                    if ")" in days:
+                        day_temp = days.split(")")
+                        days = day_temp[len(day_temp)-1]
+                    days = days.split(",")
                     weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-                    for j in range(len(days)):
-                        times = days[j].split(": ")
-                        #there is a very real possibility that stuff isn't in the perfect format.
-                        if len(times) == 2:
-                            times = times[1].split("-")
-                        else:
-                            times = times[0]
-                        hours[weekdays[j]] = times
-                #there needs to be an elif here for handling images, or images need to be skipped (as they are now)
+                    if len(days) <= 7:
+                        for j in range(len(days)):
+                            times = days[j].split(": ")
+                            times = times[len(times)-1].split("-")
+                            if len(times) == 2:
+                                hours[weekdays[j]] = [times]
+                elif entry == "type":
+                    spot_types = current[entry].split(", ")
+                    types = []
+                    for spot_type in spot_types:
+                        types.append(spot_type)
+                    spot_data[entry] = types
+                elif entry == "capacity":
+                    if current[entry] == "":
+                        current[entry] = 0
+                    spot_data[entry] = current[entry]
                 else:
                     spot_data[entry] = current[entry]
-            else:
+            elif entry != "images":
                 extended[entry] = current[entry]
         #Combine all the dictionaries and sub-dictionaries into one
         spot_data['extended_info'] = extended

@@ -6,6 +6,8 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 import csv
 import urllib2
+import urlparse
+import oauth2 as oauth
 
 #Why can't I just use a csrf token? IT'S A MYSTERY. So it's exempt.
 @csrf_exempt
@@ -24,15 +26,12 @@ def home(request):
             if docfile.content_type == 'text/csv':
                 data = csv.DictReader(docfile)
                 data = csv_to_json(data)
-                notice = data[0]
-                # XXX ON a scale of things that work, this is not one of them.
-                #post the data to spotseeker server
-#                request = urllib2.Request('%s/api/v1/spot/' % (settings.SS_WEB_SERVER_HOST), data=json.dumps(spot_data))
-#                request.add_header('Content-Type', 'application/json')
-#                opener = urllib2.build_opener(urllib2.HTTPHandler)
-                #import pdb; pdb.set_trace()
-                #url = opener.open(request)
 
+                for datum in data:
+                    consumer = oauth.Consumer(key="91201ec661d7bf71e1c346d91885256b99a80355", secret="618719f9c358028fa0dd3afd3af4d0dea07b12b5")
+                    client = oauth.Client(consumer)
+                    resp, content = client.request("http://kitkat.cac.washington.edu:8002/api/v1/spot", "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
+                    notice += str(datum)+"\n"
             else:
                 notice = "incorrect file type"
         else:
