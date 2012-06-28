@@ -30,7 +30,8 @@ def home(request):
                 for datum in data:
                     consumer = oauth.Consumer(key="91201ec661d7bf71e1c346d91885256b99a80355", secret="618719f9c358028fa0dd3afd3af4d0dea07b12b5")
                     client = oauth.Client(consumer)
-                    resp, content = client.request("http://kitkat.cac.washington.edu:8002/api/v1/spot", "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
+                    url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
+                    resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
                     notice += str(datum)+"\n"
             else:
                 notice = "incorrect file type"
