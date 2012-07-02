@@ -32,7 +32,10 @@ def home(request):
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
-                    notice += str(datum)+"\n"
+                    if content:
+                        notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content) 
+                    else:
+                        notice += "success POST: \t%s\n" % (datum)
             else:
                 notice = "incorrect file type"
         else:

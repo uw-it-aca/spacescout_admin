@@ -5,7 +5,7 @@ def csv_to_json(data):
     for current in data:
         #create a dictionary of the data that later gets json'ed 
         #the non_extended array is a list of the items the server specifically asks for. 
-        non_extended = ["id", "name", "type", "longitude", "latitude", "height_from_sea_level", "building_name", "floor", "room_number", "description", "capacity", "display_access_restrictions", "available_hours", "manager", "organization"]
+        non_extended = ["id", "name", "type", "capacity", "display_access_restrictions", "available_hours", "manager", "organization"]
         location = ["longitude", "latitude", "height_from_sea_level", "building_name", "floor", "room_number", "description"]
         spot_data = {}
         extended = {} 
@@ -35,12 +35,10 @@ def csv_to_json(data):
                     spot_data[entry] = types
                 else:
                     spot_data[entry] = current[entry]
+            #images are ignored for now.
             elif entry != "images":
-                if entry == "noise_level":
-                    if current[entry] == "":
-                        extended[entry] = "variable"
-                else:
-                    extended[entry] = current[entry]
+                extended[entry] = current[entry]
+            
         #Combine all the dictionaries and sub-dictionaries into one
         spot_data['extended_info'] = extended
         spot_data['available_hours'] = hours
