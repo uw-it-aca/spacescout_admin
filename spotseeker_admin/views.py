@@ -28,7 +28,7 @@ def home(request):
                 data = csv_to_json(data)
 
                 for datum in data:
-                    consumer = oauth.Consumer(key="91201ec661d7bf71e1c346d91885256b99a80355", secret="618719f9c358028fa0dd3afd3af4d0dea07b12b5")
+                    consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
