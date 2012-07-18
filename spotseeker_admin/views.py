@@ -41,7 +41,7 @@ def home(request):
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
-                    resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
+                    resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
                     if content:
                         c = json.loads(content)
                         keys = c.keys()
