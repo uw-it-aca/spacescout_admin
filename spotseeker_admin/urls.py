@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-
-urlpatterns = patterns('',
-    url(r'^$', 'spotseeker_admin.views.home'),
+urlpatterns = patterns('spotseeker_admin.views',
+    url(r'dataupload/$', 'upload'),
+    #url(r'datadownload/$', 'getidfile'),
 )
