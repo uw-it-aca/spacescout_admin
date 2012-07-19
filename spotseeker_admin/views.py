@@ -18,7 +18,6 @@ import urlparse
 import time
 import oauth2 as oauth
 import json
-import pdb
 
 #Why can't I just use a csrf token? IT'S A MYSTERY. So it's exempt.
 @csrf_exempt
@@ -46,7 +45,7 @@ def upload(request):
                 data = csv_to_json(data)
 
                 for datum in data:
-                    d = json.loads(datum)
+                    info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                     images=json.loads(datum)['images']
                     #for image in images:
@@ -57,21 +56,21 @@ def upload(request):
                         c = json.loads(content)
                         keys = c.keys()
                         val = c[keys[0]]
-                        if 'name' in d.keys():
+                        if 'name' in info.keys():
                             n = 'name'
                         else:
                             n='NO NAME'
                         notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
                         failurecount += 1
                         hold = {
-                            'fname': d[n],
+                            'fname': info[n],
                             'flocation': keys[0],
                             'freason': val[0],
                         }
                         failure_desc.append(hold)
                     else:
                         notice += "success POST: \t%s\n" % (datum)
-                        success_names.append(" %s," % (d['name']))
+                        success_names.append(" %s," % (info['name']))
                         successcount += 1
                         #this is where most of my changes start
                         url1 =resp['location']+'/image'
