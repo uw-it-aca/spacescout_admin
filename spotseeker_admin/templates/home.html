@@ -1,11 +1,31 @@
 <h1>Add New Spots</h1>
+{% if displaysf %}
+<p>{{failures}}</p>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Error Location</th>
+        <th>Error Message</th>
+    </tr>
+    {% for fdesc in failure_descs %}
+    <tr>
+        <td>{{fdesc.fname}}</td>
+        <td>{{fdesc.flocation}}</td>
+        <td>{{fdesc.freason}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<p>{{successes}}
+{% for success_name in success_names %}
+{{success_name}}
+{% endfor %}
+</p>
+{% else %}
 <pre>
 {{ notice }}
 </pre>
-
+{% endif %}
 <form action="" method="POST" enctype="multipart/form-data">
     {{ form.as_p }}
     <input type="submit" value="Submit" />
 </form>
-
-

@@ -35,8 +35,13 @@ def csv_to_json(data):
                     spot_data[entry] = types
                 else:
                     spot_data[entry] = current[entry]
-            #images are ignored for now.
-            elif entry != "images":
+            elif entry == "images":
+                spot_images=current[entry].split(", ")
+                images =[]
+                for image in spot_images:
+                    images.append(image)
+                spot_data[entry]=images
+            else:
                 extended[entry] = current[entry]
             
         #Combine all the dictionaries and sub-dictionaries into one
