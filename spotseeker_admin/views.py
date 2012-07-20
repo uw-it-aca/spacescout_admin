@@ -56,7 +56,7 @@ def upload(request):
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
                     if content:
                         if 'name' in info.keys():
-                            name = 'name'
+                            name = info['name']
                         else:
                             name = 'NO NAME'
 
@@ -72,7 +72,7 @@ def upload(request):
 
                         failurecount += 1
                         hold = {
-                            'fname': info[name],
+                            'fname': name,
                             'flocation': flocation,
                             'freason': freason,
                         }
@@ -111,8 +111,12 @@ def upload(request):
                                 response = urllib2.urlopen(req)
                             except:
                                 warningcount += 1
+                                if info["name"]:
+                                    name = info["name"]
+                                else:
+                                    name = "NO NAME"
                                 hold = {
-                                    'fname': info["name"],
+                                    'fname': name,
                                     'flocation': image,
                                     'freason': "invalid image",
                                 }
