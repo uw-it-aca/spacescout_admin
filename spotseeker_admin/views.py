@@ -50,8 +50,11 @@ def upload(request):
                 for datum in data:
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-                    images=json.loads(datum)['images']
-                    #for image in images:
+                    try:    
+                        images=json.loads(datum)['images']
+                    except:
+                        images = []
+
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
@@ -88,7 +91,6 @@ def upload(request):
                         for image in images:
                             try:
                                 img=urllib2.urlopen(image)
-                                
                                 f=open('image.jpg', 'w')
                                 f.write(img.read())
                                 f.close()
