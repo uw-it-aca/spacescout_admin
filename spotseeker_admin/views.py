@@ -54,14 +54,14 @@ def upload(request):
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
                     if content:
                         if 'name' in info.keys():
-                            n = 'name'
+                            name = 'name'
                         else:
-                            n='NO NAME'
+                            name = 'NO NAME'
 
                         try:
-                            c = json.loads(content)
-                            flocation = c.keys()[0]
-                            freason = c[keys[0]][0]
+                            error = json.loads(content)
+                            flocation = error.keys()[0]
+                            freason = error[flocation]
                             notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
                         except ValueError:
                             notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
@@ -70,7 +70,7 @@ def upload(request):
 
                         failurecount += 1
                         hold = {
-                            'fname': info[n],
+                            'fname': info[name],
                             'flocation': flocation,
                             'freason': freason,
                         }
