@@ -31,6 +31,8 @@ def upload(request):
     success_names = []
     failurecount = 0
     failure_desc = []
+    warningcount = 0
+    warning_desc = []
     failures = ''
     successes = ''
     displaysf = False
@@ -108,12 +110,19 @@ def upload(request):
                             try:
                                 response = urllib2.urlopen(req)
                             except:
-                                pass
+                                warningcount += 1
+                                hold = {
+                                    'fname': info["name"],
+                                    'flocation': image,
+                                    'freason': "invalid image",
+                                }
+                                warning_desc.append(hold)
                         #might need to use https://gist.github.com/1558113 instead for the oauth request
                         #content_type = 'multipart/form-data;' #boundary=%s' % BOUNDARY
                         #oauthrequest-i have it commented for mine since i was testing poster
                         #resp, content = client.request(url, "POST", body=, headers)
                 failures = "%d failed POSTs:" % (failurecount)
+                warnings = "%d warnings:" % (warningcount)
                 successes = "%d successful POSTs:" % (successcount)
                 displaysf = True                       
             else:
@@ -128,6 +137,8 @@ def upload(request):
         'notice': notice,
         'failures': failures,
         'failure_descs': failure_desc,
+        'warnings': warnings,
+        'warning_descs': warning_desc,
         'successes': successes,
         'success_names': success_names,
         'form': form,

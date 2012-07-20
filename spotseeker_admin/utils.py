@@ -13,6 +13,7 @@ def csv_to_json(data):
         location_data = {}
         for entry in current:
             current[entry] = current[entry].replace("\"", "")
+            #Don't send empty values
             if current[entry]:
                 #Handle location dict
                 if entry in location:
