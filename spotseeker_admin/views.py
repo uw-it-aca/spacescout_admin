@@ -35,6 +35,7 @@ def upload(request):
     warning_desc = []
     failures = ''
     successes = ''
+    warnings = ''
     displaysf = False
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
