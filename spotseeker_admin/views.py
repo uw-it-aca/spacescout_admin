@@ -86,29 +86,30 @@ def upload(request):
                         url1 =resp['location']+'/image'
                         #there is no language for if the url doesn't work
                         for image in images:
-                            img=urllib2.urlopen(image)
-                            f=open('image.jpg', 'w')
-                            f.write(img.read())
-                            f.close()
-                            f=open('image.jpg', 'rb')
-                            #jury rigging the oauth_signature
-                            resp, content=client.request(url, 'GET')
-                            i=resp['content-location'].find('oauth_signature=')+16
-                            signature=''
-                            while resp['content-location'][i]:
-                                signature+=resp['content-location'][i]
-                                try:
-                                    resp['content-location'][i+1]
-                                    i+=1
-                                except:
-                                    break
-                            body={"description":"yay","oauth_signature":signature,"oauth_signature_method":"HMAC-SHA1", "oauth_timestamp":int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key":settings.SS_WEB_OAUTH_KEY, "image":f}
-                            #poster code
-                            register_openers()
-                            datagen, headers=multipart_encode(body)
-                            headers["XOAUTH_USER"]="%s" % request.user
-                            req = urllib2.Request(url1, datagen, headers)
                             try:
+                                img=urllib2.urlopen(image)
+                                
+                                f=open('image.jpg', 'w')
+                                f.write(img.read())
+                                f.close()
+                                f=open('image.jpg', 'rb')
+                                #jury rigging the oauth_signature
+                                resp, content=client.request(url, 'GET')
+                                i=resp['content-location'].find('oauth_signature=')+16
+                                signature=''
+                                while resp['content-location'][i]:
+                                    signature+=resp['content-location'][i]
+                                    try:
+                                        resp['content-location'][i+1]
+                                        i+=1
+                                    except:
+                                        break
+                                body={"description":"yay","oauth_signature":signature,"oauth_signature_method":"HMAC-SHA1", "oauth_timestamp":int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key":settings.SS_WEB_OAUTH_KEY, "image":f}
+                                #poster code
+                                register_openers()
+                                datagen, headers=multipart_encode(body)
+                                headers["XOAUTH_USER"]="%s" % request.user
+                                req = urllib2.Request(url1, datagen, headers)
                                 response = urllib2.urlopen(req)
                             except:
                                 warningcount += 1
