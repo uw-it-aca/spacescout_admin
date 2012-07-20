@@ -105,7 +105,10 @@ def upload(request):
                             datagen, headers=multipart_encode(body)
                             headers["XOAUTH_USER"]="%s" % request.user
                             req = urllib2.Request(url1, datagen, headers)
-                            response = urllib2.urlopen(req)
+                            try:
+                                response = urllib2.urlopen(req)
+                            except:
+                                pass
                         #might need to use https://gist.github.com/1558113 instead for the oauth request
                         #content_type = 'multipart/form-data;' #boundary=%s' % BOUNDARY
                         #oauthrequest-i have it commented for mine since i was testing poster
