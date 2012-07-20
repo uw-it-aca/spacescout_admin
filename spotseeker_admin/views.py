@@ -53,19 +53,26 @@ def upload(request):
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
                     resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
                     if content:
-                        c = json.loads(content)
-                        keys = c.keys()
-                        val = c[keys[0]]
                         if 'name' in info.keys():
                             n = 'name'
                         else:
                             n='NO NAME'
-                        notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
+
+                        try:
+                            c = json.loads(content)
+                            flocation = c.keys()[0]
+                            freason = c[keys[0]][0]
+                            notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
+                        except ValueError:
+                            notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
+                            flocation = resp['status']
+                            freason = content
+
                         failurecount += 1
                         hold = {
                             'fname': info[n],
-                            'flocation': keys[0],
-                            'freason': val[0],
+                            'flocation': flocation,
+                            'freason': freason,
                         }
                         failure_desc.append(hold)
                     else:

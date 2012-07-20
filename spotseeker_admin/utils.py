@@ -13,8 +13,10 @@ def csv_to_json(data):
         location_data = {}
         for entry in current:
             current[entry] = current[entry].replace("\"", "")
+            #Handle location dict
             if entry in location:
                 location_data[entry] = current[entry]
+            #Handle main dict
             elif entry in non_extended:
                 if entry == 'available_hours':
                     #assumes "M: 07:30-17:030, T: 07:30-17:30, etc" format
@@ -35,15 +37,16 @@ def csv_to_json(data):
                     spot_data[entry] = types
                 else:
                     spot_data[entry] = current[entry]
+            #Handle images
             elif entry == "images":
-                spot_images=current[entry].split(", ")
-                images =[]
+                spot_images = current[entry].split(", ")
+                images = []
                 for image in spot_images:
                     images.append(image)
-                spot_data[entry]=images
+                spot_data[entry] = images
+            #Handle extended info
             else:
-                extended[entry] = current[entry]
-            
+                    extended[entry] = current[entry]
         #Combine all the dictionaries and sub-dictionaries into one
         spot_data['extended_info'] = extended
         spot_data['available_hours'] = hours

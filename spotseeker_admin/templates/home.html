@@ -11,7 +11,7 @@
     <tr>
         <td>{{fdesc.fname}}</td>
         <td>{{fdesc.flocation}}</td>
-        <td>{{fdesc.freason}}</td>
+        <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
     </tr>
     {% endfor %}
 </table>
