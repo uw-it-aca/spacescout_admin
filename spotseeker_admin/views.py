@@ -1,5 +1,5 @@
 from spotseeker_admin.forms import UploadFileForm
-from spotseeker_admin.utils import csv_to_json
+from spotseeker_admin.utils import file_to_json
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
@@ -10,10 +10,6 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 import mimetools
 import mimetypes
-import json
-import csv
-import urllib2
-import urllib
 import urlparse
 import time
 import oauth2 as oauth
@@ -26,7 +22,7 @@ def upload(request):
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
 
-    notice = "Upload a spreadsheet in CSV format"#\n\n%s" % request
+    notice = "Upload a spreadsheet in CSV or XLS format"
     successcount = 0
     success_names = []
     failurecount = 0
@@ -42,11 +38,8 @@ def upload(request):
         if form.is_valid():
             docfile = request.FILES['file']
             notice = ""
-            #is_valid doesn't care what type of file, so...
-            if docfile.content_type == 'text/csv':
-                data = csv.DictReader(docfile)
-                data = csv_to_json(data)
-
+            try:
+                data = file_to_json(docfile)
                 for datum in data:
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
@@ -133,10 +126,8 @@ def upload(request):
                 warnings = "%d warnings:" % (warningcount)
                 successes = "%d successful POSTs:" % (successcount)
                 displaysf = True                       
-            else:
-                notice = "incorrect file type"
-        else:
-            notice = "invalid form"
+            except TypeError:
+                notice = "invalid file type %s. Please upload csv or xls spreadsheet" % (docfile.content_type)
     else:
         form = UploadFileForm()
 
