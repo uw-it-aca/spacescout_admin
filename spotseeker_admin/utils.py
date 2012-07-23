@@ -1,6 +1,24 @@
 import json
+import csv
+import xlrd
 
-def csv_to_json(data): 
+def file_to_json(docfile): 
+    if docfile.content_type == 'text/csv':
+        data = csv.DictReader(docfile)
+    elif docfile.content_type == 'application/vnd.ms-excel':
+        #convert to dict
+        workbook = xlrd.open_workbook(file_contents=docfile.read())
+        sheet = workbook.sheet_by_index(0)
+        keys = sheet.row_values(0)
+        data = []
+        for row in range(1,sheet.nrows):
+            items = sheet.row_values(row)
+            data_row = {}
+            for item in range(len(items)):
+                data_row[keys[item]] = str(items[item])
+            data.append(data_row)
+    else:
+        raise TypeError("Invalid file type %s" % (docfile.content_type()))
     requests = []
     for current in data:
         #create a dictionary of the data that later gets json'ed 
