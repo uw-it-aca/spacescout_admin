@@ -10,6 +10,7 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 import mimetools
 import mimetypes
+import urllib2
 import urlparse
 import time
 import oauth2 as oauth
@@ -61,9 +62,7 @@ def upload(request):
                             error = json.loads(content)
                             flocation = error.keys()[0]
                             freason = error[flocation]
-                            notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
                         except ValueError:
-                            notice += "\nfailed POST:\t%s\n\t\t%s\n\n" % (datum, content)
                             flocation = resp['status']
                             freason = content
 
@@ -75,7 +74,6 @@ def upload(request):
                         }
                         failure_desc.append(hold)
                     else:
-                        notice += "success POST: \t%s\n" % (datum)
                         success_names.append(" %s," % (info['name']))
                         successcount += 1
                         #this is where most of my changes start
