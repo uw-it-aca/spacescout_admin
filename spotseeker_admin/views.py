@@ -6,6 +6,7 @@ from django.conf import settings
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.encoding import smart_unicode
+from django.contrib.auth.decorators import login_required
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 import mimetools
@@ -17,6 +18,7 @@ import oauth2 as oauth
 import json
 
 
+@login_required
 def upload(request):
     # Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):

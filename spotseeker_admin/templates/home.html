@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1>Add New Spots</h1>
 {% if displaysf %}
 <p>{{failures}}</p>
@@ -44,3 +47,4 @@
     {{ form.as_p }}
     <input type="submit" value="Submit" />
 </form>
+{% endblock %}
