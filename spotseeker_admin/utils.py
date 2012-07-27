@@ -2,7 +2,8 @@ import json
 import csv
 import xlrd
 
-def file_to_json(docfile): 
+
+def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
         data = csv.DictReader(docfile)
     elif docfile.content_type == 'application/vnd.ms-excel':
@@ -11,7 +12,7 @@ def file_to_json(docfile):
         sheet = workbook.sheet_by_index(0)
         keys = sheet.row_values(0)
         data = []
-        for row in range(1,sheet.nrows):
+        for row in range(1, sheet.nrows):
             items = sheet.row_values(row)
             data_row = {}
             for item in range(len(items)):
@@ -21,12 +22,12 @@ def file_to_json(docfile):
         raise TypeError("Invalid file type %s" % (docfile.content_type()))
     requests = []
     for current in data:
-        #create a dictionary of the data that later gets json'ed 
-        #the non_extended array is a list of the items the server specifically asks for. 
+        #create a dictionary of the data that later gets json'ed
+        #the non_extended array is a list of the items the server specifically asks for.
         non_extended = ["id", "name", "type", "capacity", "display_access_restrictions", "available_hours", "manager", "organization"]
         location = ["longitude", "latitude", "height_from_sea_level", "building_name", "floor", "room_number", "description"]
         spot_data = {}
-        extended = {} 
+        extended = {}
         hours = {}
         location_data = {}
         for entry in current:
@@ -34,6 +35,7 @@ def file_to_json(docfile):
             #Don't send empty values
             if current[entry]:
                 #Handle location dict
+                current[entry] = current[entry].decode('utf-8')
                 if entry in location:
                     location_data[entry] = current[entry]
                 #Handle main dict
@@ -46,7 +48,7 @@ def file_to_json(docfile):
                         if len(days) <= 7:
                             for j in range(len(days)):
                                 times = days[j].split(": ")
-                                times = times[len(times)-1].split("-")
+                                times = times[len(times) - 1].split("-")
                                 if len(times) == 2:
                                     hours[weekdays[j]] = [times]
                     elif entry == "type":
