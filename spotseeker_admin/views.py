@@ -11,10 +11,12 @@ from poster.streaminghttp import register_openers
 import mimetools
 import mimetypes
 import urllib2
+import urllib
+import oauth2 as oauth
 import urlparse
 import time
-import oauth2 as oauth
 import json
+
 
 #Why can't I just use a csrf token? IT'S A MYSTERY. So it's exempt.
 @csrf_exempt
@@ -42,17 +44,47 @@ def upload(request):
             try:
                 data = file_to_json(docfile)
                 for datum in data:
+                    spot_id = datum["id"]
+                    datum = datum["data"]
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-                    try:    
-                        images=json.loads(datum)['images']
+                    try:
+                        images = json.loads(datum)['images']
                     except:
                         images = []
 
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
-                    resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
-                    if content:
+
+                    spot_headers = {"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
+                    spot_url = url
+                    method = 'POST'
+                    #use PUT when spot id is prodived to update the spot
+                    if spot_id:
+                        spot_url = "%s/%s" % (url, spot_id)
+                        method = 'PUT'
+
+                        #get the existing spot for its etag
+                        resp, content = client.request(spot_url, 'GET')
+                        if resp['status'] != '200':
+                            failurecount += 1
+                            if 'name' in info.keys():
+                                name = info['name']
+                            else:
+                                name = 'NO NAME'
+                            hold = {
+                                'fname': name,
+                                'flocation': 'id',
+                                'freason': 'id not found, spot does not exist',
+                            }
+                            failure_desc.append(hold)
+                            break
+                        etag = resp['etag']
+                        spot_headers['If-Match'] = etag
+                    resp, content = client.request(spot_url, method, datum, headers=spot_headers)
+
+                    #Responses 200 and 201 mean you done good.
+                    if resp['status'] != '200' and resp['status'] != '201':
                         if 'name' in info.keys():
                             name = info['name']
                         else:
@@ -66,6 +98,7 @@ def upload(request):
                             flocation = resp['status']
                             freason = content
 
+                        #Add spot attempt to the list of failures
                         failurecount += 1
                         hold = {
                             'fname': name,
@@ -76,32 +109,30 @@ def upload(request):
                     else:
                         success_names.append(" %s," % (info['name']))
                         successcount += 1
-                        #this is where most of my changes start
-                        url1 =resp['location']+'/image'
+
+                        #jury rigging the oauth_signature
+                        consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+                        client = oauth.Client(consumer)
+                        resp, content = client.request(url, 'GET')
+                        i = resp['content-location'].find('oauth_signature=')
+                        i += len('oauth_signature=')
+                        signature = resp['content-location'][i:]
+
+                        url1 = url + '/image'
                         #there is no language for if the url doesn't work
                         for image in images:
                             try:
-                                img=urllib2.urlopen(image)
-                                f=open('image.jpg', 'w')
+                                img = urllib2.urlopen(image)
+                                f = open('image.jpg', 'w')
                                 f.write(img.read())
                                 f.close()
-                                f=open('image.jpg', 'rb')
-                                #jury rigging the oauth_signature
-                                resp, content=client.request(url, 'GET')
-                                i=resp['content-location'].find('oauth_signature=')+16
-                                signature=''
-                                while resp['content-location'][i]:
-                                    signature+=resp['content-location'][i]
-                                    try:
-                                        resp['content-location'][i+1]
-                                        i+=1
-                                    except:
-                                        break
-                                body={"description":"yay","oauth_signature":signature,"oauth_signature_method":"HMAC-SHA1", "oauth_timestamp":int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key":settings.SS_WEB_OAUTH_KEY, "image":f}
+                                f = open('image.jpg', 'rb')
+
+                                body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
                                 #poster code
                                 register_openers()
-                                datagen, headers=multipart_encode(body)
-                                headers["XOAUTH_USER"]="%s" % request.user
+                                datagen, headers = multipart_encode(body)
+                                headers["XOAUTH_USER"] = "%s" % request.user
                                 req = urllib2.Request(url1, datagen, headers)
                                 response = urllib2.urlopen(req)
                             except:
@@ -123,7 +154,7 @@ def upload(request):
                 failures = "%d failed POSTs:" % (failurecount)
                 warnings = "%d warnings:" % (warningcount)
                 successes = "%d successful POSTs:" % (successcount)
-                displaysf = True                       
+                displaysf = True
             except TypeError:
                 notice = "invalid file type %s. Please upload csv or xls spreadsheet" % (docfile.content_type)
     else:
@@ -140,7 +171,8 @@ def upload(request):
         'success_names': success_names,
         'form': form,
     }
-    return render_to_response('home.html', args)#, context_instance=RequestContext(request))
+    return render_to_response('home.html', args)
+
 #previous work that is not ready to be used
 '''
 @csrf_exempt
@@ -156,8 +188,8 @@ def getidfile(request):
         resp, content=client.request(url, "GET", headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
         if content:
             spots=json.loads(content)
-            response = HttpResponse(mimetype='text/csv') 
-            response['Content-Disposition'] = "attachment; filename=spot_data.csv" 
+            response = HttpResponse(mimetype='text/csv')
+            response['Content-Disposition'] = "attachment; filename=spot_data.csv"
             f=csv.writer(response)
             #extended info isn't the same for all. Need to build up a dict of all extended info keys
             f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager']+ spots[1]['extended_info'].keys() + ["height_from_sea_level", "capacity", "display_acess_restrictions", "type", 'available_hours'])
@@ -172,8 +204,8 @@ def getidfile(request):
                     else:
                         types+=', '+Type
                     count=1
-                count1=0 
-                for day in days:  
+                count1=0
+                for day in days:
                     try:
                         if count1 == 0:
                             if day == "thursday" or day == "saturday" or day == "sunday":
@@ -184,12 +216,12 @@ def getidfile(request):
                             if day == "thursday" or day == "saturday" or day == "sunday":
                                 available_hours+=', '+day[0]+day[1]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
                             else:
-                                available_hours+=', '+day[0]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
+                                available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     except:
                         pass
-                    count1=1
-                available_hours=smart_unicode(available_hours)
-                types=smart_unicode(available_hours)
+                    count1 = 1
+                available_hours = smart_unicode(available_hours)
+                types = smart_unicode(available_hours)
                 f.writerow([spot['id'], spot['name'], spot['location']['room_number'], spot['location']['floor'], spot['location']['building_name'], spot['location']['latitude'], spot['location']['longitude'], spot['organization'], spot['manager']] + spot['extended_info'].values() + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'], types, available_hours])
             return response
     return render_to_response('getidfile.html')'''
