@@ -1,14 +1,15 @@
 import json
 
-def csv_to_json(data): 
+
+def csv_to_json(data):
     requests = []
     for current in data:
-        #create a dictionary of the data that later gets json'ed 
-        #the non_extended array is a list of the items the server specifically asks for. 
+        #create a dictionary of the data that later gets json'ed
+        #the non_extended array is a list of the items the server specifically asks for.
         non_extended = ["id", "name", "type", "capacity", "display_access_restrictions", "available_hours", "manager", "organization"]
         location = ["longitude", "latitude", "height_from_sea_level", "building_name", "floor", "room_number", "description"]
         spot_data = {}
-        extended = {} 
+        extended = {}
         hours = {}
         location_data = {}
         for entry in current:
@@ -16,6 +17,7 @@ def csv_to_json(data):
             #Don't send empty values
             if current[entry]:
                 #Handle location dict
+                current[entry] = current[entry].decode('utf-8')
                 if entry in location:
                     location_data[entry] = current[entry]
                 #Handle main dict
@@ -28,7 +30,7 @@ def csv_to_json(data):
                         if len(days) <= 7:
                             for j in range(len(days)):
                                 times = days[j].split(": ")
-                                times = times[len(times)-1].split("-")
+                                times = times[len(times) - 1].split("-")
                                 if len(times) == 2:
                                     hours[weekdays[j]] = [times]
                     elif entry == "type":

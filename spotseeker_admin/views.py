@@ -19,6 +19,7 @@ import time
 import oauth2 as oauth
 import json
 
+
 #Why can't I just use a csrf token? IT'S A MYSTERY. So it's exempt.
 @csrf_exempt
 def upload(request):
@@ -26,7 +27,7 @@ def upload(request):
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
 
-    notice = "Upload a spreadsheet in CSV format"#\n\n%s" % request
+    notice = "Upload a spreadsheet in CSV format"  # \n\n%s" % request
     successcount = 0
     success_names = []
     failurecount = 0
@@ -50,14 +51,14 @@ def upload(request):
                 for datum in data:
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-                    try:    
-                        images=json.loads(datum)['images']
+                    try:
+                        images = json.loads(datum)['images']
                     except:
                         images = []
 
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
-                    resp, content = client.request(url, "POST", datum, headers={ "XOAUTH_USER":"%s" % request.user, "Content-Type":"application/json", "Accept":"application/json" })
+                    resp, content = client.request(url, "POST", datum, headers={"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"})
                     if content:
                         if 'name' in info.keys():
                             name = info['name']
@@ -86,31 +87,31 @@ def upload(request):
                         success_names.append(" %s," % (info['name']))
                         successcount += 1
                         #this is where most of my changes start
-                        url1 =resp['location']+'/image'
+                        url1 = resp['location'] + '/image'
                         #there is no language for if the url doesn't work
                         for image in images:
                             try:
-                                img=urllib2.urlopen(image)
-                                f=open('image.jpg', 'w')
+                                img = urllib2.urlopen(image)
+                                f = open('image.jpg', 'w')
                                 f.write(img.read())
                                 f.close()
-                                f=open('image.jpg', 'rb')
+                                f = open('image.jpg', 'rb')
                                 #jury rigging the oauth_signature
-                                resp, content=client.request(url, 'GET')
-                                i=resp['content-location'].find('oauth_signature=')+16
-                                signature=''
+                                resp, content = client.request(url, 'GET')
+                                i = resp['content-location'].find('oauth_signature=') + 16
+                                signature = ''
                                 while resp['content-location'][i]:
-                                    signature+=resp['content-location'][i]
+                                    signature += resp['content-location'][i]
                                     try:
-                                        resp['content-location'][i+1]
-                                        i+=1
+                                        resp['content-location'][i + 1]
+                                        i += 1
                                     except:
                                         break
-                                body={"description":"yay","oauth_signature":signature,"oauth_signature_method":"HMAC-SHA1", "oauth_timestamp":int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key":settings.SS_WEB_OAUTH_KEY, "image":f}
+                                body = {"oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
                                 #poster code
                                 register_openers()
-                                datagen, headers=multipart_encode(body)
-                                headers["XOAUTH_USER"]="%s" % request.user
+                                datagen, headers = multipart_encode(body)
+                                headers["XOAUTH_USER"] = "%s" % request.user
                                 req = urllib2.Request(url1, datagen, headers)
                                 response = urllib2.urlopen(req)
                             except:
@@ -132,7 +133,7 @@ def upload(request):
                 failures = "%d failed POSTs:" % (failurecount)
                 warnings = "%d warnings:" % (warningcount)
                 successes = "%d successful POSTs:" % (successcount)
-                displaysf = True                       
+                displaysf = True
             else:
                 notice = "incorrect file type"
         else:
@@ -151,9 +152,9 @@ def upload(request):
         'success_names': success_names,
         'form': form,
     }
-    return render_to_response('home.html', args)#, context_instance=RequestContext(request))
-#previous work that is not ready to be used
-'''
+    return render_to_response('home.html', args)  # , context_instance=RequestContext(request))
+
+
 @csrf_exempt
 def getidfile(request):
     # Required settings for the client
@@ -161,46 +162,59 @@ def getidfile(request):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
     if request.method == 'POST':
         #dictwriter maybe?
-        consumer = oauth.Consumer(key="91201ec661d7bf71e1c346d91885256b99a80355", secret="618719f9c358028fa0dd3afd3af4d0dea07b12b5")
+        consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
         client = oauth.Client(consumer)
         url = "%s/api/v1/spot/?center_latitude=47.653835&center_longitude=-122.307809&distance=400000" % settings.SS_WEB_SERVER_HOST
-        resp, content=client.request(url, "GET", headers={ "XOAUTH_USER":"mreeve", "Content-Type":"application/json", "Accept":"application/json" })
+        resp, content = client.request(url, "GET", headers={"XOAUTH_USER": "mreeve", "Content-Type": "application/json", "Accept": "application/json"})
         if content:
-            spots=json.loads(content)
-            response = HttpResponse(mimetype='text/csv') 
-            response['Content-Disposition'] = "attachment; filename=spot_data.csv" 
-            f=csv.writer(response)
+            spots = json.loads(content)
+            response = HttpResponse(mimetype='text/csv')
+            response['Content-Disposition'] = "attachment; filename=spot_data.csv"
+            f = csv.writer(response)
             #extended info isn't the same for all. Need to build up a dict of all extended info keys
-            f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager']+ spots[1]['extended_info'].keys() + ["height_from_sea_level", "capacity", "display_acess_restrictions", "type", 'available_hours'])
+            extended = []
             for spot in spots:
-                days=["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
-                available_hours=''
-                types=''
-                count=0
+                for info in spot['extended_info']:
+                    if not info in extended:
+                        extended.append(info.encode('utf-8'))
+            f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_acess_restrictions", "type", 'available_hours'])
+            for spot in spots:
+                days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
+                available_hours = ''
+                types = ''
+                count = 0
+                extended_info = []
+                for info in extended:
+                    info = info.decode('utf-8')
+                    try:
+                        extended_info.append(spot['extended_info'][info])
+                    except:
+                        extended_info.append('')
                 for Type in spot['type']:
-                    if count==0:
-                        types+=Type
+                    if count == 0:
+                        types += Type
                     else:
-                        types+=', '+Type
-                    count=1
-                count1=0 
-                for day in days:  
+                        types += ', ' + Type
+                    count = 1
+                count1 = 0
+                for day in days:
                     try:
                         if count1 == 0:
                             if day == "thursday" or day == "saturday" or day == "sunday":
-                                available_hours+=day[0]+day[1]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
+                                available_hours += day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                             else:
-                                available_hours+=day[0]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
+                                available_hours += day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                         else:
                             if day == "thursday" or day == "saturday" or day == "sunday":
-                                available_hours+=', '+day[0]+day[1]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
+                                available_hours += ', ' + day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                             else:
-                                available_hours+=', '+day[0]+': '+spot['available_hours'][day][0][0]+'-'+spot['available_hours'][day][0][1]
+                                available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     except:
                         pass
-                    count1=1
-                available_hours=smart_unicode(available_hours)
-                types=smart_unicode(available_hours)
-                f.writerow([spot['id'], spot['name'], spot['location']['room_number'], spot['location']['floor'], spot['location']['building_name'], spot['location']['latitude'], spot['location']['longitude'], spot['organization'], spot['manager']] + spot['extended_info'].values() + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'], types, available_hours])
+                    count1 = 1
+                available_hours = smart_unicode(available_hours)
+                types = smart_unicode(types)
+                #how to deal with the special character
+                f.writerow([spot['id'], spot['name'].encode('utf-8'), spot['location']['room_number'], spot['location']['floor'].encode('utf-8'), spot['location']['building_name'].encode('utf-8'), spot['location']['latitude'], spot['location']['longitude'], spot['organization'].encode('utf-8'), spot['manager'].encode('utf-8')] + extended_info + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'].encode('utf-8'), types, available_hours])
             return response
-    return render_to_response('getidfile.html')'''
+    return render_to_response('getidfile.html')
