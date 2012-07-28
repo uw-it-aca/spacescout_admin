@@ -12,9 +12,10 @@ from poster.streaminghttp import register_openers
 import mimetools
 import mimetypes
 import urllib2
+import urllib
+import oauth2 as oauth
 import urlparse
 import time
-import oauth2 as oauth
 import json
 import csv
 
@@ -44,6 +45,8 @@ def upload(request):
             try:
                 data = file_to_json(docfile)
                 for datum in data:
+                    spot_id = datum["id"]
+                    datum = datum["data"]
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                     try:
@@ -53,8 +56,36 @@ def upload(request):
 
                     client = oauth.Client(consumer)
                     url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
-                    resp, content = client.request(url, "POST", datum, headers={"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"})
-                    if content:
+
+                    spot_headers = {"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
+                    spot_url = url
+                    method = 'POST'
+                    #use PUT when spot id is prodived to update the spot
+                    if spot_id:
+                        spot_url = "%s/%s" % (url, spot_id)
+                        method = 'PUT'
+
+                        #get the existing spot for its etag
+                        resp, content = client.request(spot_url, 'GET')
+                        if resp['status'] != '200':
+                            failurecount += 1
+                            if 'name' in info.keys():
+                                name = info['name']
+                            else:
+                                name = 'NO NAME'
+                            hold = {
+                                'fname': name,
+                                'flocation': 'id',
+                                'freason': 'id not found, spot does not exist',
+                            }
+                            failure_desc.append(hold)
+                            break
+                        etag = resp['etag']
+                        spot_headers['If-Match'] = etag
+                    resp, content = client.request(spot_url, method, datum, headers=spot_headers)
+
+                    #Responses 200 and 201 mean you done good.
+                    if resp['status'] != '200' and resp['status'] != '201':
                         if 'name' in info.keys():
                             name = info['name']
                         else:
@@ -68,6 +99,7 @@ def upload(request):
                             flocation = resp['status']
                             freason = content
 
+                        #Add spot attempt to the list of failures
                         failurecount += 1
                         hold = {
                             'fname': name,
@@ -78,8 +110,16 @@ def upload(request):
                     else:
                         success_names.append(" %s," % (info['name']))
                         successcount += 1
-                        #this is where most of my changes start
-                        url1 = resp['location'] + '/image'
+
+                        #jury rigging the oauth_signature
+                        consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+                        client = oauth.Client(consumer)
+                        resp, content = client.request(url, 'GET')
+                        i = resp['content-location'].find('oauth_signature=')
+                        i += len('oauth_signature=')
+                        signature = resp['content-location'][i:]
+
+                        url1 = url + '/image'
                         #there is no language for if the url doesn't work
                         for image in images:
                             try:
@@ -88,18 +128,8 @@ def upload(request):
                                 f.write(img.read())
                                 f.close()
                                 f = open('image.jpg', 'rb')
-                                #jury rigging the oauth_signature
-                                resp, content = client.request(url, 'GET')
-                                i = resp['content-location'].find('oauth_signature=') + 16
-                                signature = ''
-                                while resp['content-location'][i]:
-                                    signature += resp['content-location'][i]
-                                    try:
-                                        resp['content-location'][i + 1]
-                                        i += 1
-                                    except:
-                                        break
-                                body = {"oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
+
+                                body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
                                 #poster code
                                 register_openers()
                                 datagen, headers = multipart_encode(body)
@@ -203,8 +233,7 @@ def getidfile(request):
                         pass
                     count1 = 1
                 available_hours = smart_unicode(available_hours)
-                types = smart_unicode(types)
-                #how to deal with the special character
-                f.writerow([spot['id'], spot['name'].encode('utf-8'), spot['location']['room_number'], spot['location']['floor'].encode('utf-8'), spot['location']['building_name'].encode('utf-8'), spot['location']['latitude'], spot['location']['longitude'], spot['organization'].encode('utf-8'), spot['manager'].encode('utf-8')] + extended_info + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'].encode('utf-8'), types, available_hours])
+                types = smart_unicode(available_hours)
+                f.writerow([spot['id'], spot['name'], spot['location']['room_number'], spot['location']['floor'], spot['location']['building_name'], spot['location']['latitude'], spot['location']['longitude'], spot['organization'], spot['manager']] + spot['extended_info'].values() + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'], types, available_hours])
             return response
     return render_to_response('getidfile.html')

@@ -30,13 +30,16 @@ def file_to_json(docfile):
         extended = {}
         hours = {}
         location_data = {}
+        spot_id = ""
         for entry in current:
             current[entry] = current[entry].replace("\"", "")
             #Don't send empty values
             if current[entry]:
-                #Handle location dict
                 current[entry] = current[entry].decode('utf-8')
-                if entry in location:
+                if entry == 'id':
+                    spot_id = current[entry]
+                #Handle location dict
+                elif entry in location:
                     location_data[entry] = current[entry]
                 #Handle main dict
                 elif entry in non_extended:
@@ -73,5 +76,6 @@ def file_to_json(docfile):
         spot_data['extended_info'] = extended
         spot_data['available_hours'] = hours
         spot_data['location'] = location_data
-        requests.append(json.dumps(spot_data))
+        spot_request = {"id": spot_id, "data": json.dumps(spot_data)}
+        requests.append(spot_request)
     return requests
