@@ -176,7 +176,7 @@ def upload(request):
 
 
 @csrf_exempt
-def getidfile(request):
+def download(request):
     # Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
@@ -236,4 +236,4 @@ def getidfile(request):
                 types = smart_unicode(available_hours)
                 f.writerow([spot['id'], spot['name'], spot['location']['room_number'], spot['location']['floor'], spot['location']['building_name'], spot['location']['latitude'], spot['location']['longitude'], spot['organization'], spot['manager']] + spot['extended_info'].values() + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'], types, available_hours])
             return response
-    return render_to_response('getidfile.html')
+    return render_to_response('download.html')
