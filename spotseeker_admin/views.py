@@ -237,3 +237,7 @@ def download(request):
                 f.writerow([spot['id'], spot['name'], spot['location']['room_number'], spot['location']['floor'], spot['location']['building_name'], spot['location']['latitude'], spot['location']['longitude'], spot['organization'], spot['manager']] + spot['extended_info'].values() + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'], types, available_hours])
             return response
     return render_to_response('download.html')
+
+
+def home(request):
+    return render_to_response('home.html')
