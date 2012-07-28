@@ -172,7 +172,7 @@ def upload(request):
         'success_names': success_names,
         'form': form,
     }
-    return render_to_response('home.html', args, context_instance=RequestContext(request))
+    return render_to_response('upload.html', args, context_instance=RequestContext(request))
 
 
 @csrf_exempt
