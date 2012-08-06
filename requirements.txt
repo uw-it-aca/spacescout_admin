@@ -2,3 +2,4 @@ Django
 oauth2
 poster
 xlrd
+xlwt
