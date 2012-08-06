@@ -110,6 +110,24 @@ def upload(request):
                         success_names.append(" %s," % (info['name']))
                         successcount += 1
 
+                        if content:
+                            url1 = spot_url
+                        elif resp['location']:
+                            url1 = '%s/image' % resp['location']
+                        else:
+                            warningcount += 1
+                            if info["name"]:
+                                name = info["name"]
+                            else:
+                                name = "NO NAME"
+                            hold = {
+                                'fname': name,
+                                'flocation': image,
+                                'freason': "could not find spot idea; images not posted",
+                            }
+                            warning_desc.append(hold)
+                            break
+
                         #jury rigging the oauth_signature
                         consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                         client = oauth.Client(consumer)
@@ -118,7 +136,6 @@ def upload(request):
                         i += len('oauth_signature=')
                         signature = resp['content-location'][i:]
 
-                        url1 = url + '/image'
                         #there is no language for if the url doesn't work
                         for image in images:
                             try:
