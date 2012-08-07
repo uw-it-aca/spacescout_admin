@@ -43,10 +43,22 @@ def upload(request):
             docfile = request.FILES['file']
             notice = ""
             try:
-                data = file_to_json(docfile)
+                jsons = file_to_json(docfile)
+                data = jsons["data"]
+                errors = jsons["errors"]
                 for datum in data:
                     spot_id = datum["id"]
                     datum = datum["data"]
+
+                    for error in errors:
+                        failurecount += 1
+                        hold = {
+                            'fname': error["name"],
+                            'flocation': error["location"],
+                            'freason': error["error"]
+                        }
+                        failure_desc.append(hold)
+
                     info = json.loads(datum)
                     consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
                     try:
