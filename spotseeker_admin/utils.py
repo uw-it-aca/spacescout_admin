@@ -16,7 +16,7 @@ def write_xls(spots):
         for info in spot['extended_info']:
             if not info in extended:
                 extended.append(info.encode('utf-8'))
-    header = ['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_acess_restrictions", "type", 'available_hours']
+    header = ['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_access_restrictions", "type", 'available_hours']
     collumn = 0
     for info in header:
         worksheet.write(0, collumn, info)
@@ -78,7 +78,7 @@ def write_csv(spots):
         for info in spot['extended_info']:
             if not info in extended:
                 extended.append(info.encode('utf-8'))
-    f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_acess_restrictions", "type", 'available_hours'])
+    f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_access_restrictions", "type", 'available_hours'])
     for spot in spots:
         days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
         available_hours = ''
@@ -135,7 +135,10 @@ def file_to_json(docfile):
                 try:
                     data_row[keys[item]] = items[item].encode('utf-8')
                 except:
-                    data_row[keys[item]] = str(items[item])
+                    if items[item] == int(items[item]):
+                        data_row[keys[item]] = str(int(items[item]))
+                    else:
+                        data_row[keys[item]] = str(items[item])
             data.append(data_row)
     else:
         raise TypeError("Invalid file type %s" % (docfile.content_type()))
