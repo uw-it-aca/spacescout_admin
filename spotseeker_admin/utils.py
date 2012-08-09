@@ -1,6 +1,122 @@
 import json
 import csv
 import xlrd
+import xlwt
+from django.http import HttpResponse
+from django.utils.encoding import smart_unicode
+
+
+def write_xls(spots):
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = "attachment; filename=spot_data.xls"
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('spot_data')
+    extended = []
+    for spot in spots:
+        for info in spot['extended_info']:
+            if not info in extended:
+                extended.append(info.encode('utf-8'))
+    header = ['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_access_restrictions", "type", 'available_hours']
+    collumn = 0
+    for info in header:
+        worksheet.write(0, collumn, info)
+        collumn += 1
+    row = 1
+    for spot in spots:
+        days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
+        available_hours = ''
+        types = ''
+        count = 0
+        extended_info = []
+        for info in extended:
+            info = info.decode('utf-8')
+            try:
+                extended_info.append(spot['extended_info'][info])
+            except:
+                extended_info.append('')
+        for Type in spot['type']:
+            if count == 0:
+                types += Type.encode('utf-8')
+            else:
+                types += ', ' + Type.encode('utf-8')
+            count = 1
+        count1 = 0
+        for day in days:
+            try:
+                if count1 == 0:
+                    if day == "thursday" or day == "saturday" or day == "sunday":
+                        available_hours += day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                    else:
+                        available_hours += day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                else:
+                    if day == "thursday" or day == "saturday" or day == "sunday":
+                        available_hours += ', ' + day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                    else:
+                        available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+            except:
+                pass
+            count1 = 1
+        available_hours = smart_unicode(available_hours)
+        types = smart_unicode(types)
+        data_row = [spot['id'], spot['name'].encode('utf-8'), spot['location']['room_number'], spot['location']['floor'].encode('utf-8'), spot['location']['building_name'].encode('utf-8'), spot['location']['latitude'], spot['location']['longitude'], spot['organization'].encode('utf-8'), spot['manager'].encode('utf-8')] + extended_info + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'].encode('utf-8'), types, available_hours]
+        collumn = 0
+        for info in data_row:
+            worksheet.write(row, collumn, info)
+            collumn += 1
+        row += 1
+    workbook.save(response)
+    return response
+
+
+def write_csv(spots):
+    response = HttpResponse(mimetype='text/csv')
+    response['Content-Disposition'] = "attachment; filename=spot_data.csv"
+    f = csv.writer(response)
+    #extended info isn't the same for all. Need to build up a dict of all extended info keys
+    extended = []
+    for spot in spots:
+        for info in spot['extended_info']:
+            if not info in extended:
+                extended.append(info.encode('utf-8'))
+    f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_access_restrictions", "type", 'available_hours'])
+    for spot in spots:
+        days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
+        available_hours = ''
+        types = ''
+        count = 0
+        extended_info = []
+        for info in extended:
+            info = info.decode('utf-8')
+            try:
+                extended_info.append(spot['extended_info'][info])
+            except:
+                extended_info.append('')
+        for Type in spot['type']:
+            if count == 0:
+                types += Type.encode('utf-8')
+            else:
+                types += ', ' + Type.encode('utf-8')
+            count = 1
+        count1 = 0
+        for day in days:
+            try:
+                if count1 == 0:
+                    if day == "thursday" or day == "saturday" or day == "sunday":
+                        available_hours += day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                    else:
+                        available_hours += day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                else:
+                    if day == "thursday" or day == "saturday" or day == "sunday":
+                        available_hours += ', ' + day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+                    else:
+                        available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
+            except:
+                pass
+            count1 = 1
+        available_hours = smart_unicode(available_hours)
+        types = smart_unicode(types)
+        f.writerow([spot['id'], spot['name'].encode('utf-8'), spot['location']['room_number'], spot['location']['floor'].encode('utf-8'), spot['location']['building_name'].encode('utf-8'), spot['location']['latitude'], spot['location']['longitude'], spot['organization'].encode('utf-8'), spot['manager'].encode('utf-8')] + extended_info + [spot['location']["height_from_sea_level"], spot['capacity'], spot['display_access_restrictions'].encode('utf-8'), types, available_hours])
+    return response
 
 
 def file_to_json(docfile):
@@ -16,7 +132,13 @@ def file_to_json(docfile):
             items = sheet.row_values(row)
             data_row = {}
             for item in range(len(items)):
-                data_row[keys[item]] = str(items[item])
+                try:
+                    data_row[keys[item]] = items[item].encode('utf-8')
+                except:
+                    if items[item] == int(items[item]):
+                        data_row[keys[item]] = str(int(items[item]))
+                    else:
+                        data_row[keys[item]] = str(items[item])
             data.append(data_row)
     else:
         raise TypeError("Invalid file type %s" % (docfile.content_type()))
