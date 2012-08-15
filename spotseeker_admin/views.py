@@ -213,7 +213,7 @@ def download(request):
         consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
         client = oauth.Client(consumer)
         url = "%s/api/v1/spot/?center_latitude=47.653835&center_longitude=-122.307809&distance=400000" % settings.SS_WEB_SERVER_HOST
-        resp, content = client.request(url, "GET", headers={"XOAUTH_USER": "mreeve", "Content-Type": "application/json", "Accept": "application/json"})
+        resp, content = client.request(url, "GET", headers={"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"})
         if content:
             spots = json.loads(content)
             if 'csv' in request.POST:
