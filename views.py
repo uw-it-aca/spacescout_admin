@@ -1,5 +1,5 @@
-from spotseeker_admin.forms import UploadFileForm
-from spotseeker_admin.utils import file_to_json, write_xls, write_csv
+from spacescout_admin.forms import UploadFileForm
+from spacescout_admin.utils import file_to_json, write_xls, write_csv
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
