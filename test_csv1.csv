@@ -1,0 +1,2 @@
+id,name,room_number,floor,building_name,latitude,longitude,organization,manager,has_computers,noise_level,has_scanner,has_printing,num_computers,has_whiteboards,has_natural_light,has_outlets,food_nearby,has_displays,has_projector,reservable,height_from_sea_level,capacity,display_access_restrictions,type,available_hours
+2,Suzzallo Cafe,207,first,Fishery Sciences,47.652915,-122.316378,University of Washington,Quinn,true,quiet,hello,true,21,true,true,true,space,true,true,true,50,21,yes,aaa,"m: 07:30-17:03, t: 07:30-17:30, w: 07:30-17:30, th: 07:03-17:30"

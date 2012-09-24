@@ -31,7 +31,7 @@ def write_xls(spots):
         for info in extended:
             info = info.decode('utf-8')
             try:
-                extended_info.append(spot['extended_info'][info])
+                extended_info.append(spot['extended_info'][info].encode('utf-8'))
             except:
                 extended_info.append('')
         for Type in spot['type']:
@@ -88,7 +88,7 @@ def write_csv(spots):
         for info in extended:
             info = info.decode('utf-8')
             try:
-                extended_info.append(spot['extended_info'][info])
+                extended_info.append(spot['extended_info'][info].encode('utf-8'))
             except:
                 extended_info.append('')
         for Type in spot['type']:
@@ -121,7 +121,7 @@ def write_csv(spots):
 
 def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
-        data = csv.DictReader(docfile)
+        data = csv.DictReader(docfile.file)
     elif docfile.content_type == 'application/vnd.ms-excel':
         #convert to dict
         workbook = xlrd.open_workbook(file_contents=docfile.read())
