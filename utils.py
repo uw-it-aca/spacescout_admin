@@ -181,7 +181,15 @@ def file_to_json(docfile):
                                 times = times[len(times) - 1].split("-")
                                 if len(times) == 2:
                                     try:
-                                        hours[weekdays[day]] = [times]
+                                        hours[weekdays[day]]
+                                        prev=True
+                                    except:
+                                        prev=False
+                                    try:
+                                        if not prev:
+                                            hours[weekdays[day]] = [times]
+                                        else:
+                                            hours[weekdays[day]] += [times]
                                     except:
                                         errors.append({"name": current["name"], "location": entry, "error": "unable to parse hours"})
                                         raise Warning
