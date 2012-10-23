@@ -205,10 +205,12 @@ def file_to_json(docfile):
                             spot_data[entry] = current[entry]
                     #Handle images
                     elif entry == "images":
-                        spot_images = current[entry].split(", ")
+                        spot_images = current[entry].split(",")
                         images = []
                         for image in spot_images:
-                            images.append(image)
+                            if image != "":
+                                image.strip()
+                                images.append(image)
                         spot_data[entry] = images
                     #Handle extended info
                     else:
