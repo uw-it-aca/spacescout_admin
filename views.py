@@ -200,6 +200,7 @@ def upload(request):
         'successes': successes,
         'success_names': success_names,
         'form': form,
+        'web_server': settings.SS_WEB_SERVER_HOST,
     }
     return render_to_response('upload.html', args, context_instance=RequestContext(request))
 
