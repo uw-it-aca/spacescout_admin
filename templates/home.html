@@ -3,15 +3,24 @@
 {% block content %}
 <h1>Home</h1>
 <p>Do something with a spreadsheet or CSV file!</p>
-<ul>
-<li><a href='/upload'>Upload</a></li>
-<li><a href='/download'>Download</a></li>
-</ul>
 
+<div class="table-options clearfix">
+    <ul class="pull-left">
+        <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
+        <li><a href="#"><i class="icon-check"></i> Save</a></li>
+    </ul>
+    <ul class="pull-right">
+        <li><a href='/upload'><i class="icon-upload"></i> Upload</a></li>
+        <li><a href='/download'><i class="icon-download"></i> Download</a></li>
+        <li><a href="#"><i class="icon-plus-sign"></i> Add Space(s)</a></li>
+    </ul>
+</div>
+<div class="table-container">
 <table class="table table-bordered table-striped table-condensed">
-    <caption>List of Spaces</caption>
-    <thead>
+    <caption class="visuallyhidden">List of Spaces</caption>
+    <thead style="">
         <tr>
+            <th class="check"><input id="check_all" type="checkbox"></th>
             <th class="id">ID</th>
             <th>Space</th>
             <th>column2</th>
@@ -20,54 +29,63 @@
     </thead>
     <tbody>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>1</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>2</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>3</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>4</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>5</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>6</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>7</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>8</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
             <td>aslkdflkasdfj sadflkas</td>
         </tr>
         <tr>
+            <td class="check"><input type="checkbox"></td>
             <td>9</td>
             <td><a href="#">asdfasdfasdfsa</a></td>
             <td>sadfasdfa</td>
@@ -75,5 +93,6 @@
         </tr>
     </tbody>
 </table>
+</div>
 
 {% endblock %}

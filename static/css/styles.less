@@ -3,6 +3,18 @@
 .content {
     margin: 20px;
 
-    .table thead { background-color: #e3e3e3; }
-    .table .id { width: 40px; }
+    .table-options { background: #ddd; padding: 6px;
+        ul { margin: 0;
+            li { list-style: none; display: inline-block; margin-right: 10px;
+                a { color: #555; text-decoration: none; }
+            }
+            li:last-child { margin-right: 0; }
+        }
+    }
+    .table-container { height: 200px; overflow-y: scroll; }
+    .table {
+        thead { background-color: #e3e3e3; }
+        .check { width: 20px; text-align: center; }
+        .id { width: 40px; }
+    }
 }
