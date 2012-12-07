@@ -3,3 +3,4 @@ oauth2
 poster
 xlrd
 xlwt
+django-compressor
