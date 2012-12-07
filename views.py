@@ -207,6 +207,8 @@ def upload(request):
 
 @csrf_exempt
 def download(request):
+    context = RequestContext(request, {})
+
     # Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
@@ -223,7 +225,7 @@ def download(request):
             elif 'xls' in request.POST:
                 response = write_xls(spots)
                 return response
-    return render_to_response('download.html')
+    return render_to_response('download.html', context)
 
 
 def home(request):
