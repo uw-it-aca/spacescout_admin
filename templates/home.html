@@ -2,17 +2,16 @@
 
 {% block content %}
 <h1>Home</h1>
-<p>Do something with a spreadsheet or CSV file!</p>
 
 <div class="table-options clearfix">
     <ul class="pull-left">
-        <li><a href="#"><i class="icon-edit"></i> Edit</a></li>
-        <li><a href="#"><i class="icon-check"></i> Save</a></li>
+        <li><a href="#" id="edit_button" class="btn btn-mini disabled"><i class="icon-edit"></i> Edit</a></li>
+        <li><a href="#" id="" class="btn btn-mini btn-primary"><i class="icon-check icon-white"></i> Save</a></li>
     </ul>
     <ul class="pull-right">
-        <li><a href='/upload'><i class="icon-upload"></i> Upload</a></li>
-        <li><a href='/download'><i class="icon-download"></i> Download</a></li>
-        <li><a href="#"><i class="icon-plus-sign"></i> Add Space(s)</a></li>
+        <li><a href='/upload' class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Upload</a></li>
+        <li><a href='/download' class="btn btn-mini"><i class="icon-circle-arrow-down"></i> Download</a></li>
+        <li><a href="#" class="btn btn-mini btn-success"><i class="icon-plus-sign icon-white"></i> Add New Space</a></li>
     </ul>
 </div>
 <div class="table-container">
