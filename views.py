@@ -228,6 +228,10 @@ def download(request):
     return render_to_response('download.html', context)
 
 
-def home(request):
+def spaces(request):
     context = RequestContext(request, {})
-    return render_to_response('home.html', context)
+    return render_to_response('spaces.html', context)
+
+def edit(request):
+    context = RequestContext(request, {})
+    return render_to_response('edit.html', context)

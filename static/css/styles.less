@@ -1,11 +1,23 @@
+/* LESS Mixins */
+
+.rounded-corners (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+
 .header { background-color: #333; color: #fff; line-height: 40px; height: 40px;
     .header-inner { margin: 0 20px; }
 }
 
-.content {
-    margin: 20px;
+.content { margin: 20px;
 
-    .table-options { margin-bottom: 5px;
+    h1 { font-weight: normal; font-size: 25px; }
+
+    .table-options { margin-bottom: 8px;
         ul { margin: 0;
             li { list-style: none; display: inline-block; margin-right: 2px;
                 a { text-decoration: none; }
@@ -14,7 +26,7 @@
             li:last-child { margin-right: 0; }
         }
     }
-    .table-container { /*height: 200px; overflow-y: scroll;*/
+    .table-container { /*height: 200px; overflow-y: scroll;*/ padding: 10px; background-color: #f6f6f6; .rounded-corners(3px);
         .table { font-size: 12px; color: #666;
             thead { background-color: #e3e3e3; }
 
