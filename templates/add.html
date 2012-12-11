@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="success_message" class="alert alert-error fade in hide">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+</div>
+
+<div class="table-container">
+<form name="spaces" action="/" method="post">
+
+    <div class="table-options clearfix">
+        <ul class="pull-left">
+            <li><button  id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
+            <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
+        </ul>
+    </div>
+
+    <div id="table_scroller_container" class="table-scroll">
+    <table class="table table-bordered table-striped table-condensed table-edit">
+        <caption class="visuallyhidden">Edit Multiple Spaces</caption>
+        <thead style="">
+            <tr>
+                <th>Space Name</th>
+                <th>column2</th>
+                <th>colunn3</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td><input type="text" value=""></td>
+                <td><input type="text" value=""></td>
+                <td>
+                    <select>
+                        <option>aslkdflkasdfj sadflkas</option>
+                        <option>asfddsf</option>
+                        <option>qweiu roi oweui</option>
+                        <option>4sdaouwen khj</option>
+                        <option>zxzx xncvxb</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" value=""></td>
+                <td><input type="text" value=""></td>
+                <td>
+                    <select>
+                        <option>aslkdflkasdfj sadflkas</option>
+                        <option>asfddsf</option>
+                        <option>qweiu roi oweui</option>
+                        <option>4sdaouwen khj</option>
+                        <option>zxzx xncvxb</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" value=""></td>
+                <td><input type="text" value=""></td>
+                <td>
+                    <select>
+                        <option>aslkdflkasdfj sadflkas</option>
+                        <option>asfddsf</option>
+                        <option>qweiu roi oweui</option>
+                        <option>4sdaouwen khj</option>
+                        <option>zxzx xncvxb</option>
+                    </select>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    </div>
+    <div class="table-sub-options clearfix">
+        <ul class="pull-right">
+            <li><a href="#" id="add_rows_button" class="btn btn-mini"><i class="icon-plus-sign"></i> Add New Rows</a></li>
+        </ul>
+    </div>
+
+</form>
+</div>
+
+{% endblock %}

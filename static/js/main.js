@@ -108,7 +108,7 @@
 	// toggle edit and export buttons
 	function toggleEditExportButtons() {
 
-    	if($('#space_list_body tr input:checkbox:checked').length > 0){
+    	if($('#space_list_body tr input:checkbox:checked').length > 1){
 
         	$('#edit_button').removeClass('disabled');
         	$('#export_button').removeClass('disabled');
@@ -131,7 +131,7 @@
 	function setTableScrollHeight() {
     	var winH = $(window).height();
         var headerH = $("#header").height();
-        $("#table_scroller_container").height(winH - headerH - 120); // approximation height
+        //$("#table_scroller_container").height(winH - headerH - 120); // approximation height
 	}
 
 

@@ -233,6 +233,16 @@ def spaces(request):
     return render_to_response('spaces.html', context)
 
 @csrf_exempt
+def add(request):
+    context = RequestContext(request, {})
+    return render_to_response('add.html', context)
+
+@csrf_exempt
+def add_space(request):
+    context = RequestContext(request, {})
+    return render_to_response('add_space.html', context)
+
+@csrf_exempt
 def edit(request):
     context = RequestContext(request, {})
 
@@ -241,3 +251,8 @@ def edit(request):
 
     context['count'] = [ i+1 for i in range(checked_count) ]
     return render_to_response('edit.html', context)
+
+@csrf_exempt
+def edit_space(request):
+    context = RequestContext(request, {})
+    return render_to_response('edit_space.html', context)
