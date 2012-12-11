@@ -4,17 +4,18 @@
 
 <h1>Edit</h1>
 
-<div id="alert_messages" class="alert alert-error fade in">
+<div id="success_message" class="alert alert-error fade in">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <strong>Oh snap!</strong> Change a few things up and try submitting again.
 </div>
 
 <div class="table-container">
+<form name="spaces" action="/" method="post">
 
     <div class="table-options clearfix">
         <ul class="pull-left">
-            <li><a href="#" id="save_button" class="btn btn-mini btn-primary"><i class="icon-check icon-white"></i> Save</a></li>
-            <li><a href="#" id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</a></li>
+            <li><button  id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
+            <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
         </ul>
     </div>
 
@@ -50,6 +51,7 @@
         </tbody>
     </table>
 
+</form>
 </div>
 
 {% endblock %}

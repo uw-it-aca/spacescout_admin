@@ -227,7 +227,7 @@ def download(request):
                 return response
     return render_to_response('download.html', context)
 
-
+@csrf_exempt
 def spaces(request):
     context = RequestContext(request, {})
     return render_to_response('spaces.html', context)
@@ -236,5 +236,6 @@ def spaces(request):
 def edit(request):
     context = RequestContext(request, {})
     checked_count = 5
+
     context['count'] = [ i+1 for i in range(checked_count) ]
     return render_to_response('edit.html', context)
