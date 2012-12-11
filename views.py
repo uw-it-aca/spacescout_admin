@@ -253,6 +253,6 @@ def edit(request):
     return render_to_response('edit.html', context)
 
 @csrf_exempt
-def edit_space(request):
+def edit_space(request, spot_id):
     context = RequestContext(request, {})
     return render_to_response('edit_space.html', context)
