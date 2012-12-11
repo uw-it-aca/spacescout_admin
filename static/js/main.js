@@ -52,8 +52,11 @@
             e.preventDefault();
         }
         else {
-            window.location.href = '/edit';
-            return false;
+
+            var space_count = $('#space_list_body tr input:checkbox:checked').length;
+
+            $('#checked_spaces_count').val(space_count);
+            alert($('#checked_spaces_count').val());
         }
 
     });
@@ -61,7 +64,6 @@
     // save button
 	$('#save_button').click(function() {
         window.location.href = '/';
-        return false;
     });
 
     // cancel button

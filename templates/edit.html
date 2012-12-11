@@ -4,6 +4,11 @@
 
 <h1>Edit</h1>
 
+<div id="alert_messages" class="alert alert-error fade in">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+</div>
+
 <div class="table-container">
 
     <div class="table-options clearfix">
@@ -24,8 +29,10 @@
             </tr>
         </thead>
         <tbody>
+
+            {% for i in count %}
             <tr>
-                <td>1</td>
+                <td>{{i}}</td>
                 <td><input type="text" value="asdjflasdk"></td>
                 <td><input type="text" value="asdjflasdk"></td>
                 <td>
@@ -38,48 +45,8 @@
                     </select>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td>
-                    <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td>
-                    <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td>
-                    <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-            </tr>
+            {% endfor %}
+
         </tbody>
     </table>
 
