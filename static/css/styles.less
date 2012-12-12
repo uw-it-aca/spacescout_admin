@@ -12,12 +12,15 @@
 
 /* Main Styles */
 
-.freeze { overflow: hidden; }
-
 .header { background-color: #333; color: #fff; line-height: 40px; height: 40px;
     .header-inner { margin: 0 20px;
         .logo { }
-        .campus { margin-left: 20px; padding-left: 20px; border-left: solid 1px #262626; }
+        .campus { margin-left: 20px; padding-left: 20px; border-left: solid 1px #262626;
+
+            a.dropdown-toggle { line-height: 40px; display: inline-block; text-decoration: none; color: #aaa;
+                b { margin-top: 17px; border-top-color: #eee; }
+            }
+        }
         .user { color: #777;  }
     }
 }
@@ -77,3 +80,5 @@
   height: 1px; width: 1px;
   margin: -1px; padding: 0; border: 0;
 }
+
+.freeze { overflow: hidden; }

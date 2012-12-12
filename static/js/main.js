@@ -4,6 +4,9 @@
 		setTableScrollHeight();
 		getSpaceCount();
 		toggleEditExportButtons();
+
+		$('.dropdown-toggle').dropdown();
+
 	});
 
 	$(w).resize(function(){ //Update dimensions on resize
