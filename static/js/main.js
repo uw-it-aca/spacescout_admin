@@ -1,6 +1,5 @@
 (function(w){
 
-
 	$(document).ready(function() {
 		setTableScrollHeight();
 		getSpaceCount();
@@ -58,7 +57,6 @@
     // save button
 	$('#save_button').click(function() {
 
-
     });
 
     // cancel button
@@ -80,11 +78,24 @@
 
     });
 
-    // add spaces button
-    $('#add_spaces_button').click(function(e) {
+    // add space button
+    $('#add_space_button').click(function(e) {
 
     	// disable the add spaces button by default unless a space has been "checked"
-        if($('#add_spaces_button').hasClass('disabled')) {
+        if($('#add_space_button').hasClass('disabled')) {
+            e.preventDefault();
+        }
+        else {
+
+        }
+
+    });
+
+    // add multiple spaces button
+    $('#add_multiple_button').click(function(e) {
+
+    	// disable the add spaces button by default unless a space has been "checked"
+        if($('#add_multiple_button').hasClass('disabled')) {
             e.preventDefault();
         }
         else {
@@ -97,6 +108,7 @@
     $('#add_rows_button').click(function(e) {
         e.preventDefault();
         $('.add-new').show();
+        setTableScrollHeight();
     });
 
 	// get a count of spaces
@@ -131,7 +143,18 @@
 	function setTableScrollHeight() {
     	var winH = $(window).height();
         var headerH = $("#header").height();
-        //$("#table_scroller_container").height(winH - headerH - 120); // approximation height
+
+        var tableContainerH = winH - headerH - 120;  // approximation height of table container
+        var tableH = $(".table").height();
+
+        if (tableH > tableContainerH) {
+            $("#table_scroller_container").height(tableContainerH);
+            $("body").addClass("freeze");
+        }
+        else {
+            $("#table_scroller_container").height("auto");
+            $("body").removeClass("freeze");
+        }
 	}
 
 

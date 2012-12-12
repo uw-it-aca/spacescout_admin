@@ -246,10 +246,9 @@ def add_space(request):
 def edit(request):
     context = RequestContext(request, {})
 
-    #import pdb; pdb.set_trace()
     checked_count = int(request.POST['checked_spaces'])
-
     context['count'] = [ i+1 for i in range(checked_count) ]
+
     return render_to_response('edit.html', context)
 
 @csrf_exempt
