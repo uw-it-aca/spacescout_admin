@@ -148,7 +148,7 @@
     	var winH = $(window).height();
         var headerH = $("#header").height();
 
-        var tableContainerH = winH - headerH - 120;  // approximation height of table container
+        var tableContainerH = winH - headerH - 160;  // approximation height of table container
         var tableH = $(".table").height();
 
         if (tableH > tableContainerH) {
