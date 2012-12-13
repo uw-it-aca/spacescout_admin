@@ -243,6 +243,11 @@ def add_space(request):
     return render_to_response('add_space.html', context)
 
 @csrf_exempt
+def add_multiple(request):
+    context = RequestContext(request, {})
+    return render_to_response('add_multiple.html', context)
+
+@csrf_exempt
 def edit(request):
     context = RequestContext(request, {})
 

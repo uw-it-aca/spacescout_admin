@@ -1,11 +1,21 @@
 (function(w){
 
 	$(document).ready(function() {
+
 		setTableScrollHeight();
 		getSpaceCount();
 		toggleEditExportButtons();
 
 		$('.dropdown-toggle').dropdown();
+
+		// show the success message
+		var success = GetQueryStringParams('q');
+		if (success) {
+    		$('#success_message').show();
+		}
+		else {
+    		$('#success_message').hide();
+		}
 
 	});
 
@@ -59,6 +69,35 @@
 
     // save button
 	$('#save_button').click(function(e) {
+
+    	$(".table-container input:text:visible").each(function (i) {
+        	if ( $(this).val().length === 0 ) {
+            	$(this).addClass("blah");
+        	}
+        	else {
+            	$(this).removeClass("blah");
+        	}
+    	});
+
+    	var empties = $('.blah').length;
+
+    	if (empties == 0){
+        	window.location.href = '/?q=success';
+    	}
+    	else {
+        	$('#error_message').show();
+    	}
+
+    	console.log(empties);
+
+    	// if any visible input are empty, show error alert
+    	/*if( $('.table-container').find('input:text:visible').val().length == 0 ) {
+        	$('#error_message').show();
+    	}
+    	else {
+        	// else go back to space list page
+        	window.location.href = '/?q=success';
+    	}*/
 
 
     });
@@ -115,6 +154,17 @@
         setTableScrollHeight();
     });
 
+    // fake login and logout
+    $('#user_signin_button').click(function(e) {
+        $('#user_login_form').hide();
+        $('#user_login_info').show();
+    });
+    $('#user_logout_link').click(function(e) {
+        e.preventDefault();
+        $('#user_login_form').show();
+        $('#user_login_info').hide();
+    });
+
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
@@ -148,7 +198,7 @@
     	var winH = $(window).height();
         var headerH = $("#header").height();
 
-        var tableContainerH = winH - headerH - 160;  // approximation height of table container
+        var tableContainerH = winH - headerH - 230;  // approximation height of table container
         var tableH = $(".table").height();
 
         if (tableH > tableContainerH) {
@@ -160,6 +210,19 @@
             $("body").removeClass("freeze");
         }
 	}
+
+	function GetQueryStringParams(sParam) {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++)
+        {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam)
+            {
+                return sParameterName[1];
+            }
+        }
+    }
 
 
 

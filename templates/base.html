@@ -30,21 +30,36 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/">SPACESCOUT MANAGER</a>
+          <div class="nav-collapse collapse">
 
-        <div id="header" class="header">
-            <div class="header-inner clearfix">
-                <div class="logo pull-left">SPACESCOUT MANAGER</div>
-                <div class="campus pull-left dropdown">
-                    <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Seattle <b class="caret"></b></a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                        <li><a tabindex="-1" href="#">Seattle</a></li>
-                        <li><a tabindex="-1" href="#">Bothell</a></li>
-                        <li><a tabindex="-1" href="#">Tacoma</a></li>
-                    </ul>
+            <div class="login pull-right clearfix">
+                <div id="user_login_info" class="navbar-text pull-right hide">Dubs McHuskyfellar <a href="#" id="user_logout_link" class="navbar-link muted" style="margin-left:8px;">Logout</a></div>
+                <div id="user_login_form" class="navbar-form pull-right">
+                    <input class="span2" type="text" placeholder="Email">
+                    <input class="span2" type="password" placeholder="Password">
+                    <button id="user_signin_button" type="submit" class="btn btn-mini">Sign in</button>
                 </div>
-                <div class="user pull-right">Dubs McHusky</div>
             </div>
+
+            <ul class="nav">
+              <li class="active dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Seattle <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Bothell</a></li>
+                  <li><a href="#">Seattle</a></li>
+                  <li><a href="#">Tacoma</a></li>
+                </ul>
+              </li>
+            </ul>
+
+          </div>
         </div>
+      </div>
+    </div>
 
         <div id="main" class="content">
         {% block content %}{% endblock %}
