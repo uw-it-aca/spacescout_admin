@@ -8,6 +8,11 @@
 
 		$('.dropdown-toggle').dropdown();
 
+		$(".populate-column").tooltip({
+            'placement': 'top',
+            'animation': true,
+        });
+
 		// show the success message
 		var success = GetQueryStringParams('q');
 		if (success) {
@@ -154,17 +159,6 @@
         setTableScrollHeight();
     });
 
-    // fake login and logout
-    $('#user_signin_button').click(function(e) {
-        $('#user_login_form').hide();
-        $('#user_login_info').show();
-    });
-    $('#user_logout_link').click(function(e) {
-        e.preventDefault();
-        $('#user_login_form').show();
-        $('#user_login_info').hide();
-    });
-
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
@@ -196,9 +190,10 @@
 
 	function setTableScrollHeight() {
     	var winH = $(window).height();
-        var headerH = $("#header").height();
+        var headerH = $(".navbar").height();
+        var alertH = $(".alert").height();
 
-        var tableContainerH = winH - headerH - 230;  // approximation height of table container
+        var tableContainerH = winH - headerH - alertH - 140;  // approximation height of table container
         var tableH = $(".table").height();
 
         if (tableH > tableContainerH) {
