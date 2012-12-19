@@ -1,5 +1,7 @@
 (function(w){
 
+
+
 	$(document).ready(function() {
 
 		setTableScrollHeight();
@@ -32,7 +34,8 @@
 	$('#filter_block_button').click(function(e){
     	e.preventDefault();
     	$('#filter_block').toggleClass('slidedown');
-    	// recalculate height
+        // wait for the filter block to slide down before resetting the table scroll height
+        setTimeout(setTableScrollHeight, 499);
 	});
 
 
@@ -198,11 +201,13 @@
 	}
 
 	function setTableScrollHeight() {
-    	var winH = $(window).height();
+
+        var winH = $(window).height();
         var headerH = $(".navbar").height();
         var alertH = $(".alert").height();
+        var filterH = $("#filter_block").height();
 
-        var tableContainerH = winH - headerH - alertH - 190;  // approximation height of table container
+        var tableContainerH = winH - headerH - alertH - filterH - 100;  // approximation height of table container
         var tableH = $(".table").height();
 
         if (tableH > tableContainerH) {
@@ -213,6 +218,7 @@
             $("#table_scroller_container").height("auto");
             $("body").removeClass("freeze");
         }
+
 	}
 
 	function GetQueryStringParams(sParam) {
