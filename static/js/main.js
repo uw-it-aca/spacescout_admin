@@ -28,6 +28,15 @@
     	setTableScrollHeight();
 	});
 
+	//show filter block
+	$('#filter_block_button').click(function(e){
+    	e.preventDefault();
+    	$('#filter_block').toggleClass('slidedown');
+    	// recalculate height
+	});
+
+
+
 	// check individual checkboxes
 	$('#space_list_body tr input:checkbox').click(function(){
         // check the corresponding checkbox
@@ -193,7 +202,7 @@
         var headerH = $(".navbar").height();
         var alertH = $(".alert").height();
 
-        var tableContainerH = winH - headerH - alertH - 140;  // approximation height of table container
+        var tableContainerH = winH - headerH - alertH - 190;  // approximation height of table container
         var tableH = $(".table").height();
 
         if (tableH > tableContainerH) {

@@ -23,8 +23,16 @@ body { padding-top: 40px; }
         }
     }
 
-
 }
+
+#filter_block { display: block; overflow:hidden; height: 0; background:#eee; margin:0 20px; font-size:11.5px;
+    -moz-transition: height .5s ease-in-out;
+    -ms-transition: height .5s ease-in-out;
+    -o-transition: height .5s ease-in-out;
+    -webkit-transition: height .5s ease-in-out;
+    transition: height .5s ease-in-out;
+}
+#filter_block.slidedown { height: 200px; }
 
 .content { margin: 20px;
 
@@ -80,15 +88,15 @@ body { padding-top: 40px; }
 
 /* Bootstrap Overrides */
 
-.modal { 
+.modal {
     .modal-header { padding: 10px;
         h3 { text-transform: uppercase; font-size: 13px; line-height: 20px; }
     }
-    
-    .modal-body { font-size: 12px; 
+
+    .modal-body { font-size: 12px;
         input[type="text"], select { font-size: 12px; padding: 1px 4px; color: #000; }
     }
-    
+
     .modal-footer { padding: 10px; }
 }
 
