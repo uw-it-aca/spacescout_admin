@@ -219,7 +219,7 @@
 	function buildScrollTable() {
 
 	    var maintbheight = tableContainerH;
-        var maintbwidth = winW - 60;
+        var maintbwidth = winW - 62;
 
         console.log("table"+tableContainerH + "maintable" + maintbheight);
 

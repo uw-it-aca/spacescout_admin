@@ -95,11 +95,13 @@ body { padding-top: 40px; }
 
 .tableDiv { font-size: 12px;}
 
-.fixedColumn {
+.fixedColumn { border-right: solid 2px #aaa;
     .fixedHead {
         td { background-color: #ccc; line-height: 25px; border: solid 1px #aaa;
             input[type="text"] { vertical-align: text-top; margin: 0; }
         }
+
+        td:last-child { border-right: none;}
     }
 }
 
@@ -107,6 +109,8 @@ body { padding-top: 40px; }
     td { background-color: #ddd; line-height: 25px; border: solid 1px #aaa;
         input[type="text"] { vertical-align: text-top; margin: 0; }
     }
+
+    td:first-child { border-left: none; }
 }
 
 /* Bootstrap Overrides */
