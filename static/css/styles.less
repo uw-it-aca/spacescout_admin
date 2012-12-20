@@ -1,6 +1,6 @@
 /* LESS Mixins */
 
-.rounded-corners (@radius: 5px) {
+.rounded-corners (@radius: 4px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
   -ms-border-radius: @radius;
@@ -93,25 +93,44 @@ body { padding-top: 40px; }
 }
 
 
-.tableDiv { font-size: 12px;}
+.tableDiv { font-size: 12px; border: solid 1px #ddd; .rounded-corners(3px); }
 
-.fixedColumn { border-right: solid 2px #aaa;
+.fixedColumn { border-right: solid 2px #c6c6c6;
     .fixedHead {
-        td { background-color: #ccc; line-height: 25px; border: solid 1px #aaa;
+
+        tr {  border-bottom: solid 1px #ddd; }
+        td { background-color: #e7e7e7; line-height: 25px; border-right: solid 1px #ddd;
             input[type="text"] { vertical-align: text-top; margin: 0; }
         }
 
+        td:first-child { border-left: none; }
         td:last-child { border-right: none;}
     }
+
+    .fixedTable {
+        tr { border-bottom: solid 1px #ddd; }
+        tr:last-child { border-bottom: none; }
+        td { background-color: #eee;}
+    }
 }
 
-.fixedHead {
-    td { background-color: #ddd; line-height: 25px; border: solid 1px #aaa;
-        input[type="text"] { vertical-align: text-top; margin: 0; }
+.fixedContainer {
+    .fixedHead {
+
+        tr {  border-bottom: solid 1px #ddd; }
+        td { background-color: #eee; line-height: 25px; border-right: solid 1px #ddd;
+            input[type="text"] { vertical-align: text-top; margin: 0; }
+        }
+
+        td:first-child { border-left: none; }
+        td:last-child { border-right: none;}
     }
 
-    td:first-child { border-left: none; }
+    .fixedTable {
+        tr { border-bottom: solid 1px #ddd; }
+    }
 }
+
 
 /* Bootstrap Overrides */
 

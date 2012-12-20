@@ -88,7 +88,7 @@
         //Adjust the fixed column area if we have a horizontal scrollbar on the main table
         // - specifically, make sure our fixedTable area matches the main table area minus the scrollbar height,
         //   and the fixed column footer area lines up with the main footer area (shift down by the scrollbar height)
-        var h = $(".fixedContainer > .fixedTable", layout)[0].offsetHeight - 16;
+        var h = $(".fixedContainer > .fixedTable", layout)[0].offsetHeight - 0;
         $("." + options.classColumn + " > .fixedTable", layout).height(h);  //make sure the row area of the fixed column matches the height of the main table, with the scrollbar
 
         // Apply the scroll handlers

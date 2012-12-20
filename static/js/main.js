@@ -219,7 +219,7 @@
 	function buildScrollTable() {
 
 	    var maintbheight = tableContainerH;
-        var maintbwidth = winW - 62;
+        var maintbwidth = winW - 64;
 
         console.log("table"+tableContainerH + "maintable" + maintbheight);
 
@@ -235,7 +235,7 @@
                 classHeader: "fixedHead",
                 classFooter: "fixedFoot",
                 classColumn: "fixedColumn",
-                fixedColumnWidth: 350,
+                fixedColumnWidth: 300,
                 outerId: Id,
                 backcolor: "#FFFFFF",
                 hovercolor: "#99CCFF"
