@@ -25,7 +25,7 @@
 
         $(".fixedContainer .fixedTable", layout).css({
             "float": "left",
-            width: (w + 16) + "px",
+            width: (w + 0) + "px",
             "overflow": "auto"
         });
         $(".fixedContainer", layout).css({

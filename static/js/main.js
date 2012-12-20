@@ -1,8 +1,25 @@
 (function(w){
 
+    var winH = $(window).height();
+    var winW = $(window).width();
+    var headerH = $(".navbar").height();
+    var alertH = $(".alert").height();
+    var filterH = $("#filter_block").height();
+    var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+
 	$(document).ready(function() {
 
-		setTableScrollHeight();
+    	// show the success message
+		var success = GetQueryStringParams('q');
+		if (success) {
+    		$('#success_message').show();
+		}
+		else {
+    		$('#success_message').hide();
+		}
+
+		buildScrollTable();
+
 		getSpaceCount();
 		toggleEditExportButtons();
 
@@ -13,19 +30,19 @@
             'animation': true,
         });
 
-		// show the success message
-		var success = GetQueryStringParams('q');
-		if (success) {
-    		$('#success_message').show();
-		}
-		else {
-    		$('#success_message').hide();
-		}
 
 	});
 
 	$(w).resize(function(){ //Update dimensions on resize
-    	setTableScrollHeight();
+
+	    winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+
+    	buildScrollTable();
 	});
 
 	//show filter block
@@ -199,32 +216,17 @@
     	}
 	}
 
-	function setTableScrollHeight() {
+	function buildScrollTable() {
 
-        var winH = $(window).height();
-        var winW = $(window).width();
-        var headerH = $(".navbar").height();
-        var alertH = $(".alert").height();
-        var filterH = $("#filter_block").height();
+	    var maintbheight = tableContainerH;
+        var maintbwidth = winW - 60;
 
-        var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-        //var tableH = $(".table").height();
-
-        /*if (tableH > tableContainerH) {
-            $("#table_scroller_container").height(tableContainerH);
-            $("body").addClass("freeze");
-        }
-        else {
-            $("#table_scroller_container").height("auto");
-            $("body").removeClass("freeze");
-        }*/
-
+        console.log("table"+tableContainerH + "maintable" + maintbheight);
 
         // fixed table
 		$(".tableDiv").each(function() {
+
             var Id = $(this).get(0).id;
-            var maintbheight = tableContainerH;
-            var maintbwidth = winW - 80;
 
             $("#" + Id + " .FixedTables").fixedTable({
                 width: maintbwidth,
@@ -239,9 +241,6 @@
                 hovercolor: "#99CCFF"
             });
         });
-
-        $("body").addClass("freeze");
-
 	}
 
 	function GetQueryStringParams(sParam) {
