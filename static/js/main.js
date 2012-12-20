@@ -1,7 +1,5 @@
 (function(w){
 
-
-
 	$(document).ready(function() {
 
 		setTableScrollHeight();
@@ -35,13 +33,12 @@
     	e.preventDefault();
     	$('#filter_block').toggleClass('slidedown');
         // wait for the filter block to slide down before resetting the table scroll height
-        setTimeout(setTableScrollHeight, 499);
+        //setTimeout(setTableScrollHeight, 699);
 	});
 
 
-
 	// check individual checkboxes
-	$('#space_list_body tr input:checkbox').click(function(){
+	$('.fixedTable tr input:checkbox').click(function(){
         // check the corresponding checkbox
         $(this).prop('checked', this.checked);
         // toggle buttons based on checkbox
@@ -50,8 +47,10 @@
 
 	// check all checkboxes
 	$('#check_all_checkbox').click(function(){
+
     	// check all the checkboxes
-    	$(this).closest('table').find(':checkbox').prop('checked', this.checked);
+    	//$('.fixedTable').closest('.check').find(':checkbox').prop('checked', this.checked);
+    	$('.fixedTable').find(':checkbox').attr('checked','checked');
     	// toggle buttons based on checkboxes
     	toggleEditExportButtons();
 	});
@@ -180,7 +179,7 @@
 	// toggle edit and export buttons
 	function toggleEditExportButtons() {
 
-    	if($('#space_list_body tr input:checkbox:checked').length > 1){
+    	if($('.fixedTable tr input:checkbox:checked').length > 1){
 
         	$('#edit_button').removeClass('disabled');
         	$('#export_button').removeClass('disabled');
@@ -203,21 +202,45 @@
 	function setTableScrollHeight() {
 
         var winH = $(window).height();
+        var winW = $(window).width();
         var headerH = $(".navbar").height();
         var alertH = $(".alert").height();
         var filterH = $("#filter_block").height();
 
-        var tableContainerH = winH - headerH - alertH - filterH - 100;  // approximation height of table container
-        var tableH = $(".table").height();
+        var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        //var tableH = $(".table").height();
 
-        if (tableH > tableContainerH) {
+        /*if (tableH > tableContainerH) {
             $("#table_scroller_container").height(tableContainerH);
             $("body").addClass("freeze");
         }
         else {
             $("#table_scroller_container").height("auto");
             $("body").removeClass("freeze");
-        }
+        }*/
+
+
+        // fixed table
+		$(".tableDiv").each(function() {
+            var Id = $(this).get(0).id;
+            var maintbheight = tableContainerH;
+            var maintbwidth = winW - 80;
+
+            $("#" + Id + " .FixedTables").fixedTable({
+                width: maintbwidth,
+                height: maintbheight,
+                fixedColumns: 3,
+                classHeader: "fixedHead",
+                classFooter: "fixedFoot",
+                classColumn: "fixedColumn",
+                fixedColumnWidth: 350,
+                outerId: Id,
+                backcolor: "#FFFFFF",
+                hovercolor: "#99CCFF"
+            });
+        });
+
+        $("body").addClass("freeze");
 
 	}
 
