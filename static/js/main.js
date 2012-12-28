@@ -55,8 +55,10 @@ $special = $event.special.debouncedresize = {
 		else {
     		$('#success_message').hide();
 		}
-		// make the table header and first 3 columns fixed
-		//buildScrollTable();
+
+
+
+
 
 		getSpaceCount();
 		toggleEditExportButtons();
@@ -67,10 +69,11 @@ $special = $event.special.debouncedresize = {
             'placement': 'top',
             'animation': true,
         });
-        console.log(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 310);
-        $(".fixedHead").width(tableContainerW);
-        $("#table_scroller").width(tableContainerW);
+
+        // set widths for table container
+        $(".fixedContainer").width(tableContainerW - 302);
+        $(".fixedHead").width(tableContainerW - 302);
+        $("#table_scroller").width(tableContainerW - 302);
 
         // Apply the scroll handlers
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
