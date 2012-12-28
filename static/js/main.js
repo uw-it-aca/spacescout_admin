@@ -71,7 +71,6 @@ $special = $event.special.debouncedresize = {
 
 	});
 
-
     $(w).on("debouncedresize", function( event ) {
         // Your event handler code goes here.
         winH = $(window).height();
@@ -95,7 +94,8 @@ $special = $event.special.debouncedresize = {
 
 
 	// check individual checkboxes
-	$('.fixedTable tr input:checkbox').click(function(){
+	$('.fixedTable tr input:checkbox').live("click", function(e){
+
         // check the corresponding checkbox
         $(this).prop('checked', this.checked);
         // toggle buttons based on checkbox
@@ -103,7 +103,7 @@ $special = $event.special.debouncedresize = {
      });
 
 	// check all checkboxes
-	$('#check_all_checkbox').live("click", function(event){
+	$('#check_all_checkbox').live("click", function(e){
 
     	// check all the checkboxes
         if($("#check_all_checkbox").is(':checked')){
@@ -242,7 +242,7 @@ $special = $event.special.debouncedresize = {
 	// toggle edit and export buttons
 	function toggleEditExportButtons() {
 
-    	if($('.fixedTable tr input:checkbox:checked').length > 1){
+    	if($('.fixedTable .check input:checkbox:checked').length > 1){
 
         	$('#edit_button').removeClass('disabled');
         	$('#export_button').removeClass('disabled');
