@@ -80,15 +80,20 @@ $special = $event.special.debouncedresize = {
 	});
 
     $(w).on("debouncedresize", function( event ) {
-        // Your event handler code goes here.
+
+        // reset base widths
         winH = $(window).height();
         winW = $(window).width();
         headerH = $(".navbar").height();
         alertH = $(".alert").height();
         filterH = $("#filter_block").height();
         tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        tableContainerW = $("#table_scroller_container").width();
 
-        window.location.reload(true);
+        // set widths for table container
+        $(".fixedContainer").width(tableContainerW - 302);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
+        $("#table_scroller").width(tableContainerW - 302);
     });
 
 
