@@ -103,11 +103,17 @@ $special = $event.special.debouncedresize = {
      });
 
 	// check all checkboxes
-	$('#check_all_checkbox').click(function(){
+	$('#check_all_checkbox').live("click", function(event){
 
     	// check all the checkboxes
-    	//$('.fixedTable').closest('.check').find(':checkbox').prop('checked', this.checked);
-    	$('.fixedTable').find(':checkbox').attr('checked','checked');
+        if($("#check_all_checkbox").is(':checked')){
+            console.log("checkbox checker was checked");
+            $('.fixedTable').find(':checkbox').attr('checked', true);
+        } else {
+            console.log("checkbox checker was unchecked");
+            $('.fixedTable').find(':checkbox').attr('checked', false);
+        };
+
     	// toggle buttons based on checkboxes
     	toggleEditExportButtons();
 	});
