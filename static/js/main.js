@@ -1,3 +1,39 @@
+(function($) {
+
+var $event = $.event,
+	$special,
+	resizeTimeout;
+
+$special = $event.special.debouncedresize = {
+	setup: function() {
+		$( this ).on( "resize", $special.handler );
+	},
+	teardown: function() {
+		$( this ).off( "resize", $special.handler );
+	},
+	handler: function( event, execAsap ) {
+		// Save the context
+		var context = this,
+			args = arguments,
+			dispatch = function() {
+				// set correct event type
+				event.type = "debouncedresize";
+				$event.dispatch.apply( context, args );
+			};
+
+		if ( resizeTimeout ) {
+			clearTimeout( resizeTimeout );
+		}
+
+		execAsap ?
+			dispatch() :
+			resizeTimeout = setTimeout( dispatch, $special.threshold );
+	},
+	threshold: 150
+};
+
+})(jQuery);
+
 (function(w){
 
     var winH = $(window).height();
@@ -6,6 +42,8 @@
     var alertH = $(".alert").height();
     var filterH = $("#filter_block").height();
     var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+
+    var divClone;
 
 	$(document).ready(function() {
 
@@ -17,6 +55,8 @@
 		else {
     		$('#success_message').hide();
 		}
+
+		divClone = $('#table_scroller').clone();
 
 		buildScrollTable();
 
@@ -33,7 +73,7 @@
 
 	});
 
-	$(w).resize(function(){ //Update dimensions on resize
+	/*$(w).resize(function(){ //Update dimensions on resize
 
 	    winH = $(window).height();
         winW = $(window).width();
@@ -42,8 +82,38 @@
         filterH = $("#filter_block").height();
         tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
 
+        console.log("wwwwww");
     	buildScrollTable();
-	});
+	});*/
+
+	/*$(w).smartresize(function(){
+      // code that takes it easy...
+        winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+
+    	buildScrollTable();
+    });*/
+
+    $(w).on("debouncedresize", function( event ) {
+        // Your event handler code goes here.
+        winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+
+        //window.location.reload(true);
+
+        // reinsert cloned table before building the scrolltable
+        $('#table_scroller_container').html(divClone);
+        buildScrollTable();
+    });
+
 
 	//show filter block
 	$('#filter_block_button').click(function(e){
@@ -220,8 +290,6 @@
 
 	    var maintbheight = tableContainerH;
         var maintbwidth = winW - 64;
-
-        console.log("table"+tableContainerH + "maintable" + maintbheight);
 
         // fixed table
 		$(".tableDiv").each(function() {
