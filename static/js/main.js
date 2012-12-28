@@ -55,9 +55,7 @@ $special = $event.special.debouncedresize = {
 		else {
     		$('#success_message').hide();
 		}
-
-		divClone = $('#table_scroller').clone();
-
+		// make the table header and first 3 columns fixed
 		buildScrollTable();
 
 		getSpaceCount();
@@ -73,30 +71,6 @@ $special = $event.special.debouncedresize = {
 
 	});
 
-	/*$(w).resize(function(){ //Update dimensions on resize
-
-	    winH = $(window).height();
-        winW = $(window).width();
-        headerH = $(".navbar").height();
-        alertH = $(".alert").height();
-        filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-
-        console.log("wwwwww");
-    	buildScrollTable();
-	});*/
-
-	/*$(w).smartresize(function(){
-      // code that takes it easy...
-        winH = $(window).height();
-        winW = $(window).width();
-        headerH = $(".navbar").height();
-        alertH = $(".alert").height();
-        filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-
-    	buildScrollTable();
-    });*/
 
     $(w).on("debouncedresize", function( event ) {
         // Your event handler code goes here.
@@ -107,11 +81,7 @@ $special = $event.special.debouncedresize = {
         filterH = $("#filter_block").height();
         tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
 
-        //window.location.reload(true);
-
-        // reinsert cloned table before building the scrolltable
-        $('#table_scroller_container').html(divClone);
-        buildScrollTable();
+        window.location.reload(true);
     });
 
 
