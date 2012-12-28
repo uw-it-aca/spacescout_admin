@@ -43,7 +43,7 @@ $special = $event.special.debouncedresize = {
     var filterH = $("#filter_block").height();
     var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
 
-    var divClone;
+    var tableContainerW = $("#table_scroller_container").width();
 
 	$(document).ready(function() {
 
@@ -56,7 +56,7 @@ $special = $event.special.debouncedresize = {
     		$('#success_message').hide();
 		}
 		// make the table header and first 3 columns fixed
-		buildScrollTable();
+		//buildScrollTable();
 
 		getSpaceCount();
 		toggleEditExportButtons();
@@ -66,6 +66,15 @@ $special = $event.special.debouncedresize = {
 		$(".populate-column").tooltip({
             'placement': 'top',
             'animation': true,
+        });
+        console.log(tableContainerW);
+        $(".fixedContainer").width(tableContainerW - 310);
+        $(".fixedHead").width(tableContainerW);
+        $("#table_scroller").width(tableContainerW);
+
+        // Apply the scroll handlers
+        $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
+            handleScroll();
         });
 
 
@@ -300,6 +309,19 @@ $special = $event.special.debouncedresize = {
         }
     }
 
+    // Handle the scroll events
+    function handleScroll() {
+        //Find the scrolling offsets
+        var tblarea = $('#table_scroller');
+        var x = tblarea[0].scrollLeft;
+        var y = tblarea[0].scrollTop;
 
+        $(".fixedColumn .fixedTable")[0].scrollTop = y;
+        //$(mainid + " ." + classColumn + " > .fixedTable")[0].scrollTop = y;
+
+        $(".fixedContainer .fixedHead")[0].scrollLeft = x;
+        //$(mainid + " .fixedContainer > ." + classHeader)[0].scrollLeft = x;
+
+    }
 
 })(this);
