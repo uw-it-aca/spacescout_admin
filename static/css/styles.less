@@ -93,13 +93,16 @@ body { padding-top: 40px; }
 }
 
 
-.tableDiv { font-size: 12px; border: solid 1px #ddd; .rounded-corners(3px); }
+.tableDiv { font-size: 12px; border: solid 1px #ddd; .rounded-corners(3px);
+
+    td { white-space: nowrap; line-height: 30px; }
+}
 
 .fixedColumn { border-right: solid 2px #c6c6c6;
     .fixedHead {
 
         tr {  border-bottom: solid 1px #ddd; }
-        td { background-color: #e7e7e7; line-height: 25px; border-right: solid 1px #ddd;
+        td { background-color: #e7e7e7; border-right: solid 1px #ddd;
             input[type="text"] { vertical-align: text-top; margin: 0; }
         }
 
@@ -118,7 +121,7 @@ body { padding-top: 40px; }
     .fixedHead {
 
         tr {  border-bottom: solid 1px #ddd; }
-        td { background-color: #eee; line-height: 25px; border-right: solid 1px #ddd;
+        td { background-color: #eee; border-right: solid 1px #ddd;
             input[type="text"] { vertical-align: text-top; margin: 0; }
         }
 
@@ -128,6 +131,7 @@ body { padding-top: 40px; }
 
     .fixedTable {
         tr { border-bottom: solid 1px #ddd; }
+        tr:last-child { border-bottom: none; }
     }
 }
 

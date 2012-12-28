@@ -211,7 +211,7 @@
         var fixedColumnhovercolor = options.fixedColumnhovercolor;
 
         // row height
-        $("#" + Id + " ." + options.classColumn + " .fixedTable table tbody tr").each(function(i) {
+        /*$("#" + Id + " ." + options.classColumn + " .fixedTable table tbody tr").each(function(i) {
             var maxh = 0;
             var fixedh = $(this).height();
             var contenth = $("#" + Id + " .fixedContainer .fixedTable table tbody tr").eq(i).height();
@@ -224,7 +224,7 @@
             //$(this).height(contenth);
             $(this).children("td").height(maxh);
             $("#" + Id + " .fixedContainer .fixedTable table tbody tr").eq(i).children("td").height(maxh);
-        });
+        });*/
 
         //adjust the cell widths so the header/footer and table cells line up
         var htbale = $("#" + Id + " .fixedContainer ." + options.classHeader + " table");
