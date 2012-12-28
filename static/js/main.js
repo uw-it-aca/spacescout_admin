@@ -56,10 +56,6 @@ $special = $event.special.debouncedresize = {
     		$('#success_message').hide();
 		}
 
-
-
-
-
 		getSpaceCount();
 		toggleEditExportButtons();
 
@@ -72,10 +68,10 @@ $special = $event.special.debouncedresize = {
 
         // set widths for table container
         $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedHead").width(tableContainerW - 302);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
 
-        // Apply the scroll handlers
+        // handle scrolling
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
             handleScroll();
         });
