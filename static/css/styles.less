@@ -95,14 +95,15 @@ body { padding-top: 40px; }
 
 .tableDiv { font-size: 12px; border: solid 1px #ddd; .rounded-corners(3px); margin-bottom: 8px;
 
-    td { white-space: nowrap; line-height: 30px; border-right: solid 1px #ddd; }
+    td { white-space: nowrap; line-height: 30px; border-right: solid 1px #ddd; padding: 0 4px; }
 
-    .check { width: 30px !important; text-align: center; }
+    .col-checkbox { width: 20px;  text-align: center; }
+    .col-id { width: 40px; }
 }
 
 .fixedColumn { border-right: solid 2px #c6c6c6;
 
-    .fixedHead {
+    .fixedHead { font-weight: bold;
 
         tr {  border-bottom: solid 1px #ddd; }
         td { background-color: #e7e7e7;
@@ -122,7 +123,8 @@ body { padding-top: 40px; }
 }
 
 .fixedContainer {
-    .fixedHead {
+
+    .fixedHead { font-weight: bold;
 
         tr {  border-bottom: solid 1px #ddd; }
         td { background-color: #eee; border-right: solid 1px #ddd;

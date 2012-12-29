@@ -67,6 +67,8 @@ $special = $event.special.debouncedresize = {
         });
 
         // set widths for table container
+
+        $(".fixedArea").width(tableContainerW);
         $(".fixedContainer").width(tableContainerW - 302);
         $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
@@ -79,7 +81,9 @@ $special = $event.special.debouncedresize = {
 
 	});
 
-    $(w).on("debouncedresize", function( event ) {
+    /*$(w).on("debouncedresize", function( event ) {
+
+        console.log("resize");
 
         // reset base widths
         winH = $(window).height();
@@ -91,6 +95,26 @@ $special = $event.special.debouncedresize = {
         tableContainerW = $("#table_scroller_container").width();
 
         // set widths for table container
+        $(".fixedContainer").width(tableContainerW - 302);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
+        $("#table_scroller").width(tableContainerW - 302);
+    });
+    */
+
+    $(w).resize(function() {
+        console.log("resize");
+
+        // reset base widths
+        winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        tableContainerW = $("#table_scroller_container").width();
+
+        // set widths for table container
+        $(".fixedArea").width(tableContainerW);
         $(".fixedContainer").width(tableContainerW - 302);
         $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
@@ -110,7 +134,7 @@ $special = $event.special.debouncedresize = {
 	$('.fixedTable tr input:checkbox').live("click", function(e){
 
         // check the corresponding checkbox
-        $(this).prop('checked', this.checked);
+        $(this).attr('checked', true);
         // toggle buttons based on checkbox
         toggleEditExportButtons();
      });
@@ -120,10 +144,8 @@ $special = $event.special.debouncedresize = {
 
     	// check all the checkboxes
         if($("#check_all_checkbox").is(':checked')){
-            console.log("checkbox checker was checked");
             $('.fixedTable').find(':checkbox').attr('checked', true);
         } else {
-            console.log("checkbox checker was unchecked");
             $('.fixedTable').find(':checkbox').attr('checked', false);
         };
 
@@ -152,7 +174,7 @@ $special = $event.special.debouncedresize = {
             e.preventDefault();
         }
         else {
-            var space_count = $('#space_list_body tr input:checkbox:checked').length;
+            var space_count = $('.fixedTable tr input:checkbox:checked').length;
             // pass number of checked spaces to hidden field
             $('#checked_spaces_count').val(space_count);
         }
@@ -255,7 +277,7 @@ $special = $event.special.debouncedresize = {
 	// toggle edit and export buttons
 	function toggleEditExportButtons() {
 
-    	if($('.fixedTable .check input:checkbox:checked').length > 1){
+    	if($('.fixedTable .col-checkbox input:checkbox:checked').length > 1){
 
         	$('#edit_button').removeClass('disabled');
         	$('#export_button').removeClass('disabled');
