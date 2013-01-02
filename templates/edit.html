@@ -48,12 +48,12 @@
                     <table style="width: 1680px;">
                         <tbody>
                             <tr>
-                                <td width="193px">Building <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td width="121px">Type <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td width="183px">Floor</td>
-                                <td width="260px">Orientation <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td width="315px">Access Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td width="496px">Hours Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-building">Building <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-type">Type <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-floor">Floor</td>
+                                <td class="col-orientation">Orientation <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-notes">Access Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-notes">Hours Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -65,8 +65,8 @@
                         <tbody id="space_list_body">
                             {% for i in count %}
                             <tr>
-                                <td width="193px"><input type="text" value="building name here"></td>
-                                <td width="121px">
+                                <td class="col-building"><input type="text" value="building name here"></td>
+                                <td class="col-type">
                                     <select>
                                         <option>aslkdflkasdfj sadflkas</option>
                                         <option>asfddsf</option>
@@ -75,10 +75,10 @@
                                         <option>zxzx xncvxb</option>
                                     </select>
                                 </td>
-                                <td width="183px"><input type="text" value="2nd floor"></td>
-                                <td width="260px"><input type="text" value="North"></td>
-                                <td width="315px"><input type="text" value="Husky Card required for RC access 10pm-2am Sun-Th."></td>
-                                <td width="496px"><input type="text" value="This space can be reserved at the help desk or online at https://commons.lib.washington.edu."></td>
+                                <td class="col-floor"><input type="text" value="2nd floor"></td>
+                                <td class="col-orientation"><input type="text" value="North"></td>
+                                <td class="col-notes"><input type="text" value="Husky Card required for RC access 10pm-2am Sun-Th."></td>
+                                <td class="col-notes"><input type="text" value="This space can be reserved at the help desk or online at https://commons.lib.washington.edu."></td>
                             </tr>
                             {% endfor %}
                         </tbody>

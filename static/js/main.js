@@ -81,27 +81,8 @@ $special = $event.special.debouncedresize = {
 
 	});
 
-    /*$(w).on("debouncedresize", function( event ) {
+    $(w).on("debouncedresize", function( event ) {
 
-        console.log("resize");
-
-        // reset base widths
-        winH = $(window).height();
-        winW = $(window).width();
-        headerH = $(".navbar").height();
-        alertH = $(".alert").height();
-        filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-        tableContainerW = $("#table_scroller_container").width();
-
-        // set widths for table container
-        $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
-        $("#table_scroller").width(tableContainerW - 302);
-    });
-    */
-
-    $(w).resize(function() {
         console.log("resize");
 
         // reset base widths
@@ -119,6 +100,26 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
     });
+
+
+    /*$(w).resize(function() {
+        console.log("resize");
+
+        // reset base widths
+        winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        tableContainerW = $("#table_scroller_container").width();
+
+        // set widths for table container
+        $(".fixedArea").width(tableContainerW);
+        $(".fixedContainer").width(tableContainerW - 302);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
+        $("#table_scroller").width(tableContainerW - 302);
+    });*/
 
 
 	//show filter block
