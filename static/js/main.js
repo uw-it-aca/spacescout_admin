@@ -107,6 +107,8 @@ $special = $event.special.debouncedresize = {
 
 	//show filter block
 	$('#filter_block_button').click(function(e){
+
+    	console.log("sadlkjfalsdfkja");
     	e.preventDefault();
     	$('#filter_block').toggleClass('slidedown');
         // wait for the filter block to slide down before resetting the table scroll height
