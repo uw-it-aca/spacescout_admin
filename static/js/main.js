@@ -73,6 +73,10 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
 
+        $("#table_scroller").height(tableContainerH - 30);
+        $(".fixedTable").height(tableContainerH - 30);
+        $(".fixedColumn").height(tableContainerH + 1);
+
         // handle scrolling
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
             handleScroll();
@@ -99,6 +103,10 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer").width(tableContainerW - 302);
         $(".fixedContainer .fixedHead").width(tableContainerW - 302);
         $("#table_scroller").width(tableContainerW - 302);
+
+        $("#table_scroller").height(tableContainerH - 30);
+        $(".fixedTable").height(tableContainerH - 30);
+        $(".fixedColumn").height(tableContainerH + 1);
     });
 
 
