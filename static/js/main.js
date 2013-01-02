@@ -80,15 +80,6 @@ $special = $event.special.debouncedresize = {
 
         console.log("resize");
 
-        // reset base widths
-        winH = $(window).height();
-        winW = $(window).width();
-        headerH = $(".navbar").height();
-        alertH = $(".alert").height();
-        filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-        tableContainerW = $("#table_scroller_container").width();
-
         buildScrollTable();
 
     });
@@ -119,7 +110,7 @@ $special = $event.special.debouncedresize = {
     	e.preventDefault();
     	$('#filter_block').toggleClass('slidedown');
         // wait for the filter block to slide down before resetting the table scroll height
-        //setTimeout(setTableScrollHeight, 699);
+        setTimeout(buildScrollTable, 699);
 	});
 
 
@@ -292,6 +283,15 @@ $special = $event.special.debouncedresize = {
 
 	function buildScrollTable() {
 
+    	// reset base widths
+        winH = $(window).height();
+        winW = $(window).width();
+        headerH = $(".navbar").height();
+        alertH = $(".alert").height();
+        filterH = $("#filter_block").height();
+        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        tableContainerW = $("#table_scroller_container").width();
+
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
         $(".fixedContainer").width(tableContainerW - 302);
@@ -305,6 +305,8 @@ $special = $event.special.debouncedresize = {
         $("#table_scroller").css("max-height", tableContainerH - 30);
         $(".fixedTable").css("max-height", tableContainerH - 30);
         $(".fixedColumn").css("max-height", tableContainerH + 1);
+
+        console.log("dsalkfj");
 	}
 
 	function GetQueryStringParams(sParam) {
