@@ -16,186 +16,105 @@
         <h5 class="pull-left" style="margin:0;">EDIT SPACES</h5>
     </div>
 
-    <div id="table_scroller_container" class="table-scroll">
-    <table class="table table-bordered table-striped table-condensed table-edit">
-        <caption class="visuallyhidden">Edit Multiple Spaces</caption>
-        <thead style="">
-            <tr>
-                <th class="id">ID</th>
-                <th>Space</th>
-                <th>Building <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-                <th>Type <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-                <th>Floor <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-                <th>Orientation <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-                <th>Access Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-                <th>Hours Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></th>
-            </tr>
-        </thead>
-        <tbody id="edit_list_body">
+    <div id="table_scroller_container" class="tableDiv">
+        <div class="fixedArea clearfix">
+            <div class="fixedColumn" style="float: left; width: 300px; height: 364px;">
+                <div class="fixedHead">
+                    <table style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td class="col-id" id="">ID</td>
+                                <td class="col-space" id="">Space</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="fixedTable" style="width: 300px; overflow: hidden; border-collapse: collapse; padding: 0px; height: 333px;">
+                    <table style="width:100%;">
+                        <tbody>
+                            {% for i in count %}
+                            <tr>
+                                <td class="col-id muted">{{i}}</td>
+                                <td class="col-space" id=""><input type="text" value="space name here"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            {% for i in count %}
-            <tr>
-                <td class="muted">{{i}}</td>
-                <td><input type="text" value="asdfasdfasdfsa"></td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td>
-                    <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td><input type="text" value="asdjflasdk"></td>
-                <td>
-                    <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value="asdjflasdk"></td>
-            </tr>
-            {% endfor %}
+            <div class="fixedContainer" style="float: left; overflow:hidden;">
+                <div class="fixedHead" style="width: 1069px; float: left; overflow: hidden;">
+                    <table style="width: 1680px;">
+                        <tbody>
+                            <tr>
+                                <td width="193px">Building <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td width="121px">Type <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td width="183px">Floor</td>
+                                <td width="260px">Orientation <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td width="315px">Access Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td width="496px">Hours Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <tr class="add-new hide">
-                <td></td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-            </tr>
-            <tr class="add-new hide">
-                <td></td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-            </tr>
-            <tr class="add-new hide">
-                <td></td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-            </tr>
-            <tr class="add-new hide">
-                <td></td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-            </tr>
-            <tr class="add-new hide">
-                <td></td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>--</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-                <td><input type="text" value=""></td>
-                <td>
-                    <select>
-                        <option>-</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
-                </td>
-                <td><input type="text" value=""></td>
-            </tr>
-
-        </tbody>
-    </table>
+                <div id="table_scroller" class="fixedTable" style="float: left;  overflow: auto; height: 333px;">
+                    <table class="FixedTables" style="width: 1680px;">
+                        <caption class="visuallyhidden">List of Spaces</caption>
+                        <tbody id="space_list_body">
+                            {% for i in count %}
+                            <tr>
+                                <td width="193px"><input type="text" value="building name here"></td>
+                                <td width="121px">
+                                    <select>
+                                        <option>aslkdflkasdfj sadflkas</option>
+                                        <option>asfddsf</option>
+                                        <option>qweiu roi oweui</option>
+                                        <option>4sdaouwen khj</option>
+                                        <option>zxzx xncvxb</option>
+                                    </select>
+                                </td>
+                                <td width="183px"><input type="text" value="2nd floor"></td>
+                                <td width="260px"><input type="text" value="North"></td>
+                                <td width="315px"><input type="text" value="Husky Card required for RC access 10pm-2am Sun-Th."></td>
+                                <td width="496px"><input type="text" value="This space can be reserved at the help desk or online at https://commons.lib.washington.edu."></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="table-sub-options clearfix">
         <ul class="pull-left">
 
