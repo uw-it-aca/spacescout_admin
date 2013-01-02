@@ -66,16 +66,7 @@ $special = $event.special.debouncedresize = {
             'animation': true,
         });
 
-        // set widths for table container
-
-        $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
-        $("#table_scroller").width(tableContainerW - 302);
-
-        $("#table_scroller").height(tableContainerH - 30);
-        $(".fixedTable").height(tableContainerH - 30);
-        $(".fixedColumn").height(tableContainerH + 1);
+        buildScrollTable();
 
         // handle scrolling
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
@@ -98,15 +89,8 @@ $special = $event.special.debouncedresize = {
         tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
         tableContainerW = $("#table_scroller_container").width();
 
-        // set widths for table container
-        $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
-        $("#table_scroller").width(tableContainerW - 302);
+        buildScrollTable();
 
-        $("#table_scroller").height(tableContainerH - 30);
-        $(".fixedTable").height(tableContainerH - 30);
-        $(".fixedColumn").height(tableContainerH + 1);
     });
 
 
@@ -308,27 +292,19 @@ $special = $event.special.debouncedresize = {
 
 	function buildScrollTable() {
 
-	    var maintbheight = tableContainerH;
-        var maintbwidth = winW - 64;
+    	// set widths for table container
+        $(".fixedArea").width(tableContainerW);
+        $(".fixedContainer").width(tableContainerW - 302);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
+        $("#table_scroller").width(tableContainerW - 302);
 
-        // fixed table
-		$(".tableDiv").each(function() {
+        /*$("#table_scroller").height(tableContainerH - 30);
+        $(".fixedTable").height(tableContainerH - 30);
+        $(".fixedColumn").height(tableContainerH + 1);*/
 
-            var Id = $(this).get(0).id;
-
-            $("#" + Id + " .FixedTables").fixedTable({
-                width: maintbwidth,
-                height: maintbheight,
-                fixedColumns: 3,
-                classHeader: "fixedHead",
-                classFooter: "fixedFoot",
-                classColumn: "fixedColumn",
-                fixedColumnWidth: 300,
-                outerId: Id,
-                backcolor: "#FFFFFF",
-                hovercolor: "#99CCFF"
-            });
-        });
+        $("#table_scroller").css("max-height", tableContainerH - 30);
+        $(".fixedTable").css("max-height", tableContainerH - 30);
+        $(".fixedColumn").css("max-height", tableContainerH + 1);
 	}
 
 	function GetQueryStringParams(sParam) {
