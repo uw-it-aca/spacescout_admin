@@ -5,22 +5,23 @@
 <div id="filter_block">
     <div style="padding:10px;color:#222;">
         <div class="clearfix"><h5 style="margin-top:0;display:inline-block;">FILTERS</h5> <a href="#" id="filter_block_button" class="dropdown pull-right"><i class="icon-chevron-down" style="opacity:.5;"></i></a></div>
-        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquam pulvinar dolor, non ultrices quam hendrerit non. Phasellus vel laoreet sapien. Vivamus imperdiet dapibus ornare. Proin bibendum pellentesque risus id viverra. Aenean tellus ligula, tempus sit amet rhoncus eget, tincidunt ac mi. Cras vitae nisl at lectus mattis vulputate in vel mauris. Integer vehicula nibh lobortis magna cursus fringilla. Nam tincidunt dolor sed felis ultricies bibendum. Vivamus auctor odio sit amet nisl pretium quis faucibus diam dictum. Donec consequat turpis eget justo pharetra ut mattis ipsum tempus. Nunc pharetra tempor tempor. Morbi sed dolor erat, id malesuada sapien.</div>
+        <div>You're going to be an interesting companion, Mr. Data. I can't. As much as I care about you, my first duty is to the ship. When has justice ever been as simple as a rule book? In all trust, there is the possibility for betrayal. Shields up! Rrrrred alert! Fate protects fools, little children and ships named Enterprise. Your head is not an artifact! Captain, why we are we out here chasing comets? Besides, you look good in a dress. We have a saboteur aboard. That might've been one of the shortest assignments in the history of Starfleet. Fear is the true enemy, the only enemy.</div>
 
     </div>
 </div>
 
 
-<div id="success_message" class="alert alert-success fade in" style="margin-bottom:8px;">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Well done!</strong> You successfully completed a task.
-</div>
+
 
 <div class="table-container">
 <form name="spaces" action="/space/" method="post">
 
     <div class="table-options clearfix">
         <h5 class="pull-left" style="margin:0;">SPACES</h5>
+        <div id="success_message" class="alert alert-success fade in pull-left" style="margin: 0 0 0 20px;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Well done!</strong> You successfully completed a task.
+        </div>
         <ul class="pull-right">
             <li><a href="/upload" id="batch_upload_button" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Batch Upload</a></li>
             <li><a href="/space/multiple" id="add_multiple_button" class="btn btn-mini"><i class="icon-plus-sign"></i> Multiple Spaces</a></li>
@@ -48,42 +49,42 @@
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td class="col-id" id="">1</td>
-                                <td class="col-space" id=""><a href="/space/123">Allen 2nd N/S Bridge</a></td>
+                                <td class="col-space" id=""><a href="/space/123">Allen 2nd N/S Bridge</a> </td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">2</td>
-                                <td id=""><a href="/space/123">Allen Balcony</a></td>
+                                <td id=""><a href="/space/123">Allen Balcony</a> <span class="label">Updated</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">3</td>
-                                <td id=""><a href="/space/123">Booth A</a></td>
+                                <td id=""><a href="/space/123">Booth A</a> <span class="label">Updated</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">4</td>
-                                <td id=""><a href="/space/123">Green A</a></td>
+                                <td id=""><a href="/space/123">Green A</a> <span class="label label-warning">Queued</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">5</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> </td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">6</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> <span class="label label-warning">Queued</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">7</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> </td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">8</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> </td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
@@ -93,12 +94,12 @@
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">10</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> <span class="label">Updated</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">11</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> <span class="label">Updated</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
@@ -113,7 +114,7 @@
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 <td id="">14</td>
-                                <td id=""><a href="/space/123">asdfasdfasdfsa</a></td>
+                                <td id=""><a href="/space/123">asdfasdfasdfsa</a> <span class="label label-warning">Queued</span></td>
                             </tr>
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>

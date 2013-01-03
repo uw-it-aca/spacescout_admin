@@ -39,22 +39,13 @@ $special = $event.special.debouncedresize = {
     var winH = $(window).height();
     var winW = $(window).width();
     var headerH = $(".navbar").height();
-    var alertH = $(".alert").height();
     var filterH = $("#filter_block").height();
-    var tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+    var tableContainerH = winH - headerH - filterH - 90;  // approximation height of table container
 
     var tableContainerW = $("#table_scroller_container").width();
 
 	$(document).ready(function() {
 
-    	// show the success message
-		var success = GetQueryStringParams('q');
-		if (success) {
-    		$('#success_message').show();
-		}
-		else {
-    		$('#success_message').hide();
-		}
 
 		getSpaceCount();
 		toggleEditExportButtons();
@@ -289,9 +280,8 @@ $special = $event.special.debouncedresize = {
         winH = $(window).height();
         winW = $(window).width();
         headerH = $(".navbar").height();
-        alertH = $(".alert").height();
         filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
+        tableContainerH = winH - headerH - filterH - 90;  // approximation height of table container
         tableContainerW = $("#table_scroller_container").width();
 
     	// set widths for table container
@@ -304,11 +294,10 @@ $special = $event.special.debouncedresize = {
         $(".fixedTable").height(tableContainerH - 30);
         $(".fixedColumn").height(tableContainerH + 1);*/
 
-        $("#table_scroller").css("max-height", tableContainerH - 30);
-        $(".fixedTable").css("max-height", tableContainerH - 30);
+        $("#table_scroller").css("max-height", tableContainerH - 55);
+        $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);
 
-        console.log("dsalkfj");
 	}
 
 	function GetQueryStringParams(sParam) {
