@@ -111,7 +111,13 @@ $special = $event.special.debouncedresize = {
 	$('.fixedTable tr input:checkbox').live("click", function(e){
 
         // check the corresponding checkbox
-        $(this).attr('checked', true);
+        if($(this).is(':checked')){
+            $(this).prop('checked', true);
+        }
+        else {
+            $(this).prop('checked', false);
+        }
+
         // toggle buttons based on checkbox
         toggleEditExportButtons();
      });
@@ -121,9 +127,9 @@ $special = $event.special.debouncedresize = {
 
     	// check all the checkboxes
         if($("#check_all_checkbox").is(':checked')){
-            $('.fixedTable').find(':checkbox').attr('checked', true);
+            $('.fixedTable').find(':checkbox').prop('checked', true);
         } else {
-            $('.fixedTable').find(':checkbox').attr('checked', false);
+            $('.fixedTable').find(':checkbox').prop('checked', false);
         };
 
     	// toggle buttons based on checkboxes
@@ -286,9 +292,9 @@ $special = $event.special.debouncedresize = {
 
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
-        $("#table_scroller").width(tableContainerW - 302);
+        $(".fixedContainer").width(tableContainerW - 402);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 402);
+        $("#table_scroller").width(tableContainerW - 402);
 
         /*$("#table_scroller").height(tableContainerH - 30);
         $(".fixedTable").height(tableContainerH - 30);
