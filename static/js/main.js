@@ -112,10 +112,10 @@ $special = $event.special.debouncedresize = {
 
         // check the corresponding checkbox
         if($(this).is(':checked')){
-            $(this).prop('checked', true);
+            $(this).attr('checked', true);
         }
         else {
-            $(this).prop('checked', false);
+            $(this).attr('checked', false);
         }
 
         // toggle buttons based on checkbox
@@ -127,9 +127,9 @@ $special = $event.special.debouncedresize = {
 
     	// check all the checkboxes
         if($("#check_all_checkbox").is(':checked')){
-            $('.fixedTable').find(':checkbox').prop('checked', true);
+            $('.fixedTable').find(':checkbox').attr('checked', true);
         } else {
-            $('.fixedTable').find(':checkbox').prop('checked', false);
+            $('.fixedTable').find(':checkbox').attr('checked', false);
         };
 
     	// toggle buttons based on checkboxes
