@@ -84,10 +84,16 @@ body { padding-top: 40px; }
 
     table { max-width: none; }
     input[type="text"], select { margin: 0; font-size: 12px; padding: 1px 4px; color: #000; width: auto; }
-    select { height: 24px; width: auto; }
+    .checkbox { font-size: 12px; }
+
+    select { width: auto; }
 
     tr {  border-bottom: solid 1px #ddd; }
-    td { white-space: nowrap; line-height: 27px; border-right: solid 1px #ddd; padding: 0 4px; }
+    td { white-space: nowrap; line-height: 27px; border-right: solid 1px #ddd; padding: 0 4px; background: #fff; }
+
+    tbody {
+        tr:last-child { border-bottom: none; }
+    }
 
     .col-checkbox { width: 20px;  text-align: center; }
     .col-id { width: 40px; }
@@ -99,7 +105,9 @@ body { padding-top: 40px; }
     }
 
     .col-building { }
-    .col-type { width:  250px; }
+    .col-type { width:  250px;
+        select { height: 24px; }
+    }
     .col-floor { width: 250px; }
     .col-orientation { width: 300px; }
     .col-notes { width: 300px;

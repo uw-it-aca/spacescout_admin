@@ -11,12 +11,16 @@
 <form name="add_space" action="" method="">
 
     <div class="table-options clearfix">
-        <h5 class="pull-left" style="margin:0;">EDIT SPACE</h5>
+        <h5 class="pull-left" style="margin:0;display:inline-block;">EDIT SPACE</h5>
+        <ul class="pull-right">
+            <li>This space has been updated ready to publish</li>
+            <li><button id="publish_button" class="btn btn-mini disabled">Approve</button></li>
+            <li><button id="publish_button" class="btn btn-mini btn-success disabled">Publish</button></li>
+        </ul>
     </div>
 
-    <div id="table_scroller_container" class="table-scroll">
-    <table class="table table-bordered table-striped table-condensed">
-        <caption class="visuallyhidden">List of Spaces</caption>
+    <div id="table_scroller_container" class="tableDiv">
+    <table style="width:100%;">
           <thead>
               <tr>
                   <th style="width:200px;">Field</th>
@@ -24,72 +28,93 @@
                   <th></th>
               </tr>
           </thead>
-
-          <tbody>
+    </table>
+    <div id="" class="table-scroll" style="height:400px;">
+    <table style="width:100%;">
+        <tbody>
               <tr>
                   <td>ID</td>
                   <td>123</td>
                   <td>&nbsp;</td>
               </tr>
               <tr>
-                  <td>Space Name</td>
+                  <td>Space</td>
                   <td><input type="text" value="asdfasdfasdfsa"></td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column2</td>
+                  <td>Building</td>
                   <td><input type="text" value="sadfasdfa"></td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column3</td>
+                  <td>Type</td>
                   <td>
-                      <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Study room</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Study area</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Computer lab</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Production studio</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Conference/classroom</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Open space</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Lounge</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Cafe</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Outdoor area</label>
                   </td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column4</td>
+                  <td>Floor</td>
                   <td><input type="text" value="sadfasdfa"></td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column5</td>
+                  <td>Orientation</td>
                   <td><input type="text" value="aslkdflkasdfj sadflkas"></td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column6</td>
+                  <td>Access Notes</td>
+                  <td><input type="text" value=""></td>
+                  <td>sdalkfja</td>
+              </tr>
+              <tr>
+                  <td>Hours Notes</td>
+                  <td><input type="text" value=""></td>
+                  <td>sdalkfja</td>
+              </tr>
+              <tr>
+                  <td>Resources</td>
                   <td>
-                      <select>
-                        <option>aslkdflkasdfj sadflkas</option>
-                        <option>asfddsf</option>
-                        <option>qweiu roi oweui</option>
-                        <option>4sdaouwen khj</option>
-                        <option>zxzx xncvxb</option>
-                    </select>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Whiteboard</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Outlets</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Computer</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Scanning</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Large display (for laptop)</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Projector</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Printing</label>
                   </td>
                   <td>sdalkfja</td>
               </tr>
               <tr>
-                  <td>column7</td>
-                  <td><input type="text" value=""></td>
+                  <td>Noise Level</td>
+                  <td>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Silet</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Low Hum</label>
+                      <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Chatter</label>
+                  </td>
                   <td>sdalkfja</td>
               </tr>
           </tbody>
       </table>
     </div>
+    </div>
     <div class="table-sub-options clearfix">
         <ul class="pull-left">
-            <li><button  id="save_button" class="btn btn-mini btn-primary" type="button"><i class="icon-check icon-white"></i> Save</button></li>
+            <li><button id="save_button" class="btn btn-mini btn-primary" type="button"><i class="icon-check icon-white"></i> Save</button></li>
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
+
         </ul>
+
     </div>
 
 </form>
