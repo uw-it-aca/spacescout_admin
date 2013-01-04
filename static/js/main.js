@@ -301,6 +301,8 @@ $special = $event.special.debouncedresize = {
         $(".fixedColumn").height(tableContainerH + 1);*/
 
         //$("#table_scroller_container").css("max-height", tableContainerH - 25);
+
+        $("#edit_space_scroller").css("max-height", tableContainerH - 45);
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);
