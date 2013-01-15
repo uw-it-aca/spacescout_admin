@@ -69,7 +69,7 @@ $special = $event.special.debouncedresize = {
 
     $(w).on("debouncedresize", function( event ) {
 
-        console.log("resize");
+        //console.log("resize");
 
         buildScrollTable();
 
@@ -77,7 +77,7 @@ $special = $event.special.debouncedresize = {
 
 
     /*$(w).resize(function() {
-        console.log("resize");
+        //console.log("resize");
 
         // reset base widths
         winH = $(window).height();
@@ -99,7 +99,7 @@ $special = $event.special.debouncedresize = {
 	//show filter block
 	$('#filter_block_button').click(function(e){
 
-    	console.log("sadlkjfalsdfkja");
+    	//console.log("sadlkjfalsdfkja");
     	e.preventDefault();
     	$('#filter_block').toggleClass('slidedown');
         // wait for the filter block to slide down before resetting the table scroll height
@@ -185,7 +185,7 @@ $special = $event.special.debouncedresize = {
         	$('#error_message').show();
     	}
 
-    	console.log(empties);
+    	//console.log(empties);
 
     	// if any visible input are empty, show error alert
     	/*if( $('.table-container').find('input:text:visible').val().length == 0 ) {
@@ -245,11 +245,13 @@ $special = $event.special.debouncedresize = {
     });
 
     // add rows button
+    /* deprecated
     $('#add_rows_button').click(function(e) {
         e.preventDefault();
         $('.add-new').show();
         setTableScrollHeight();
     });
+    */
 
 	// get a count of spaces
 	function getSpaceCount() {
