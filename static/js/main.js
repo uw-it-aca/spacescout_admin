@@ -253,6 +253,18 @@ $special = $event.special.debouncedresize = {
     });
     */
 
+    // switch campuses dropdown menu
+    $('#campus_switcher a').click(function(e) {
+
+        e.preventDefault();
+        alert("switch campus!");
+
+        // if what was clicked is already active - don't do anything
+
+        // otherwise do the switch - change the menu to reflect selected item and re-run the webservice query
+
+    });
+
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
