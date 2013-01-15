@@ -1,23 +1,8 @@
-from spacescout_admin.forms import UploadFileForm
-from spacescout_admin.utils import file_to_json, write_xls, write_csv
-from django.shortcuts import render_to_response
-from django.http import HttpResponse
 from django.conf import settings
-from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.encoding import smart_unicode
 from django.contrib.auth.decorators import login_required
-from poster.encode import multipart_encode
-from poster.streaminghttp import register_openers
-import mimetools
-import mimetypes
-import urllib2
-import urllib
-import oauth2 as oauth
-import urlparse
-import time
-import json
-import csv
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from spacescout_admin.forms import UploadFileForm
 
 
 @login_required
@@ -205,58 +190,3 @@ def upload(request):
     return render_to_response('upload.html', args, context_instance=RequestContext(request))
 
 
-@csrf_exempt
-def download(request):
-    context = RequestContext(request, {})
-
-    # Required settings for the client
-    if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
-        raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
-    if request.method == 'POST':
-        consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-        client = oauth.Client(consumer)
-        url = "%s/api/v1/spot/all"
-        resp, content = client.request(url, "GET", headers={"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"})
-        if content:
-            spots = json.loads(content)
-            if 'csv' in request.POST:
-                response = write_csv(spots)
-                return response
-            elif 'xls' in request.POST:
-                response = write_xls(spots)
-                return response
-    return render_to_response('download.html', context)
-
-@csrf_exempt
-def spaces(request):
-    context = RequestContext(request, {})
-    return render_to_response('spaces.html', context)
-
-@csrf_exempt
-def add(request):
-    context = RequestContext(request, {})
-    return render_to_response('add.html', context)
-
-@csrf_exempt
-def add_space(request):
-    context = RequestContext(request, {})
-    return render_to_response('add_space.html', context)
-
-@csrf_exempt
-def add_multiple(request):
-    context = RequestContext(request, {})
-    return render_to_response('add_multiple.html', context)
-
-@csrf_exempt
-def edit(request):
-    context = RequestContext(request, {})
-
-    checked_count = int(request.POST['checked_spaces'])
-    context['count'] = [ i+1 for i in range(checked_count) ]
-
-    return render_to_response('edit.html', context)
-
-@csrf_exempt
-def edit_space(request, spot_id):
-    context = RequestContext(request, {})
-    return render_to_response('edit_space.html', context)

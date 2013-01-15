@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Download Spots</h1>
-<form name='csv' action="" method="POST" enctype="multipart/form-data">
+<form name='csv' action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
     <input type="submit" name='csv' value="Get CSV File" />
     <input type="submit" name='xls' value="Get Excel File" />
 </form>
