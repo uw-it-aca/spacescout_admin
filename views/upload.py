@@ -1,8 +1,15 @@
+import json
+import oauth2 as oauth
+import time
+import urllib2
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
 from spacescout_admin.forms import UploadFileForm
+from spacescout_admin.utils import file_to_json
 
 
 @login_required
@@ -188,5 +195,3 @@ def upload(request):
         'web_server': settings.SS_WEB_SERVER_HOST,
     }
     return render_to_response('upload.html', args, context_instance=RequestContext(request))
-
-

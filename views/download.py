@@ -6,6 +6,7 @@ import json
 import oauth2 as oauth
 
 
+#TODO: should this be login required?
 def download(request):
     context = RequestContext(request, {})
 
