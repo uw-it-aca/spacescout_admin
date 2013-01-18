@@ -253,6 +253,36 @@ $special = $event.special.debouncedresize = {
     });
     */
 
+    // switch campuses dropdown menu
+    $('#campus_switcher a').click(function(e) {
+
+        e.preventDefault();
+        
+        // if what was clicked is already active - don't do anything
+        // otherwise do the switch - change the menu to reflect selected item and re-run the webservice query
+                
+        if ($(this).hasClass('selected')) {
+            return false
+        }
+        else {
+             // replace this alert with actual fuction to display campus spaces
+             alert("switch campus!");
+             
+             //remove previously selected item    
+             if ($('#campus_switcher a').hasClass('selected')) {
+                 $('#campus_switcher a').removeClass();
+             }
+             
+             //add the selected class
+             $(this).addClass('selected');
+               
+             // change the name in the dropdown menu
+             $('#campus_name_dropdown span').html($(this).html());
+        }
+        
+       
+    });
+
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
