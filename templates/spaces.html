@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load ss_admin_extras %}
 
 <div id="filter_block">
     <div style="padding:10px;color:#222;">
@@ -38,8 +39,9 @@
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
                                 <td class="col-checkbox" id=""><input id="check_all_checkbox" type="checkbox"></td>
-                                <td class="col-id" id="">ID</td>
-                                <td class="col-space" id="">Space</td>
+                                {% for key in fixed_keys %}
+                                <td class="col-{{ key }}" id="">{{ key }}</td>
+                                {% endfor %}
                                 <td class="col-publish muted" id="">Action</td>
                             </tr>
                         </thead>
@@ -49,12 +51,15 @@
                     <table style="width:100%;">
                         <tbody>
                             <!-- loop of spaces -->
+                            {% for space in spots %}
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
-                                <td class="col-id" id="">2</td>
-                                <td class="col-space" id=""><a href="/space/123">Allen Balcony</a> <span class="label">Updated</span></td>
+                                {% for key in fixed_keys %}
+                                <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                {% endfor %}
                                 <td class="col-publish" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
                             </tr>
+                            {% endfor %}
                             <!-- end loop -->
                         </tbody>
                     </table>
@@ -67,12 +72,9 @@
                         <thead>
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
-                                <td class="col-building">Building</td>
-                                <td class="col-type">Type</td>
-                                <td class="col-floor">Floor</td>
-                                <td class="col-orientation">Orientation</td>
-                                <td class="col-notes">Access Notes</td>
-                                <td class="col-notes">Hours Notes</td>
+                                {% for key in scrollable_keys %}
+                                <td class="col-{{ key }}">{{ key }}</td>
+                                {% endfor %}
                             </tr>
                         </thead>
                     </table>
@@ -83,14 +85,13 @@
                         <caption class="visuallyhidden">List of Spaces</caption>
                         <tbody id="space_list_body">
                             <!-- loop  of spaces -->
+                            {% for space in spots %}
                             <tr>
-                                <td class="col-building">Allen Library</td>
-                                <td class="col-type">Open space</td>
-                                <td class="col-floor">2nd floor</td>
-                                <td class="col-orientation">North</td>
-                                <td class="col-notes"><span>Husky Card required for RC access 10pm-2am Sun-Th.</span></td>
-                                <td class="col-notes"><span>This space can be reserved at the help desk or online at https://commons.lib.washington.edu.</span></td>
+                                {% for key in scrollable_keys %}
+                                <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                {% endfor %}
                             </tr>
+                            {% endfor %}
                             <!-- end loop -->
                         </tbody>
                     </table>
