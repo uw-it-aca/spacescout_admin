@@ -19,10 +19,21 @@ def spaces(request):
     resp, content = client.request(spot_url, 'GET')
     spots = json.loads(content)
     context = RequestContext(request, {})
+    try:
+        fixed = settings.SPACE_TABLE_KEYS['FIXED']
+    except:
+        fixed = ('id', 'name')
+    try:
+        scrollable = settings.SPACE_TABLE_KEYS['SCROLLABLE']
+    except:
+        scrollable = ('type',
+                      'capacity',
+                      'manager',
+                      'last_modified',)
     args = {
         "schema": schema,
         "spots": spots,
-        "fixed_keys": ('id', 'name',),
-        "scrollable_keys": ('type', )
+        "fixed_keys": fixed,
+        "scrollable_keys": scrollable,
     }
     return render_to_response('spaces.html', args, context)
