@@ -3,5 +3,16 @@ register = template.Library()
 
 
 @register.filter
-def lookup(d, key):
-    return d[key]
+def lookup(dictionary, key):
+    try:
+        return dictionary[key]
+    except KeyError:
+        try:
+            return dictionary['location'][key]
+        except KeyError:
+            try:
+                return dictionary['extended_info'][key]
+            except KeyError:
+                return ''
+    else:
+        return None
