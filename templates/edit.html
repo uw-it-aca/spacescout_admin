@@ -22,7 +22,7 @@
 
     <div id="table_scroller_container" class="tableDiv">
         <div class="fixedArea clearfix">
-            <div class="fixedColumn" style="float: left; width: 400px;">
+            <div class="fixedColumn" style="float: left; width: 550px;">
                 <div class="fixedHead">
                     <table style="width:100%;">
                         <tbody>
@@ -33,13 +33,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="fixedTable" style="width: 400px; overflow: hidden; border-collapse: collapse; padding: 0px;">
+                <div class="fixedTable" style="width: 550px; overflow: hidden; border-collapse: collapse; padding: 0px;">
                     <table style="width:100%;">
                         <tbody>
                             {% for i in count %}
                             <tr>
                                 <td class="col-id muted">{{i}}</td>
-                                <td class="col-space" id=""><input type="text" value="space name here"></td>
+                                <td class="col-name" id=""><input type="text" value="space name here"></td>
                             </tr>
                             {% endfor %}
                         </tbody>

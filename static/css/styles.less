@@ -16,11 +16,11 @@ body { padding-top: 40px; }
 
 .navbar {
     .brand { font-size: 17px; }
-    
+
     #campus_switcher {
         a.selected { color: red; background: #ddd; cursor: default; }
     }
-        
+
     .login { font-size: 12px;
         #user_login_form { margin-top: 3px;
             input { font-size: 12px; padding: 1px 5px; }
@@ -98,23 +98,35 @@ body { padding-top: 40px; }
     }
 
     .col-checkbox { width: 20px;  text-align: center; }
+
     .col-id { width: 40px; }
-    .col-space {
+    .col-name { color: red;
         .label { font-size: 8px; font-weight: normal; padding: 0 4px; text-transform: uppercase; }
     }
-    .col-publish { width: 70px; text-align: center;
+
+    .col-location_description { width: 250px;
+        span { display: inline-block; width: 240px; overflow: hidden; text-overflow: ellipsis;  color: green; }
+    }
+
+    .col-action { width: 70px; text-align: center;
         .btn-mini { width: 40px; font-size: 9px; padding: 0 6px; line-height: 17px; }
     }
 
-    .col-building { }
-    .col-type { width:  250px;
+    .col-building_name { color: purple; width: 250px;
+        span { width: 240px; display: inline-block; overflow: hidden; text-overflow: ellipsis; }
+    }
+    .col-type { width:  250px; color: blue;
         select { height: 24px; }
     }
     .col-floor { width: 250px; }
-    .col-orientation { width: 200px; }
-    .col-notes { width: 350px;
+    .col-has_whiteboards { width: 200px; }
+
+
+    .col-access_notes { width: 550px;
         span { width: 345px; overflow: hidden; display: block; text-overflow: ellipsis; }
     }
+
+    .col-last_modified { width: 200px; }
 
     /*.col-building { width: 10%; }
     .col-type { width:  10% }

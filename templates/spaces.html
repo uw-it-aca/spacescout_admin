@@ -32,7 +32,7 @@
 
     <div id="table_scroller_container" class="tableDiv">
         <div class="fixedArea clearfix">
-            <div class="fixedColumn" style="float: left; width: 400px;">
+            <div class="fixedColumn" style="float: left; width: 600px;">
                 <div class="fixedHead">
                     <table style="width:100%;">
                         <thead>
@@ -42,12 +42,12 @@
                                 {% for key in fixed_keys %}
                                 <td class="col-{{ key }}" id="">{{ key }}</td>
                                 {% endfor %}
-                                <td class="col-publish muted" id="">Action</td>
+                                <td class="col-action muted" id="">Action</td>
                             </tr>
                         </thead>
                     </table>
                 </div>
-                <div class="fixedTable" style="width: 400px; overflow: hidden; border-collapse: collapse; padding: 0px;">
+                <div class="fixedTable" style="width: 600px; overflow: hidden; border-collapse: collapse; padding: 0px;">
                     <table style="width:100%;">
                         <tbody>
                             <!-- loop of spaces -->
@@ -55,9 +55,9 @@
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 {% for key in fixed_keys %}
-                                <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
                                 {% endfor %}
-                                <td class="col-publish" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
+                                <td class="col-action" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
                             </tr>
                             {% endfor %}
                             <!-- end loop -->
@@ -88,7 +88,7 @@
                             {% for space in spots %}
                             <tr>
                                 {% for key in scrollable_keys %}
-                                <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
                                 {% endfor %}
                             </tr>
                             {% endfor %}

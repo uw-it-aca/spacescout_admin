@@ -257,30 +257,30 @@ $special = $event.special.debouncedresize = {
     $('#campus_switcher a').click(function(e) {
 
         e.preventDefault();
-        
+
         // if what was clicked is already active - don't do anything
         // otherwise do the switch - change the menu to reflect selected item and re-run the webservice query
-                
+
         if ($(this).hasClass('selected')) {
             return false
         }
         else {
              // replace this alert with actual fuction to display campus spaces
              alert("switch campus!");
-             
-             //remove previously selected item    
+
+             //remove previously selected item
              if ($('#campus_switcher a').hasClass('selected')) {
                  $('#campus_switcher a').removeClass();
              }
-             
+
              //add the selected class
              $(this).addClass('selected');
-               
+
              // change the name in the dropdown menu
              $('#campus_name_dropdown span').html($(this).html());
         }
-        
-       
+
+
     });
 
 	// get a count of spaces
@@ -324,9 +324,9 @@ $special = $event.special.debouncedresize = {
 
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 402);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 402);
-        $("#table_scroller").width(tableContainerW - 402);
+        $(".fixedContainer").width(tableContainerW - 602);
+        $(".fixedContainer .fixedHead").width(tableContainerW - 602);
+        $("#table_scroller").width(tableContainerW - 602);
 
         /*$("#table_scroller").height(tableContainerH - 30);
         $(".fixedTable").height(tableContainerH - 30);
