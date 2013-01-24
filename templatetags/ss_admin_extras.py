@@ -14,5 +14,5 @@ def lookup(dictionary, key):
                 return dictionary['extended_info'][key]
             except KeyError:
                 return 'no value'
-    else:
-        return None
+    except Exception as e:
+        return e.__class__()
