@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load ss_admin_extras %}
 
 <div id="error_message" class="alert alert-error fade in hide" style="margin-bottom:8px;">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -26,137 +27,19 @@
                   <tr>
                       <td class="col-field">Field</td>
                       <td class="col-value">Value</td>
-                      <td class="col-error">Error</td>
                   </tr>
               </thead>
         </table>
         <div id="edit_space_scroller" class="table-scroll">
             <table style="width:100%;">
                 <tbody>
+                    {% for key in schema %}
                       <tr>
-                          <td class="col-field">ID</td>
-                          <td class="col-value">123</td>
-                          <td class="col-error">&nbsp;</td>
+                          <td class="col-field">{{ key }}</td>
+                          <td class="col-value"><input type="text" value="{{ spot|lookup:key }}" /></td>
                       </tr>
-                      <tr>
-                          <td class="col-field">Space</td>
-                          <td><input type="text" value="asdfasdfasdfsa"></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Building</td>
-                          <td><input type="text" value="sadfasdfa"></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Campus</td>
-                          <td><select>
-                              <option>Seattle</option>
-                              <option>Bothell</option>
-                              <option>Tacoma</option>
-                            </select></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Type</td>
-                          <td>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Study room</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Study area</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Computer lab</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Production studio</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Conference/classroom</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Open space</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Lounge</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Cafe</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Outdoor area</label>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Floor</td>
-                          <td><input type="text" value="sadfasdfa"></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Orientation</td>
-                          <td><input type="text" value="aslkdflkasdfj sadflkas"></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Access Notes</td>
-                          <td><textarea rows="3"></textarea></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Hours Notes</td>
-                          <td><textarea rows="3"></textarea></td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Resources</td>
-                          <td>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Whiteboard</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Outlets</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Computer</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Scanning</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Large display (for laptop)</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Projector</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Printing</label>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Noise Level</td>
-                          <td>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Silet</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Low Hum</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Chatter</label>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Lighting</td>
-                          <td>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">Natural light</label>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Food/Coffee</td>
-                          <td>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">In space</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">In building</label>
-                              <label class="checkbox"><input type="checkbox" id="inlineCheckbox1" value="option1">In neighboring building</label>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                      <tr>
-                          <td class="col-field">Images</td>
-                          <td>
-                              <div class="input-prepend input-append" style="margin-top:2px; margin-bottom:0;">
-                                  <span class="add-on" style="font-size:11px;padding:1px;">1</span>
-                                  <input class="span2" id="appendedInputButton" type="text" style="width:80%;">
-                                  <button class="btn btn-mini" type="button">Image</button>
-                              </div>
-                              <div class="input-prepend input-append" style="margin-top:2px; margin-bottom:0;">
-                                  <span class="add-on" style="font-size:11px;padding:1px;">2</span>
-                                  <input class="span2" id="appendedInputButton" type="text" style="width:80%;">
-                                  <button class="btn btn-mini" type="button">Image</button>
-                              </div>
-                              <div class="input-prepend input-append" style="margin-top:2px; margin-bottom:0;">
-                                  <span class="add-on" style="font-size:11px;padding:1px;">3</span>
-                                  <input class="span2" id="appendedInputButton" type="text" style="width:80%;">
-                                  <button class="btn btn-mini" type="button">Image</button>
-                              </div>
-                              <div class="input-prepend input-append" style="margin-top:2px; margin-bottom:0;">
-                                  <span class="add-on" style="font-size:11px;padding:1px;">4</span>
-                                  <input class="span2" id="appendedInputButton" type="text" style="width:80%;">
-                                  <button class="btn btn-mini" type="button">Image</button>
-                              </div>
-                          </td>
-                          <td>sdalkfja</td>
-                      </tr>
-                  </tbody>
+                    {% endfor %}
+                 </tbody>
               </table>
           </div>
     </div>
