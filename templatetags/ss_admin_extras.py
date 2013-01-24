@@ -13,6 +13,6 @@ def lookup(dictionary, key):
             try:
                 return dictionary['extended_info'][key]
             except KeyError:
-                return ''
+                return 'no value'
     else:
         return None
