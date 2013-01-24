@@ -319,14 +319,16 @@ $special = $event.special.debouncedresize = {
         winW = $(window).width();
         headerH = $(".navbar").height();
         filterH = $("#filter_block").height();
+        fixedW = $(".fixedColumn").width() + 2;
+
         tableContainerH = winH - headerH - filterH - 90;  // approximation height of table container
         tableContainerW = $("#table_scroller_container").width();
 
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 602);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 602);
-        $("#table_scroller").width(tableContainerW - 602);
+        $(".fixedContainer").width(tableContainerW - fixedW);
+        $(".fixedContainer .fixedHead").width(tableContainerW - fixedW);
+        $("#table_scroller").width(tableContainerW - fixedW);
 
         /*$("#table_scroller").height(tableContainerH - 30);
         $(".fixedTable").height(tableContainerH - 30);
