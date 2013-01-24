@@ -55,7 +55,11 @@
                             <tr>
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
                                 {% for key in fixed_keys %}
+                                {% if key == "name" %}
+                                <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></span></td>
+                                {% else %}
                                 <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
+                                {% endif %}
                                 {% endfor %}
                                 <td class="col-action" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
                             </tr>
