@@ -61,9 +61,9 @@
 
                                         <!-- for now, look for specific words and apply the updates/queued labels to mimic status -->
                                         {% if "Area" in space|lookup:key %}
-                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-info">Updated</span></span></td>
+                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></span></td>
                                         {% elif "Lounge" in space|lookup:key %}
-                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-success">Queued</span></span></td>
+                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Ready</span></span></td>
                                         {% else %}
                                         <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></span></td>
                                         {% endif %}
@@ -73,9 +73,14 @@
                                     {% endif %}
                                 {% endfor %}
 
-
+                                <!-- for now, look for specific words and apply the approve/publish buttons to mimic actions -->
+                                {% if "Area" in space.name %}
                                 <td class="col-action" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
-
+                                {% elif "Lounge" in space.name %}
+                                <td class="col-action" id=""><a href="#" id="" class="btn btn-mini btn-success">Publish</a></td>
+                                {% else %}
+                                <td class="col-action" id="">&nbsp;</td>
+                                {% endif %}
 
                             </tr>
                             {% endfor %}
