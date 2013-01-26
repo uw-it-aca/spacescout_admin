@@ -283,6 +283,25 @@ $special = $event.special.debouncedresize = {
 
     });
 
+    // hover table rows
+    $("table tbody").delegate('td','mouseover mouseleave', function(e) {
+
+        // get the id and strip out any characters
+        var id = $(this).parent().attr("id").toString();
+        id = id.replace(/\D/g,'');
+
+        // add hover class to the matching spot id's row
+        if (e.type == 'mouseover') {
+          $("#spot_" + id + "_fixed").addClass("hover");
+          $("#spot_" + id + "_scroll").addClass("hover");
+        }
+        else {
+          $("#spot_" + id + "_fixed").removeClass("hover");
+          $("#spot_" + id + "_scroll").removeClass("hover");
+        }
+    });
+
+
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;

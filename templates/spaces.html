@@ -38,7 +38,7 @@
                         <thead>
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
-                                <td class="col-checkbox" id=""><input id="check_all_checkbox" type="checkbox"></td>
+                                <td class="col-checkbox" id="" style="text-align:center;"><input id="check_all_checkbox" type="checkbox"></td>
                                 {% for key in fixed_keys %}
                                 <td class="col-{{ key }}" id=""><span>{{ key }}</span></td>
                                 {% endfor %}
@@ -52,7 +52,7 @@
                         <tbody>
                             <!-- loop of spaces -->
                             {% for space in spots %}
-                            <tr>
+                            <tr id="spot_{{space.id}}_fixed">
 
                                 <td class="col-checkbox" id=""><input type="checkbox"></td>
 
@@ -110,7 +110,7 @@
                         <tbody id="space_list_body">
                             <!-- loop  of spaces -->
                             {% for space in spots %}
-                            <tr>
+                            <tr id="spot_{{space.id}}_scroll">
                                 {% for key in scrollable_keys %}
                                 <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
                                 {% endfor %}
