@@ -311,7 +311,6 @@ $special = $event.special.debouncedresize = {
         }
     });
 
-
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
@@ -398,7 +397,7 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead")[0].scrollLeft = x;
         //$(mainid + " .fixedContainer > ." + classHeader)[0].scrollLeft = x;
 
-        // close any popovers
+        // close all popovers
         $('.bulk-edit').popover('hide');
 
     }
