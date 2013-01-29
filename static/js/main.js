@@ -302,6 +302,16 @@ $special = $event.special.debouncedresize = {
     });
 
 
+    $('.bulk-edit').popover({
+        title: 'Bulk Edit',
+        html: true,
+        placement: 'bottom',
+        content: function () {
+            return $('#settings-layout-content').html();
+        }
+    });
+
+
 	// get a count of spaces
 	function getSpaceCount() {
     	var rowCount = $('#space_list_body tr').length;
@@ -387,6 +397,9 @@ $special = $event.special.debouncedresize = {
 
         $(".fixedContainer .fixedHead")[0].scrollLeft = x;
         //$(mainid + " .fixedContainer > ." + classHeader)[0].scrollLeft = x;
+
+        // close any popovers
+        $('.bulk-edit').popover('hide');
 
     }
 

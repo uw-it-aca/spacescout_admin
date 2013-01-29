@@ -25,12 +25,12 @@
             <div class="fixedColumn" style="float: left; width: 600px;">
                 <div class="fixedHead">
                     <table style="width:100%;">
-                        <tbody>
+                        <thead>
                             <tr>
                                 <td class="col-id" id="">ID</td>
                                 <td class="col-space" id="">Space</td>
                             </tr>
-                        </tbody>
+                        </thead>
                     </table>
                 </div>
                 <div class="fixedTable" style="width: 600px; overflow: hidden; border-collapse: collapse; padding: 0px;">
@@ -50,15 +50,15 @@
             <div class="fixedContainer" style="float: left; overflow:hidden;">
                 <div class="fixedHead" style="width: 1069px; float: left; overflow: hidden;">
                     <table style="width: 1950px;">
-                        <tbody>
+                        <thead>
                             <tr>
-                                <td class="col-building">Building <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td class="col-floor">Floor <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td class="col-orientation">Orientation <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td class="col-notes">Access Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
-                                <td class="col-notes">Hours Notes <a href="#myModal" role="button" class="populate-column muted" data-toggle="modal">Update <i class="icon-arrow-down icon-white"></i></a></td>
+                                <td class="col-building">Building <a href="#" class="bulk-edit">BULK EDIT</a></td>
+                                <td class="col-floor">Floor <a href="#" class="bulk-edit">BULK EDIT</a></td>
+                                <td class="col-orientation">Orientation <a href="#" class="bulk-edit">BULK EDIT</a></td>
+                                <td class="col-notes">Access Notes <a href="#" class="bulk-edit">BULK EDIT</a></td>
+                                <td class="col-notes">Hours Notes <a href="#" class="bulk-edit">BULK EDIT</a></td>
                             </tr>
-                        </tbody>
+                        </thead>
                     </table>
                 </div>
 
@@ -106,6 +106,13 @@
     <button class="btn btn-mini" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-mini btn-primary">Save changes</button>
   </div>
+</div>
+
+<div id="settings-layout-content" class="hide">
+    <p>Apply single value for entire alksdfj sadflkj column: Building</p>
+    <input type="text"/><br/>
+    <button class="btn btn-small">Close</button>
+    <button class="btn btn-small btn-primary">Okay</button>
 </div>
 
 {% endblock %}
