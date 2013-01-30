@@ -300,7 +300,6 @@ $special = $event.special.debouncedresize = {
         }
     });*/
 
-
     $('[rel="popover"]').popover({
         title: 'Bulk Edit',
         html: true,
@@ -310,22 +309,9 @@ $special = $event.special.debouncedresize = {
         }
     });
 
-    var $visiblePopover;
-
-    $('body').on('click', '[rel="popover"]', function(e) {
-        var $this = $(this);
-
-        // check if the one clicked is now shown
-        if ($this.data('popover').tip().hasClass('in')) {
-
-            // if another was showing, hide it
-            $visiblePopover && $visiblePopover.popover('hide');
-
-            // then store the current popover
-            $visiblePopover = $this;
-        } else { // if it was hidden, then nothing must be showing
-            $visiblePopover = '';
-        }
+    /* avoid popover to open more than on at the same time */
+    $('[rel="popover"]').click(function(){
+        $('.bulk-edit').not(this).popover('hide'); //all but this
     });
 
 	// get a count of spaces
@@ -414,8 +400,8 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead")[0].scrollLeft = x;
         //$(mainid + " .fixedContainer > ." + classHeader)[0].scrollLeft = x;
 
-        // close all popovers
-        $visiblePopover.popover('hide');
+        //hide any open popover
+        $('[rel="popover"]').popover('hide');
 
     }
 
