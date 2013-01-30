@@ -196,7 +196,6 @@ $special = $event.special.debouncedresize = {
         	window.location.href = '/?q=success';
     	}*/
 
-
     });
 
     // cancel button
@@ -243,15 +242,6 @@ $special = $event.special.debouncedresize = {
         }
 
     });
-
-    // add rows button
-    /* deprecated
-    $('#add_rows_button').click(function(e) {
-        e.preventDefault();
-        $('.add-new').show();
-        setTableScrollHeight();
-    });
-    */
 
     // switch campuses dropdown menu
     $('#campus_switcher a').click(function(e) {
@@ -301,13 +291,40 @@ $special = $event.special.debouncedresize = {
         }
     });
 
-
-    $('.bulk-edit').popover({
+    /*$('.bulk-edit').popover({
         title: 'Bulk Edit',
         html: true,
         placement: 'bottom',
         content: function () {
             return $('#settings-layout-content').html();
+        }
+    });*/
+
+
+    $('[rel="popover"]').popover({
+        title: 'Bulk Edit',
+        html: true,
+        placement: 'bottom',
+        content: function () {
+            return $('#settings-layout-content').html();
+        }
+    });
+
+    var $visiblePopover;
+
+    $('body').on('click', '[rel="popover"]', function(e) {
+        var $this = $(this);
+
+        // check if the one clicked is now shown
+        if ($this.data('popover').tip().hasClass('in')) {
+
+            // if another was showing, hide it
+            $visiblePopover && $visiblePopover.popover('hide');
+
+            // then store the current popover
+            $visiblePopover = $this;
+        } else { // if it was hidden, then nothing must be showing
+            $visiblePopover = '';
         }
     });
 
@@ -398,7 +415,7 @@ $special = $event.special.debouncedresize = {
         //$(mainid + " .fixedContainer > ." + classHeader)[0].scrollLeft = x;
 
         // close all popovers
-        $('.bulk-edit').popover('hide');
+        $visiblePopover.popover('hide');
 
     }
 
