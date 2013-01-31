@@ -327,17 +327,18 @@ $special = $event.special.debouncedresize = {
     });
     
     $('#bulk_edit_submit').live("click", function(e){
-        e.preventDefault();
-        alert("YOLO!");
-        
+        e.preventDefault();        
         //populate column values - need to set this dynamically  
         populateColumnValues();    
     });
     
     function populateColumnValues() {
         
+        
+        var newValue = $('#bulk_edit_input').val();
+        
         // specify the column and the value to be inserted
-        $('tbody .col-building input').val("YOLO!");
+        $('tbody .col-building input').val(newValue);
         $('[rel="popover"]').popover('hide');
     }
 
