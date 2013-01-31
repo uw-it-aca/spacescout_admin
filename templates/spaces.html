@@ -54,7 +54,7 @@
                             {% for space in spots %}
                             <tr id="spot_{{space.id}}_fixed">
 
-                                <td class="col-checkbox" id=""><input type="checkbox"></td>
+                                <td class="col-checkbox" id=""><input type="checkbox" name="space_id" value="{{ space.id }}"></td>
 
                                 {% for key in fixed_keys %}
                                     {% if key == "name" %}

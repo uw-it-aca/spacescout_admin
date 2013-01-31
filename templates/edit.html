@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load ss_admin_extras %}
 
 
 
@@ -27,8 +28,9 @@
                     <table style="width:100%;">
                         <thead>
                             <tr>
-                                <td class="col-id" id="">ID</td>
-                                <td class="col-space" id="">Space</td>
+                                {% for key in fixed_keys %}
+                                <td class="col-{{ key }}" id="">{{ key }}</td>
+                                {% endfor %}
                             </tr>
                         </thead>
                     </table>
@@ -36,10 +38,11 @@
                 <div class="fixedTable" style="width: 600px; overflow: hidden; border-collapse: collapse; padding: 0px;">
                     <table style="width:100%;">
                         <tbody>
-                            {% for i in count %}
+                            {% for space in spaces %}
                             <tr>
-                                <td class="col-id muted">{{i}}</td>
-                                <td class="col-name" id=""><input type="text" value="space name here"></td>
+                                {% for key in fixed_keys %}
+                                <td class="col-{{ key }}" id=""><input type="text" value="{{ space|lookup:key }}"></td>
+                                {% endfor %}
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -52,11 +55,9 @@
                     <table style="width: 1950px;">
                         <thead>
                             <tr>
-                                <td class="col-building"><span>Building</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-floor"><span>Floor</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-orientation"><span>Orientation</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-notes"><span>Access Notes</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-notes"><span>Hours Notes</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                {% for key in scrollable_keys %}
+                                <td class="col-{{ key }}"><span>{{ key }}</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                {% endfor %}
                             </tr>
                         </thead>
                     </table>
@@ -66,13 +67,11 @@
                     <table class="FixedTables" style="width: 1650px;">
                         <caption class="visuallyhidden">List of Spaces</caption>
                         <tbody id="space_list_body">
-                            {% for i in count %}
+                            {% for space in spaces %}
                             <tr>
-                                <td class="col-building"><input type="text" value="building name here"></td>
-                                <td class="col-floor"><input type="text" value="2nd floor"></td>
-                                <td class="col-orientation"><input type="text" value="North"></td>
-                                <td class="col-notes"><input type="text" value="Husky Card required for RC access 10pm-2am Sun-Th."></td>
-                                <td class="col-notes"><input type="text" value="This space can be reserved at the help desk or online at https://commons.lib.washington.edu."></td>
+                                {% for key in scrollable_keys %}
+                                <td class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}"></td>
+                                {% endfor %}
                             </tr>
                             {% endfor %}
                         </tbody>
