@@ -300,19 +300,48 @@ $special = $event.special.debouncedresize = {
         }
     });*/
 
+    // handle popover clicks
     $('[rel="popover"]').popover({
         title: 'Bulk Edit',
         html: true,
         placement: 'bottom',
-        content: function () {
-            return $('#settings-layout-content').html();
+        content: function(){
+            return setPopoverContent($(this).siblings().html());
         }
+    }).click(function(e) {
+        e.preventDefault();
+        $('.bulk-edit').not(this).popover('hide'); //hide any popovers currently open
     });
 
-    /* avoid popover to open more than on at the same time */
-    $('[rel="popover"]').click(function(){
-        $('.bulk-edit').not(this).popover('hide'); //all but this
+    // create popover content
+    function setPopoverContent(columnName) {
+
+        $('#settings-layout-content .column-name').html(columnName);
+        return $('#settings-layout-content').html();
+    }
+      
+    $('#bulk_edit_close').live("click", function(e){
+        e.preventDefault();
+        //hide any open popover
+        $('[rel="popover"]').popover('hide');
     });
+    
+    $('#bulk_edit_submit').live("click", function(e){
+        e.preventDefault();        
+        
+        //populate column values - need to set this dynamically
+        var columnClass = $(this).closest('td').attr('class');          
+        populateColumnValues(columnClass);    
+    });
+    
+    function populateColumnValues(columnClass) {
+        
+        var newValue = $('#bulk_edit_input').val();
+        
+        // specify the column and the value to be inserted
+        $('tbody .' + columnClass + ' input').val(newValue);
+        $('[rel="popover"]').popover('hide');
+    }
 
 	// get a count of spaces
 	function getSpaceCount() {
