@@ -328,17 +328,18 @@ $special = $event.special.debouncedresize = {
     
     $('#bulk_edit_submit').live("click", function(e){
         e.preventDefault();        
-        //populate column values - need to set this dynamically  
-        populateColumnValues();    
+        
+        //populate column values - need to set this dynamically
+        var columnClass = $(this).closest('td').attr('class');          
+        populateColumnValues(columnClass);    
     });
     
-    function populateColumnValues() {
-        
+    function populateColumnValues(columnClass) {
         
         var newValue = $('#bulk_edit_input').val();
         
         // specify the column and the value to be inserted
-        $('tbody .col-building input').val(newValue);
+        $('tbody .' + columnClass + ' input').val(newValue);
         $('[rel="popover"]').popover('hide');
     }
 
