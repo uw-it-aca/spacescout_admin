@@ -319,6 +319,27 @@ $special = $event.special.debouncedresize = {
         $('#settings-layout-content .column-name').html(columnName);
         return $('#settings-layout-content').html();
     }
+      
+    $('#bulk_edit_close').live("click", function(e){
+        e.preventDefault();
+        //hide any open popover
+        $('[rel="popover"]').popover('hide');
+    });
+    
+    $('#bulk_edit_submit').live("click", function(e){
+        e.preventDefault();
+        alert("YOLO!");
+        
+        //populate column values - need to set this dynamically  
+        populateColumnValues();    
+    });
+    
+    function populateColumnValues() {
+        
+        // specify the column and the value to be inserted
+        $('tbody .col-building input').val("YOLO!");
+        $('[rel="popover"]').popover('hide');
+    }
 
 	// get a count of spaces
 	function getSpaceCount() {
