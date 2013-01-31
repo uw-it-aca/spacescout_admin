@@ -52,11 +52,11 @@
                     <table style="width: 1950px;">
                         <thead>
                             <tr>
-                                <td class="col-building">Building <a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-floor">Floor <a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-orientation">Orientation <a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-notes">Access Notes <a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
-                                <td class="col-notes">Hours Notes <a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                <td class="col-building"><span>Building</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                <td class="col-floor"><span>Floor</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                <td class="col-orientation"><span>Orientation</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                <td class="col-notes"><span>Access Notes</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                <td class="col-notes"><span>Hours Notes</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
                             </tr>
                         </thead>
                     </table>
@@ -93,23 +93,9 @@
 </form>
 </div>
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3 id="myModalLabel">Update column values</h3>
-  </div>
-  <div class="modal-body">
-    <p>Update the following column with the same value:</p>
-    <div>Hours Notes: <input type="text"></div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-mini" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-mini btn-primary">Save changes</button>
-  </div>
-</div>
 
 <div id="settings-layout-content" class="hide">
-    <p>Apply single value for entire alksdfj sadflkj column: Building</p>
+    <p>Apply single value for entire alksdfj sadflkj column: <span class="column-name" style="font-weight:bold; color:red;"></span></p>
     <input type="text"/><br/>
     <button class="btn btn-small">Close</button>
     <button class="btn btn-small btn-primary">Okay</button>
