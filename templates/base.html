@@ -36,7 +36,7 @@
                 <a class="brand" href="/">SPACESCOUT MANAGER</a>
                 <div class="nav-collapse collapse">
                     <div class="login pull-right clearfix">
-                        <div id="user_login_info" class="navbar-text pull-right">Charlon Palacay&nbsp;&nbsp;<a href="#" id="user_logout_link" class="text-error" style="margin-left:8px;">Logout</a></div>
+                        <div id="user_login_info" class="navbar-text pull-right">{% if user %}{{ user }}{% else %}Not logged in{% endif %}&nbsp;&nbsp;<a href="#" id="user_logout_link" class="text-error" style="margin-left:8px;">Logout</a></div>
                     </div>
                     <ul class="nav">
                         <li class="active dropdown">
