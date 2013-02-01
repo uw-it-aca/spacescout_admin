@@ -36,7 +36,19 @@
                     {% for key in schema %}
                       <tr>
                           <td class="col-field">{{ key }}</td>
+                          {% if spot|lookup:key|classname == 'list' %}
+                          <td class="col-value">
+                              {% for t in schema|lookup:key %}
+                              {% if t in  spot|lookup:key %}
+                              <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
+                              {% else %}
+                              <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
+                              {% endif %}
+                              {% endfor %}
+                          </td>
+                          {% else %}
                           <td class="col-value"><input type="text" value="{{ spot|lookup:key }}" /></td>
+                          {% endif %}
                       </tr>
                     {% endfor %}
                  </tbody>
