@@ -16,3 +16,8 @@ def lookup(dictionary, key):
                 return 'no value'
     except Exception as e:
         return e.__class__()
+
+
+@register.filter
+def classname(obj):
+    return obj.__class__.__name__
