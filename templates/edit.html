@@ -39,7 +39,7 @@
                     <table style="width:100%;">
                         <tbody>
                             {% for space in spaces %}
-                            <tr>
+                            <tr id="spot_{{space.id}}_fixed">
                                 {% for key in fixed_keys %}
 
                                      {% if key == "id" %}
@@ -82,7 +82,7 @@
                         <caption class="visuallyhidden">List of Spaces</caption>
                         <tbody id="space_list_body">
                             {% for space in spaces %}
-                            <tr>
+                            <tr id="spot_{{space.id}}_scroll">
                                 {% for key in scrollable_keys %}
 
                                     {% if key == "id" or key == "last_modified" %}
