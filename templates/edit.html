@@ -63,7 +63,7 @@
                             <tr>
                                 {% for key in scrollable_keys %}
 
-                                    {% if key == "id" %}
+                                    {% if key == "id" or key = "last_modified" %}
                                     <td class="col-{{ key }}"><span>{{ key }}</span></td>
                                     {% else %}
                                     <td class="col-{{ key }}"><span>{{ key }}</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
@@ -85,7 +85,7 @@
                             <tr>
                                 {% for key in scrollable_keys %}
 
-                                    {% if key == "id" %}
+                                    {% if key == "id" or key == "last_modified" %}
                                      <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
                                      {% else %}
                                      <td class="col-{{ key }}" id=""><input type="text" value="{{ space|lookup:key }}"></td>

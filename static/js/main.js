@@ -320,18 +320,27 @@ $special = $event.special.debouncedresize = {
         return $('#settings-layout-content').html();
     }
 
+    // handle closing the popover
     $('#bulk_edit_close').live("click", function(e){
         e.preventDefault();
         //hide any open popover
         $('[rel="popover"]').popover('hide');
     });
 
+    // handle the button to change all column values
     $('#bulk_edit_submit').live("click", function(e){
         e.preventDefault();
 
         //populate column values - need to set this dynamically
         var columnClass = $(this).closest('td').attr('class');
         populateColumnValues(columnClass);
+    });
+
+    // handle when user hits "enter" button instead of clicking button
+    $('#bulk_edit_input').live('keypress', function (e) {
+        if(e.keyCode == 13){
+            $('#bulk_edit_submit').trigger('click');
+        }
     });
 
     function populateColumnValues(columnClass) {
