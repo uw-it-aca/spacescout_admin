@@ -319,28 +319,32 @@ $special = $event.special.debouncedresize = {
         $('#settings-layout-content .column-name').html(columnName);
         return $('#settings-layout-content').html();
     }
-      
+
     $('#bulk_edit_close').live("click", function(e){
         e.preventDefault();
         //hide any open popover
         $('[rel="popover"]').popover('hide');
     });
-    
+
     $('#bulk_edit_submit').live("click", function(e){
-        e.preventDefault();        
-        
+        e.preventDefault();
+
         //populate column values - need to set this dynamically
-        var columnClass = $(this).closest('td').attr('class');          
-        populateColumnValues(columnClass);    
+        var columnClass = $(this).closest('td').attr('class');
+        populateColumnValues(columnClass);
     });
-    
+
     function populateColumnValues(columnClass) {
-        
+
         var newValue = $('#bulk_edit_input').val();
-        
+
         // specify the column and the value to be inserted
         $('tbody .' + columnClass + ' input').val(newValue);
+        $('tbody .' + columnClass + ' input').css('color', 'red');
+
+        // close the popover and do some color changing to signify the changes
         $('[rel="popover"]').popover('hide');
+        setTimeout(function(){ $('tbody .' + columnClass + ' input').delay('2000').removeAttr('style')}, 2500);
     }
 
 	// get a count of spaces
