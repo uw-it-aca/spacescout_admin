@@ -41,7 +41,13 @@
                             {% for space in spaces %}
                             <tr>
                                 {% for key in fixed_keys %}
-                                <td class="col-{{ key }}" id=""><input type="text" value="{{ space|lookup:key }}"></td>
+
+                                     {% if key == "id" %}
+                                     <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                     {% else %}
+                                     <td class="col-{{ key }}" id=""><input type="text" value="{{ space|lookup:key }}"></td>
+                                     {% endif %}
+
                                 {% endfor %}
                             </tr>
                             {% endfor %}
@@ -70,7 +76,11 @@
                             {% for space in spaces %}
                             <tr>
                                 {% for key in scrollable_keys %}
-                                <td class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}"></td>
+                                    {% if key == "id" %}
+                                     <td class="col-{{ key }}" id="">{{ space|lookup:key }}</td>
+                                     {% else %}
+                                     <td class="col-{{ key }}" id=""><input type="text" value="{{ space|lookup:key }}"></td>
+                                     {% endif %}
                                 {% endfor %}
                             </tr>
                             {% endfor %}
