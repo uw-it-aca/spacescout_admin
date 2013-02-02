@@ -309,7 +309,8 @@ $special = $event.special.debouncedresize = {
         }
     }).click(function(e) {
         e.preventDefault();
-        $("#bulk_edit_input").focus();
+
+        $(this).siblings().find("#bulk_edit_input").focus(); // find child siblings that is the bulk input and put focus
         $('.bulk-edit').not(this).popover('hide'); //hide any popovers currently open
     });
 
