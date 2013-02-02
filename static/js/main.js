@@ -46,7 +46,6 @@ $special = $event.special.debouncedresize = {
 
 	$(document).ready(function() {
 
-
 		getSpaceCount();
 		toggleEditExportButtons();
 
@@ -310,6 +309,7 @@ $special = $event.special.debouncedresize = {
         }
     }).click(function(e) {
         e.preventDefault();
+        $("#bulk_edit_input").focus();
         $('.bulk-edit').not(this).popover('hide'); //hide any popovers currently open
     });
 
