@@ -5,8 +5,175 @@
 
 <div id="filter_block">
     <div style="padding:10px;color:#222;">
-        <div class="clearfix"><h5 style="margin-top:0;display:inline-block;">FILTERS</h5> <a href="#" id="filter_block_button" class="dropdown pull-right"><i class="icon-chevron-down" style="opacity:.5;"></i></a></div>
-        <div>You're going to be an interesting companion, Mr. Data. I can't. As much as I care about you, my first duty is to the ship. When has justice ever been as simple as a rule book? In all trust, there is the possibility for betrayal. Shields up! Rrrrred alert! Fate protects fools, little children and ships named Enterprise. Your head is not an artifact! Captain, why we are we out here chasing comets? Besides, you look good in a dress. We have a saboteur aboard. That might've been one of the shortest assignments in the history of Starfleet. Fear is the true enemy, the only enemy.</div>
+        <div class="clearfix">
+            <h5 style="margin-top:0;display:inline-block; margin:0;">FILTERS <a href="#" id="filter_block_button" class="dropdown"><i class="icon-chevron-down" style="opacity:.5;"></i></a></h5>
+            <div style="display:inline-block; margin-left:30px;">
+                <h6 style="display:inline-block;margin:0;">resources</h6>
+                <label class="checkbox inline" for="has_whiteboards">
+                  <input type="checkbox" id="has_whiteboards" name="equipment" value="has_whiteboards"> Whiteboard
+                </label>
+                <label class="checkbox inline" for="has_outlets">
+                  <input type="checkbox" id="has_outlets" name="equipment" value="has_outlets"> Outlets
+                </label>
+                <label class="checkbox inline" for="has_computers">
+                  <input type="checkbox" id="has_computers" name="equipment" value="has_computers"> Computer
+                </label>
+                <label class="checkbox inline" for="has_scanner">
+                  <input type="checkbox" id="has_scanner" name="equipment" value="has_scanner"> Scanning
+                </label>
+                <label class="checkbox inline" for="has_displays">
+                  <input type="checkbox" id="has_displays" name="equipment" value="has_displays"> Large display
+                </label>
+                <label class="checkbox inline" for="has_projector">
+                  <input type="checkbox" id="has_projector" name="equipment" value="has_projector"> Projector
+                </label>
+                <label class="checkbox inline" for="has_printing">
+                  <input type="checkbox" id="has_printing" name="equipment" value="has_printing"> Printing
+                </label>
+            </div>
+            <div style="display:inline-block; margin-left:30px;">
+                <h6 style="display:inline-block;margin:0;">building</h6>
+                <select class="building-location" style="font-size:11px; padding: 2px; line-height:24px; height:24px; margin:0;">
+
+                    <option>---</option>
+                    <optgroup label="A">
+
+                        <option value="Alder Hall">Alder Hall</option>
+
+                        <option value="Allen Library (ALB)">Allen Library (ALB)</option>
+
+                        <option value="Allen Library (ALB) North">Allen Library (ALB) North</option>
+
+                        <option value="Allen Library (ALB) South">Allen Library (ALB) South</option>
+
+                        <option value="Architecture Hall (ARC)">Architecture Hall (ARC)</option>
+
+                        <option value="Art Building (ART)">Art Building (ART)</option>
+
+                    </optgroup>
+
+                    <optgroup label="B">
+
+                        <option value="Burke Memorial-Washington State Museum (BMM)">Burke Memorial-Washington State Museum (BMM)</option>
+
+                    </optgroup>
+
+                    <optgroup label="C">
+
+                        <option value="Computer Science and Engineering Building (CSE)">Computer Science and Engineering Building (CSE)</option>
+
+                    </optgroup>
+
+                    <optgroup label="E">
+
+                        <option value="Electrical Engineering Building (EEB)">Electrical Engineering Building (EEB)</option>
+
+                        <option value="Engineering Library (ELB)">Engineering Library (ELB)</option>
+
+                    </optgroup>
+
+                    <optgroup label="F">
+
+                        <option value="Fishery Sciences (FSH)">Fishery Sciences (FSH)</option>
+
+                    </optgroup>
+
+                    <optgroup label="G">
+
+                        <option value="Gould Hall (GLD)">Gould Hall (GLD)</option>
+
+                        <option value="Gowen Hall (GWN)">Gowen Hall (GWN)</option>
+
+                    </optgroup>
+
+                    <optgroup label="H">
+
+                        <option value="Haggett Hall (HGT)">Haggett Hall (HGT)</option>
+
+                        <option value="Hitchcock Hall (HCK)">Hitchcock Hall (HCK)</option>
+
+                        <option value="Hutchinson Hall (HUT)">Hutchinson Hall (HUT)</option>
+
+                    </optgroup>
+
+                    <optgroup label="I">
+
+                        <option value="Intramural Activities Building (IMA)">Intramural Activities Building (IMA)</option>
+
+                    </optgroup>
+
+                    <optgroup label="M">
+
+                        <option value="Magnuson Health Sciences Center A (HSA)">Magnuson Health Sciences Center A (HSA)</option>
+
+                        <option value="Magnuson Health Sciences Center C (HSC)">Magnuson Health Sciences Center C (HSC)</option>
+
+                        <option value="Magnuson Health Sciences Center D (HSD)">Magnuson Health Sciences Center D (HSD)</option>
+
+                        <option value="Magnuson Health Sciences Center E (HSE)">Magnuson Health Sciences Center E (HSE)</option>
+
+                        <option value="Magnuson Health Sciences Center I (HSI)">Magnuson Health Sciences Center I (HSI)</option>
+
+                        <option value="Magnuson Health Sciences Center T (HST)">Magnuson Health Sciences Center T (HST)</option>
+
+                        <option value="Mary Gates Hall (MGH)">Mary Gates Hall (MGH)</option>
+
+                        <option value="McCarty Hall (MCC)">McCarty Hall (MCC)</option>
+
+                        <option value="McMahon Hall (MCM)">McMahon Hall (MCM)</option>
+
+                        <option value="Miller Hall (MLR)">Miller Hall (MLR)</option>
+
+                        <option value="Music Building (MUS)">Music Building (MUS)</option>
+
+                    </optgroup>
+
+                    <optgroup label="O">
+
+                        <option value="Odegaard Undergraduate Library (OUGL)">Odegaard Undergraduate Library (OUGL)</option>
+
+                    </optgroup>
+
+                    <optgroup label="P">
+
+                        <option value="Paccar Hall (PCAR)">Paccar Hall (PCAR)</option>
+
+                        <option value="Padelford Hall (PDL)">Padelford Hall (PDL)</option>
+
+                        <option value="Physics/Astronomy Building (PAB) Tower">Physics/Astronomy Building (PAB) Tower</option>
+
+                        <option value="Poplar Hall (UTO)">Poplar Hall (UTO)</option>
+
+                    </optgroup>
+
+                    <optgroup label="S">
+
+                        <option value="Social Work/Speech &amp; Hearing Sciences Building (SWS)">Social Work/Speech &amp; Hearing Sciences Building (SWS)</option>
+
+                        <option value="South Campus Center (SOCC)">South Campus Center (SOCC)</option>
+
+                        <option value="Suzzallo Library (SUZ)">Suzzallo Library (SUZ)</option>
+
+                    </optgroup>
+
+                    <optgroup label="W">
+
+                        <option value="William H. Foege Genome Sciences (GNOM)">William H. Foege Genome Sciences (GNOM)</option>
+
+                        <option value="William H. Gates Hall (LAW)">William H. Gates Hall (LAW)</option>
+
+                    </optgroup>
+
+                </select>
+            </div>
+
+            <div style="display:inline-block; border-left:solid 1px #bbb; padding-left:6px;" class="pull-right">
+                <input type="text" placeholder="SPOT ID OR NAME" style="margin:0; font-size:11px; padding: 1px 3px;" />&nbsp;<a href="#" id="" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Search</a>
+            </div>
+
+        </div>
+
+        <div style="margin-top:30px;">You're going to be an interesting companion, Mr. Data. I can't. As much as I care about you, my first duty is to the ship. When has justice ever been as simple as a rule book? In all trust, there is the possibility for betrayal. Shields up! Rrrrred alert! Fate protects fools, little children and ships named Enterprise. Your head is not an artifact! Captain, why we are we out here chasing comets? Besides, you look good in a dress. We have a saboteur aboard. That might've been one of the shortest assignments in the history of Starfleet. Fear is the true enemy, the only enemy.</div>
 
     </div>
 </div>
