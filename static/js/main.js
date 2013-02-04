@@ -58,6 +58,13 @@ $special = $event.special.debouncedresize = {
 
         buildScrollTable();
 
+        // if not apple webkit... ?
+        //$("#table_scroller").niceScroll();
+
+        $('#table_scroller').lionbars({
+            autohide: true
+        });
+
         // handle scrolling
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
             handleScroll();
