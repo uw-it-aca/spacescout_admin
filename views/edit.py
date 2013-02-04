@@ -16,6 +16,7 @@ def edit(request):
     space_ids = request.POST.getlist('space_id')
     for i in space_ids:
         qargs.append("id=%s" % i)
+    qargs.append("limit=0")
     query = ''
     query = '&'.join(qargs)
 
