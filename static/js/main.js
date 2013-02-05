@@ -59,27 +59,25 @@ $special = $event.special.debouncedresize = {
         buildScrollTable();
 
         // if not apple webkit... ?
-        //$("#table_scroller").niceScroll();
 
-        $('#table_scroller').lionbars({
+        /*$('#table_scroller').lionbars({
             autohide: true
-        });
-
-        // handle scrolling
-        /*$(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
-            handleScroll();
         });*/
 
-        $('.lb-wrap').scroll(function() {
+        // handle scrolling - default browser
+        $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
             handleScroll();
         });
+
+        // handle scrolling - lionbars
+        /*$('.lb-wrap').scroll(function() {
+            handleScroll();
+        });*/
 
 
 	});
 
     $(w).on("debouncedresize", function( event ) {
-
-        //console.log("resize");
 
         buildScrollTable();
 
@@ -415,12 +413,6 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead").width(tableContainerW - fixedW);
         $("#table_scroller").width(tableContainerW - fixedW);
 
-        /*$("#table_scroller").height(tableContainerH - 30);
-        $(".fixedTable").height(tableContainerH - 30);
-        $(".fixedColumn").height(tableContainerH + 1);*/
-
-        //$("#table_scroller_container").css("max-height", tableContainerH - 25);
-
         $("#edit_space_scroller").css("max-height", tableContainerH - 45);
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
@@ -443,8 +435,11 @@ $special = $event.special.debouncedresize = {
 
     // Handle the scroll events
     function handleScroll() {
+
         //Find the scrolling offsets
-        var tblarea = $('.lb-wrap');
+
+        var tblarea = $('#table_scroller');
+        //var tblarea = $('.lb-wrap');
 
         var x = tblarea[0].scrollLeft;
         var y = tblarea[0].scrollTop;
