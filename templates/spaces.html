@@ -205,11 +205,11 @@
                         <thead>
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
-                                <td class="col-checkbox" id="" style="text-align:center;"><input id="check_all_checkbox" type="checkbox"></td>
+                                <td class="col-checkbox" id="" style="text-align:center;"><div><input id="check_all_checkbox" type="checkbox"></div></td>
                                 {% for key in fixed_keys %}
-                                <td class="col-{{ key }}" id=""><span>{{ key }}</span></td>
+                                <td class="col-{{ key }}" id=""><div>{{ key }}</div></td>
                                 {% endfor %}
-                                <td class="col-action muted" id="">Action</td>
+                                <td class="col-action muted" id=""><div>Action</div></td>
                             </tr>
                         </thead>
                     </table>
@@ -221,30 +221,30 @@
                             {% for space in spots %}
                             <tr id="spot_{{space.id}}_fixed">
 
-                                <td class="col-checkbox" id=""><input type="checkbox" name="space_id" value="{{ space.id }}"></td>
+                                <td class="col-checkbox" id=""><div><input type="checkbox" name="space_id" value="{{ space.id }}"></div></td>
 
                                 {% for key in fixed_keys %}
                                     {% if key == "name" %}
 
                                         <!-- for now, look for specific words and apply the updates/queued labels to mimic status -->
                                         {% if "Area" in space|lookup:key %}
-                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></span></td>
+                                        <td class="col-{{ key }}" id=""><div><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></div></td>
                                         {% elif "Lounge" in space|lookup:key %}
-                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Ready</span></span></td>
+                                        <td class="col-{{ key }}" id=""><div><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Ready</span></div></td>
                                         {% else %}
-                                        <td class="col-{{ key }}" id=""><span><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></span></td>
+                                        <td class="col-{{ key }}" id=""><div><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></div></td>
                                         {% endif %}
 
                                     {% else %}
-                                    <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
+                                    <td class="col-{{ key }}" id=""><div>{{ space|lookup:key }}</div></td>
                                     {% endif %}
                                 {% endfor %}
 
                                 <!-- for now, look for specific words and apply the approve/publish buttons to mimic actions -->
                                 {% if "Area" in space.name %}
-                                <td class="col-action" id=""><a href="#" id="" class="btn btn-mini">Approve</a></td>
+                                <td class="col-action" id=""><div><a href="#" id="" class="btn btn-mini">Approve</a></div></td>
                                 {% elif "Lounge" in space.name %}
-                                <td class="col-action" id=""><a href="#" id="" class="btn btn-mini btn-success">Publish</a></td>
+                                <td class="col-action" id=""><div><a href="#" id="" class="btn btn-mini btn-success">Publish</a></div></td>
                                 {% else %}
                                 <td class="col-action" id="">&nbsp;</td>
                                 {% endif %}
@@ -264,7 +264,7 @@
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
                                 {% for key in scrollable_keys %}
-                                <td class="col-{{ key }}"><span>{{ key }}</span></td>
+                                <td class="col-{{ key }}"><div>{{ key }}</div></td>
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -281,9 +281,9 @@
                                 {% for key in scrollable_keys %}
                                     {% if space|lookup:key|classname == 'list' %}
                                     <!-- TODO: if list is detected, loop over it to create a nicer looking list -->
-                                    <td class="col-{{ key }}" id=""><span>{% for t in space|lookup:key %}{% if not forloop.first %}, {% endif %}{{ t }}{% endfor %}</span></td>
+                                    <td class="col-{{ key }}" id=""><div>{% for t in space|lookup:key %}{% if not forloop.first %}, {% endif %}{{ t }}{% endfor %}</div></td>
                                     {% else %}
-                                    <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
+                                    <td class="col-{{ key }}" id=""><div>{{ space|lookup:key }}</div></td>
                                     {% endif %}
                                 {% endfor %}
                             </tr>

@@ -29,7 +29,7 @@
                         <thead>
                             <tr>
                                 {% for key in fixed_keys %}
-                                <td class="col-{{ key }}" id=""><span>{{ key }}</span></td>
+                                <td class="col-{{ key }}" id=""><div>{{ key }}</div></td>
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -43,9 +43,9 @@
                                 {% for key in fixed_keys %}
 
                                      {% if key == "id" %}
-                                     <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
+                                     <td class="col-{{ key }}" id=""><div>{{ space|lookup:key }}</div></td>
                                      {% else %}
-                                     <td class="col-{{ key }}" id=""><span><input type="text" value="{{ space|lookup:key }}"></span></td>
+                                     <td class="col-{{ key }}" id=""><div><input type="text" value="{{ space|lookup:key }}"></div></td>
                                      {% endif %}
 
                                 {% endfor %}
@@ -64,9 +64,9 @@
                                 {% for key in scrollable_keys %}
 
                                     {% if key == "id" or key = "last_modified" %}
-                                    <td class="col-{{ key }}"><span>{{ key }}</span></td>
+                                    <td class="col-{{ key }}"><div>{{ key }}</div></td>
                                     {% else %}
-                                    <td class="col-{{ key }}"><span>{{ key }}</span><a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></td>
+                                    <td class="col-{{ key }}"><div>{{ key }}<a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></div></td>
                                     {% endif %}
 
 
@@ -86,9 +86,9 @@
                                 {% for key in scrollable_keys %}
 
                                     {% if key == "id" or key == "last_modified" %}
-                                     <td class="col-{{ key }}" id=""><span>{{ space|lookup:key }}</span></td>
+                                     <td class="col-{{ key }}" id=""><div>{{ space|lookup:key }}</div></td>
                                      {% else %}
-                                     <td class="col-{{ key }}" id=""><span><input type="text" value="{{ space|lookup:key }}"></span></td>
+                                     <td class="col-{{ key }}" id=""><div><input type="text" value="{{ space|lookup:key }}"></div></td>
                                      {% endif %}
 
                                 {% endfor %}
