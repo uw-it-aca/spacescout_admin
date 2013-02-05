@@ -127,7 +127,7 @@ body { padding-top: 40px; }
     }
 
     .col-building_name { width: 250px;
-        div { width: 240px; overflow: hidden; text-overflow: ellipsis; }
+        div { width: 248px; overflow: hidden; text-overflow: ellipsis; }
     }
     .col-type { width:  250px;
         select { height: 24px; }
@@ -192,7 +192,10 @@ body { padding-top: 40px; }
 
 
 #table_scroller_container {
-    input[type="text"] { width: 96%; }
+
+    tbody {
+        input[type="text"] { width: 96%; border-radius: 0; }
+    }
 }
 
 #edit_space_table {
