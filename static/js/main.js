@@ -66,7 +66,11 @@ $special = $event.special.debouncedresize = {
         });
 
         // handle scrolling
-        $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
+        /*$(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
+            handleScroll();
+        });*/
+
+        $('.lb-wrap').scroll(function() {
             handleScroll();
         });
 
@@ -440,7 +444,8 @@ $special = $event.special.debouncedresize = {
     // Handle the scroll events
     function handleScroll() {
         //Find the scrolling offsets
-        var tblarea = $('#table_scroller');
+        var tblarea = $('.lb-wrap');
+
         var x = tblarea[0].scrollLeft;
         var y = tblarea[0].scrollTop;
 
