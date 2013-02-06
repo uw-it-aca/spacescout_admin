@@ -108,39 +108,30 @@ body { padding-top: 40px; }
 
     tbody {
         tr:last-child { border-bottom: none; }
+
+        div { overflow-x: hidden; text-overflow: ellipsis;
+             input[type="text"] { width: 95%; border-radius: 0; }
+        }
     }
 
     /* table column styling */
     .col-checkbox { width: 20px;  text-align: center; }
-
     .col-id { width: 40px; }
-    .col-name {
+    .col-name { width: 200px;
         .label { font-size: 8px; font-weight: normal; padding: 0 4px; text-transform: uppercase; }
     }
 
-    .col-location_description { width: 250px;
-        div { width: 240px; overflow: hidden; text-overflow: ellipsis; }
-    }
+    .col-location_description { width: 230px; }
 
     .col-action { width: 70px; text-align: center;
         .btn-mini { width: 40px; font-size: 9px; padding: 0 6px; line-height: 17px; }
     }
 
-    .col-building_name { width: 250px;
-        div { width: 248px; overflow: hidden; text-overflow: ellipsis; }
-    }
-    .col-type { width:  250px;
-        select { height: 24px; }
-    }
+    .col-building_name { width: 250px;}
+    .col-type { width:  250px; }
     .col-floor { width: 250px; }
-
     .col-has_whiteboards { width: 200px; }
-
-
-    .col-access_notes { width: 500px;
-        /*span { width: 345px; overflow: hidden; display: inline-block; text-overflow: ellipsis; }*/
-    }
-
+    .col-access_notes { width: 500px;}
     .col-last_modified { width: 200px; }
 
     .populate-column { display: inline-block; font-size: 10px; font-weight: normal; text-transform: uppercase; line-height: 20px;
@@ -194,7 +185,7 @@ body { padding-top: 40px; }
 #table_scroller_container {
 
     tbody {
-        input[type="text"] { width: 96%; border-radius: 0; }
+
     }
 }
 
