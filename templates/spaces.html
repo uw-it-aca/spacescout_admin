@@ -168,7 +168,7 @@
             </div>
 
             <div style="display:inline-block; border-left:solid 1px #bbb; padding-left:6px;" class="pull-right">
-                <input type="text"  placeholder="Enter space name" style="margin:0; font-size:11px; padding: 1px 3px;"  data-provide="typeahead" data-items="4" data-source="[{% for space in spots %}{% if forloop.last %}&quot;{{space.name}}&quot;{% else %}&quot;{{space.name}}&quot;,{% endif %}{% endfor %}]">&nbsp;<a href="#" id="" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Search</a>
+                <input id="search_single_spot_input" type="text" placeholder="Enter space name" style="margin:0; font-size:11px; padding: 1px 3px;" data-provide="typeahead" data-items="4" data-source="[{% for space in spots %}{% if forloop.last %}&quot;{{space.name}}&quot;{% else %}&quot;{{space.name}}&quot;,{% endif %}{% endfor %}]">&nbsp;<a href="#" id="search_single_spot_button" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Search</a>
             </div>
 
         </div>

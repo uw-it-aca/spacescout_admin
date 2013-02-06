@@ -58,22 +58,10 @@ $special = $event.special.debouncedresize = {
 
         buildScrollTable();
 
-        // if not apple webkit... ?
-
-        /*$('#table_scroller').lionbars({
-            autohide: true
-        });*/
-
         // handle scrolling - default browser
         $(".fixedContainer > .fixedTable", ".fixedArea").scroll(function() {
             handleScroll();
         });
-
-        // handle scrolling - lionbars
-        /*$('.lb-wrap').scroll(function() {
-            handleScroll();
-        });*/
-
 
 	});
 
@@ -82,27 +70,6 @@ $special = $event.special.debouncedresize = {
         buildScrollTable();
 
     });
-
-
-    /*$(w).resize(function() {
-        //console.log("resize");
-
-        // reset base widths
-        winH = $(window).height();
-        winW = $(window).width();
-        headerH = $(".navbar").height();
-        alertH = $(".alert").height();
-        filterH = $("#filter_block").height();
-        tableContainerH = winH - headerH - alertH - filterH - 90;  // approximation height of table container
-        tableContainerW = $("#table_scroller_container").width();
-
-        // set widths for table container
-        $(".fixedArea").width(tableContainerW);
-        $(".fixedContainer").width(tableContainerW - 302);
-        $(".fixedContainer .fixedHead").width(tableContainerW - 302);
-        $("#table_scroller").width(tableContainerW - 302);
-    });*/
-
 
 	//show filter block
 	$('#filter_block_button').click(function(e){
@@ -192,17 +159,6 @@ $special = $event.special.debouncedresize = {
     	else {
         	$('#error_message').show();
     	}
-
-    	//console.log(empties);
-
-    	// if any visible input are empty, show error alert
-    	/*if( $('.table-container').find('input:text:visible').val().length == 0 ) {
-        	$('#error_message').show();
-    	}
-    	else {
-        	// else go back to space list page
-        	window.location.href = '/?q=success';
-    	}*/
 
     });
 
@@ -352,6 +308,20 @@ $special = $event.special.debouncedresize = {
             $('#bulk_edit_submit').trigger('click');
         }
     });
+
+    // handle the single spot search
+    $('#search_single_spot_input').keypress(function(e) {
+        if(e.keyCode == 13){
+            $('#search_single_spot_button').trigger('click');
+        }
+    });
+
+    $('#search_single_spot_button').click(function(e) {
+        e.preventDefault();
+        alert("YOLO!");
+    });
+
+
 
     function populateColumnValues(columnClass) {
 
