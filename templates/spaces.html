@@ -281,9 +281,9 @@
                                 {% for key in scrollable_keys %}
                                     {% if space|lookup:key|classname == 'list' %}
                                     <!-- TODO: if list is detected, loop over it to create a nicer looking list -->
-                                    <td id=""><div class="col-{{ key }}" >{% for t in space|lookup:key %}{% if not forloop.first %}, {% endif %}{{ t }}{% endfor %}</div></td>
+                                    <td id=""><div class="col-{{ key }}" >{% for t in space|lookup:key %}{% if not forloop.first %}, {% endif %}{{ t }}{% endfor %}{% if not space|lookup:key %}&nbsp;{% endif %}</div></td>
                                     {% else %}
-                                    <td id=""><div class="col-{{ key }}" >{{ space|lookup:key }}</div></td>
+                                    <td id=""><div class="col-{{ key }}" >{{ space|lookup:key }}{% if not space|lookup:key %}&nbsp;{% endif %}</div></td>
                                     {% endif %}
                                 {% endfor %}
                             </tr>
