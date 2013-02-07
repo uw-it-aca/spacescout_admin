@@ -298,8 +298,9 @@ $special = $event.special.debouncedresize = {
         e.preventDefault();
 
         //populate column values - need to set this dynamically
-        var columnClass = $(this).closest('td').attr('class');
+        var columnClass = $(this).closest('td').children().attr('class');
         populateColumnValues(columnClass);
+
     });
 
     // handle when user hits "enter" button instead of clicking button
