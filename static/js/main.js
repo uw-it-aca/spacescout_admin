@@ -318,7 +318,8 @@ $special = $event.special.debouncedresize = {
 
     $('#search_single_spot_button').click(function(e) {
         e.preventDefault();
-        alert("YOLO!");
+        var space_id = $('ul.typeahead li.active').data('value').match(/\d+/);
+        window.location.href = "/space/" + space_id;
     });
 
 
