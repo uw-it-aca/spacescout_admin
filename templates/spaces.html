@@ -6,30 +6,13 @@
 <div id="filter_block">
     <div style="padding:10px;color:#222;">
         <div class="clearfix">
-            <h5 style="margin-top:0;display:inline-block; margin:0;">FILTERS <a href="#" id="filter_block_button" class="dropdown"><i class="icon-chevron-down" style="opacity:.5;"></i></a></h5>
-            <div style="display:inline-block; margin-left:30px;">
-                <h6 style="display:inline-block;margin:0;">resources</h6>
-                <label class="checkbox inline" for="has_whiteboards">
-                  <input type="checkbox" id="has_whiteboards" name="equipment" value="has_whiteboards"> Whiteboard
-                </label>
-                <label class="checkbox inline" for="has_outlets">
-                  <input type="checkbox" id="has_outlets" name="equipment" value="has_outlets"> Outlets
-                </label>
-                <label class="checkbox inline" for="has_computers">
-                  <input type="checkbox" id="has_computers" name="equipment" value="has_computers"> Computer
-                </label>
-                <label class="checkbox inline" for="has_scanner">
-                  <input type="checkbox" id="has_scanner" name="equipment" value="has_scanner"> Scanning
-                </label>
-                <label class="checkbox inline" for="has_displays">
-                  <input type="checkbox" id="has_displays" name="equipment" value="has_displays"> Large display
-                </label>
-                <label class="checkbox inline" for="has_projector">
-                  <input type="checkbox" id="has_projector" name="equipment" value="has_projector"> Projector
-                </label>
-                <label class="checkbox inline" for="has_printing">
-                  <input type="checkbox" id="has_printing" name="equipment" value="has_printing"> Printing
-                </label>
+            <div style="display:inline-block;">
+                <h6 style="display:inline-block;margin:0;">Filter spaces:</h6>
+                <div class="btn-group">
+                  <button class="btn btn-mini" disabled="disabled">ALL</button>
+                  <button class="btn btn-mini">UPDATED</button>
+                  <button class="btn btn-mini">APPROVED</button>
+                </div>
             </div>
             <div style="display:inline-block; margin-left:30px;">
                 <h6 style="display:inline-block;margin:0;">building</h6>
@@ -168,12 +151,11 @@
             </div>
 
             <div style="display:inline-block; border-left:solid 1px #bbb; padding-left:6px;" class="pull-right">
+                <h6 style="display:inline-block;margin:0;">quick search</h6>
                 <input id="search_single_spot_input" type="text" placeholder="Enter #id or space name" style="margin:0; font-size:11px; padding: 1px 3px;" data-provide="typeahead" data-items="10" data-source="[{% for space in spots %}{% if forloop.last %}&quot;{{space.id}} - {{space.name}}&quot;{% else %}&quot;{{space.id}} - {{space.name}}&quot;,{% endif %}{% endfor %}]">&nbsp;<a href="#" id="search_single_spot_button" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Search</a>
             </div>
 
         </div>
-
-        <div style="margin-top:30px;">You're going to be an interesting companion, Mr. Data. I can't. As much as I care about you, my first duty is to the ship. When has justice ever been as simple as a rule book? In all trust, there is the possibility for betrayal. Shields up! Rrrrred alert! Fate protects fools, little children and ships named Enterprise. Your head is not an artifact! Captain, why we are we out here chasing comets? Besides, you look good in a dress. We have a saboteur aboard. That might've been one of the shortest assignments in the history of Starfleet. Fear is the true enemy, the only enemy.</div>
 
     </div>
 </div>
@@ -230,7 +212,7 @@
                                         {% if "Area" in space|lookup:key %}
                                         <td id=""><div class="col-{{ key }}"><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></div></td>
                                         {% elif "Lounge" in space|lookup:key %}
-                                        <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Ready</span></div></td>
+                                        <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Approved</span></div></td>
                                         {% else %}
                                         <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></div></td>
                                         {% endif %}
