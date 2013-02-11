@@ -238,7 +238,7 @@ $special = $event.special.debouncedresize = {
     });
 
     // hover table rows
-    $("table tbody").delegate('td','mouseover mouseleave', function(e) {
+    $("#table_scroller_container table tbody").delegate('td','mouseover mouseleave', function(e) {
 
         // get the id and strip out any characters
         var id = $(this).parent().attr("id").toString();
@@ -254,15 +254,6 @@ $special = $event.special.debouncedresize = {
           $("#spot_" + id + "_scroll").removeClass("hover");
         }
     });
-
-    /*$('.bulk-edit').popover({
-        title: 'Bulk Edit',
-        html: true,
-        placement: 'bottom',
-        content: function () {
-            return $('#settings-layout-content').html();
-        }
-    });*/
 
     // handle popover clicks
     $('[rel="popover"]').popover({
@@ -310,6 +301,7 @@ $special = $event.special.debouncedresize = {
         }
     });
 
+
     // handle the single spot search
     $('#search_single_spot_input').keypress(function(e) {
         if(e.keyCode == 13){
@@ -322,7 +314,6 @@ $special = $event.special.debouncedresize = {
         var space_id = $('ul.typeahead li.active').data('value').match(/\d+/);
         window.location.href = "/space/" + space_id;
     });
-
 
 
     function populateColumnValues(columnClass) {
