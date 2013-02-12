@@ -131,7 +131,9 @@ body { padding-top: 40px; }
     .col-type { width:  250px; }
     .col-floor { width: 250px; }
     .col-has_whiteboards { width: 200px; }
-    .col-access_notes { width: 500px;}
+    .col-access_notes { width: 500px;
+        input[type="text"] { width: 98%; }
+    }
     .col-last_modified { width: 200px; }
 
     .populate-column { display: inline-block; font-size: 10px; font-weight: normal; text-transform: uppercase; line-height: 20px;
@@ -232,6 +234,8 @@ body { padding-top: 40px; }
 .popover-content { font-weight: normal;
     white-space: normal;
     line-height: 18px;
+
+    input[type="text"] { width: 50% !important;  border-color: lime !important; }
 }
 
 .typeahead { width: 281px; }

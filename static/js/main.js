@@ -372,6 +372,7 @@ $special = $event.special.debouncedresize = {
 
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
+
         $(".fixedContainer").width(tableContainerW - fixedW);
         $(".fixedContainer .fixedHead").width(tableContainerW - fixedW);
         $("#table_scroller").width(tableContainerW - fixedW);

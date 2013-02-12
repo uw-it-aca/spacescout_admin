@@ -181,9 +181,9 @@
 
     <div id="table_scroller_container" class="tableDiv">
         <div class="fixedArea clearfix">
-            <div class="fixedColumn" style="float: left; width: 600px;">
+            <div class="fixedColumn" style="float: left;">
                 <div class="fixedHead">
-                    <table style="width:100%;">
+                    <table style="width:auto;">
                         <thead>
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
@@ -196,8 +196,8 @@
                         </thead>
                     </table>
                 </div>
-                <div class="fixedTable" style="width: 600px; overflow: hidden; border-collapse: collapse; padding: 0px;">
-                    <table style="width:100%;">
+                <div class="fixedTable" style="width: auto; overflow: hidden; border-collapse: collapse; padding: 0px;">
+                    <table style="width:auto;">
                         <tbody>
                             <!-- loop of spaces -->
                             {% for space in spots %}
@@ -241,7 +241,7 @@
 
             <div class="fixedContainer" style="float: left; overflow:hidden;">
                 <div class="fixedHead" style="float: left; overflow: hidden;">
-                    <table style="width: 1950px;">
+                    <table style="width: auto;">
                         <thead>
                             <!-- loop through schema? fixed table header for column titles -->
                             <tr>
@@ -254,7 +254,7 @@
                 </div>
 
                 <div id="table_scroller" class="fixedTable" style="float: left;  overflow: auto;">
-                    <table class="FixedTables" style="width: 1950px;">
+                    <table class="FixedTables" style="width: auto;">
                         <caption class="visuallyhidden">List of Spaces</caption>
                         <tbody id="space_list_body">
                             <!-- loop  of spaces -->
