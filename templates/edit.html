@@ -66,7 +66,7 @@
                                     {% if key == "id" or key = "last_modified" %}
                                     <td><div class="col-{{ key }}">{{ key }}</div></td>
                                     {% else %}
-                                    <td><div class="col-{{ key }}">{{ key }}<a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></div></td>
+                                    <td><div class="col-{{ key }}">{{ key }}&nbsp;&nbsp;<a href="#" class="bulk-edit" rel="popover">BULK EDIT</a></div></td>
                                     {% endif %}
 
 
@@ -115,9 +115,14 @@
 
 <div id="settings-layout-content" class="hide">
     <p>Apply single value for entire alksdfj sadflkj column: <span class="column-name" style="font-weight:bold; color:red;"></span></p>
-    <input id="bulk_edit_input" type="text"/><br/>
-    <button id="bulk_edit_close" class="btn btn-small">Close</button>
-    <button id="bulk_edit_submit" class="btn btn-small btn-primary">Okay</button>
+
+    <div><input id="bulk_edit_input" type="text"/></div>
+
+    <div style="margin-top:5px;">
+        <a id="bulk_edit_close" class="close" href="#">&times;</a>
+        <button id="bulk_edit_submit" class="btn btn-small btn-primary">Okay</button>
+    </div>
+
 </div>
 
 {% endblock %}

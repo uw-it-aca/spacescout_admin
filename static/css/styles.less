@@ -139,6 +139,8 @@ body { padding-top: 40px; }
     .populate-column { display: inline-block; font-size: 10px; font-weight: normal; text-transform: uppercase; line-height: 20px;
         i { margin-top: -1px; }
     }
+
+    a.bulk-edit { font-weight: normal; color: red; }
 }
 
 .fixedColumn { border-right: solid 2px #c6c6c6;
@@ -229,13 +231,16 @@ body { padding-top: 40px; }
 
 .modal.fade.in { top: 70%; } //position the modal in the center of the browser
 
+.popover-inner { margin: 0 !important; }
 
 .popover-title { text-transform: uppercase; }
-.popover-content { font-weight: normal;
+.popover-content { font-weight: normal; margin: 0 !important;
     white-space: normal;
     line-height: 18px;
 
-    input[type="text"] { width: 50% !important;  border-color: lime !important; }
+    input[type="text"] { width: 94.5% !important;  border-color: lime !important; }
+
+    .close { position: absolute; top:4px; right: 10px; }
 }
 
 .typeahead { width: 281px; }
