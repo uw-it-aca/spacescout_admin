@@ -313,7 +313,6 @@ $special = $event.special.debouncedresize = {
         window.location.href = "/space/" + space_id;
     });
 
-
     function populateColumnValues(columnClass) {
 
         var newValue = $('#bulk_edit_input').val();
@@ -364,6 +363,7 @@ $special = $event.special.debouncedresize = {
         headerH = $(".navbar").height();
         filterH = $("#filter_block").height();
         fixedW = $(".fixedColumn").width() + 2;
+        tableOptionsH = $(".table-options").height();
 
         tableContainerH = winH - headerH - filterH - 90;  // approximation height of table container
         tableContainerW = $("#table_scroller_container").width();
@@ -375,7 +375,8 @@ $special = $event.special.debouncedresize = {
         $(".fixedContainer .fixedHead").width(tableContainerW - fixedW);
         $("#table_scroller").width(tableContainerW - fixedW);
 
-        $("#edit_space_scroller").css("max-height", tableContainerH - 45);
+        $("#edit_space_scroller").css("max-height", tableContainerH - tableOptionsH - 20);
+
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);

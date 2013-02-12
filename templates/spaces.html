@@ -7,7 +7,6 @@
     <div style="padding:10px;color:#222;">
         <div class="clearfix">
             <div style="display:inline-block;">
-                <h6 style="display:inline-block;margin:0;">Filter spaces:</h6>
                 <div class="btn-group">
                   <button class="btn btn-mini" disabled="disabled">ALL</button>
                   <button class="btn btn-mini">UPDATED</button>
@@ -15,7 +14,7 @@
                 </div>
             </div>
             <div style="display:inline-block; margin-left:30px;">
-                <h6 style="display:inline-block;margin:0;">building</h6>
+                <h6 style="display:inline-block;margin:0;">BUILDING</h6>
                 <select class="building-location" style="font-size:11px; padding: 2px; line-height:24px; height:24px; margin:0;">
 
                     <option>---</option>
@@ -150,8 +149,8 @@
                 </select>
             </div>
 
-            <div style="display:inline-block; border-left:solid 1px #bbb; padding-left:6px;" class="pull-right">
-                <h6 style="display:inline-block;margin:0;">quick search</h6>
+            <div style="display:inline-block; border-left:solid 1px #bbb; padding-left:10px;" class="pull-right">
+                <h6 style="display:inline-block;margin:0;">QUICK SEARCH</h6>
                 <input id="search_single_spot_input" type="text" placeholder="Enter #id or space name" style="margin:0; font-size:11px; padding: 1px 3px;" data-provide="typeahead" data-items="10" data-source="[{% for space in spots %}{% if forloop.last %}&quot;{{space.id}} - {{space.name}}&quot;{% else %}&quot;{{space.id}} - {{space.name}}&quot;,{% endif %}{% endfor %}]">&nbsp;<a href="#" id="search_single_spot_button" class="btn btn-mini"><i class="icon-circle-arrow-up"></i> Search</a>
             </div>
 
