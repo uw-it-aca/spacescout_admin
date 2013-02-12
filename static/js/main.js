@@ -66,9 +66,7 @@ $special = $event.special.debouncedresize = {
 	});
 
     $(w).on("debouncedresize", function( event ) {
-
         buildScrollTable();
-
     });
 
 	//show filter block
