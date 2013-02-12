@@ -53,7 +53,4 @@ def edit(request):
     }
 
     context = RequestContext(request, {})
-    #TODO: will we need the count any longer?
-    checked_count = int(request.POST['checked_spaces'])
-    context['count'] = [i + 1 for i in range(checked_count)]
     return render_to_response('edit.html', args, context)
