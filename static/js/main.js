@@ -270,7 +270,7 @@ $special = $event.special.debouncedresize = {
 
     // create popover content
     function setPopoverContent(columnName) {
-
+        
         $('#settings-layout-content .column-name').html(columnName);
         return $('#settings-layout-content').html();
     }

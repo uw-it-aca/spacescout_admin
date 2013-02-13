@@ -64,9 +64,9 @@
                                 {% for key in scrollable_keys %}
 
                                     {% if key == "id" or key = "last_modified" %}
-                                    <td><div class="col-{{ key }}">{{ key }}</div></td>
+                                    <td><div class="col-{{ key }}"><span>{{ key }}</span></div></td>
                                     {% else %}
-                                    <td><div class="col-{{ key }}">{{ key }}&nbsp;&nbsp;<a href="#" class="bulk-edit" rel="popover">EDIT</a></div></td>
+                                    <td><div class="col-{{ key }}"><span>{{ key }}</span>&nbsp;&nbsp;<a href="#" class="bulk-edit" rel="popover">EDIT</a></div></td>
                                     {% endif %}
 
 
@@ -114,7 +114,7 @@
 
 
 <div id="settings-layout-content" class="hide">
-    <p>Apply single value for entire alksdfj sadflkj column: <span class="column-name" style="font-weight:bold; color:red;"></span></p>
+    <p>Apply single value for entire column: <span class="column-name" style="font-weight:bold; color:red;"></span></p>
 
     <div><input id="bulk_edit_input" type="text"/></div>
 
