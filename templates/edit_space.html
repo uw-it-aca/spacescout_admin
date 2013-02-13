@@ -53,6 +53,7 @@
                     {% endfor %}
                  </tbody>
               </table>
+              {% if q_id %}<input type="hidden" name="q_id" value="{{ q_id }}" />{% endif %}
           </div>
     </div>
     <div class="table-sub-options clearfix">
