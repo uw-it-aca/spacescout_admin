@@ -5,7 +5,7 @@ import json
 import oauth2
 
 
-def edit(request):
+def edit_multiple(request):
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
@@ -53,4 +53,4 @@ def edit(request):
     }
 
     context = RequestContext(request, {})
-    return render_to_response('edit.html', args, context)
+    return render_to_response('edit_multiple.html', args, context)
