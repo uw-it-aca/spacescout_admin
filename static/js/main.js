@@ -66,9 +66,7 @@ $special = $event.special.debouncedresize = {
 	});
 
     $(w).on("debouncedresize", function( event ) {
-
         buildScrollTable();
-
     });
 
 	//show filter block
@@ -238,7 +236,7 @@ $special = $event.special.debouncedresize = {
     });
 
     // hover table rows
-    $("table tbody").delegate('td','mouseover mouseleave', function(e) {
+    $("#table_scroller_container table tbody").delegate('td','mouseover mouseleave', function(e) {
 
         // get the id and strip out any characters
         var id = $(this).parent().attr("id").toString();
@@ -254,15 +252,6 @@ $special = $event.special.debouncedresize = {
           $("#spot_" + id + "_scroll").removeClass("hover");
         }
     });
-
-    /*$('.bulk-edit').popover({
-        title: 'Bulk Edit',
-        html: true,
-        placement: 'bottom',
-        content: function () {
-            return $('#settings-layout-content').html();
-        }
-    });*/
 
     // handle popover clicks
     $('[rel="popover"]').popover({
@@ -310,6 +299,7 @@ $special = $event.special.debouncedresize = {
         }
     });
 
+
     // handle the single spot search
     $('#search_single_spot_input').keypress(function(e) {
         if(e.keyCode == 13){
@@ -322,8 +312,6 @@ $special = $event.special.debouncedresize = {
         var space_id = $('ul.typeahead li.active').data('value').match(/\d+/);
         window.location.href = "/space/" + space_id;
     });
-
-
 
     function populateColumnValues(columnClass) {
 
@@ -375,17 +363,20 @@ $special = $event.special.debouncedresize = {
         headerH = $(".navbar").height();
         filterH = $("#filter_block").height();
         fixedW = $(".fixedColumn").width() + 2;
+        tableOptionsH = $(".table-options").height();
 
         tableContainerH = winH - headerH - filterH - 90;  // approximation height of table container
         tableContainerW = $("#table_scroller_container").width();
 
     	// set widths for table container
         $(".fixedArea").width(tableContainerW);
+
         $(".fixedContainer").width(tableContainerW - fixedW);
         $(".fixedContainer .fixedHead").width(tableContainerW - fixedW);
         $("#table_scroller").width(tableContainerW - fixedW);
 
-        $("#edit_space_scroller").css("max-height", tableContainerH - 45);
+        $("#edit_space_scroller").css("max-height", tableContainerH - tableOptionsH - 20);
+
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);

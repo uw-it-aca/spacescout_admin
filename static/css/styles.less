@@ -129,14 +129,20 @@ body { padding-top: 40px; }
 
     .col-building_name { width: 250px;}
     .col-type { width:  250px; }
-    .col-floor { width: 250px; }
+    .col-floor { width: 150px;
+        input[type="text"] { width: 93%; }
+    }
     .col-has_whiteboards { width: 200px; }
-    .col-access_notes { width: 500px;}
+    .col-access_notes { width: 500px;
+        input[type="text"] { width: 98%; }
+    }
     .col-last_modified { width: 200px; }
 
     .populate-column { display: inline-block; font-size: 10px; font-weight: normal; text-transform: uppercase; line-height: 20px;
         i { margin-top: -1px; }
     }
+
+    a.bulk-edit { font-weight: normal; color: gray; font-size: 10px; }
 }
 
 .fixedColumn { border-right: solid 2px #c6c6c6;
@@ -227,11 +233,16 @@ body { padding-top: 40px; }
 
 .modal.fade.in { top: 70%; } //position the modal in the center of the browser
 
+.popover-inner { margin: 0 !important; }
 
 .popover-title { text-transform: uppercase; }
-.popover-content { font-weight: normal;
+.popover-content { font-weight: normal; margin: 0 !important;
     white-space: normal;
     line-height: 18px;
+
+    input[type="text"] { width: 94.5% !important; }
+
+    .close { position: absolute; top:4px; right: 10px; }
 }
 
 .typeahead { width: 281px; }
