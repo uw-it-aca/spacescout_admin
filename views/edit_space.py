@@ -9,7 +9,7 @@ import json
 import oauth2
 
 
-#@login_required
+@login_required
 def edit_space(request, spot_id):
     if request.POST:
         space_datum = {}
