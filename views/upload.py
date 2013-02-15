@@ -18,7 +18,7 @@ def upload(request):
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
 
-    notice = "Upload a spreadsheet in CSV or XLS format"
+    notice = "Upload a spreadsheet in CSV, XLS, or XLSX format"
     successcount = 0
     success_names = []
     failurecount = 0
@@ -178,7 +178,7 @@ def upload(request):
                 successes = "%d successful POSTs:" % (successcount)
                 displaysf = True
             except TypeError:
-                notice = "invalid file type %s. Please upload csv or xls spreadsheet" % (docfile.content_type)
+                notice = "invalid file type %s. Please upload csv, xls, or xlsx spreadsheet" % (docfile.content_type)
     else:
         form = UploadFileForm()
 
