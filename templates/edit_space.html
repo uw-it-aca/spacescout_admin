@@ -9,15 +9,19 @@
 </div>
 
 <div class="table-container">
-<form name="add_space" action="" method="">{% csrf_token %}
+<form name="add_space" action="/space/{{ spot.id }}" method="POST">{% csrf_token %}
 
     <div class="table-options clearfix">
         <h5 class="pull-left" style="margin:0;display:inline-block;">EDIT SPACE</h5>
         <ul class="pull-right">
-            <li class="muted">Recently updated by Janice Fournier on January 4, 2012. Approve changes?</li>
+            {% if updated_by %}
+            <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
             <li><button id="publish_button" class="btn btn-mini">Approve</button></li>
             <li class="muted">Changes were approved Craig Stimmel on January 5, 2012 and will put into the queu. Skip queue and publish now?</li>
             <li><button id="publish_button" class="btn btn-mini btn-success">Publish</button></li>
+            {% else %}
+            <li class="muted">Last updated on {{ last_modified }}</li>
+            {% endif %}
         </ul>
     </div>
 
@@ -47,17 +51,18 @@
                               {% endfor %}
                           </td>
                           {% else %}
-                          <td class="col-value"><input type="text" value="{{ spot|lookup:key }}" /></td>
+                          <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                           {% endif %}
                       </tr>
                     {% endfor %}
                  </tbody>
               </table>
+              {% if q_id %}<input type="hidden" name="q_id" value="{{ q_id }}" />{% endif %}
           </div>
     </div>
     <div class="table-sub-options clearfix">
         <ul class="pull-left">
-            <li><button id="save_button" class="btn btn-mini btn-primary" type="button"><i class="icon-check icon-white"></i> Save</button></li>
+            <li><button id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
 
         </ul>
