@@ -48,17 +48,23 @@ def edit_space(request, spot_id):
         try:
             spot = QueuedSpace.objects.get(space_id=spot_id)
             q_id = spot.pk
+            modified_by = spot.modified_by
+            last_modified = spot.last_modified
             spot = json.loads(spot.json)
         except:
             spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
             resp, content = client.request(spot_url, 'GET')
             spot = json.loads(content)
             q_id = None
+            modified_by = None
+            last_modified = spot["last_modified"]
 
         args = {
             "schema": schema,
             "spot": spot,
             "q_id": q_id,
+            "updated_by": modified_by,
+            "last_modified": last_modified,
         }
 
         context = RequestContext(request, {})

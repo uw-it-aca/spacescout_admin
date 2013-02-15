@@ -11,8 +11,8 @@ class QueuedSpace(models.Model):
     q_etag = models.CharField(max_length=40, blank=True)
     status = models.CharField(max_length=25, blank=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-    modified_by = models.ForeignKey(User, blank=True, null=True)
-    approved_by = models.ForeignKey(User, blank=True, null=True)
+    modified_by = models.ForeignKey(User, blank=True, null=True, related_name='modified_by')
+    approved_by = models.ForeignKey(User, blank=True, null=True, related_name='approved_by')
 
     def __unicode__(self):
         return "id: %s (marked %s on %s by %s)" % (self.space_id, self.status, self.last_modified, self.modified_by)
