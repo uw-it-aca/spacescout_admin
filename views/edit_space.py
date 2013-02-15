@@ -21,13 +21,15 @@ def edit_space(request, spot_id):
                 'json': json.dumps(space_datum),
                 'status': 'updated', }
         # if we got the space from the queue, edit it rather than create a new instance
-        if request.POST["q_id"]:
+        if 'q_id' in request.POST:
             q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
             form = QueueForm(data, instance=q_obj)
         else:
             form = QueueForm(data)
         if form.is_valid():
-            form.save()
+            queued = form.save(commit=False)
+            queued.modified_by = request.user
+            queued.save()
         else:
             #TODO: do something appropriate if the form isn't valid
             pass
