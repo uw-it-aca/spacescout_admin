@@ -83,7 +83,7 @@ def upload(request):
                                 'freason': 'id not found, spot does not exist',
                             }
                             failure_desc.append(hold)
-                            break
+                            continue  # immediately restarts at the beginning of the loop
                         etag = resp['etag']
                         spot_headers['If-Match'] = etag
                     resp, content = client.request(spot_url, method, datum, headers=spot_headers)
