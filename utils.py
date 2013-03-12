@@ -44,12 +44,12 @@ def write_xls(spots):
         for day in days:
             try:
                 if count1 == 0:
-                    if day == "thursday" or day == "saturday" or day == "sunday":
+                    if day == "thursday" or day == "sunday":
                         available_hours += day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     else:
                         available_hours += day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                 else:
-                    if day == "thursday" or day == "saturday" or day == "sunday":
+                    if day == "thursday" or day == "sunday":
                         available_hours += ', ' + day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     else:
                         available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
@@ -101,12 +101,12 @@ def write_csv(spots):
         for day in days:
             try:
                 if count1 == 0:
-                    if day == "thursday" or day == "saturday" or day == "sunday":
+                    if day == "thursday" or day == "sunday":
                         available_hours += day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     else:
                         available_hours += day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                 else:
-                    if day == "thursday" or day == "saturday" or day == "sunday":
+                    if day == "thursday" or day == "sunday":
                         available_hours += ', ' + day[0] + day[1] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
                     else:
                         available_hours += ', ' + day[0] + ': ' + spot['available_hours'][day][0][0] + '-' + spot['available_hours'][day][0][1]
