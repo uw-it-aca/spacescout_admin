@@ -18,7 +18,7 @@ def upload(request):
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
 
-    notice = "Upload a spreadsheet in CSV or XLS format"
+    notice = "Upload a spreadsheet in CSV, XLS, or XLSX format"
     successcount = 0
     success_names = []
     failurecount = 0
@@ -83,7 +83,7 @@ def upload(request):
                                 'freason': 'id not found, spot does not exist',
                             }
                             failure_desc.append(hold)
-                            break
+                            continue  # immediately restarts at the beginning of the loop
                         etag = resp['etag']
                         spot_headers['If-Match'] = etag
                     resp, content = client.request(spot_url, method, datum, headers=spot_headers)
@@ -178,7 +178,7 @@ def upload(request):
                 successes = "%d successful POSTs:" % (successcount)
                 displaysf = True
             except TypeError:
-                notice = "invalid file type %s. Please upload csv or xls spreadsheet" % (docfile.content_type)
+                notice = "invalid file type %s. Please upload csv, xls, or xlsx spreadsheet" % (docfile.content_type)
     else:
         form = UploadFileForm()
 
