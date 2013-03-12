@@ -142,40 +142,41 @@ def upload(request):
                         signature = resp['content-location'][i:]
 
                         #there is no language for if the url doesn't work
-                        for image in images:
-                            try:
-                                img = urllib2.urlopen(image)
-                                f = open('image.jpg', 'w')
-                                f.write(img.read())
-                                f.close()
-                                f = open('image.jpg', 'rb')
+                        if method == 'POST':
+                            for image in images:
+                                try:
+                                    img = urllib2.urlopen(image)
+                                    f = open('image.jpg', 'w')
+                                    f.write(img.read())
+                                    f.close()
+                                    f = open('image.jpg', 'rb')
 
-                                body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
-                                #poster code
-                                register_openers()
-                                datagen, headers = multipart_encode(body)
-                                headers["XOAUTH_USER"] = "%s" % request.user
-                                req = urllib2.Request(url1, datagen, headers)
-                                response = urllib2.urlopen(req)
-                            except:
-                                warningcount += 1
-                                if info["name"]:
-                                    name = info["name"]
-                                else:
-                                    name = "NO NAME"
-                                hold = {
-                                    'fname': name,
-                                    'flocation': image,
-                                    'freason': "invalid image",
-                                }
-                                warning_desc.append(hold)
+                                    body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
+                                    #poster code
+                                    register_openers()
+                                    datagen, headers = multipart_encode(body)
+                                    headers["XOAUTH_USER"] = "%s" % request.user
+                                    req = urllib2.Request(url1, datagen, headers)
+                                    response = urllib2.urlopen(req)
+                                except:
+                                    warningcount += 1
+                                    if info["name"]:
+                                        name = info["name"]
+                                    else:
+                                        name = "NO NAME"
+                                    hold = {
+                                        'fname': name,
+                                        'flocation': image,
+                                        'freason': "invalid image",
+                                    }
+                                    warning_desc.append(hold)
                         #might need to use https://gist.github.com/1558113 instead for the oauth request
                         #content_type = 'multipart/form-data;' #boundary=%s' % BOUNDARY
                         #oauthrequest-i have it commented for mine since i was testing poster
                         #resp, content = client.request(url, "POST", body=, headers)
-                failures = "%d failed POSTs:" % (failurecount)
+                failures = "%d failed %ss:" % (failurecount, method)
                 warnings = "%d warnings:" % (warningcount)
-                successes = "%d successful POSTs:" % (successcount)
+                successes = "%d successful %ss:" % (successcount, method)
                 displaysf = True
             except TypeError:
                 notice = "invalid file type %s. Please upload csv, xls, or xlsx spreadsheet" % (docfile.content_type)
