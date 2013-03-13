@@ -50,6 +50,8 @@
                               {% endif %}
                               {% endfor %}
                           </td>
+                          {% elif schema|lookup:key == 'auto' %}
+                          <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" disabled/></td>
                           {% else %}
                           <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                           {% endif %}
