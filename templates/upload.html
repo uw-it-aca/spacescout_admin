@@ -4,7 +4,7 @@
 <h1>Add New Spots</h1>
 {% if displaysf %}
 <p><strong>{{failures}}</strong></p>
-<div id='upload_page_container' class="table-container">
+<div id='upload_page_container'>
     <table id='upload_errors' class='table table-bordered table-striped table-condensed'>
         <thead style="">
             <tr>
@@ -26,7 +26,7 @@
 </div>
 {% if warning_descs %}
 <p><strong>{{warnings}}</strong></p>
-<div id='upload_page_container' class="table-container">
+<div id='upload_page_container'>
     <table>
         <tr>
             <th>Name</th>
@@ -44,7 +44,7 @@
 </div>
 {% endif %}
 <p><strong>{{successes}}</strong></p>
-<div id='upload_page_container' class="table-container">
+<div id='upload_page_container'>
     {% for success_name in success_names %}
     {{success_name}}
     {% endfor %}
