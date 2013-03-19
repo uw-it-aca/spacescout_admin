@@ -1,5 +1,9 @@
 SpaceScout is a project from the University of Washington.
 
+This is the repository for the SpaceScout Admin client. It connects to services provided by https://github.com/uw-it-aca/spotseeker_server
+
+The purpose of this client is to assist in the management, addition, and modification of space metadata and resources.
+
   Copyright 2012, 2013 UW Information Technology, University of Washington
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +17,3 @@ SpaceScout is a project from the University of Washington.
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-
-
-The current official repository is located at
-
-https://github.com/abztrakt/spotseeker-admin
