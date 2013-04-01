@@ -23,7 +23,7 @@ def write_xls(spots):
         collumn += 1
     row = 1
     for spot in spots:
-        days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
+        days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         available_hours = ''
         types = ''
         count = 0
@@ -80,7 +80,7 @@ def write_csv(spots):
                 extended.append(info.encode('utf-8'))
     f.writerow(['id', 'name', 'room_number', 'floor', 'building_name', 'latitude', 'longitude', 'organization', 'manager'] + extended + ["height_from_sea_level", "capacity", "display_access_restrictions", "type", 'available_hours'])
     for spot in spots:
-        days = ["monday", "tuesday", "wednesday", "thursday", "saturday", "sunday"]
+        days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
         available_hours = ''
         types = ''
         count = 0
