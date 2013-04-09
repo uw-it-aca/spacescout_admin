@@ -46,14 +46,10 @@ def upload(request):
 
                 result = upload_data(request, data)
 
-                failures = "%d failed %ss:" % (len(failure_descs) + len(result['failure_descs']), "PUT/POST")
+                failures = "%d failures" % (len(failure_descs) + len(result['failure_descs']))
                 warnings = "%d warnings" % (len(result['warning_descs']))
-                successes = "%d successes out of %d POSTs and %d PUTs." % (len(result['success_names']), len(result['posts']), len(result['puts']))
-                for success_name in result['success_names']:
-                    if success_name in result['posts']:
-                        success_names.append(success_name + " - POST")
-                    elif success_name in result['puts']:
-                        success_names.append(success_name + " - PUT")
+                successes = "%d successes out of %d creates and %d updates." % (len(result['success_names']), len(result['posts']), len(result['puts']))
+                success_names = result['success_names']
                 warning_descs = result['warning_descs']
                 for fail in result['failure_descs']:
                     failure_descs.append(fail)

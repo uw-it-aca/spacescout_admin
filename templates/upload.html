@@ -2,53 +2,74 @@
 
 {% block content %}
 <h1>Add New Spots</h1>
-<p> You will PUT/POST to {{web_server}}</p>
 {% if displaysf %}
-    <p>{{failures}}</p>
+    <div id='upload_page_container'>
+    <p><strong>{{failures}}</strong></p>
     {% if failure_descs %}
-        <p><table style="margin-left: 30px;">
-            <tr>
-                <th>Name</th>
-                <th>Error Location</th>
-                <th>Error Message</th>
-            </tr>
-            {% for fdesc in failure_descs %}
+        <table id='upload_errors' class='table table-bordered table-striped table-condensed'>
+            <thead style="">
+                <tr>
+                    <th>Name</th>
+                    <th>Error Location</th>
+                    <th>Error Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fdesc in failure_descs %}
                 <tr>
                     <td>{{fdesc.fname}}</td>
                     <td>{{fdesc.flocation}}</td>
                     <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
                 </tr>
-            {% endfor %}
-        </table></p>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
-    <p>{{warnings}}</p>
     {% if warning_descs %}
-        <p><table style="margin-left: 30px;">
-            <tr>
-                <th>Name</th>
-                <th>Error Location</th>
-                <th>Error Message</th>
-            </tr>
-            {% for wdesc in warning_descs %}
+    <p><strong>{{warnings}}</strong></p>
+        <table class='table table-bordered table-striped table-condensed'>
+            <thead style="">
                 <tr>
-                    <td>{{wdesc.wname}}</td>
-                    <td>{{wdesc.wlocation}}</td>
-                    <td>{% autoescape off %}{{wdesc.wreason }}{% endautoescape %}</td>
+                    <th>Name</th>
+                    <th>Error Location</th>
+                    <th>Error Message</th>
                 </tr>
-            {% endfor %}
-        </table></p>
+            </thead>
+            <tbody>
+                {% for fdesc in warning_descs %}
+                <tr>
+                    <td>{{fdesc.fname}}</td>
+                    <td>{{fdesc.flocation}}</td>
+                    <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
-    <p>{{successes}}</p>
+    <p><strong>{{successes}}</strong></p>
     {% if success_names %}
-    <ul style="padding-left: 30px;">
-        {% for success_name in success_names %}
-            <li>{{success_name}}</li>
-        {% endfor %}
-    </ul>
+        <table class='table table-bordered table-striped table-condensed'>
+            <thead style="">
+                <tr>
+                    <th>Spot</th>
+                    <th>Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for success in success_names %}
+                <tr>
+                    <td>{{ success.name }}</td>
+                    <td>{{ success.method }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 {% else %}
     <pre>{{ notice }}</pre>
 {% endif %}
+<p> You will PUT/POST to {{web_server}}</p>
 <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
