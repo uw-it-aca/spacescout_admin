@@ -52,11 +52,11 @@ def edit_space(request, spot_id):
                 elif space_datum['changed'] == 'publish':
                     spot = QueuedSpace.objects.get(space_id=spot_id)
                     response = upload_data(request, [{'data': spot.json, 'id': spot_id}])  # PUT if spot_id, POST if not spot_id
-                    if not response['failurecount']:  # if there are no failures
+                    if not response['failure_descs']:  # if there are no failures
                         QueuedSpace.objects.get(space_id=spot_id).delete()
                         return HttpResponseRedirect('/')
                     else:
-                        for failure in response['failure_desc']:
+                        for failure in response['failure_descs']:
                             failure
                             #print '\n'
                             #print 'spot: ' + failure['fname'] + '\n' + 'location: ' + failure['flocation']
