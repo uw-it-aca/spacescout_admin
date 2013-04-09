@@ -4,45 +4,50 @@
 <h1>Add New Spots</h1>
 <p> You will PUT/POST to {{web_server}}</p>
 {% if displaysf %}
-<p>{{failures}}</p>
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Error Location</th>
-        <th>Error Message</th>
-    </tr>
-    {% for fdesc in failure_descs %}
-    <tr>
-        <td>{{fdesc.fname}}</td>
-        <td>{{fdesc.flocation}}</td>
-        <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
-    </tr>
-    {% endfor %}
-</table>
-<p>{{warnings}}</p>
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Error Location</th>
-        <th>Error Message</th>
-    </tr>
-    {% for fdesc in warning_descs %}
-    <tr>
-        <td>{{fdesc.fname}}</td>
-        <td>{{fdesc.flocation}}</td>
-        <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
-    </tr>
-    {% endfor %}
-</table>
-<p>{{successes}}
-{% for success_name in success_names %}
-{{success_name}}
-{% endfor %}
-</p>
+    <p>{{failures}}</p>
+    {% if failure_descs %}
+        <p><table style="margin-left: 30px;">
+            <tr>
+                <th>Name</th>
+                <th>Error Location</th>
+                <th>Error Message</th>
+            </tr>
+            {% for fdesc in failure_descs %}
+                <tr>
+                    <td>{{fdesc.fname}}</td>
+                    <td>{{fdesc.flocation}}</td>
+                    <td>{% autoescape off %}{{fdesc.freason }}{% endautoescape %}</td>
+                </tr>
+            {% endfor %}
+        </table></p>
+    {% endif %}
+    <p>{{warnings}}</p>
+    {% if warning_descs %}
+        <p><table style="margin-left: 30px;">
+            <tr>
+                <th>Name</th>
+                <th>Error Location</th>
+                <th>Error Message</th>
+            </tr>
+            {% for wdesc in warning_descs %}
+                <tr>
+                    <td>{{wdesc.wname}}</td>
+                    <td>{{wdesc.wlocation}}</td>
+                    <td>{% autoescape off %}{{wdesc.wreason }}{% endautoescape %}</td>
+                </tr>
+            {% endfor %}
+        </table></p>
+    {% endif %}
+    <p>{{successes}}</p>
+    {% if success_names %}
+    <ul style="padding-left: 30px;">
+        {% for success_name in success_names %}
+            <li>{{success_name}}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 {% else %}
-<pre>
-{{ notice }}
-</pre>
+    <pre>{{ notice }}</pre>
 {% endif %}
 <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
