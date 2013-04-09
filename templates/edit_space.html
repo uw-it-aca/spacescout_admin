@@ -3,24 +3,27 @@
 {% block content %}
 {% load ss_admin_extras %}
 
+<!--
 <div id="error_message" class="alert alert-error fade in hide" style="margin-bottom:8px;">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Oh snap!</strong> You have empties!
 </div>
+-->
 
 <div class="table-container">
-<form name="add_space" action="/space/{{ spot.id }}" method="POST">{% csrf_token %}
+<form name="add_space" action="/space/{{ spot_id }}" method="POST">{% csrf_token %}
 
     <div class="table-options clearfix">
         <h5 class="pull-left" style="margin:0;display:inline-block;">EDIT SPACE</h5>
         <ul class="pull-right">
-            {% if updated_by %}
-            <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
-            <li><button id="publish_button" class="btn btn-mini">Approve</button></li>
-            <li class="muted">Changes were approved Craig Stimmel on January 5, 2012 and will put into the queu. Skip queue and publish now?</li>
-            <li><button id="publish_button" class="btn btn-mini btn-success">Publish</button></li>
+            {% if status == 'updated' %}
+                <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini" name="changed" value="approved">Approve</button></li>
+            {% elif status == 'approved' %}
+                <li class="muted">Changes were approved by {{ approved_by }} on {{ last_modified }} and will be put into the queue. Skip queue and publish now?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini btn-success" name="changed" value="publish">Publish</button></li>
             {% else %}
-            <li class="muted">Last updated on {{ last_modified }}</li>
+                <li class="muted">Last updated on {{ space_last_modified }}</li>
             {% endif %}
         </ul>
     </div>
@@ -37,25 +40,43 @@
         <div id="edit_space_scroller" class="table-scroll">
             <table style="width:100%;">
                 <tbody>
+                    <tr>
+                        <td class="col-field">id</td>
+                        <td class="col-value"><input type="text" name="id" value="{{ spot_id }}" readonly /></td>
+                    </tr>
+                    <tr style="display: None;">
+                        <td class="col-field">space_tag</td>
+                        <td class="col-value"><input type="text" name="space_etag" value="{{ space_etag }}" readonly /></td>
+                    </tr>
+                    {% if last_modified %}
+                    <tr>
+                        <td class="col-field">last_modified</td>
+                        <td class="col-value"><input type="text" name="last_modified" value="{{ last_modified }}" readonly /></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="col-field">space_last_modified</td>
+                        <td class="col-value"><input type="text" name="space_last_modified" value="{{ space_last_modified }}" readonly /></td>
+                    </tr>
                     {% for key in schema %}
+                    {% if not schema|lookup:key == 'auto' %}
                       <tr>
                           <td class="col-field">{{ key }}</td>
                           {% if spot|lookup:key|classname == 'list' %}
                           <td class="col-value">
                               {% for t in schema|lookup:key %}
-                              {% if t in  spot|lookup:key %}
+                              {% if t in spot|lookup:key %}
                               <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
                               {% else %}
                               <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
                               {% endif %}
                               {% endfor %}
                           </td>
-                          {% elif schema|lookup:key == 'auto' %}
-                          <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" disabled/></td>
                           {% else %}
                           <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                           {% endif %}
                       </tr>
+                    {% endif %}
                     {% endfor %}
                  </tbody>
               </table>
