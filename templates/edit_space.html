@@ -62,7 +62,7 @@
                     {% if not schema|lookup:key == 'auto' %}
                       <tr>
                           <td class="col-field">{{ key }}</td>
-                          {% if spot|lookup:key|classname == 'list' %}
+                          {% if schema|lookup:key|classname == 'list' %}
                           <td class="col-value">
                               {% for t in schema|lookup:key %}
                               {% if t in spot|lookup:key %}
@@ -76,6 +76,15 @@
                           <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                           {% endif %}
                       </tr>
+                    {% if errors %}
+                    {% if key in errors %}
+                      <tr>
+                          <td class="col-field col-error">ERROR - {{ key }}</td>
+                          <td class="col-value col-error"><input type="text" name="ERROR - {{ key }}" value="{{ errors|lookup:key }}" readonly /></td>
+                      </tr>
+                    {% endif %}
+                    {% endif %}
+
                     {% endif %}
                     {% endfor %}
                  </tbody>

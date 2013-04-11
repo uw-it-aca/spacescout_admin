@@ -12,6 +12,7 @@ class QueuedSpace(models.Model):
     """
     space_id = models.IntegerField(blank=True, null=True)
     json = models.TextField()
+    errors = models.TextField(blank=True)
     space_etag = models.CharField(max_length=40, blank=True)
     q_etag = models.CharField(max_length=40, blank=True)
     status = models.CharField(max_length=25, blank=True)
