@@ -3,12 +3,12 @@
 {% block content %}
 {% load ss_admin_extras %}
 
-<!--
-<div id="error_message" class="alert alert-error fade in hide" style="margin-bottom:8px;">
+{% if errors %}
+<div id="error_message" class="alert alert-error fade in" style="margin-bottom:8px;">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Oh snap!</strong> You have empties!
+    <strong>Oh snap!</strong> You have errors!
 </div>
--->
+{% endif %}
 
 <div class="table-container">
 <form name="add_space" action="/space/{{ spot_id }}" method="POST">{% csrf_token %}
@@ -79,7 +79,7 @@
                     {% if errors %}
                     {% if key in errors %}
                       <tr>
-                          <td class="col-field col-error">ERROR - {{ key }}</td>
+                          <td class="col-field col-error">{{ key }}</td>
                           <td class="col-value col-error"><input type="text" name="ERROR - {{ key }}" value="{{ errors|lookup:key }}" readonly /></td>
                       </tr>
                     {% endif %}
