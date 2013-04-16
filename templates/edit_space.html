@@ -59,34 +59,44 @@
                         <td class="col-value"><input type="text" name="space_last_modified" value="{{ space_last_modified }}" readonly /></td>
                     </tr>
                     {% for key in schema %}
-                    {% if not schema|lookup:key == 'auto' %}
-                      <tr>
-                          <td class="col-field">{{ key }}</td>
-                          {% if schema|lookup:key|classname == 'list' %}
-                          <td class="col-value">
-                              {% for t in schema|lookup:key %}
-                              {% if t in spot|lookup:key %}
-                              <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
+                        {% if not schema|lookup:key == 'auto' %}
+                          <tr>
+                              <td class="col-field">{{ key }}</td>
+                              {% if schema|lookup:key|classname == 'list' %}
+                                  <td class="col-value">
+                                      {% for t in schema|lookup:key %}
+                                          {% if t in spot|lookup:key or t == spot|lookup:key %}
+                                              <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
+                                          {% else %}
+                                              <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
+                                          {% endif %}
+                                      {% endfor %}
+                                  </td>
+                              {% elif schema|lookup:key|classname == 'dict' %}
+                                  <td class="col-value">
+                                      <table style="width:100%;">
+                                          {% for subkey in spot|lookup:key %}
+                                              <tr>
+                                                  <td class="col-field">{{ subkey }}</td>
+                                                  <td class="col-value"><input type="text" name="{{ subkey }}" value="{{ spot|lookup:key|lookup:subkey }}" /></td>
+                                              </tr>
+                                          {% endfor %}
+                                      </table>
+                                  </td>
                               {% else %}
-                              <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
+                                  <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                               {% endif %}
-                              {% endfor %}
-                          </td>
-                          {% else %}
-                          <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
-                          {% endif %}
-                      </tr>
-                    {% if errors %}
-                    {% if key in errors %}
-                      <tr>
-                          <td class="col-field col-error">{{ key }}</td>
-                          <td class="col-value col-error"><input type="text" name="ERROR - {{ key }}" value="{{ errors|lookup:key }}" readonly /></td>
-                      </tr>
-                    {% endif %}
-                    {% endif %}
-
-                    {% endif %}
+                          </tr>
+                        {% endif %}
                     {% endfor %}
+                    {% if errors %}
+                        {% for error in errors %}
+                          <tr>
+                              <td class="col-field col-error">{{ error }}</td>
+                              <td class="col-value col-error"><input type="text" name="ERROR-{{ error }}" value="{{ errors|lookup:error }}" readonly /></td>
+                          </tr>
+                        {% endfor %}
+                    {% endif %}
                  </tbody>
               </table>
               {% if q_id %}<input type="hidden" name="q_id" value="{{ q_id }}" />{% endif %}

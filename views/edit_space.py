@@ -14,13 +14,13 @@ import oauth2
 def edit_space(request, spot_id):
     if request.POST:
         space_datum = {}
-        for key in request.POST:
+        post = dict(request.POST.viewitems())
+        for key in post:
             # Since everything's coming back from the form fields as text, try to convert
             # the strings to the appropriate type
-            space_datum[key] = autoconvert(request.POST[key])
+            space_datum[key] = autoconvert(post[key])
         cleaned_space_datum = _cleanup(space_datum)
-        data = {'space_id': int(space_datum['id']),
-                'json': cleaned_space_datum}
+        data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
         # if we got the space from the queue, edit it rather than create a new instance
         if 'q_id' in space_datum:
             q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
@@ -53,9 +53,12 @@ def edit_space(request, spot_id):
                     else:
                         errors = {}
                         for failure in response['failure_descs']:
-                            errors.update({failure['flocation']: []})
-                            for reason in failure['freason']:
-                                errors[failure['flocation']].append(reason)
+                            if type(failure['freason']) == list:
+                                errors.update({failure['flocation']: []})
+                                for reason in failure['freason']:
+                                    errors[failure['flocation']].append(reason)
+                            else:
+                                errors.update({failure['flocation']: failure['freason']})
                         queued.errors = json.dumps(errors)
                         queued.status = 'updated'
                         queued.approved_by = None
@@ -133,7 +136,15 @@ def autoconvert(s):
         If it can't, returns the string.
     """
     try:
-        return eval(s)
+        if type(s).__name__ == 'list' and len(s) == 1:
+            s = s[0]
+    except:
+        pass
+    try:
+        if type(eval(s)).__name__ == 'builtin_function_or_method':
+            return s
+        else:
+            return eval(s)
     except:
         return s
 
@@ -150,6 +161,14 @@ def _cleanup(bad_json):
     resp, content = client.request(url, 'GET')
     schema = json.loads(content)
     good_json = {}
+    for key in schema:
+        if type(schema[key]).__name__ == 'dict':
+            for subkey in schema[key]:
+                if subkey in bad_json:
+                    if key not in good_json:
+                        good_json.update({key: {}})
+                    if not schema[key][subkey] == 'auto':
+                        good_json[key].update({subkey: bad_json[subkey]})
     for key in bad_json:
         if key in schema and schema[key] != 'auto':
             good_json.update({key: bad_json[key]})
