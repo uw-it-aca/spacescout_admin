@@ -28,7 +28,7 @@ class SimpleTest(TestCase):
         excelfile.close()
         data1 = file_to_json(UploadedFile(open('spacescout_admin/test_xls1.xls', 'r'), content_type='application/vnd.ms-excel'))
         data1 = json.loads(data1['data'][0]['data'])
-        unused_keys = set([u'id',u'uri',u'display_access_restrictions',u'last_modified']) #id and uri are pulled out (to put to that uri, which contains the id), display_access_restrictions is empty, and last_modified is generated dynamically
+        unused_keys = set([u'id', u'uri', u'display_access_restrictions', u'last_modified'])  # id and uri are pulled out (to put to that uri, which contains the id), display_access_restrictions is empty, and last_modified is generated dynamically
         self.assertEqual((set(data) - set(data1)), unused_keys)
         for key in unused_keys:
             del data[key]
@@ -45,7 +45,7 @@ class SimpleTest(TestCase):
         csvfile.close()
         data1 = file_to_json(UploadedFile(open('spacescout_admin/test_csv1.csv', 'r'), content_type='text/csv'))
         data1 = json.loads(data1['data'][0]['data'])
-        unused_keys = set([u'id',u'uri',u'display_access_restrictions',u'last_modified']) #id and uri are pulled out (to put to that uri, which contains the id), display_access_restrictions is empty, and last_modified is generated dynamically
+        unused_keys = set([u'id', u'uri', u'display_access_restrictions', u'last_modified'])  # id and uri are pulled out (to put to that uri, which contains the id), display_access_restrictions is empty, and last_modified is generated dynamically
         self.assertEqual((set(data) - set(data1)), unused_keys)
         for key in unused_keys:
             del data[key]

@@ -6,6 +6,8 @@ urlpatterns = patterns('spacescout_admin.views',
                        url(r'space/$', 'edit_multiple.edit_multiple'),  # add or edit multiple
                        url(r'space/(?P<spot_id>[0-9]+)$', 'edit_space.edit_space'),  # edit single space
 
+                       url(r'diff/(?P<spot_id>[0-9]+)$', 'diff.diff'),  # shows a diff of a single space
+
                        url(r'space/add$', 'add_space.add_space'),  # add single space
                        url(r'space/multiple$', 'add_multiple.add_multiple'),  # add multiple spaces
 

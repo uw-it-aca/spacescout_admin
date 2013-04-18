@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load ss_admin_extras %}
+
+{% if json_in_db and failed_json %}
+    <div id="error_message" class="alert alert-error fade in" style="margin-bottom:8px;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ETAG</strong> Your Etag didn't match!
+    </div>
+    <h1>Someone was probably editing the same spot at the same time and beat you to it.</h1>
+{% elif not json_in_db and not failed_json %}
+    <h1>No Spots!</h1>
+{% endif %}
+
+<div class="table-container">
+    <div class="tableDiv">
+        <div class="table-scroll">
+            {% if json_in_db %}
+                <h5>JSON currently in DB</h5>
+                <p>
+                    {% for key in json_in_db %}
+                        {{ key }}: {{ json_in_db|lookup:key }}<br />
+                    {% endfor %}
+                </p>
+            {% endif %}
+            {% if failed_json %}
+                <hr />
+                <h5>Your failed JSON</h5>
+                <p>
+                    {% for key in failed_json %}
+                        {{ key }}: {{ failed_json|lookup:key }}<br />
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

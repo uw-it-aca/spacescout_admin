@@ -1,9 +1,16 @@
+from poster.streaminghttp import register_openers
+from django.utils.encoding import smart_unicode
+from poster.encode import multipart_encode
+from django.http import HttpResponse
+from django.conf import settings
+import datetime
+import oauth2 as oauth
+import urllib2
 import json
+import time
 import csv
 import xlrd
 import xlwt
-from django.http import HttpResponse
-from django.utils.encoding import smart_unicode
 
 
 def write_xls(spots):
@@ -225,3 +232,156 @@ def file_to_json(docfile):
         except:
             pass
     return {"data": requests, "errors": errors}
+
+
+def upload_data(request, data):
+    # Required settings for the client
+    if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
+        raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
+    success_names = []
+    failure_descs = []
+    warning_descs = []
+    puts = []
+    posts = []
+    for datum in data:
+        try:
+            spot_id = datum["id"]
+        except:
+            spot_id = None
+        try:
+            etag = datum["etag"]
+            if not etag:
+                etag = "There was an error!"
+        except:
+            etag = None
+        datum = datum["data"]
+
+        info = json.loads(datum)
+        consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+        try:
+            images = info['images']
+        except:
+            images = []
+
+        if 'name' in info.keys():
+            spot_name = info['name']
+        else:
+            spot_name = 'NO NAME'
+
+        client = oauth.Client(consumer)
+        url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
+
+        spot_headers = {"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
+        spot_url = url
+        method = 'POST'
+        #use PUT when spot id is prodived to update the spot
+        if spot_id:
+            spot_url = "%s/%s" % (url, spot_id)
+            method = 'PUT'
+            #get the existing spot for its etag
+            resp, content = client.request(spot_url, 'GET')
+            if resp['status'] != '200':
+                hold = {
+                    'fname': spot_name,
+                    'flocation': 'id',
+                    'freason': 'id not found, spot does not exist',
+                }
+                failure_descs.append(hold)
+                continue  # immediately restarts at the beginning of the loop
+            if not etag:
+                etag = resp['etag']
+            spot_headers['If-Match'] = etag
+        resp, content = client.request(spot_url, method, datum, headers=spot_headers)
+
+        #Responses 200 and 201 mean you done good.
+        if resp['status'] != '200' and resp['status'] != '201':
+            try:
+                error = json.loads(content)
+                flocation = error.keys()[0]
+                freason = error[flocation]
+            except ValueError:
+                flocation = resp['status']
+                freason = content
+
+            #Add spot attempt to the list of failures
+            hold = {
+                'fname': spot_name,
+                'flocation': flocation,
+                'freason': freason,
+            }
+            failure_descs.append(hold)
+        else:
+            success_names.append({'name': spot_name, 'method': method})
+
+            if content:
+                url1 = spot_url
+            elif resp['location']:
+                url1 = '%s/image' % resp['location']
+            else:
+                hold = {
+                    'fname': spot_name,
+                    'flocation': image,
+                    'freason': "could not find spot idea; images not posted",
+                }
+                warning_descs.append(hold)
+                break
+
+            #jury rigging the oauth_signature
+            consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+            client = oauth.Client(consumer)
+            resp, content = client.request(url, 'GET')
+            i = resp['content-location'].find('oauth_signature=')
+            i += len('oauth_signature=')
+            signature = resp['content-location'][i:]
+
+            #there is no language for if the url doesn't work
+            if method == 'POST':
+                for image in images:
+                    try:
+                        img = urllib2.urlopen(image)
+                        f = open('image.jpg', 'w')
+                        f.write(img.read())
+                        f.close()
+                        f = open('image.jpg', 'rb')
+
+                        body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
+                        #poster code
+                        register_openers()
+                        datagen, headers = multipart_encode(body)
+                        headers["XOAUTH_USER"] = "%s" % request.user
+                        req = urllib2.Request(url1, datagen, headers)
+                        response = urllib2.urlopen(req)
+                    except:
+                        hold = {
+                            'fname': spot_name,
+                            'flocation': image,
+                            'freason': "invalid image",
+                        }
+                        warning_descs.append(hold)
+            #might need to use https://gist.github.com/1558113 instead for the oauth request
+            #content_type = 'multipart/form-data;' #boundary=%s' % BOUNDARY
+            #oauthrequest-i have it commented for mine since i was testing poster
+            #resp, content = client.request(url, "POST", body=, headers)
+        if method == 'POST':
+            posts.append(spot_name)
+        elif method == 'PUT':
+            puts.append(spot_name)
+
+    return {
+        'success_names': success_names,
+        'failure_descs': failure_descs,
+        'warning_descs': warning_descs,
+        'posts': posts,
+        'puts': puts,
+    }
+
+
+def to_datetime_object(date_string):
+    """Only for when the string is in the format 'yyyy-mm-ddThh:mm:ss'
+    """
+
+    time_parts = date_string.split('.')
+    time_parts[1] = time_parts[1].split('+')[0]
+    result = datetime.datetime.strptime(time_parts[0], '%Y-%m-%dT%H:%M:%S')
+    result = result.replace(microsecond=int(time_parts[1]))
+    return result
