@@ -1,11 +1,12 @@
 from spacescout_admin.forms import QueueForm
 from spacescout_admin.models import QueuedSpace
-from spacescout_admin.utils import upload_data
+from spacescout_admin.utils import upload_data, to_datetime_object
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import datetime
 import json
 import oauth2
 
@@ -112,7 +113,8 @@ def edit_space(request, spot_id):
             last_modified = spot.last_modified
             status = spot.status
             space_etag = spot.space_etag
-            space_last_modified = spot.space_last_modified
+            ugly_space_last_modified = spot.space_last_modified
+            nice_space_last_modified = ugly_space_last_modified
             errors = json.loads(spot.errors)
             q_etag = spot.q_etag
             spot = json.loads(spot.json)
@@ -126,7 +128,8 @@ def edit_space(request, spot_id):
             status = None
             space_etag = resp['etag']
             last_modified = None
-            space_last_modified = spot["last_modified"]
+            ugly_space_last_modified = spot['last_modified']
+            nice_space_last_modified = to_datetime_object(ugly_space_last_modified)
             errors = None
             q_etag = None
 
@@ -141,7 +144,8 @@ def edit_space(request, spot_id):
             "status": status,
             "space_etag": space_etag,
             "q_etag": q_etag,
-            "space_last_modified": space_last_modified,
+            "ugly_space_last_modified": ugly_space_last_modified,
+            "nice_space_last_modified": nice_space_last_modified,
             "errors": errors,
         }
 

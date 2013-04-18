@@ -3,6 +3,7 @@ from django.utils.encoding import smart_unicode
 from poster.encode import multipart_encode
 from django.http import HttpResponse
 from django.conf import settings
+import datetime
 import oauth2 as oauth
 import urllib2
 import json
@@ -373,3 +374,14 @@ def upload_data(request, data):
         'posts': posts,
         'puts': puts,
     }
+
+
+def to_datetime_object(date_string):
+    """Only for when the string is in the format 'yyyy-mm-ddThh:mm:ss'
+    """
+
+    time_parts = date_string.split('.')
+    time_parts[1] = time_parts[1].split('+')[0]
+    result = datetime.datetime.strptime(time_parts[0], '%Y-%m-%dT%H:%M:%S')
+    result = result.replace(microsecond=int(time_parts[1]))
+    return result

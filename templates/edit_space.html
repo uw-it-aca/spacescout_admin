@@ -23,7 +23,7 @@
                 <li class="muted">Changes were approved by {{ approved_by }} on {{ last_modified }} and will be put into the queue. Skip queue and publish now?</li>
                 <li><button type="submit" id="publish_button" class="btn btn-mini btn-success" name="changed" value="publish">Publish</button></li>
             {% else %}
-                <li class="muted">Last updated on {{ space_last_modified }}</li>
+                <li class="muted">Last updated on {{ nice_space_last_modified }}</li>
             {% endif %}
         </ul>
     </div>
@@ -66,7 +66,8 @@
                     {% endif %}
                     <tr>
                         <td class="col-field">space_last_modified</td>
-                        <td class="col-value"><input type="text" name="space_last_modified" value="{{ space_last_modified }}" readonly /></td>
+                        <td class="col-value"><input type="text" value="{{ nice_space_last_modified }}" readonly disabled /></td>
+                        <td style="display: None;" class="col-value"><input type="text" name="space_last_modified" value="{{ ugly_space_last_modified }}" readonly /></td>
                     </tr>
                     {% for key in schema %}
                         {% if not schema|lookup:key == 'auto' %}
