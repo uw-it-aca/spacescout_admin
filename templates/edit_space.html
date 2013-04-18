@@ -86,10 +86,27 @@
                                   <td class="col-value">
                                       <table style="width:100%;">
                                           {% for subkey in spot|lookup:key %}
-                                              <tr>
-                                                  <td class="col-field">{{ subkey }}</td>
-                                                  <td class="col-value"><input type="text" name="{{ subkey }}" value="{{ spot|lookup:key|lookup:subkey }}" /></td>
-                                              </tr>
+                                              {% if schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length > 1 %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value">
+                                                          <select name="{{ subkey }}">
+                                                          {% for option in schema|lookup:key|lookup:subkey %}
+                                                              {% if option in spot|lookup:key|lookup:subkey or option == spot|lookup:key|lookup:subkey %}
+                                                                  <option value="{{ option }}" selected>{{ option }}</option>
+                                                              {% else %}
+                                                                  <option value="{{ option }}">{{ option }}</option>
+                                                              {% endif %}
+                                                          {% endfor %}
+                                                          </select>
+                                                      </td>
+                                                  </tr>
+                                              {% else %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value"><input type="text" name="{{ subkey }}" value="{{ spot|lookup:key|lookup:subkey }}" /></td>
+                                                  </tr>
+                                              {% endif %}
                                           {% endfor %}
                                       </table>
                                   </td>
