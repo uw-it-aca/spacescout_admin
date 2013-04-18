@@ -9,11 +9,6 @@ import json
 
 @login_required
 def diff(request, spot_id):
-    if 'failed_json' in request.session:
-        failed_json = json.loads(request.session['failed_json'])
-        del request.session['failed_json']
-    else:
-        failed_json = None
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
@@ -26,6 +21,10 @@ def diff(request, spot_id):
         json_in_db = json.loads(QueuedSpace.objects.get(space_id=spot_id).json)
     except:
         json_in_db = None
+    if 'failed_json' in request.GET:
+        failed_json = json.loads(dict(request.GET.viewitems())['failed_json'][0])
+    else:
+        failed_json = None
     args = {
         'schema': schema,
         'spot_id': spot_id,

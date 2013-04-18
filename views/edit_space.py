@@ -79,13 +79,13 @@ def edit_space(request, spot_id):
                             queued.approved_by = None
                     queued.save()
                 else:
-                    request.session.update({'failed_json': queued.json})
-                    return HttpResponseRedirect('/diff/%s' % (spot_id))
+                    return HttpResponseRedirect('/diff/%s?failed_json=%s' % (spot_id, queued.json))
+                    # I really wanted to try and do this with "return HttpResponseRedirect(reverse(diff.diff, blah, blah))" but I couldn't figure it out
             else:
                 try:
                     QueuedSpace.objects.get(space_id=spot_id)
-                    request.session.update({'failed_json': queued.json})
-                    return HttpResponseRedirect('/diff/%s' % (spot_id))
+                    return HttpResponseRedirect('/diff/%s?failed_json=%s' % (spot_id, queued.json))
+                    # Same here, because passing a dict through the url is UUGGLLLYYY. It would be much cooler to pass the extra json straight to the diff view
                 except:
                     queued.save()
         else:
