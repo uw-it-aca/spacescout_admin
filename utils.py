@@ -243,7 +243,16 @@ def upload_data(request, data):
     puts = []
     posts = []
     for datum in data:
-        spot_id = datum["id"]
+        try:
+            spot_id = datum["id"]
+        except:
+            spot_id = None
+        try:
+            etag = datum["etag"]
+            if not etag:
+                etag = "There was an error!"
+        except:
+            etag = None
         datum = datum["data"]
 
         info = json.loads(datum)
@@ -278,7 +287,8 @@ def upload_data(request, data):
                 }
                 failure_descs.append(hold)
                 continue  # immediately restarts at the beginning of the loop
-            etag = resp['etag']
+            if not etag:
+                etag = resp['etag']
             spot_headers['If-Match'] = etag
         resp, content = client.request(spot_url, method, datum, headers=spot_headers)
 

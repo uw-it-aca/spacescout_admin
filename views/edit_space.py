@@ -28,9 +28,11 @@ def edit_space(request, spot_id):
                 data.update({'status': q_obj.status, 'errors': q_obj.errors})
             else:
                 data.update({'status': 'updated', 'errors': '{}'})
+            q_etag = q_obj.q_etag
             form = QueueForm(data, instance=q_obj)
         else:
             data.update({'status': 'updated', 'errors': '{}'})
+            q_etag = None
             form = QueueForm(data)
         if form.is_valid():
             queued = form.save(commit=False)
@@ -41,39 +43,51 @@ def edit_space(request, spot_id):
             else:
                 queued.space_etag = space_datum['space_etag']
                 queued.space_last_modified = space_datum['space_last_modified']
-            if 'changed' in space_datum and not json.loads(queued.errors):
-                if space_datum['changed'] == 'approved':
-                    queued.status = 'approved'
-                    queued.approved_by = request.user
-                elif space_datum['changed'] == 'publish':
-                    response = upload_data(request, [{'data': queued.json, 'id': spot_id}])  # PUT if spot_id, POST if not spot_id
-                    if not response['failure_descs']:  # if there are no failures
-                        QueuedSpace.objects.get(space_id=spot_id).delete()
-                        return HttpResponseRedirect('/')
-                    else:
-                        errors = {}
-                        for failure in response['failure_descs']:
-                            if type(failure['freason']) == list:
-                                errors.update({failure['flocation']: []})
-                                for reason in failure['freason']:
-                                    errors[failure['flocation']].append(reason)
+            if q_etag:
+                if q_etag == space_datum['q_etag']:
+                    if 'changed' in space_datum and not json.loads(queued.errors):
+                        if space_datum['changed'] == 'approved':
+                            queued.status = 'approved'
+                            queued.approved_by = request.user
+                        elif space_datum['changed'] == 'publish':
+                            response = upload_data(request, [{'data': queued.json, 'id': spot_id, 'etag': queued.space_etag}])  # PUT if spot_id, POST if not spot_id
+                            if not response['failure_descs']:  # if there are no failures
+                                QueuedSpace.objects.get(space_id=spot_id).delete()
+                                return HttpResponseRedirect('/')
                             else:
-                                errors.update({failure['flocation']: failure['freason']})
-                        queued.errors = json.dumps(errors)
-                        queued.status = 'updated'
-                        queued.approved_by = None
-                        queued.save()
+                                errors = {}
+                                for failure in response['failure_descs']:
+                                    if type(failure['freason']) == list:
+                                        errors.update({failure['flocation']: []})
+                                        for reason in failure['freason']:
+                                            errors[failure['flocation']].append(reason)
+                                    else:
+                                        errors.update({failure['flocation']: failure['freason']})
+                                queued.errors = json.dumps(errors)
+                                queued.status = 'updated'
+                                queued.approved_by = None
+                                queued.save()
+                                url = '/space/%s' % space_datum['id']
+                                return HttpResponseRedirect(url)
+                    elif 'changed' in space_datum and queued.errors:
                         url = '/space/%s' % space_datum['id']
                         return HttpResponseRedirect(url)
-            elif 'changed' in space_datum and queued.errors:
-                url = '/space/%s' % space_datum['id']
-                return HttpResponseRedirect(url)
-            else:
-                if data['status'] == 'approved':
-                    queued.approved_by = QueuedSpace.objects.get(space_id=spot_id).approved_by
+                    else:
+                        if data['status'] == 'approved':
+                            queued.approved_by = QueuedSpace.objects.get(space_id=spot_id).approved_by
+                        else:
+                            queued.approved_by = None
+                    queued.save()
                 else:
-                    queued.approved_by = None
-            queued.save()
+                    request.session.update({'failed_json': queued.json})
+                    return HttpResponseRedirect('/diff/%s' % (spot_id))
+            else:
+                try:
+                    QueuedSpace.objects.get(space_id=spot_id)
+                    request.session.update({'failed_json': queued.json})
+                    return HttpResponseRedirect('/diff/%s' % (spot_id))
+                except:
+                    queued.save()
         else:
             #TODO: do something appropriate if the form isn't valid
             pass
@@ -89,6 +103,7 @@ def edit_space(request, spot_id):
         resp, content = client.request(url, 'GET')
         schema = json.loads(content)
 
+        #Clean all of this up!! So it's not such a scary try/except
         try:
             spot = QueuedSpace.objects.get(space_id=spot_id)
             q_id = spot.pk
@@ -99,6 +114,7 @@ def edit_space(request, spot_id):
             space_etag = spot.space_etag
             space_last_modified = spot.space_last_modified
             errors = json.loads(spot.errors)
+            q_etag = spot.q_etag
             spot = json.loads(spot.json)
         except:
             spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
@@ -112,6 +128,7 @@ def edit_space(request, spot_id):
             last_modified = None
             space_last_modified = spot["last_modified"]
             errors = None
+            q_etag = None
 
         args = {
             "spot_id": spot_id,
@@ -123,6 +140,7 @@ def edit_space(request, spot_id):
             "last_modified": last_modified,
             "status": status,
             "space_etag": space_etag,
+            "q_etag": q_etag,
             "space_last_modified": space_last_modified,
             "errors": errors,
         }
@@ -141,7 +159,7 @@ def autoconvert(s):
     except:
         pass
     try:
-        if type(eval(s)).__name__ == 'builtin_function_or_method':
+        if type(eval(s)).__name__ == 'builtin_function_or_method':  # makes sure a python function or object isnt added to the list
             return s
         else:
             return eval(s)
