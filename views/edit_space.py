@@ -187,10 +187,11 @@ def _cleanup(bad_json):
         if type(schema[key]).__name__ == 'dict':
             for subkey in schema[key]:
                 if subkey in bad_json:
-                    if key not in good_json:
-                        good_json.update({key: {}})
-                    if not schema[key][subkey] == 'auto':
-                        good_json[key].update({subkey: bad_json[subkey]})
+                    if not type(schema[key][subkey]).__name__ == 'list' or not len(schema[key][subkey]) == 1 or not bad_json[subkey] == '':
+                        if key not in good_json:
+                            good_json.update({key: {}})
+                        if not schema[key][subkey] == 'auto':
+                            good_json[key].update({subkey: bad_json[subkey]})
     for key in bad_json:
         if key in schema and schema[key] != 'auto':
             good_json.update({key: bad_json[key]})

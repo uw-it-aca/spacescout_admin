@@ -86,7 +86,7 @@
                               {% elif schema|lookup:key|classname == 'dict' %}
                                   <td class="col-value">
                                       <table style="width:100%;">
-                                          {% for subkey in spot|lookup:key %}
+                                          {% for subkey in schema|lookup:key %}
                                               {% if schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length > 1 %}
                                                   <tr>
                                                       <td class="col-field">{{ subkey }}</td>
