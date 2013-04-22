@@ -6,13 +6,18 @@
 {% if json_in_db and failed_json %}
     <div id="error_message" class="alert alert-error fade in" style="margin-bottom:8px;">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>ETAG</strong> Your Etag didn't match!
+        <strong>ERROR</strong> Your spot update failed.
     </div>
     <h1>Someone was probably editing the same spot at the same time and beat you to it.</h1>
+{% elif error_message %}
+    <h1>{{ error_message }}</h1>
 {% elif not json_in_db and not failed_json %}
-    <h1>No Spots!</h1>
+    <h1>What should we do here? Just a place holder for a generic error page?</h1>
+{% elif json_in_db or failed_json %}
+    <h1>Here is some spot data.</h1>
 {% endif %}
 
+{% if json_in_db or failed_json %}
 <div class="table-container">
     <div class="tableDiv">
         <div class="table-scroll">
@@ -24,8 +29,10 @@
                     {% endfor %}
                 </p>
             {% endif %}
-            {% if failed_json %}
+            {% if json_in_db and failed_json %}
                 <hr />
+            {% endif %}
+            {% if failed_json %}
                 <h5>Your failed JSON</h5>
                 <p>
                     {% for key in failed_json %}
@@ -36,5 +43,6 @@
         </div>
     </div>
 </div>
+            {% endif %}
 
 {% endblock %}

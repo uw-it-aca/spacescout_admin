@@ -86,20 +86,31 @@
                               {% elif schema|lookup:key|classname == 'dict' %}
                                   <td class="col-value">
                                       <table style="width:100%;">
-                                          {% for subkey in spot|lookup:key %}
+                                          {% for subkey in schema|lookup:key %}
                                               {% if schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length > 1 %}
                                                   <tr>
                                                       <td class="col-field">{{ subkey }}</td>
                                                       <td class="col-value">
                                                           <select name="{{ subkey }}">
                                                           {% for option in schema|lookup:key|lookup:subkey %}
-                                                              {% if option in spot|lookup:key|lookup:subkey or option == spot|lookup:key|lookup:subkey %}
+                                                              {% if option in spot|lookup:key|lookup:subkey %}
                                                                   <option value="{{ option }}" selected>{{ option }}</option>
                                                               {% else %}
                                                                   <option value="{{ option }}">{{ option }}</option>
                                                               {% endif %}
                                                           {% endfor %}
                                                           </select>
+                                                      </td>
+                                                  </tr>
+                                              {% elif schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length == 1 %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value">
+                                                          {% if spot|lookup:key|lookup:subkey == schema|lookup:key|lookup:subkey|first %}
+                                                              <input type="checkbox" name="{{ subkey }}" value="{{ schema|lookup:key|lookup:subkey|first }}" checked="checked" />
+                                                          {% else %}
+                                                              <input type="checkbox" name="{{ subkey }}" value="{{ schema|lookup:key|lookup:subkey|first }}" />
+                                                          {% endif %}
                                                       </td>
                                                   </tr>
                                               {% else %}
