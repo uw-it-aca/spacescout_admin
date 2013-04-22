@@ -24,7 +24,11 @@ def edit_space(request, spot_id):
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
         # if we got the space from the queue, edit it rather than create a new instance
         if 'q_id' in space_datum:
-            q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
+            try:
+                q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
+            except:
+                error_message = 'Oops. Something went wrong. It appears that the spot you were attempting to modify is no longer in the database.'
+                return HttpResponseRedirect('/error/%s?failed_json=%s&error_message=%s' % (spot_id, cleaned_space_datum, error_message))
             if json.loads(q_obj.json) == json.loads(cleaned_space_datum):
                 data.update({'status': q_obj.status, 'errors': q_obj.errors})
             else:
@@ -80,13 +84,13 @@ def edit_space(request, spot_id):
                             queued.approved_by = None
                     queued.save()
                 else:
-                    return HttpResponseRedirect('/diff/%s?failed_json=%s' % (spot_id, queued.json))
-                    # I really wanted to try and do this with "return HttpResponseRedirect(reverse(diff.diff, blah, blah))" but I couldn't figure it out
+                    return HttpResponseRedirect('/error/%s?failed_json=%s' % (spot_id, queued.json))
+                    # I really wanted to try and do this with "return HttpResponseRedirect(reverse(error.error, blah, blah))" but I couldn't figure it out
             else:
                 try:
                     QueuedSpace.objects.get(space_id=spot_id)
-                    return HttpResponseRedirect('/diff/%s?failed_json=%s' % (spot_id, queued.json))
-                    # Same here, because passing a dict through the url is UUGGLLLYYY. It would be much cooler to pass the extra json straight to the diff view
+                    return HttpResponseRedirect('/error/%s?failed_json=%s' % (spot_id, queued.json))
+                    # Same here, because passing a dict through the url is UUGGLLLYYY. It would be much cooler to pass the extra json straight to the error view
                 except:
                     queued.save()
         else:

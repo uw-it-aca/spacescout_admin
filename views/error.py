@@ -8,7 +8,7 @@ import json
 
 
 @login_required
-def diff(request, spot_id):
+def error(request, spot_id=None):
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
@@ -25,11 +25,16 @@ def diff(request, spot_id):
         failed_json = json.loads(dict(request.GET.viewitems())['failed_json'][0])
     else:
         failed_json = None
+    if 'error_message' in request.GET:
+        error_message = str(dict(request.GET.viewitems())['error_message'][0])
+    else:
+        error_message = None
     args = {
         'schema': schema,
         'spot_id': spot_id,
         'json_in_db': json_in_db,
         'failed_json': failed_json,
+        'error_message': error_message,
     }
     context = RequestContext(request, {})
-    return render_to_response('diff.html', args, context)
+    return render_to_response('error.html', args, context)
