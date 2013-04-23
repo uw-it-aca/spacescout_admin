@@ -176,7 +176,7 @@ def autoconvert(s):
 
 
 def _cleanup(bad_json):
-    """ Takes the json in spot.json and returns json that is kosher with Spotseeker_Server
+    """ Takes the json in spot.json and returns json that is kosher with the SS_WEB_SERVER schema
     """
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
@@ -191,7 +191,8 @@ def _cleanup(bad_json):
         if type(schema[key]).__name__ == 'dict':
             for subkey in schema[key]:
                 if subkey in bad_json:
-                    if not type(schema[key][subkey]).__name__ == 'list' or not len(schema[key][subkey]) == 1 or not bad_json[subkey] == '':
+                    # the following if is for when there is a list of values and the value has to be one of the values from the schema
+                    if not type(schema[key][subkey]).__name__ == 'list' or not len(schema[key][subkey]) >= 1 or bad_json[subkey] in schema[key][subkey]:
                         if key not in good_json:
                             good_json.update({key: {}})
                         if not schema[key][subkey] == 'auto':
