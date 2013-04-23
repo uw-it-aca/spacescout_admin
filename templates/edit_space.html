@@ -92,6 +92,7 @@
                                                       <td class="col-field">{{ subkey }}</td>
                                                       <td class="col-value">
                                                           <select name="{{ subkey }}">
+                                                          <option value="" selected />
                                                           {% for option in schema|lookup:key|lookup:subkey %}
                                                               {% if option in spot|lookup:key|lookup:subkey %}
                                                                   <option value="{{ option }}" selected>{{ option }}</option>
