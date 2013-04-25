@@ -29,3 +29,10 @@ class QueuedSpace(models.Model):
             cache.delete(self.pk)
         self.q_etag = hashlib.sha1("{0} - {1}".format(random.random(), time.time())).hexdigest()
         super(QueuedSpace, self).save(*args, **kwargs)
+
+    class Meta:
+        permissions = (
+            ("can_update", "Can update a queued space"),
+            ("can_approve", "Can approve a queued space"),
+            ("can_publish", "Can publish a queued space"),
+        )

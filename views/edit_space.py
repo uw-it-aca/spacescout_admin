@@ -13,7 +13,7 @@ import oauth2
 
 @login_required
 def edit_space(request, spot_id):
-    if request.POST:
+    if request.POST and request.user.has_perm('spacescout_admin.can_update'):
         space_datum = {}
         post = dict(request.POST.viewitems())
         for key in post:
@@ -51,10 +51,10 @@ def edit_space(request, spot_id):
             if q_etag:
                 if q_etag == space_datum['q_etag']:
                     if 'changed' in space_datum and not json.loads(queued.errors):
-                        if space_datum['changed'] == 'approved':
+                        if space_datum['changed'] == 'approved' and request.user.has_perm('spacescout_admin.can_approve'):
                             queued.status = 'approved'
                             queued.approved_by = request.user
-                        elif space_datum['changed'] == 'publish':
+                        elif space_datum['changed'] == 'publish' and request.user.has_perm('spacescout_admin.can_publish'):
                             response = upload_data(request, [{'data': queued.json, 'id': spot_id, 'etag': queued.space_etag}])  # PUT if spot_id, POST if not spot_id
                             if not response['failure_descs']:  # if there are no failures
                                 QueuedSpace.objects.get(space_id=spot_id).delete()
@@ -107,6 +107,7 @@ def edit_space(request, spot_id):
         client = oauth2.Client(consumer)
         resp, content = client.request(url, 'GET')
         schema = json.loads(content)
+        user = request.user
 
         #Clean all of this up!! So it's not such a scary try/except
         try:
@@ -138,6 +139,7 @@ def edit_space(request, spot_id):
             q_etag = None
 
         args = {
+            "user": user,
             "spot_id": spot_id,
             "schema": schema,
             "spot": spot,

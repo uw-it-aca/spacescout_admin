@@ -7,7 +7,7 @@ import oauth2
 import json
 
 
-#@login_required
+@login_required
 def spaces(request):
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
