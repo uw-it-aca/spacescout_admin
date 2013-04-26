@@ -3,6 +3,7 @@ from spacescout_admin.models import QueuedSpace
 from spacescout_admin.utils import upload_data, to_datetime_object
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -13,16 +14,23 @@ import oauth2
 
 @login_required
 def edit_space(request, spot_id):
-    if request.POST and request.user.has_perm('spacescout_admin.can_update'):
+    user = request.user
+    has_perm = False
+    if user.has_perm('spacescout_admin.can_update') or user.has_perm('spacescout_admin.can_approve') or user.has_perm('spacescout_admin.can_publish'):
+        has_perm = True
+    elif user.has_perm('spacescout_admin.can_mod_any'):
+        has_perm = True
+    if request.POST and has_perm:
         space_datum = {}
         post = dict(request.POST.viewitems())
         for key in post:
             # Since everything's coming back from the form fields as text, try to convert
             # the strings to the appropriate type
-            space_datum[key] = autoconvert(post[key])
+            space_datum[key] = _autoconvert(post[key])
         cleaned_space_datum = _cleanup(space_datum)
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
         # if we got the space from the queue, edit it rather than create a new instance
+        is_a_manager = _is_manager(user, space_datum['manager'])
         if 'q_id' in space_datum:
             try:
                 q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
@@ -39,9 +47,9 @@ def edit_space(request, spot_id):
             data.update({'status': 'updated', 'errors': '{}'})
             q_etag = None
             form = QueueForm(data)
-        if form.is_valid():
+        if form.is_valid() and is_a_manager:
             queued = form.save(commit=False)
-            queued.modified_by = request.user
+            queued.modified_by = user
             if 'q_id' in space_datum:
                 queued.space_etag = QueuedSpace.objects.get(space_id=spot_id).space_etag
                 queued.space_last_modified = QueuedSpace.objects.get(space_id=spot_id).space_last_modified
@@ -51,10 +59,10 @@ def edit_space(request, spot_id):
             if q_etag:
                 if q_etag == space_datum['q_etag']:
                     if 'changed' in space_datum and not json.loads(queued.errors):
-                        if space_datum['changed'] == 'approved' and request.user.has_perm('spacescout_admin.can_approve'):
+                        if space_datum['changed'] == 'approved' and (user.has_perm('spacescout_admin.can_approve') or user.has_perm('spacescout_admin.can_mod_any')):
                             queued.status = 'approved'
-                            queued.approved_by = request.user
-                        elif space_datum['changed'] == 'publish' and request.user.has_perm('spacescout_admin.can_publish'):
+                            queued.approved_by = user
+                        elif space_datum['changed'] == 'publish' and (user.has_perm('spacescout_admin.can_publish') or user.has_perm('spacescout_admin.can_mod_any')):
                             response = upload_data(request, [{'data': queued.json, 'id': spot_id, 'etag': queued.space_etag}])  # PUT if spot_id, POST if not spot_id
                             if not response['failure_descs']:  # if there are no failures
                                 QueuedSpace.objects.get(space_id=spot_id).delete()
@@ -107,7 +115,6 @@ def edit_space(request, spot_id):
         client = oauth2.Client(consumer)
         resp, content = client.request(url, 'GET')
         schema = json.loads(content)
-        user = request.user
 
         #Clean all of this up!! So it's not such a scary try/except
         try:
@@ -138,8 +145,11 @@ def edit_space(request, spot_id):
             errors = None
             q_etag = None
 
+        is_a_manager = _is_manager(user, _autoconvert(spot['manager']))
+
         args = {
             "user": user,
+            "is_a_manager": is_a_manager,
             "spot_id": spot_id,
             "schema": schema,
             "spot": spot,
@@ -159,7 +169,7 @@ def edit_space(request, spot_id):
         return render_to_response('edit_space.html', args, context)
 
 
-def autoconvert(s):
+def _autoconvert(s):
     """ Takes a string and tries to return a non-string datatype (int, float, list, etc.)
         If it can't, returns the string.
     """
@@ -203,3 +213,27 @@ def _cleanup(bad_json):
         if key in schema and schema[key] != 'auto':
             good_json.update({key: bad_json[key]})
     return json.dumps(good_json)
+
+
+def _is_manager(user, managers):
+    """ Takes a list of groups and users and checks to see if the user passed in is any of those groups or if the user is a superuser
+    """
+    is_a_manager = False
+    if type(managers).__name__ == 'list':
+        for group in managers:
+            try:
+                if user in Group.objects.get(name=group).user_set.all():
+                    is_a_manager = True
+            except:
+                if user.username == group:
+                    is_a_manager = True
+    else:
+        try:
+            if user in Group.objects.get(name=managers).user_set.all():
+                is_a_manager = True
+        except:
+            if user.username == managers:
+                is_a_manager = True
+    if user.has_perm('spacescout_admin.can_mod_any') or user.is_superuser:
+        is_a_manager = True
+    return is_a_manager

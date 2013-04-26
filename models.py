@@ -35,4 +35,5 @@ class QueuedSpace(models.Model):
             ("can_update", "Can update a queued space"),
             ("can_approve", "Can approve a queued space"),
             ("can_publish", "Can publish a queued space"),
+            ("can_mod_any", "Can do anything to any space regardless of ownership"),
         )
