@@ -3,70 +3,111 @@ from spacescout_admin.models import QueuedSpace
 from spacescout_admin.utils import upload_data, to_datetime_object
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import datetime
 import json
 import oauth2
 
 
 @login_required
 def edit_space(request, spot_id):
+
     user = request.user
-    has_perm = False
-    if user.has_perm('spacescout_admin.can_update') or user.has_perm('spacescout_admin.can_approve') or user.has_perm('spacescout_admin.can_publish'):
-        has_perm = True
-    elif user.has_perm('spacescout_admin.can_mod_any'):
-        has_perm = True
-    if request.POST and has_perm:
+    has_a_perm = False
+    can_update = False
+    can_approve = False
+    can_publish = False
+    if user.has_perm('spacescout_admin.can_update'):
+        has_a_perm = True
+        can_update = True
+    if user.has_perm('spacescout_admin.can_approve'):
+        has_a_perm = True
+        can_approve = True
+    if user.has_perm('spacescout_admin.can_publish'):
+        has_a_perm = True
+        can_publish = True
+    if user.has_perm('spacescout_admin.can_mod_any'):
+        has_a_perm = True
+        can_update = True
+        can_approve = True
+        can_publish = True
+
+    if request.POST and has_a_perm:
         space_datum = {}
         post = dict(request.POST.viewitems())
         for key in post:
-            # Since everything's coming back from the form fields as text, try to convert
-            # the strings to the appropriate type
+            # All of the form field data comes back as lists of text. Converts to appropriate data types where possible
             space_datum[key] = _autoconvert(post[key])
         cleaned_space_datum = _cleanup(space_datum)
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
-        # if we got the space from the queue, edit it rather than create a new instance
         is_a_manager = _is_manager(user, space_datum['manager'])
+
+        # If we got the space from the queue, edit it rather than create a new instance
         if 'q_id' in space_datum:
             try:
                 q_obj = QueuedSpace.objects.get(pk=int(request.POST["q_id"]))
             except:
                 error_message = 'Oops. Something went wrong. It appears that the spot you were attempting to modify is no longer in the database.'
                 return HttpResponseRedirect('/error/%s?failed_json=%s&error_message=%s' % (spot_id, cleaned_space_datum, error_message))
+
+            # If the json didn't change after the save click, keep the same status and errors as before
             if json.loads(q_obj.json) == json.loads(cleaned_space_datum):
                 data.update({'status': q_obj.status, 'errors': q_obj.errors})
             else:
                 data.update({'status': 'updated', 'errors': '{}'})
             q_etag = q_obj.q_etag
             form = QueueForm(data, instance=q_obj)
+
+        # Creates a brand new spot
         else:
             data.update({'status': 'updated', 'errors': '{}'})
             q_etag = None
             form = QueueForm(data)
+
+        # The user must be part of the group that has permission to edit the QueuedSpace - (is_a_manager)
         if form.is_valid() and is_a_manager:
             queued = form.save(commit=False)
             queued.modified_by = user
+
             if 'q_id' in space_datum:
                 queued.space_etag = QueuedSpace.objects.get(space_id=spot_id).space_etag
                 queued.space_last_modified = QueuedSpace.objects.get(space_id=spot_id).space_last_modified
             else:
                 queued.space_etag = space_datum['space_etag']
                 queued.space_last_modified = space_datum['space_last_modified']
+
             if q_etag:
+                # The QueuedSpace etags must match in order to do anything
                 if q_etag == space_datum['q_etag']:
-                    if 'changed' in space_datum and not json.loads(queued.errors):
-                        if space_datum['changed'] == 'approved' and (user.has_perm('spacescout_admin.can_approve') or user.has_perm('spacescout_admin.can_mod_any')):
+                    approved_or_published = False
+                    no_errors = True
+                    if 'changed' in space_datum:
+                        approved_or_published = True
+                    if json.loads(queued.errors):
+                        no_errors = False
+
+                    # If trying to be approved or published and there are no errors
+                    if approved_or_published and no_errors:
+                        # Approving the QueuedSpace
+                        if space_datum['changed'] == 'approved' and can_approve:
                             queued.status = 'approved'
                             queued.approved_by = user
-                        elif space_datum['changed'] == 'publish' and (user.has_perm('spacescout_admin.can_publish') or user.has_perm('spacescout_admin.can_mod_any')):
-                            response = upload_data(request, [{'data': queued.json, 'id': spot_id, 'etag': queued.space_etag}])  # PUT if spot_id, POST if not spot_id
-                            if not response['failure_descs']:  # if there are no failures
+                        # Publishing the QueuedSpace
+                        elif space_datum['changed'] == 'publish' and can_publish:
+                            # Attempts to put the spot to the server
+                            response = upload_data(request, [{
+                                'data': queued.json,
+                                'id': spot_id,
+                                'etag': queued.space_etag
+                            }])
+
+                            # If there are no failures, delete the QueuedSpace
+                            if not response['failure_descs']:
                                 QueuedSpace.objects.get(space_id=spot_id).delete()
                                 return HttpResponseRedirect('/')
+                            # If there are errors, add them to the QueuedSpace errors field
                             else:
                                 errors = {}
                                 for failure in response['failure_descs']:
@@ -79,33 +120,42 @@ def edit_space(request, spot_id):
                                 queued.errors = json.dumps(errors)
                                 queued.status = 'updated'
                                 queued.approved_by = None
-                                queued.save()
-                                url = '/space/%s' % space_datum['id']
-                                return HttpResponseRedirect(url)
-                    elif 'changed' in space_datum and queued.errors:
+                    # If trying to be approved or published and there are errors, do nothing
+                    elif approved_or_published and not no_errors:
                         url = '/space/%s' % space_datum['id']
                         return HttpResponseRedirect(url)
+                    # If the QueuedSpace is just being saved, not approved or published
                     else:
                         if data['status'] == 'approved':
                             queued.approved_by = QueuedSpace.objects.get(space_id=spot_id).approved_by
                         else:
                             queued.approved_by = None
                     queued.save()
+                # If the QueuedSpace etags do not match
                 else:
                     return HttpResponseRedirect('/error/%s?failed_json=%s' % (spot_id, queued.json))
-                    # I really wanted to try and do this with "return HttpResponseRedirect(reverse(error.error, blah, blah))" but I couldn't figure it out
+                    # Could not figure out "return HttpResponseRedirect(reverse(error.error, blah, blah))"
+                    # It would be really cool if we could figure out how to get this to work
+
+            # If there is no QueuedSpace etag at all
             else:
                 try:
+                    # Checks to see if the same spot has been created while you were editing this one
                     QueuedSpace.objects.get(space_id=spot_id)
                     return HttpResponseRedirect('/error/%s?failed_json=%s' % (spot_id, queued.json))
-                    # Same here, because passing a dict through the url is UUGGLLLYYY. It would be much cooler to pass the extra json straight to the error view
+                    # Same here, because passing a dict through the url is UUGGLLLYYY. It would be much
+                    # cooler to pass the extra json straight to the error view
                 except:
                     queued.save()
+
+        # If the form is not valid or the user does not have permissions to modify this spot
         else:
             #TODO: do something appropriate if the form isn't valid
             pass
+
         url = '/space/%s' % space_datum['id']
         return HttpResponseRedirect(url)
+
     else:
         #Required settings for the client
         if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
@@ -116,53 +166,59 @@ def edit_space(request, spot_id):
         resp, content = client.request(url, 'GET')
         schema = json.loads(content)
 
-        #Clean all of this up!! So it's not such a scary try/except
+        from_queued_space = False
         try:
             spot = QueuedSpace.objects.get(space_id=spot_id)
-            q_id = spot.pk
-            modified_by = spot.modified_by
-            approved_by = spot.approved_by
-            last_modified = spot.last_modified
-            status = spot.status
-            space_etag = spot.space_etag
-            ugly_space_last_modified = spot.space_last_modified
-            nice_space_last_modified = ugly_space_last_modified
-            errors = json.loads(spot.errors)
-            q_etag = spot.q_etag
-            spot = json.loads(spot.json)
+            from_queued_space = True
         except:
             spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
             resp, content = client.request(spot_url, 'GET')
             spot = json.loads(content)
-            q_id = None
-            modified_by = None
-            approved_by = "an admin"
-            status = None
+
+        if from_queued_space:
+            errors = json.loads(spot.errors)
+            space_etag = spot.space_etag
+            q_etag = spot.q_etag
+            status = spot.status
+            ugly_space_last_modified = spot.space_last_modified
+            nice_space_last_modified = ugly_space_last_modified
+            last_modified = spot.last_modified
+            modified_by = spot.modified_by
+            approved_by = spot.approved_by
+            q_id = spot.pk
+            spot = json.loads(spot.json)
+        else:
+            errors = None
             space_etag = resp['etag']
-            last_modified = None
+            q_etag = None
+            status = None
             ugly_space_last_modified = spot['last_modified']
             nice_space_last_modified = to_datetime_object(ugly_space_last_modified)
-            errors = None
-            q_etag = None
-
+            last_modified = None
+            modified_by = None
+            approved_by = None
+            q_id = None
         is_a_manager = _is_manager(user, _autoconvert(spot['manager']))
 
         args = {
-            "user": user,
-            "is_a_manager": is_a_manager,
             "spot_id": spot_id,
+            "user": user,
+            "can_update": can_update,
+            "can_approve": can_approve,
+            "can_publish": can_publish,
             "schema": schema,
             "spot": spot,
-            "q_id": q_id,
-            "updated_by": modified_by,
-            "approved_by": approved_by,
-            "last_modified": last_modified,
-            "status": status,
+            "errors": errors,
             "space_etag": space_etag,
             "q_etag": q_etag,
+            "status": status,
             "ugly_space_last_modified": ugly_space_last_modified,
             "nice_space_last_modified": nice_space_last_modified,
-            "errors": errors,
+            "last_modified": last_modified,
+            "updated_by": modified_by,
+            "approved_by": approved_by,
+            "q_id": q_id,
+            "is_a_manager": is_a_manager,
         }
 
         context = RequestContext(request, {})
@@ -178,8 +234,10 @@ def _autoconvert(s):
             s = s[0]
     except:
         pass
+
     try:
-        if type(eval(s)).__name__ == 'builtin_function_or_method':  # makes sure a python function or object isnt added to the list
+        # makes sure a python function or object is not added to the list
+        if type(eval(s)).__name__ == 'builtin_function_or_method':
             return s
         else:
             return eval(s)
@@ -199,41 +257,64 @@ def _cleanup(bad_json):
     resp, content = client.request(url, 'GET')
     schema = json.loads(content)
     good_json = {}
+
+    # Loops throught the dicts in the schema and adds any key/values in
+    # the json parameter that should be in a dict into the correct dict
+    # according to the schema
     for key in schema:
         if type(schema[key]).__name__ == 'dict':
             for subkey in schema[key]:
                 if subkey in bad_json:
-                    # the following if is for when there is a list of values and the value has to be one of the values from the schema
-                    if not type(schema[key][subkey]).__name__ == 'list' or not len(schema[key][subkey]) >= 1 or bad_json[subkey] in schema[key][subkey]:
+                    not_a_list = False
+                    valid_list_value = False
+                    if not type(schema[key][subkey]).__name__ == 'list':
+                        not_a_list = True
+                    else:
+                        if bad_json[subkey] in schema[key][subkey]:
+                            valid_list_value = True
+                    if not_a_list or valid_list_value:
                         if key not in good_json:
                             good_json.update({key: {}})
                         if not schema[key][subkey] == 'auto':
                             good_json[key].update({subkey: bad_json[subkey]})
+
+    # Loops through all of the json parameter and only adds data that
+    # is in the schema except for data the server auto adds
     for key in bad_json:
         if key in schema and schema[key] != 'auto':
             good_json.update({key: bad_json[key]})
+
     return json.dumps(good_json)
 
 
 def _is_manager(user, managers):
-    """ Takes a list of groups and users and checks to see if the user passed in is any of those groups or if the user is a superuser
+    """ Takes a list of groups and users and checks to see if the user passed
+        in is any of those groups or if the user is a superuser
     """
     is_a_manager = False
+
+    # if the value is a list
     if type(managers).__name__ == 'list':
         for group in managers:
             try:
+                # if the list item is a group
                 if user in Group.objects.get(name=group).user_set.all():
                     is_a_manager = True
             except:
+                # if the list item is not a group, but just a username
                 if user.username == group:
                     is_a_manager = True
-    else:
+    else:  # the value should just be a string if it is not a list
         try:
+            # if the value is the name of a group
             if user in Group.objects.get(name=managers).user_set.all():
                 is_a_manager = True
         except:
+            # if the value is just a username
             if user.username == managers:
                 is_a_manager = True
+
     if user.has_perm('spacescout_admin.can_mod_any') or user.is_superuser:
         is_a_manager = True
+
     return is_a_manager

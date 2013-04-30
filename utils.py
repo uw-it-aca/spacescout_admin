@@ -379,7 +379,6 @@ def upload_data(request, data):
 def to_datetime_object(date_string):
     """Only for when the string is in the format 'yyyy-mm-ddThh:mm:ss'
     """
-
     time_parts = date_string.split('.')
     time_parts[1] = time_parts[1].split('+')[0]
     result = datetime.datetime.strptime(time_parts[0], '%Y-%m-%dT%H:%M:%S')

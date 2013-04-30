@@ -16,20 +16,12 @@
     <div class="table-options clearfix">
         <h5 class="pull-left" style="margin:0;display:inline-block;">EDIT SPACE</h5>
         <ul class="pull-right">
-            {% if status == 'updated' %}
-                {% if 'spacescout_admin.can_approve' in user.get_all_permissions and is_a_manager or 'spacescout_admin.can_mod_any' in user.get_all_permissions %}
-                    <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
-                    <li><button type="submit" id="publish_button" class="btn btn-mini" name="changed" value="approved">Approve</button></li>
-                {% else %}
-                    <li class="muted">Last updated on {{ nice_space_last_modified }}</li>
-                {% endif %}
-            {% elif status == 'approved' %}
-                {% if 'spacescout_admin.can_publish' in user.get_all_permissions and is_a_manager or 'spacescout_admin.can_mod_any' in user.get_all_permissions %}
-                    <li class="muted">Changes were approved by {{ approved_by }} on {{ last_modified }} and will be put into the queue. Skip queue and publish now?</li>
-                    <li><button type="submit" id="publish_button" class="btn btn-mini btn-success" name="changed" value="publish">Publish</button></li>
-                {% else %}
-                    <li class="muted">Last updated on {{ nice_space_last_modified }}</li>
-                {% endif %}
+            {% if status == 'updated' and is_a_manager and can_approve %}
+                <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini" name="changed" value="approved">Approve</button></li>
+            {% elif status == 'approved' and is_a_manager and can_publish %}
+                <li class="muted">Changes were approved by {{ approved_by }} on {{ last_modified }} and will be put into the queue. Skip queue and publish now?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini btn-success" name="changed" value="publish">Publish</button></li>
             {% else %}
                 <li class="muted">Last updated on {{ nice_space_last_modified }}</li>
             {% endif %}
@@ -151,7 +143,7 @@
     </div>
     <div class="table-sub-options clearfix">
         <ul class="pull-left">
-            {% if 'spacescout_admin.can_update' in user.get_all_permissions and is_a_manager or 'spacescout_admin.can_mod_any' in user.get_all_permissions %}
+            {% if can_update and is_a_manager %}
                 <li><button id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
             {% endif %}
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
