@@ -2,8 +2,8 @@
 
 {% block extra_js %}
 <script>
-function confirmUndo() {
-return confirm("Are you sure you want to delete all changes made to the space?\nCan't be undone.");
+function confirmReset() {
+return confirm("Are you sure you want to reset this spot to how it currently is in the server?\nCan't be undone.");
 }
 function confirmDelete() {
 return confirm("Are you sure you want to permanentally delete this spot FROM THE SERVER?\nCan't be undone.");
@@ -160,8 +160,8 @@ return confirm("Are you sure you want to permanentally delete this spot FROM THE
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
         </ul>
         <ul class="pull-right">
-            {% if status and can_undo and is_a_manager %}
-                <li><button type="submit" id="undo_button" class="btn btn-mini btn-warning" onclick="return confirmUndo()" name="changed" value="undo"><i class="icon-refresh icon-white"></i> Undo Saved Changes</button></li>
+            {% if status and can_reset and is_a_manager %}
+                <li><button type="submit" id="reset_button" class="btn btn-mini btn-warning" onclick="return confirmReset()" name="changed" value="reset"><i class="icon-refresh icon-white"></i> Reset Space</button></li>
             {% endif %}
             {% if can_publish and is_a_manager %}
                 <li><button type="submit" id="delete_button" class="btn btn-mini btn-danger" onclick="return confirmDelete()" name="changed" value="delete"><i class="icon-trash icon-white"></i> Delete</button></li>

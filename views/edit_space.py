@@ -15,13 +15,13 @@ import oauth2
 def edit_space(request, spot_id):
     user = request.user
     has_a_perm = False
-    can_undo = False
+    can_reset = False
     can_update = False
     can_approve = False
     can_publish = False
-    if user.has_perm('spacescout_admin.can_undo'):
+    if user.has_perm('spacescout_admin.can_reset'):
         has_a_perm = True
-        can_undo = True
+        can_reset = True
     if user.has_perm('spacescout_admin.can_update'):
         has_a_perm = True
         can_update = True
@@ -33,7 +33,7 @@ def edit_space(request, spot_id):
         can_publish = True
     if user.has_perm('spacescout_admin.can_mod_any') or user.is_superuser:
         has_a_perm = True
-        can_undo = True
+        can_reset = True
         can_update = True
         can_approve = True
         can_publish = True
@@ -107,10 +107,10 @@ def edit_space(request, spot_id):
             if q_etag:
                 # The QueuedSpace etags must match in order to do anything
                 if q_etag == space_datum['q_etag']:
-                    # If the spot was approved, published, undone, or deleted
+                    # If the spot was approved, published, reset, or deleted
                     if 'changed' in space_datum:
                         # Undoes all saved changes made to the QueuedSpace
-                        if space_datum['changed'] == 'undo' and can_undo:
+                        if space_datum['changed'] == 'reset' and can_reset:
                             QueuedSpace.objects.get(space_id=spot_id).delete()
                             url = '/space/%s' % space_datum['id']
                             return HttpResponseRedirect(url)
@@ -234,7 +234,7 @@ def edit_space(request, spot_id):
         args = {
             "spot_id": spot_id,
             "user": user,
-            "can_undo": can_undo,
+            "can_reset": can_reset,
             "can_update": can_update,
             "can_approve": can_approve,
             "can_publish": can_publish,
