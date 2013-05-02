@@ -2,8 +2,11 @@
 
 {% block extra_js %}
 <script>
-function undoConfirm() {
-return confirm("Are you sure you want to delete all changes made to the space?");
+function confirmUndo() {
+return confirm("Are you sure you want to delete all changes made to the space?\nCan't be undone.");
+}
+function confirmDelete() {
+return confirm("Are you sure you want to permanentally delete this spot FROM THE SERVER?\nCan't be undone.");
 }
 </script>
 {% endblock %}
@@ -156,11 +159,14 @@ return confirm("Are you sure you want to delete all changes made to the space?")
             {% endif %}
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
         </ul>
-        {% if status and is_a_manager and can_undo %}
-            <ul class="pull-right">
-                <li><button type="submit" id="undo_button" class="btn btn-mini btn-warning" onclick="return undoConfirm()" name="changed" value="undo"><i class="icon-refresh icon-white"></i> Undo Saved Changes</button></li>
-            </ul>
-        {% endif %}
+        <ul class="pull-right">
+            {% if status and can_undo and is_a_manager %}
+                <li><button type="submit" id="undo_button" class="btn btn-mini btn-warning" onclick="return confirmUndo()" name="changed" value="undo"><i class="icon-refresh icon-white"></i> Undo Saved Changes</button></li>
+            {% endif %}
+            {% if can_publish and is_a_manager %}
+                <li><button type="submit" id="delete_button" class="btn btn-mini btn-danger" onclick="return confirmDelete()" name="changed" value="delete"><i class="icon-trash icon-white"></i> Delete</button></li>
+            {% endif %}
+        </ul>
     </div>
 </form>
 </div>
