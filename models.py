@@ -32,8 +32,9 @@ class QueuedSpace(models.Model):
 
     class Meta:
         permissions = (
+            ("can_undo", "Can undo all saved changes made to a queued space"),
             ("can_update", "Can update a queued space"),
             ("can_approve", "Can approve a queued space"),
             ("can_publish", "Can publish a queued space"),
-            ("can_mod_any", "Can do anything to any space regardless of ownership"),
+            ("can_mod_any", "Can do anything to any queued space regardless of ownership"),
         )

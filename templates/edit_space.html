@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block extra_js %}
+<script>
+function undoConfirm() {
+return confirm("Are you sure you want to delete all changes made to the space?");
+}
+</script>
+{% endblock %}
+
 {% block content %}
 {% load ss_admin_extras %}
 
@@ -148,6 +156,11 @@
             {% endif %}
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
         </ul>
+        {% if status and is_a_manager and can_undo %}
+            <ul class="pull-right">
+                <li><button type="submit" id="undo_button" class="btn btn-mini btn-warning" onclick="return undoConfirm()" name="changed" value="undo"><i class="icon-refresh icon-white"></i> Undo Saved Changes</button></li>
+            </ul>
+        {% endif %}
     </div>
 </form>
 </div>

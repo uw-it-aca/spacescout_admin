@@ -13,12 +13,15 @@ import oauth2
 
 @login_required
 def edit_space(request, spot_id):
-
     user = request.user
     has_a_perm = False
+    can_undo = False
     can_update = False
     can_approve = False
     can_publish = False
+    if user.has_perm('spacescout_admin.can_undo'):
+        has_a_perm = True
+        can_undo = True
     if user.has_perm('spacescout_admin.can_update'):
         has_a_perm = True
         can_update = True
@@ -28,8 +31,9 @@ def edit_space(request, spot_id):
     if user.has_perm('spacescout_admin.can_publish'):
         has_a_perm = True
         can_publish = True
-    if user.has_perm('spacescout_admin.can_mod_any'):
+    if user.has_perm('spacescout_admin.can_mod_any') or user.is_superuser:
         has_a_perm = True
+        can_undo = True
         can_update = True
         can_approve = True
         can_publish = True
@@ -96,6 +100,11 @@ def edit_space(request, spot_id):
                         approved_or_published = True
                     if json.loads(queued.errors):
                         no_errors = False
+
+                    # Undoing all saved changes made to the QueuedSpace
+                    if space_datum['changed'] == 'undo' and can_undo:
+                        QueuedSpace.objects.get(space_id=spot_id).delete()
+                        return HttpResponseRedirect('/')
 
                     # If trying to be approved or published and there are no errors
                     if approved_or_published and no_errors:
@@ -212,6 +221,7 @@ def edit_space(request, spot_id):
         args = {
             "spot_id": spot_id,
             "user": user,
+            "can_undo": can_undo,
             "can_update": can_update,
             "can_approve": can_approve,
             "can_publish": can_publish,
