@@ -68,6 +68,8 @@ def edit_space(request, spot_id):
                     "If_Match": space_datum['space_etag'],
                 }
                 response = client.request(spot_url, 'DELETE', headers=spot_headers)
+                if 'q_id' in space_datum:
+                    QueuedSpace.objects.get(space_id=spot_id).delete()
                 return HttpResponseRedirect('/')
 
         # If we got the space from the queue, edit it rather than create a new instance
