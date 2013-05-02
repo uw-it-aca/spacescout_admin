@@ -26,7 +26,11 @@ def error(request, spot_id=None):
     else:
         failed_json = None
     if 'error_message' in request.GET:
-        error_message = str(dict(request.GET.viewitems())['error_message'][0])
+        error_message = dict(request.GET.viewitems())['error_message'][0]
+        try:
+            error_message = eval(error_message)
+        except:
+            error_message = str(error_message)
     else:
         error_message = None
     args = {

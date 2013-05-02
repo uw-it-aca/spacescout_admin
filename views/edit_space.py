@@ -34,13 +34,22 @@ def edit_space(request, spot_id):
         can_approve = True
         can_publish = True
 
+    #Required settings for the client
+    if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
+        raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
+    consumer = oauth2.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+    url = "%s/api/v1/schema" % settings.SS_WEB_SERVER_HOST
+    client = oauth2.Client(consumer)
+    resp, content = client.request(url, 'GET')
+    schema = json.loads(content)
+
     if request.POST and has_a_perm:
         space_datum = {}
         post = dict(request.POST.viewitems())
         for key in post:
             # All of the form field data comes back as lists of text. Converts to appropriate data types where possible
             space_datum[key] = _autoconvert(post[key])
-        cleaned_space_datum = _cleanup(space_datum)
+        cleaned_space_datum = _cleanup(space_datum, schema)
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
         is_a_manager = _is_manager(user, space_datum['manager'])
 
@@ -117,6 +126,12 @@ def edit_space(request, spot_id):
                                             errors[failure['flocation']].append(reason)
                                     else:
                                         errors.update({failure['flocation']: failure['freason']})
+                                for error in errors:
+                                    # If errors are thrown in fields the user cant edit, return the error
+                                    # page instead of adding them to the QueuedSpace error field
+                                    if error in schema:
+                                        if schema[error] == 'auto':
+                                            return HttpResponseRedirect('/error/%s?failed_json=%s&error_message=%s' % (spot_id, queued.json, errors))
                                 queued.errors = json.dumps(errors)
                                 queued.status = 'updated'
                                 queued.approved_by = None
@@ -157,23 +172,17 @@ def edit_space(request, spot_id):
         return HttpResponseRedirect(url)
 
     else:
-        #Required settings for the client
-        if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
-            raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
-        consumer = oauth2.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-        url = "%s/api/v1/schema" % settings.SS_WEB_SERVER_HOST
-        client = oauth2.Client(consumer)
-        resp, content = client.request(url, 'GET')
-        schema = json.loads(content)
-
         from_queued_space = False
         try:
             spot = QueuedSpace.objects.get(space_id=spot_id)
             from_queued_space = True
         except:
-            spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
-            resp, content = client.request(spot_url, 'GET')
-            spot = json.loads(content)
+            try:
+                spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
+                resp, content = client.request(spot_url, 'GET')
+                spot = json.loads(content)
+            except:
+                return HttpResponseRedirect('/error/%s' % (spot_id))
 
         if from_queued_space:
             errors = json.loads(spot.errors)
@@ -245,17 +254,9 @@ def _autoconvert(s):
         return s
 
 
-def _cleanup(bad_json):
+def _cleanup(bad_json, schema):
     """ Takes the json in spot.json and returns json that is kosher with the SS_WEB_SERVER schema
     """
-    #Required settings for the client
-    if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
-        raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
-    consumer = oauth2.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-    url = "%s/api/v1/schema" % settings.SS_WEB_SERVER_HOST
-    client = oauth2.Client(consumer)
-    resp, content = client.request(url, 'GET')
-    schema = json.loads(content)
     good_json = {}
 
     # Loops throught the dicts in the schema and adds any key/values in
