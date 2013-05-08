@@ -169,7 +169,7 @@ def edit_space(request, spot_id):
                                 queued.approved_by = QueuedSpace.objects.get(space_id=spot_id).approved_by
                             else:
                                 queued.approved_by = None
-                        queued.save()
+                    queued.save()
                 # If the QueuedSpace etags do not match
                 else:
                     return HttpResponseRedirect('/error/%s?failed_json=%s' % (spot_id, queued.json))
