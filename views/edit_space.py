@@ -109,17 +109,21 @@ def edit_space(request, spot_id):
             if q_etag:
                 # The QueuedSpace etags must match in order to do anything
                 if q_etag == space_datum['q_etag']:
-                    # If the spot was approved, published, reset, or deleted
+                    no_errors = True
+                    if json.loads(queued.errors):
+                        no_errors = False
+
+                    changed = False
                     if 'changed' in space_datum:
+                        changed = True
+
+                    # If the spot was approved, published, reset, or deleted
+                    if changed:
                         # Undoes all saved changes made to the QueuedSpace
                         if space_datum['changed'] == 'reset' and can_reset:
                             QueuedSpace.objects.get(space_id=spot_id).delete()
                             url = '/space/%s' % space_datum['id']
                             return HttpResponseRedirect(url)
-
-                        no_errors = True
-                        if json.loads(queued.errors):
-                            no_errors = False
 
                         # If trying to be approved or published and there are no errors
                         if no_errors:
@@ -160,7 +164,7 @@ def edit_space(request, spot_id):
                                     queued.status = 'updated'
                                     queued.approved_by = None
                         # If trying to be approved or published and there are errors, do nothing
-                        elif approved_or_published and not no_errors:
+                        elif changed and not no_errors:
                             url = '/space/%s' % space_datum['id']
                             return HttpResponseRedirect(url)
                         # If the QueuedSpace is just being saved, not approved or published
