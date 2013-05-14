@@ -9,6 +9,8 @@ from django.test import TestCase
 from spacescout_admin.utils import *
 from django.core.files import File
 from django.core.files.uploadedfile import UploadedFile
+from spacescout_admin.models import User, QueuedSpace
+from django.contrib.auth.models import Permission
 
 
 class SimpleTest(TestCase):
@@ -51,3 +53,20 @@ class SimpleTest(TestCase):
             del data[key]
 
         self.assertEqual(data, data1)
+
+    def test_unauthorized_spot_editing(self):
+        # create a user that doesnt belong to any group
+        self.user1 = User.objects.create(username='user1', password='user1', email='user1@uw.edu')
+        # give user permissions required to edit a spot, generally
+        can_update = Permission.objects.get(name='can_update')
+        self.user1.permissions.add(can_update)
+        # create a spot that has different manager than user
+        before_json = "{'manager': ['test'], 'capacity': 12, 'location': {'floor': '2nd floor', 'latitude': 47.652956, 'room_number': 207, 'longitude': -122.316343, 'building_name': 'Fishery Sciences (FSH)'}}"
+        spot = QueuedSpace.objects.create(space_id=5, json=json_data, errors='{}', status='updated', modified_by='fake', approved_by=None)
+        login(user1)
+
+        # as that user, edit some data for that spot
+        after_json = "{'manager': ['test'], 'capacity': 200, 'location': {'floor': 'roof', 'latitude': 47.652956, 'room_number': 1, 'longitude': -3, 'building_name': 'Different'}}"
+        spot.json = after_json
+        #spot.save() ??
+        self.assertEquals(spot.json, before_json)
