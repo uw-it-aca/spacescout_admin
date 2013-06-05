@@ -234,6 +234,7 @@ def file_to_json(docfile):
     return {"data": requests, "errors": errors}
 
 
+# This function was copy and pasted to spacescout_labtracker utils.py
 def upload_data(request, data):
     # Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
