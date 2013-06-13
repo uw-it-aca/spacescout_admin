@@ -57,20 +57,8 @@ def edit_space(request, spot_id):
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
         is_a_manager = _is_manager(user, space_datum['manager'])
 
-        # Completely deletes the spot from the server
-        if 'changed' in space_datum and space_datum['changed'] == 'delete':
-            if is_a_manager and can_publish:
-                spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, space_datum['id'])
-                spot_headers = {
-                    "XOAUTH_USER": "%s" % user,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "If_Match": space_datum['space_etag'],
-                }
-                response = client.request(spot_url, 'DELETE', headers=spot_headers)
-                if 'q_id' in space_datum:
-                    QueuedSpace.objects.get(space_id=spot_id).delete()
-                return HttpResponseRedirect('/')
+        if _is_deleted(space_datum, is_a_manager, can_publish, user, spot_id, client):
+            return HttpResponseRedirect('/')
 
         # If we got the space from the queue, edit it rather than create a new instance
         if 'q_id' in space_datum:
@@ -119,50 +107,19 @@ def edit_space(request, spot_id):
 
                     # If the spot was approved, published, reset, or deleted
                     if changed:
-                        # Undoes all saved changes made to the QueuedSpace
-                        if space_datum['changed'] == 'reset' and can_reset:
-                            QueuedSpace.objects.get(space_id=spot_id).delete()
-                            url = '/space/%s' % space_datum['id']
-                            return HttpResponseRedirect(url)
+                        is_reset = _is_reset(space_datum, can_reset, spot_id)
+                        if is_reset:
+                            return HttpResponseRedirect(is_reset)
 
                         # If trying to be approved or published and there are no errors
                         if no_errors:
-                            # Approves the QueuedSpace
-                            if space_datum['changed'] == 'approved' and can_approve:
-                                queued.status = 'approved'
-                                queued.approved_by = user
-                            # Publishes the QueuedSpace
-                            elif space_datum['changed'] == 'publish' and can_publish:
-                                # Attempts to put the spot to the server
-                                response = upload_data(request, [{
-                                    'data': queued.json,
-                                    'id': spot_id,
-                                    'etag': queued.space_etag
-                                }])
+                            queued = _is_approved(space_datum, can_approve, queued, user)
+                            is_published = _is_published(request, space_datum, spot_id, can_publish, queued, schema)
+                            if type(is_published).__name__ == 'unicode':
+                                return HttpResponseRedirect(is_published)
+                            else:
+                                queued = is_published
 
-                                # If there are no failures, delete the QueuedSpace
-                                if not response['failure_descs']:
-                                    QueuedSpace.objects.get(space_id=spot_id).delete()
-                                    return HttpResponseRedirect('/')
-                                # If there are errors, add them to the QueuedSpace errors field
-                                else:
-                                    errors = {}
-                                    for failure in response['failure_descs']:
-                                        if type(failure['freason']) == list:
-                                            errors.update({failure['flocation']: []})
-                                            for reason in failure['freason']:
-                                                errors[failure['flocation']].append(reason)
-                                        else:
-                                            errors.update({failure['flocation']: failure['freason']})
-                                    for error in errors:
-                                        # If errors are thrown in fields the user cant edit, return the error
-                                        # page instead of adding them to the QueuedSpace error field
-                                        if error in schema:
-                                            if schema[error] == 'auto':
-                                                return HttpResponseRedirect('/error/%s?failed_json=%s&error_message=%s' % (spot_id, queued.json, errors))
-                                    queued.errors = json.dumps(errors)
-                                    queued.status = 'updated'
-                                    queued.approved_by = None
                         # If trying to be approved or published and there are errors, do nothing
                         elif changed and not no_errors:
                             url = '/space/%s' % space_datum['id']
@@ -348,3 +305,74 @@ def _is_manager(user, managers):
         is_a_manager = True
 
     return is_a_manager
+
+
+def _is_deleted(space_datum, is_a_manager, can_publish, user, spot_id, client):
+    # Completely deletes the spot from the server
+    if 'changed' in space_datum and space_datum['changed'] == 'delete':
+        if is_a_manager and can_publish:
+            spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, space_datum['id'])
+            spot_headers = {
+                "XOAUTH_USER": "%s" % user,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If_Match": space_datum['space_etag'],
+            }
+            response = client.request(spot_url, 'DELETE', headers=spot_headers)
+            if 'q_id' in space_datum:
+                QueuedSpace.objects.get(space_id=spot_id).delete()
+            return True
+    return False
+
+
+def _is_reset(space_datum, can_reset, spot_id):
+    # Undoes all saved changes made to the QueuedSpace
+    if space_datum['changed'] == 'reset' and can_reset:
+        QueuedSpace.objects.get(space_id=spot_id).delete()
+        url = '/space/%s' % space_datum['id']
+        return url
+    return False
+
+
+def _is_approved(space_datum, can_approve, queued, user):
+    # Approves the QueuedSpace
+    if space_datum['changed'] == 'approved' and can_approve:
+        queued.status = 'approved'
+        queued.approved_by = user
+    return queued
+
+
+def _is_published(request, space_datum, spot_id, can_publish, queued, schema):
+    # Publishes the QueuedSpace
+    if space_datum['changed'] == 'publish' and can_publish:
+        # Attempts to put the spot to the server
+        response = upload_data(request, [{
+            'data': queued.json,
+            'id': spot_id,
+            'etag': queued.space_etag
+        }])
+
+        # If there are no failures, delete the QueuedSpace
+        if not response['failure_descs']:
+            QueuedSpace.objects.get(space_id=spot_id).delete()
+            return u'/'
+        # If there are errors, add them to the QueuedSpace errors field
+        else:
+            errors = {}
+            for failure in response['failure_descs']:
+                if type(failure['freason']) == list:
+                    errors.update({failure['flocation']: []})
+                    for reason in failure['freason']:
+                        errors[failure['flocation']].append(reason)
+                else:
+                    errors.update({failure['flocation']: failure['freason']})
+            for error in errors:
+                # If errors are thrown in fields the user cant edit, return the error
+                # page instead of adding them to the QueuedSpace error field
+                if error in schema:
+                    if schema[error] == 'auto':
+                        return '/error/%s?failed_json=%s&error_message=%s' % (spot_id, queued.json, errors)
+            queued.errors = json.dumps(errors)
+            queued.status = 'updated'
+            queued.approved_by = None
+    return queued
