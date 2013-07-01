@@ -162,12 +162,8 @@ def edit_space(request, spot_id):
             spot = QueuedSpace.objects.get(space_id=spot_id)
             from_queued_space = True
         except:
-            try:
-                spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
-                resp, content = client.request(spot_url, 'GET')
-                spot = json.loads(content)
-            except:
-                return HttpResponseRedirect('/error/%s' % (spot_id))
+            spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, spot_id)
+            resp, content = client.request(spot_url, 'GET')
 
         if from_queued_space:
             errors = json.loads(spot.errors)
@@ -181,7 +177,8 @@ def edit_space(request, spot_id):
             approved_by = spot.approved_by
             q_id = spot.pk
             spot = json.loads(spot.json)
-        else:
+        elif resp['status'] == '200' or resp['status'] == '201':
+            spot = json.loads(content)
             errors = None
             space_etag = resp['etag']
             q_etag = None
@@ -192,6 +189,10 @@ def edit_space(request, spot_id):
             modified_by = None
             approved_by = None
             q_id = None
+        else:
+            error_message = "Oops. Something went wrong. It appears that spot '%s' could not be found." % (spot_id)
+            return HttpResponseRedirect('/error/?error_message=%s' % (error_message))
+
         is_a_manager = _is_manager(user, _autoconvert(spot['manager']))
 
         args = {
