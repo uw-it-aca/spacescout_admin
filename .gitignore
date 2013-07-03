@@ -14,3 +14,7 @@ manage.py
 media/
 spotseeker/
 spotseeker.db
+
+# excel and csv test files
+test_csv1.csv
+test_xls1.xls

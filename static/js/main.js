@@ -382,7 +382,7 @@ $special = $event.special.debouncedresize = {
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);
-        $("#upload_page_container").css("max-height", tableContainerH / 4);
+        $("#upload_page_container").css("max-height", tableContainerH / 1.25);
         $("#upload_page_container").css("overflow", "auto");
 
 	}

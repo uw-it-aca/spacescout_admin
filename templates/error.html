@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load ss_admin_extras %}
+
+{% if json_in_db and failed_json %}
+    <div id="error_message" class="alert alert-error fade in" style="margin-bottom:8px;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ERROR</strong> Your spot update failed.
+    </div>
+    {% if not error_message %}
+        <h1>Someone was probably editing the same spot at the same time and beat you to it.</h1>
+    {% endif %}
+{% elif spot_id and not json_in_db %}
+    <h1>The spot with id "{{ spot_id }}" has not been edited and is not a QueuedSpace.</h1>
+{% elif not json_in_db and not failed_json and not error_message %}
+    <h1>I've got nothin' for ya here, man. I'll be sure to let you know if you have errors in the future, though.</h1>
+{% elif json_in_db or failed_json %}
+    <h1>Here is some spot data.</h1>
+{% endif %}
+{% if error_message %}
+    {% if error_message|classname == 'dict' %}
+        <h1>
+            {% for error in error_message %}
+                {{ error }}: {{ error_message|lookup:error }}<br />
+            {% endfor %}
+        </h1>
+    {% else %}
+        <h1>{{ error_message }}</h1>
+    {% endif %}
+{% endif %}
+
+{% if json_in_db or failed_json %}
+<div class="table-container">
+    <div class="tableDiv">
+        <div class="table-scroll">
+            {% if json_in_db %}
+                <h5>QueuedSpace JSON currently in Admin DB</h5>
+                <p>
+                    {% for key in json_in_db %}
+                        {{ key }}: {{ json_in_db|lookup:key }}<br />
+                    {% endfor %}
+                </p>
+            {% endif %}
+            {% if json_in_db and failed_json %}
+                <hr />
+            {% endif %}
+            {% if failed_json %}
+                <h5>Your failed JSON</h5>
+                <p>
+                    {% for key in failed_json %}
+                        {{ key }}: {{ failed_json|lookup:key }}<br />
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+            {% endif %}
+
+{% endblock %}
