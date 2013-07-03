@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.conf import settings
+from spacescout_admin.models import QueuedSpace
 import oauth2
 import json
 
 
-#@login_required
+@login_required
 def spaces(request):
     #Required settings for the client
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
@@ -19,6 +20,9 @@ def spaces(request):
     spot_url = "%s/api/v1/spot/all" % settings.SS_WEB_SERVER_HOST
     resp, content = client.request(spot_url, 'GET')
     spots = json.loads(content)
+    q_spots_status = {}
+    for q_spot in QueuedSpace.objects.all():
+        q_spots_status.update({q_spot.space_id: q_spot.status})
     context = RequestContext(request, {})
     try:
         fixed = settings.SPACE_TABLE_KEYS['FIXED']
@@ -34,6 +38,7 @@ def spaces(request):
     args = {
         "schema": schema,
         "spots": spots,
+        "q_spots_status": q_spots_status,
         "fixed_keys": fixed,
         "scrollable_keys": scrollable,
     }

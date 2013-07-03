@@ -88,9 +88,9 @@
                                     {% if key == "id" or key == "last_modified" %}
                                      <td id=""><div class="col-{{ key }}">{{ space|lookup:key }}</div></td>
                                      {% elif schema|lookup:key == 'auto' %}
-                                     <td id=""><div class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}" disabled></div></td>
+                                     <td id=""><div class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}" readonly /></div></td>
                                      {% else %}
-                                     <td id=""><div class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}"></div></td>
+                                     <td id=""><div class="col-{{ key }}"><input type="text" value="{{ space|lookup:key }}" /></div></td>
                                      {% endif %}
 
                                 {% endfor %}
