@@ -11,7 +11,7 @@ import time
 import csv
 import xlrd
 import xlwt
-
+import os
 
 def write_xls(spots):
     response = HttpResponse(mimetype='application/vnd.ms-excel')
@@ -346,6 +346,16 @@ def upload_data(request, data):
                         f = open('image.jpg', 'rb')
 
                         body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
+                        
+                        #delete that 'image.jpg' created in the directory from above code'
+                        myfile= "image.jpg"
+                        ## if file exists, delete it ##
+                        if os.path.isfile(myfile):
+                            os.remove(myfile)
+                            print("image.jpg deleted")
+                        else:    ## Show an error ##
+                            print("Error: %s file not found" % myfile)     
+
                         #poster code
                         register_openers()
                         datagen, headers = multipart_encode(body)
@@ -367,7 +377,6 @@ def upload_data(request, data):
             posts.append(spot_name)
         elif method == 'PUT':
             puts.append(spot_name)
-
     return {
         'success_names': success_names,
         'failure_descs': failure_descs,
