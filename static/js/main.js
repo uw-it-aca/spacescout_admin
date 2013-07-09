@@ -46,6 +46,8 @@ $special = $event.special.debouncedresize = {
 
 	$(document).ready(function() {
 
+        $('#id_username').focus()
+
 		getSpaceCount();
 		toggleEditExportButtons();
 
@@ -55,7 +57,7 @@ $special = $event.special.debouncedresize = {
             'placement': 'top',
             'animation': true,
         });
-
+        
         buildScrollTable();
 
         // handle scrolling - default browser
