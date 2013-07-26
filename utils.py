@@ -351,15 +351,6 @@ def upload_data(request, data):
 
                         body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
 
-                        # delete that 'image.jpg' created in the directory from above code
-                        myfile = "image.jpg"
-                        # if file exists, delete it
-                        if os.path.isfile(myfile):
-                            os.remove(myfile)
-                            print("image.jpg deleted")
-                        else:  # Show an error
-                            print("Error: %s file not found" % myfile)
-
                         #poster code
                         register_openers()
                         datagen, headers = multipart_encode(body)
@@ -373,6 +364,14 @@ def upload_data(request, data):
                             'freason': "invalid image",
                         }
                         warning_descs.append(hold)
+
+                # 'image.jpg' being saved in admin_proj may just be a bug that only happens in development
+                # this may end up being unneccessary
+                # delete that 'image.jpg' created in the directory from above code
+                myfile = "image.jpg"
+                if os.path.isfile(myfile):
+                    os.remove(myfile)
+
             #might need to use https://gist.github.com/1558113 instead for the oauth request
             #content_type = 'multipart/form-data;' #boundary=%s' % BOUNDARY
             #oauthrequest-i have it commented for mine since i was testing poster
