@@ -55,7 +55,11 @@ def edit_space(request, spot_id):
             space_datum[key] = _autoconvert(post[key])
         cleaned_space_datum = _cleanup(space_datum, schema)
         data = {'space_id': space_datum['id'], 'json': cleaned_space_datum}
-        is_a_manager = _is_manager(user, space_datum['manager'])
+
+        if 'manager' in space_datum:
+            is_a_manager = _is_manager(user, space_datum['manager'])
+        else:
+            is_a_manager = _is_manager(user)
 
         if _is_deleted(space_datum, is_a_manager, can_publish, user, spot_id, client):
             return HttpResponseRedirect('/')
@@ -193,7 +197,10 @@ def edit_space(request, spot_id):
             error_message = "Oops. Something went wrong. It appears that spot '%s' could not be found." % (spot_id)
             return HttpResponseRedirect('/error/?error_message=%s' % (error_message))
 
-        is_a_manager = _is_manager(user, _autoconvert(spot['manager']))
+        if 'manager' in spot:
+            is_a_manager = _is_manager(user, _autoconvert(spot['manager']))
+        else:
+            is_a_manager = _is_manager(user)
 
         args = {
             "spot_id": spot_id,
@@ -276,11 +283,13 @@ def _cleanup(bad_json, schema):
     return json.dumps(good_json)
 
 
-def _is_manager(user, managers):
+def _is_manager(user, managers=None):
     """ Takes a list of groups and users and checks to see if the user passed
         in is any of those groups or if the user is a superuser
     """
     is_a_manager = False
+    if not managers:
+        managers = []
 
     # if the value is a list
     if type(managers).__name__ == 'list':
