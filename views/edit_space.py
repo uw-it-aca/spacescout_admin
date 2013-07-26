@@ -252,7 +252,7 @@ def _cleanup(bad_json, schema):
     for key in schema:
         if type(schema[key]).__name__ == 'dict':
             for subkey in schema[key]:
-                if subkey in bad_json:
+                if subkey in bad_json and bad_json[subkey]:
                     not_a_list = False
                     valid_list_value = False
                     if not type(schema[key][subkey]).__name__ == 'list':
@@ -269,8 +269,9 @@ def _cleanup(bad_json, schema):
     # Loops through all of the json parameter and only adds data that
     # is in the schema except for data the server auto adds
     for key in bad_json:
-        if key in schema and schema[key] != 'auto':
-            good_json.update({key: bad_json[key]})
+        if bad_json[key]:
+            if key in schema and schema[key] != 'auto':
+                good_json.update({key: bad_json[key]})
 
     return json.dumps(good_json)
 
