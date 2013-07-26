@@ -12,6 +12,8 @@ import csv
 import xlrd
 import xlwt
 import os
+import codecs
+
 
 def write_xls(spots):
     response = HttpResponse(mimetype='application/vnd.ms-excel')
@@ -128,7 +130,9 @@ def write_csv(spots):
 
 def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
-        data = csv.DictReader(docfile.file)
+        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read(1024))
+        docfile.open()
+        data = csv.DictReader(codecs.EncodedFile(docfile, "utf-8"), dialect=dialect)
     elif docfile.content_type == 'application/vnd.ms-excel' or docfile.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         #convert .xls or .xlsx to dict
         workbook = xlrd.open_workbook(file_contents=docfile.read())
@@ -346,15 +350,15 @@ def upload_data(request, data):
                         f = open('image.jpg', 'rb')
 
                         body = {"description": "yay", "oauth_signature": signature, "oauth_signature_method": "HMAC-SHA1", "oauth_timestamp": int(time.time()), "oauth_nonce": oauth.generate_nonce, "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY, "image": f}
-                        
-                        #delete that 'image.jpg' created in the directory from above code'
-                        myfile= "image.jpg"
-                        ## if file exists, delete it ##
+
+                        # delete that 'image.jpg' created in the directory from above code
+                        myfile = "image.jpg"
+                        # if file exists, delete it
                         if os.path.isfile(myfile):
                             os.remove(myfile)
                             print("image.jpg deleted")
-                        else:    ## Show an error ##
-                            print("Error: %s file not found" % myfile)     
+                        else:  # Show an error
+                            print("Error: %s file not found" % myfile)
 
                         #poster code
                         register_openers()
