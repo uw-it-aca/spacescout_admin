@@ -11,6 +11,7 @@ import time
 import csv
 import xlrd
 import xlwt
+import codecs
 
 
 def write_xls(spots):
@@ -128,7 +129,9 @@ def write_csv(spots):
 
 def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
-        data = csv.DictReader(docfile.file)
+        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read(1024))
+        docfile.open()
+        data = csv.DictReader(codecs.EncodedFile(docfile, "utf-8"), dialect=dialect)
     elif docfile.content_type == 'application/vnd.ms-excel' or docfile.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         #convert .xls or .xlsx to dict
         workbook = xlrd.open_workbook(file_contents=docfile.read())
