@@ -349,16 +349,8 @@ def upload_data(request, data):
                         f.close()
                         f = open('image.jpg', 'rb')
 
-                        body = {
-                            "description": "yay",
-                            "oauth_signature": signature,
-                            "oauth_signature_method": "HMAC-SHA1",
-                            "oauth_timestamp": int(time.time()),
-                            "oauth_nonce": oauth.generate_nonce,
-                            "oauth_consumer_key": settings.SS_WEB_OAUTH_KEY,
-                            "image": f
-                        }
-                        authorization = 'oauth_consumer_key="%s",oauth_signature_method="HMAC-SHA1",oauth_signature="%s",oauth_timestamp="%d",oauth_nonce="%s",oauth_version="1.0"' % (settings.SS_WEB_OAUTH_KEY, signature, int(time.time()), oauth.generate_nonce())
+                        body = {"description": "yay", "image": f}
+                        authorization = 'OAuth oauth_version="1.0",oauth_nonce="%s",oauth_timestamp="%d",oauth_consumer_key="%s",oauth_signature_method="HMAC-SHA1",oauth_signature="%s"' % (oauth.generate_nonce(), int(time.time()), settings.SS_WEB_OAUTH_KEY, signature)
 
                         #poster code
                         register_openers()
