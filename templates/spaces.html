@@ -207,11 +207,12 @@
                                 {% for key in fixed_keys %}
                                     {% if key == "name" %}
 
-                                        <!-- for now, look for specific words and apply the updates/queued labels to mimic status -->
-                                        {% if "Area" in space|lookup:key %}
-                                        <td id=""><div class="col-{{ key }}"><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></div></td>
-                                        {% elif "Lounge" in space|lookup:key %}
-                                        <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Approved</span></div></td>
+                                        {% if space.id in q_spots_status %}
+                                            {% if q_spots_status|lookup:space.id == "updated" %}
+                                            <td id=""><div class="col-{{ key }}"><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label">Updated</span></div></td>
+                                            {% elif q_spots_status|lookup:space.id == "approved" %}
+                                            <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a> <span class="label label-warning">Approved</span></div></td>
+                                            {% endif %}
                                         {% else %}
                                         <td id=""><div class="col-{{ key }}" ><a href="/space/{{ space.id }}">{{ space|lookup:key }}</a></div></td>
                                         {% endif %}
@@ -221,11 +222,12 @@
                                     {% endif %}
                                 {% endfor %}
 
-                                <!-- for now, look for specific words and apply the approve/publish buttons to mimic actions -->
-                                {% if "Area" in space.name %}
-                                <td id=""><div class="col-action" ><a href="#" id="" class="btn btn-mini">Approve</a></div></td>
-                                {% elif "Lounge" in space.name %}
-                                <td id=""><div class="col-action" ><a href="#" id="" class="btn btn-mini btn-success">Publish</a></div></td>
+                                {% if space.id in q_spots_status %}
+                                    {% if q_spots_status|lookup:space.id == "updated" %}
+                                    <td id=""><div class="col-action" ><a href="#" id="" class="btn btn-mini">Approve</a></div></td>
+                                    {% elif q_spots_status|lookup:space.id == "approved" %}
+                                    <td id=""><div class="col-action" ><a href="#" id="" class="btn btn-mini btn-success">Publish</a></div></td>
+                                    {% endif %}
                                 {% else %}
                                 <td id=""><div  class="col-action">&nbsp;</div></td>
                                 {% endif %}

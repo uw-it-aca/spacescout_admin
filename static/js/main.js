@@ -46,6 +46,8 @@ $special = $event.special.debouncedresize = {
 
 	$(document).ready(function() {
 
+        $('#id_username').focus()
+
 		getSpaceCount();
 		toggleEditExportButtons();
 
@@ -55,7 +57,7 @@ $special = $event.special.debouncedresize = {
             'placement': 'top',
             'animation': true,
         });
-
+        
         buildScrollTable();
 
         // handle scrolling - default browser
@@ -380,6 +382,8 @@ $special = $event.special.debouncedresize = {
         $("#table_scroller").css("max-height", tableContainerH - 55);
         $(".fixedTable").css("max-height", tableContainerH - 55);
         $(".fixedColumn").css("max-height", tableContainerH + 1);
+        $("#upload_page_container").css("max-height", tableContainerH / 1.25);
+        $("#upload_page_container").css("overflow", "auto");
 
 	}
 

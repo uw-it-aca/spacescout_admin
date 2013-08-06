@@ -5,7 +5,7 @@ from spacescout_admin.models import QueuedSpace
 class UploadFileForm(forms.Form):
     file = forms.FileField(
         label='Select a file',
-        help_text='csv or xls files, please'
+        help_text='csv, xls, or xlsx files, please'
     )
 
 

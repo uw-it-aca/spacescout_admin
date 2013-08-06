@@ -1,26 +1,40 @@
 {% extends 'base.html' %}
 
+{% block extra_js %}
+<script>
+function confirmReset() {
+return confirm("Are you sure you want to reset this spot to how it currently is in the server?\nCan't be undone.");
+}
+function confirmDelete() {
+return confirm("Are you sure you want to permanentally delete this spot FROM THE SERVER?\nCan't be undone.");
+}
+</script>
+{% endblock %}
+
 {% block content %}
 {% load ss_admin_extras %}
 
-<div id="error_message" class="alert alert-error fade in hide" style="margin-bottom:8px;">
+{% if errors %}
+<div id="error_message" class="alert alert-error fade in" style="margin-bottom:8px;">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Oh snap!</strong> You have empties!
+    <strong>Oh snap!</strong> You have errors!
 </div>
+{% endif %}
 
 <div class="table-container">
-<form name="add_space" action="/space/{{ spot.id }}" method="POST">{% csrf_token %}
+<form name="add_space" action="/space/{{ spot_id }}" method="POST">{% csrf_token %}
 
     <div class="table-options clearfix">
         <h5 class="pull-left" style="margin:0;display:inline-block;">EDIT SPACE</h5>
         <ul class="pull-right">
-            {% if updated_by %}
-            <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
-            <li><button id="publish_button" class="btn btn-mini">Approve</button></li>
-            <li class="muted">Changes were approved Craig Stimmel on January 5, 2012 and will put into the queu. Skip queue and publish now?</li>
-            <li><button id="publish_button" class="btn btn-mini btn-success">Publish</button></li>
+            {% if status == 'updated' and is_a_manager and can_approve %}
+                <li class="muted">Recently updated by {{ updated_by }} on {{ last_modified }}. Approve changes?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini" name="changed" value="approved">Approve</button></li>
+            {% elif status == 'approved' and is_a_manager and can_publish %}
+                <li class="muted">Changes were approved by {{ approved_by }} on {{ last_modified }} and will be put into the queue. Skip queue and publish now?</li>
+                <li><button type="submit" id="publish_button" class="btn btn-mini btn-success" name="changed" value="publish">Publish</button></li>
             {% else %}
-            <li class="muted">Last updated on {{ last_modified }}</li>
+                <li class="muted">Last updated on {{ nice_space_last_modified }}</li>
             {% endif %}
         </ul>
     </div>
@@ -37,38 +51,123 @@
         <div id="edit_space_scroller" class="table-scroll">
             <table style="width:100%;">
                 <tbody>
+                    <tr>
+                        <td class="col-field">id</td>
+                        <td class="col-value"><input type="text" name="id" value="{{ spot_id }}" readonly /></td>
+                    </tr>
+                    {% if q_id %}
+                    <tr style="display: None;">
+                        <td class="col-field">q_id</td>
+                        <td class="col-value"><input type="hidden" name="q_id" value="{{ q_id }}" readonly /></td>
+                    </tr>
+                    {% endif %}
+                    <tr style="display: None;">
+                        <td class="col-field">space_etag</td>
+                        <td class="col-value"><input type="hidden" name="space_etag" value="{{ space_etag }}" readonly /></td>
+                    </tr>
+                    <tr style="display: None;">
+                        <td class="col-field">q_etag</td>
+                        <td class="col-value"><input type="hidden" name="q_etag" value="{{ q_etag }}" readonly /></td>
+                    </tr>
+                    {% if last_modified %}
+                    <tr>
+                        <td class="col-field">last_modified</td>
+                        <td class="col-value"><input type="text" name="last_modified" value="{{ last_modified }}" readonly /></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="col-field">space_last_modified</td>
+                        <td class="col-value"><input type="text" value="{{ nice_space_last_modified }}" readonly disabled /></td>
+                        <td style="display: None;" class="col-value"><input type="text" name="space_last_modified" value="{{ ugly_space_last_modified }}" readonly /></td>
+                    </tr>
                     {% for key in schema %}
-                      <tr>
-                          <td class="col-field">{{ key }}</td>
-                          {% if spot|lookup:key|classname == 'list' %}
-                          <td class="col-value">
-                              {% for t in schema|lookup:key %}
-                              {% if t in  spot|lookup:key %}
-                              <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
+                        {% if not schema|lookup:key == 'auto' %}
+                          <tr>
+                              <td class="col-field">{{ key }}</td>
+                              {% if schema|lookup:key|classname == 'list' %}
+                                  <td class="col-value">
+                                      {% for t in schema|lookup:key %}
+                                          {% if t in spot|lookup:key or t == spot|lookup:key %}
+                                              <input type="checkbox" name="{{ key }}" value="{{ t }}" checked="checked">{{ t }}</input><br />
+                                          {% else %}
+                                              <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
+                                          {% endif %}
+                                      {% endfor %}
+                                  </td>
+                              {% elif schema|lookup:key|classname == 'dict' %}
+                                  <td class="col-value">
+                                      <table style="width:100%;">
+                                          {% for subkey in schema|lookup:key %}
+                                              {% if schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length > 1 %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value">
+                                                          <select name="{{ subkey }}">
+                                                          <option value="" selected />
+                                                          {% for option in schema|lookup:key|lookup:subkey %}
+                                                              {% if option in spot|lookup:key|lookup:subkey %}
+                                                                  <option value="{{ option }}" selected>{{ option }}</option>
+                                                              {% else %}
+                                                                  <option value="{{ option }}">{{ option }}</option>
+                                                              {% endif %}
+                                                          {% endfor %}
+                                                          </select>
+                                                      </td>
+                                                  </tr>
+                                              {% elif schema|lookup:key|lookup:subkey|classname == 'list' and schema|lookup:key|lookup:subkey|length == 1 %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value">
+                                                          {% if spot|lookup:key|lookup:subkey == schema|lookup:key|lookup:subkey|first %}
+                                                              <input type="checkbox" name="{{ subkey }}" value="{{ schema|lookup:key|lookup:subkey|first }}" checked="checked" />
+                                                          {% else %}
+                                                              <input type="checkbox" name="{{ subkey }}" value="{{ schema|lookup:key|lookup:subkey|first }}" />
+                                                          {% endif %}
+                                                      </td>
+                                                  </tr>
+                                              {% else %}
+                                                  <tr>
+                                                      <td class="col-field">{{ subkey }}</td>
+                                                      <td class="col-value"><input type="text" name="{{ subkey }}" value="{{ spot|lookup:key|lookup:subkey }}" /></td>
+                                                  </tr>
+                                              {% endif %}
+                                          {% endfor %}
+                                      </table>
+                                  </td>
                               {% else %}
-                              <input type="checkbox" name="{{ key }}" value="{{ t }}">{{ t }}</input><br />
+                                  <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
                               {% endif %}
-                              {% endfor %}
-                          </td>
-                          {% else %}
-                          <td class="col-value"><input type="text" name="{{ key }}" value="{{ spot|lookup:key }}" /></td>
-                          {% endif %}
-                      </tr>
+                          </tr>
+                        {% endif %}
                     {% endfor %}
+                    {% if errors %}
+                        {% for error in errors %}
+                          <tr>
+                              <td class="col-field col-error">{{ error }}</td>
+                              <td class="col-value col-error"><input type="text" name="ERROR-{{ error }}" value="{{ errors|lookup:error }}" readonly /></td>
+                          </tr>
+                        {% endfor %}
+                    {% endif %}
                  </tbody>
               </table>
-              {% if q_id %}<input type="hidden" name="q_id" value="{{ q_id }}" />{% endif %}
           </div>
     </div>
     <div class="table-sub-options clearfix">
         <ul class="pull-left">
-            <li><button id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
+            {% if can_update and is_a_manager %}
+                <li><button id="save_button" class="btn btn-mini btn-primary" type="submit"><i class="icon-check icon-white"></i> Save</button></li>
+            {% endif %}
             <li><button id="cancel_button" class="btn btn-mini"><i class="icon-ban-circle"></i> Cancel</button></li>
-
         </ul>
-
+        <ul class="pull-right">
+            {% if status and can_reset and is_a_manager %}
+                <li><button type="submit" id="reset_button" class="btn btn-mini btn-warning" onclick="return confirmReset()" name="changed" value="reset"><i class="icon-refresh icon-white"></i> Reset Space</button></li>
+            {% endif %}
+            {% if can_publish and is_a_manager %}
+                <li><button type="submit" id="delete_button" class="btn btn-mini btn-danger" onclick="return confirmDelete()" name="changed" value="delete"><i class="icon-trash icon-white"></i> Delete</button></li>
+            {% endif %}
+        </ul>
     </div>
-
 </form>
 </div>
 
