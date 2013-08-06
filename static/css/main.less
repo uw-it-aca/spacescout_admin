@@ -6,16 +6,23 @@ body { padding-top: 50px; }
 
 /* home */
 
-.space-list { border: 1px solid black;
-	.space-list-header { padding-left: 8px; line-height: 2em; border-bottom: 1px solid black; background: #e3e3e3; }
-	.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-bottom: 1px solid black;
-		a {	display: block; font-size: 1.2em;}
-		.item-description { display: block;}
-		.item-modified { display: block; font-style: italic; color: gray;}	
+.space-list { border: 1px solid black; list-style: none; margin: 0; padding: 0;
+	.space-list-header { line-height: 2em; background: #e3e3e3;
+	.building-name { padding-left: 8px;}
+	.building-list { list-style: none; padding: 0; margin: 0; background: white; }
+		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid black;
+			a {	display: block; font-size: 1.2em;}
+			.item-description { display: block;}
+			.item-modified { display: block; font-style: italic; color: gray;}	
+		}
 	}
-	.space-list-item:last-child { border: none;}
-	
-	
+	.space-list-header:last-child { border-top: 1px solid black;}
+}
+.incomplete-list { 
+	.space-list-item { border-bottom: 1px solid black; padding: 8px 0 8px 16px;}
+	.space-list-item:last-child { border-bottom: none;}
+	.item-incomplete { line-height: 2em;}
+
 }
 
 
