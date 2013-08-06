@@ -21,19 +21,44 @@
         
     </head>
     <body>
-        
-        
-        <div id="content">
-        <!-- Add your site or application content here -->
-        {% block content %}{% endblock %}
-        </div>
-        
+    
 
-        <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
-        
-        <script src="/static/js/main.js"></script>
-        
-    </body>
+    <body>
+    
+        <!-- Static navbar -->
+        <div class="navbar navbar-static-top">
+          <div class="container">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Space Manager</a>
+            <div class="nav-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="#">Add Space</a></li>
+                <li><a href="#about">Batch Upload</a></li>
+              </ul>
+              <ul class="nav navbar-nav pull-right">
+                <li><a href="/examples/navbar/">jcomis</a></li>
+                <li><a href="/examples/navbar-fixed-top/">Logout</a></li>
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+
+
+        <div class="container">
+    
+           {% block content %}{% endblock %}
+           
+        </div> <!-- /container -->
+    
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+    
+    <script src="/static/js/main.js"></script>
+
+  </body>
 </html>
