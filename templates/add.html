@@ -4,11 +4,16 @@
 
 {% block content %}
     
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oh snap!</strong> Change a few things up and try submitting again.
+    </div>
+    
     <h2>Add Space</h2>
     <p>All fields on this page are required in order to create the initial space listing.</p>
     
     <div class="form-group">
-        <label>Campus</label>
+        <label>Campus <small class="text-danger" style="font-weight:normal;">Required</small></label>
         <select class="form-control">
           <option>Seattle</option>
           <option>Tacoma</option>
@@ -17,61 +22,63 @@
     </div>
     
     <div class="form-group">
-      <label for="">Space name</label>
+      <label for="">Space name <small class="text-danger" style="font-weight:normal;">Required</small></label>
       <input type="text" id="" class="form-control" placeholder="Room 112">
     </div>
     
     <div class="form-group">
-        <label for="">Space type</label>
+        <label for="">Space type <small class="text-danger" style="font-weight:normal;">Required</small></label>
         <p class="text-muted">Select up to two</p>
         
+        <div class="panel">  
         <div class="checkbox">
           <label><input type="checkbox" value="">Study room</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Enclosed space for individual or group</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Study area</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Unenclosed space for individual or group</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Computer lab</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">A number of computers grouped in a way that students would call a &ldquo;lab&rdquo;</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Production studio</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Work space with specialized equipment or technology, such as a multimedia studio</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Conference/classroom</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Larger-capacity rooms primarily used for classes, meetings, or workshops</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Open space</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Area for use by multiple individuals or groups; may contain a range of furniture -- carrels, tables, lounge furniture</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Lounge</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Indoor casual space, typically with lounge furniture and low tables</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Cafe</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Space that functions primarily as an eatery</p>
         </div>
         <div class="checkbox">
           <label><input type="checkbox" value="">Outdoor area</label>
-          <p class="text-muted">asjdflkajsflkjasfd</p>
+          <p class="text-muted">Outdoor casual space</p>
         </div>
-
+        </div>
+        
     </div>
     
     <div class="form-group">
-      <label for="">Contact</label>
-      <input type="text" id="" class="form-control" placeholder="yournetid">
+      <label for="">Contact <small class="text-danger" style="font-weight:normal;">Required</small></label>
+      <p class="text-muted">Never displayed to students. For admin use only.</p>
+      <input type="text" id="" class="form-control" placeholder="jcomis" disabled>
     </div>
     
     <div style="margin-top: 2em;">
-      <a href="/" class="btn btn-primary btn-lg" >Create and close</a>
-      <a href="/space" class="btn btn-default btn-lg">Create and edit</a>
+      <a href="/space" class="btn btn-primary btn-lg btn-block">Save</a>
     </div>
 
 {% endblock %}

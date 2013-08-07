@@ -2,24 +2,53 @@
 /*variables*/
 
 
-body { padding-top: 50px; }
+/* bootstrap overrides */
+
+body { padding-top: 60px; }
+
+.navbar-brand {
+    h1 { font-size: 1em; display: inline; text-transform: uppercase; color: #1ABC9C; }
+}
+
 
 /* home */
 
-.space-list { border: 1px solid black; list-style: none; margin: 0; padding: 0;
-	.space-list-header { line-height: 2em; background: #e3e3e3;
-	.building-name { padding-left: 8px;}
-	.building-list { list-style: none; padding: 0; margin: 0; background: white; }
-		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid black;
+.space-list { border: 1px solid #ddd; list-style: none; margin: 0; padding: 0;
+    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+
+	.space-list-header { line-height: 2em;  
+	
+	    .building-name { padding: 10px 15px;; background: #f5f5f5; margin: 0; }
+	
+    	.building-list { list-style: none; padding: 0; margin: 0; }
+		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid #ddd;
 			a {	display: block; font-size: 1.2em;}
 			.item-description { display: block;}
 			.item-modified { display: block; font-style: italic; color: gray;}	
 		}
 	}
-	.space-list-header:last-child { border-top: 1px solid black;}
+	.space-list-header:first-child { 
+    	.building-name {
+        	-webkit-border-top-left-radius: 4px;
+            -webkit-border-top-right-radius: 4px;
+            -moz-border-radius-topleft: 4px;
+            -moz-border-radius-topright: 4px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+    	}
+	}
+	.space-list-header:last-child { border-top: 1px solid #ddd; }
 }
 .incomplete-list { 
-	.space-list-item { border-bottom: 1px solid black; padding: 8px 0 8px 16px;}
+	.space-list-item { border-bottom: 1px solid #ddd; padding: 8px 0 8px 16px;
+    	a {	display: block; font-size: 1.2em; }
+	}
 	.space-list-item:last-child { border-bottom: none;}
 	.item-incomplete { line-height: 2em;}
 
