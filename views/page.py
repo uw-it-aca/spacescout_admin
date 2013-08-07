@@ -22,3 +22,8 @@ def add(request):
    return render_to_response('add.html',
                             {},     
                             context_instance=RequestContext(request))
+
+def upload(request):
+   return render_to_response('upload.html',
+                            {},     
+                            context_instance=RequestContext(request))

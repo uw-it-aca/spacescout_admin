@@ -6,4 +6,5 @@ urlpatterns = patterns('spacescout_admin.views',
     url(r'login/$', 'page.login'),
     url(r'space/$', 'page.space'),
     url(r'add/$', 'page.add'),
+    url(r'upload/$', 'page.upload'),
 )
