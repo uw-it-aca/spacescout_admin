@@ -4,24 +4,74 @@
 
 {% block content %}
     
-    <h2>Gallery Space</h2>
-    <div>
-        <p>Study area, Open space</p>
+    <h2>Space Name</h2>
+    <div class="space-detail-section">
+    	<div class="section-edit"><a href="#">edit</a></div>
+        <p class="space-detail-item">Study area, Open space</p>
+        <p class="space-detail-item"><strong>contact: </strong>netid</p>
     </div>
     
-    <div class="panel">
-      <div class="panel-heading"><h3 class="panel-title">Location</h3></div>
-      <div>Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</div>
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="#">edit</a></div>
+      	<h3 class="panel-title">Location</h3>
+      </div>
+      <div>
+        <div class="space-detail-item">
+          <h4>Campus</h4>
+          <p>Seattle</p>
+        </div>
+        <div class="space-detail-item">
+          <h4>Building</h4>
+          <p>Allen Library</p>
+        </div>
+        <div class="space-detail-item">
+          <h4>Description</h4>
+          <p>Allen Library North, 4th floor</p>
+        </div>
+        <div class="space-detail-item">
+          <h4>Orientation</h4>
+          <p><em>No information</em></p>
+        </div>
+        <div class="space-detail-item">
+          <h4>Lat & Long</h4>
+          <p>47.234323,-122.307213</p>
+        </div>
+
+
+      </div>
     </div>
     
-    <div class="panel">
-      <div class="panel-heading"><h3 class="panel-title">Hours</h3></div>
-      <div>Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Curabitur blandit tempus porttitor. Sed posuere consectetur est at lobortis. Donec id elit non mi porta gravida at eget metus.</div>
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <h3 class="panel-title">Hours</h3>
+      </div>
+      <div>
+        
+      </div>
     </div>
-    
-    <div class="panel">
-      <div class="panel-heading"><h3 class="panel-title">Access</h3></div>
-      <div>Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</div>
+
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <h3 class="panel-title">Access</h3>
+      </div>
+      <div>
+        <div class="space-detail-item">
+          <h4>Notes</h4>
+          <p>After 5pm see front desk for access. Only available to building residents. Husky Card required.</p>
+        </div>
+        <div class="space-detail-item">
+          <h4>Reservability</h4>
+          <p><em>Can be reserved</em></p>
+          <p>This space can be reserved at the help desk or online at <a href="#">https://digital.lib.washington.edu/studyspaces/seattle?tab=rc</a></p>
+        </div>
+
+
+
+      </div>
     </div>
+
     
 {% endblock %}
