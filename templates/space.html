@@ -37,6 +37,29 @@
         <p>47.234323,-122.307213</p>
       </div>
     </div>
+    <!-- Edit location -->
+    <div class="panel">
+      <h4>Campus</h4>
+      <select class="form-control">
+        <option>Seattle</option>
+        <option>Tacoma</option>
+        <option>Bothell</option>
+      </select>
+      <h4>Building</h4>
+      <select class="form-control">
+        <option>Building 1</option>
+        <option>Building 2</option>
+        <option>Building 3</option>
+      </select>
+      <h4>Description <small> be specific as possible?</small></h4>
+      <input type="text" class="form-control" placeholder="Text input">
+      <h4>Orientation <small> Further refine the description</small></h4>
+      <input type="text" class="form-control" placeholder="Text input">
+      <h4>Lat & Long <small> Use Google Maps. Tutorial <a href="#">here</a></small></h4>
+      <input type="text" class="form-control" placeholder="Text input">
+    </div>
+    <!--  End edit location -->
+
     
     <div class="panel space-detail-section">
       <div class="panel-heading">
@@ -89,6 +112,22 @@
       </div>
     </div>
 
+    <!-- Edit access -->
+    <div class="panel">
+      <h4>Hours Notes</h4>
+      <textarea class="form-control" rows="2" placeholder="Enter Hours notes"></textarea>
+      <h4>Reservability</h4>
+      <div class="checkbox">
+      <label>
+        <input type="checkbox" value="">
+        Space is reservable
+      </label>
+    </div>
+      <textarea class="form-control" rows="2" placeholder="Enter additional details such as reservation link"></textarea>
+    </div>
+    <!--  End edit access -->
+
+
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <div class="section-edit clearfix"><a href="#">edit</a></div>
@@ -115,6 +154,80 @@
         <p>In Building</p>
       </div>
     </div>
+
+    <!-- Edit resources -->
+    <div class="panel">
+      <h4>Resources <small> Select all that apply</small></h4>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Whiteboard</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Outlets</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Computers</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Scanner</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Large Display (for laptops)</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Projector</label>
+      </div>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Printing</label>
+      </div>
+        
+      <h4>Capacity</h4>
+      <select class="form-control">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>50+</option>
+      </select>
+      <h4>Lighting</h4>
+      <div class="checkbox">
+          <label><input type="checkbox" value="">Space has natural light</label>
+      </div>
+      <h4>Noise Level</h4>
+      <div class="checkbox">
+        <label><input type="checkbox" value="">Silent</label>
+        <p class="text-muted">Little to no noise in space</p>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox" value="">Low Hum</label>
+        <p class="text-muted">There is a moderate about of humming</p>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox" value="">Chatter</label>
+        <p class="text-muted">Space is loud</p>
+      </div>
+      <h4>Food & Coffee</h4>
+      <div class="radio">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+          In space
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+          In building
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
+          In neighboring building
+        </label>
+      </div>
+    </div>
+    <!--  End edit access -->
+
 
     <div class="panel space-detail-section">
       <div class="panel-heading">
