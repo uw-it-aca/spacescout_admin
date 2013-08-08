@@ -8,9 +8,9 @@ body { padding-top: 60px;
     &.freeze { position:relative; overflow: hidden; }
 }
 
-.navbar { margin-bottom: 0;  }
+.navbar { margin-bottom: 0;  border-bottom: solid 5px #5a58a3; }
 .navbar-brand { text-align: left; margin-left: 0; margin-right: 0; padding: 0; padding-left: 33px; line-height: 60px; background: #eee url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; 
-    h1 { font-size: 30px; display: inline; text-transform: uppercase; color: #333; line-height: 60px; font-family: 'Dosis', sans-serif; font-weight: 700; }
+    h1 { font-size: 30px; display: inline; text-transform: uppercase; color: #333; line-height: 60px; font-family: 'Dosis', sans-serif; font-weight: 500; }
 }
 .navbar-nav { 
     li a {  }
@@ -23,12 +23,12 @@ body { padding-top: 60px;
 
 .space-container {
     
-    h2 { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.8em; color: #999; font-weight: 400; }
+    h2 { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.8em; color: #999; font-weight: 300; }
 }
 
 
 /* home */
-.space-list { border: 1px solid #ddd; list-style: none; margin: 0; padding: 0;
+.space-list { border: 1px solid #ddd; list-style: none; margin: 0; padding: 0; 
     
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -37,12 +37,12 @@ body { padding-top: 60px;
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
 
-	.space-list-header { line-height: 2em;  
+	.space-list-header { line-height: 2em;  font-weight: 400;
 	
-	    .building-name { padding: 10px 15px;; background: #f5f5f5; margin: 0; }
+	    .building-name { padding: 10px 15px;; background: #f5f5f5; margin: 0; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1em; }
 	
     	.building-list { list-style: none; padding: 0; margin: 0; }
-		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid #ddd;
+		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid #ddd; font-weight: 300; font-size: 0.8em;
 			a {	display: block; font-size: 1.2em;}
 			.item-description { display: block;}
 			.item-modified { display: block; font-style: italic; color: gray;}	
@@ -61,7 +61,7 @@ body { padding-top: 60px;
 	.space-list-header:last-child { border-top: 1px solid #ddd; }
 }
 .incomplete-list { 
-	.space-list-item { border-bottom: 1px solid #ddd; padding: 8px 0 8px 16px;
+	.space-list-item { border-bottom: 1px solid #ddd; padding: 8px 0 8px 16px; font-weight: 300; font-size: 0.8em;
     	a {	display: block; font-size: 1.2em; }
 	}
 	.space-list-item:last-child { border-bottom: none;}
