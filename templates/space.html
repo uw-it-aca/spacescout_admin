@@ -112,8 +112,8 @@
       </select>
       
         <div class="form-group hour-selector">
-          <label for="opening-time" class="col-4 control-label">Opening</label>
-          <div class="col-7">
+          <label for="opening-time" class="col-3 control-label">Opening</label>
+          <div class="col-9">
             <select class="form-control">
               <option>12:30AM</option>
               <option>1:00AM</option>
@@ -124,8 +124,8 @@
           </div>
         </div>
         <div class="form-group hour-selector">
-          <label for="closing-time" class="col-4 control-label">Closing</label>
-          <div class="col-7">
+          <label for="closing-time" class="col-3 control-label">Closing</label>
+          <div class="col-9">
             <select class="form-control" id="closing-time">
               <option>12:30AM</option>
               <option>1:00AM</option>
@@ -135,8 +135,43 @@
             </select>
           </div>
         </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="">
+            Open 24 Hours
+          </label>
+        </div>
       </form>
-      <p class="text-center"><a href="#">add another day/time group</a></p>
+      <p class="text-center"><a href="#">Add selected hours</a></p>
+       
+      <div class="row">
+        <select multiple class="form-control day-select third">
+          <option>M</option>
+          <option>T</option>
+          <option>W</option>
+          <option>Th</option>
+          <option>F</option>
+          <option>S</option>
+          <option>Su</option>
+        </select>
+        <select class="form-control third" id="opening-time">
+          <option>12:30AM</option>
+          <option>1:00AM</option>
+          <option>1:30AM</option>
+          <option>2:00AM</option>
+          <option>2:30AM</option>
+        </select>
+        <select class="form-control third" id="closing-time">
+          <option>12:30AM</option>
+          <option>1:00AM</option>
+          <option>1:30AM</option>
+          <option>2:00AM</option>
+          <option>2:30AM</option>
+        </select>
+      </div>
+   
+
+
 
     </div>
     <!-- end edit hours -->
