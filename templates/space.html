@@ -99,7 +99,9 @@
     <!-- edit hours -->
     <div class="panel">
       <h4>Space - <small>Normal</small></h4>
-      <select multiple class="form-control">
+      <h5>Select Days</h5>
+      <form class="form-horizontal time-form">
+      <select multiple class="form-control day-select" placeholder="select days">
         <option>M</option>
         <option>T</option>
         <option>W</option>
@@ -108,15 +110,33 @@
         <option>S</option>
         <option>Su</option>
       </select>
-      <select class="form-control">
-        <option>12:30AM</option>
-        <option>1:00AM</option>
-        <option>1:30AM</option>
-        <option>2:00AM</option>
-        <option>2:30AM</option>
-      </select>
-
-
+      
+        <div class="form-group hour-selector">
+          <label for="opening-time" class="col-4 control-label">Opening</label>
+          <div class="col-7">
+            <select class="form-control">
+              <option>12:30AM</option>
+              <option>1:00AM</option>
+              <option>1:30AM</option>
+              <option>2:00AM</option>
+              <option>2:30AM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group hour-selector">
+          <label for="closing-time" class="col-4 control-label">Closing</label>
+          <div class="col-7">
+            <select class="form-control" id="closing-time">
+              <option>12:30AM</option>
+              <option>1:00AM</option>
+              <option>1:30AM</option>
+              <option>2:00AM</option>
+              <option>2:30AM</option>
+            </select>
+          </div>
+        </div>
+      </form>
+      <p class="text-center"><a href="#">add another day/time group</a></p>
 
     </div>
     <!-- end edit hours -->
