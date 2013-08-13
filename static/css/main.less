@@ -111,14 +111,17 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;
 	.hour-select,.day-select { -webkit-appearance: none;}
 	.day-select { border: 1px solid #ccc; color: transparent; z-index: 2;}
 	.day-select-container {  border-radius: 4px; }
-	#show-days { color: #444; font-size: 14px; text-align: center; margin-top: -30px; z-index: -999;}
+	#show-days { color: #555; font-family: helvetica; font-size: 14px; text-align: center; margin-top: -30px; z-index: -999;}
 
 }
-.time-form { 
+.time-selector { 
 	//show all days possible to select when not on mobile
-	@media screen and (min-width: 767px) { select[multiple] { height: 135px;} } 
-	.control-label { padding-left: 0px; }
-	.hour-selector { padding-top: 10px;}
+	@media screen and (min-width: 767px) { 
+		.third { width: 25%;}
+		select[multiple] { top: 0; margin:0 auto; height: 145px; width: 50px; color: black;
+}
+		#show-days { display: none;}
+		 } 
 }
 
 
