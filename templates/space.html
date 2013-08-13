@@ -99,56 +99,12 @@
     <!-- edit hours -->
     <div class="panel">
       <h4>Space - <small>Normal</small></h4>
-      <!--<h5>Select Days</h5>
-      <form class="form-horizontal time-form">
-      <select multiple class="form-control day-select" placeholder="select days">
-        <option>M</option>
-        <option>T</option>
-        <option>W</option>
-        <option>Th</option>
-        <option>F</option>
-        <option>S</option>
-        <option>Su</option>
-      </select>
-      
-        <div class="form-group hour-selector">
-          <label for="opening-time" class="col-3 control-label">Opening</label>
-          <div class="col-9">
-            <select class="form-control">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group hour-selector">
-          <label for="closing-time" class="col-3 control-label">Closing</label>
-          <div class="col-9">
-            <select class="form-control" id="closing-time">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
-          </div>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="">
-            Open 24 Hours
-          </label>
-        </div>
-      </form>
-      
-       -->
       <div class="row time-selector">
         <span class="third">Days</span>
         <span class="third">Open</span>
         <span class="third">Close</span>
       </div>
+      <!-- repeat this row with each new "add new group"-->
       <div class="row time-selector">
         <div class="day-select-container third">
           <select multiple class="form-control day-select" id="days">
@@ -160,7 +116,7 @@
             <option value="S">S</option>
             <option value="Su">Su</option>
           </select>
-        <div id="show-days">Select Days</div>
+          <div id="show-days">Select Days</div>
         </div>
         <select class="form-control third hour-select" id="opening-time">
           <option>12:30AM</option>
