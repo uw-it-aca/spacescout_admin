@@ -11,5 +11,13 @@ $(function() {
         $(".md-modal").removeClass('md-show');  
         $("body").removeClass('freeze');  
     });
+
+    $('#days').change(function(){
+        var selected = $(this).val()
+        var list = $.map(selected, function(value) {
+            return(value);
+        });
+        $("#show-days").html(list.join(""));
+    });
     
 });
