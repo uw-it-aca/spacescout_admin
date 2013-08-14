@@ -8,7 +8,71 @@
     <div class="panel space-detail-section space-detail-header">
     	<div class="section-edit"><a href="" class="edit-panel-slide">edit</a></div>
         <p class="space-detail-item">Study area, Open space</p>
-        <p class="space-detail-item"><strong>contact: </strong>netid</p>
+        <p class="space-detail-item"><strong>owner: </strong>netid</p>
+        <p class="space-detail-item"><strong>editors: </strong>netid, netid, uw_group</p>
+    </div>
+    
+    <div class="panel">
+        
+        <div class="form-group">
+            <h4>Space Name</h4>
+            <input type="text" class="form-control" placeholder="Text input" value="Allen 3rd N/S Bridge">
+        </div>
+        
+        <div class="form-group">
+            <label for="">Space type <small class="text-danger" style="font-weight:normal;">Required</small></label>
+            <p class="text-muted">Select up to two</p>
+            
+            <div class="panel">  
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Study room</label>
+                  <p class="text-muted">Enclosed space for individual or group</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Study area</label>
+                  <p class="text-muted">Unenclosed space for individual or group</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Computer lab</label>
+                  <p class="text-muted">A number of computers grouped in a way that students would call a &ldquo;lab&rdquo;</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Production studio</label>
+                  <p class="text-muted">Work space with specialized equipment or technology, such as a multimedia studio</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Conference/classroom</label>
+                  <p class="text-muted">Larger-capacity rooms primarily used for classes, meetings, or workshops</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Open space</label>
+                  <p class="text-muted">Area for use by multiple individuals or groups; may contain a range of furniture -- carrels, tables, lounge furniture</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Lounge</label>
+                  <p class="text-muted">Indoor casual space, typically with lounge furniture and low tables</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Cafe</label>
+                  <p class="text-muted">Space that functions primarily as an eatery</p>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="">Outdoor area</label>
+                  <p class="text-muted">Outdoor casual space</p>
+                </div>
+            </div>            
+        </div>
+        
+        <div class="form-group">
+            <h4>Owner</h4>
+            <input type="text" class="form-control" placeholder="Text input" value="netid">
+        </div>
+        
+        <div class="form-group">
+            <h4>Editors</h4>
+            <input type="text" class="form-control" placeholder="Text input" value="netid, netid, uw_group">
+        </div>
+        
     </div>
     
     <div class="panel space-detail-section">
@@ -39,7 +103,7 @@
     </div>
     
     <!-- Edit location -->
-    <!--<div class="panel">
+    <div class="panel">
       <h4>Campus</h4>
       <select class="form-control">
         <option>Seattle</option>
@@ -59,9 +123,8 @@
       <h4>Lat & Long <small> Use Google Maps. Tutorial <a href="#">here</a></small></h4>
       <input type="text" class="form-control" placeholder="Text input">
     </div>
-    <!--  End edit location -->
 
-    
+
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <div class="section-edit clearfix"><a href="#">edit</a></div>
@@ -173,57 +236,7 @@
     </div>
     <!--  End edit access -->
     <!-- image edit -->
-    <div class="panel">
-      <h4>Images <small> Select Primary</small></h4>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-
-    </div>
-
-
+    
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <div class="section-edit clearfix"><a href="#">edit</a></div>
@@ -331,32 +344,82 @@
         <h3 class="panel-title">Images</h3>
       </div>
         <div id="carousel-example-generic" class="carousel slide">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-    <div class="item active">
-      <div class="thumb-test"></div>
-      <div class="carousel-caption">
-        Caption
-      </div>
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+          </ol>
+        
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            <div class="item active">
+              <div class="thumb-test"></div>
+              <div class="carousel-caption">
+                Caption
+              </div>
+            </div>
+          </div>
+        
+          <!-- Controls -->
+          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+            <span class="icon-prev"></span>
+          </a>
+          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+            <span class="icon-next"></span>
+          </a>
+        </div>      
     </div>
-  </div>
+    
+    <!-- image edit -->
+    <div class="panel">
+      <h4>Images <small> Select Primary</small></h4>
+      <div class="row image-select">
+        <div class="col-1">
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+            </label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="thumb-small"></div>
+        </div>
+        <div class="col-3">
+          <a href="#">Delete?</a>
+        </div>
+      </div>
+      <div class="row image-select">
+        <div class="col-1">
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+            </label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="thumb-small"></div>
+        </div>
+        <div class="col-3">
+          <a href="#">Delete?</a>
+        </div>
+      </div>
+      <div class="row image-select">
+        <div class="col-1">
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+            </label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="thumb-small"></div>
+        </div>
+        <div class="col-3">
+          <a href="#">Delete?</a>
+        </div>
+      </div>
 
-  <!-- Controls -->
-  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-    <span class="icon-prev"></span>
-  </a>
-  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-    <span class="icon-next"></span>
-  </a>
-</div>
-      
     </div>
 
     <div class="panel space-detail-section">
