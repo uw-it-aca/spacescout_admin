@@ -17,7 +17,12 @@ def space(request):
    return render_to_response('space.html',
                             {},     
                             context_instance=RequestContext(request))
-                            
+
+def edit(request):
+   return render_to_response('edit.html',
+                            {},     
+                            context_instance=RequestContext(request))
+                                                        
 def add(request):
    return render_to_response('add.html',
                             {},     

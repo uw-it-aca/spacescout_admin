@@ -6,65 +6,15 @@
     
     <h2 style="font-family: 'Lato', sans-serif; font-weight:400; text-transform:capitalize; color:#333;">Allen 3rd N/S Bridge</h2>
     <div class="panel space-detail-section space-detail-header">
-    	<div class="section-edit"><a href="" class="edit-panel-slide">edit</a></div>
+    	<div class="section-edit"><a href="/edit" class="">edit</a></div>
         <p class="space-detail-item">Study area, Open space</p>
         <p class="space-detail-item"><strong>owner: </strong>netid</p>
         <p class="space-detail-item"><strong>editors: </strong>netid, netid, uw_group</p>
     </div>
-    
-    <div class="panel">
         
-        <div class="form-group">
-            <h4>Space Name</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="Allen 3rd N/S Bridge">
-        </div>
-        
-        <div class="form-group">
-              <h4>Space Type <small> Select all that apply</small></h4>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Study room</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Study area</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Computer lab</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Portfolio studio</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Conference/classroom</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Open space</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Lounge</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Cafe</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Outdoor area</label>
-              </div>
-        </div>
-        
-        <div class="form-group">
-            <h4>Owner</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="netid">
-        </div>
-        
-        <div class="form-group">
-            <h4>Editors</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="netid, netid, uw_group">
-        </div>
-        
-    </div>
-    
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="#" class="edit-panel-slide">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
       	<h3 class="panel-title">Location</h3>
       </div>
       <div class="space-detail-item">
@@ -89,32 +39,9 @@
       </div>
     </div>
     
-    <!-- Edit location -->
-    <div class="panel">
-      <h4>Campus</h4>
-      <select class="form-control">
-        <option>Seattle</option>
-        <option>Tacoma</option>
-        <option>Bothell</option>
-      </select>
-      <h4>Building</h4>
-      <select class="form-control">
-        <option>Building 1</option>
-        <option>Building 2</option>
-        <option>Building 3</option>
-      </select>
-      <h4>Description <small> be specific as possible?</small></h4>
-      <input type="text" class="form-control" placeholder="Text input">
-      <h4>Orientation <small> Further refine the description</small></h4>
-      <input type="text" class="form-control" placeholder="Text input">
-      <h4>Lat & Long <small> Use Google Maps. Tutorial <a href="#">here</a></small></h4>
-      <input type="text" class="form-control" placeholder="Text input">
-    </div>
-
-
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
         <h3 class="panel-title">Hours</h3>
       </div>
       <div class="section-hours">
@@ -146,55 +73,10 @@
         </ul>
       </div>
     </div>
-    <!-- edit hours -->
-    <div class="panel">
-      <h4>Space - <small>Normal</small></h4>
-      <div class="row time-selector">
-        <span class="third">Days</span>
-        <span class="third">Open</span>
-        <span class="third">Close</span>
-      </div>
-      <!-- repeat this row with each new "add new group"-->
-      <div class="row time-selector">
-        <div class="day-select-container third">
-          <select multiple class="form-control day-select" id="days">
-            <option value="M">M</option>
-            <option value="T">T</option>
-            <option value="W">W</option>
-            <option value="Th">Th</option>
-            <option value="F">F</option>
-            <option value="S">S</option>
-            <option value="Su">Su</option>
-          </select>
-          <div id="show-days">Select Days</div>
-        </div>
-        <select class="form-control third hour-select" id="opening-time">
-          <option>12:30AM</option>
-          <option>1:00AM</option>
-          <option>1:30AM</option>
-          <option>2:00AM</option>
-          <option>2:30AM</option>
-        </select>
-        <select class="form-control third hour-select" id="closing-time">
-          <option>12:30AM</option>
-          <option>1:00AM</option>
-          <option>1:30AM</option>
-          <option>2:00AM</option>
-          <option>2:30AM</option>
-        </select>
-      </div>
-
-      <p class="text-center"><a href="#">Add another hour group</a></p>
-   
-
-
-
-    </div>
-    <!-- end edit hours -->
-
+  
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
         <h3 class="panel-title">Access</h3>
       </div>
       <div class="space-detail-item">
@@ -208,24 +90,10 @@
       </div>
     </div>
 
-    <!-- Edit access -->
-    <div class="panel">
-      <h4>Access Notes</h4>
-      <textarea class="form-control" rows="2" placeholder="Enter Hours notes"></textarea>
-      <h4>Reservability</h4>
-      <div class="checkbox">
-      <label>
-        <input type="checkbox" value="">
-        Space is reservable
-      </label>
-    </div>
-      <textarea class="form-control" rows="2" placeholder="Enter additional details such as reservation link"></textarea>
-    </div>
-    <!--  End edit access -->
     
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
         <h3 class="panel-title">Resources & Environment</h3>
       </div>
       <div class="space-detail-item">
@@ -250,83 +118,9 @@
       </div>
     </div>
 
-    <!-- Edit resources -->
-    <div class="panel">
-      <h4>Resources <small> Select all that apply</small></h4>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Whiteboard</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Outlets</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Computers</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Scanner</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Large Display (for laptops)</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Projector</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Printing</label>
-      </div>
-        
-      <h4>Capacity</h4>
-      <select class="form-control">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>50+</option>
-      </select>
-      <h4>Lighting</h4>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Space has natural light</label>
-      </div>
-      <h4>Noise Level</h4>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Silent</label>
-        <p class="text-muted">Little to no noise in space</p>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Low Hum</label>
-        <p class="text-muted">There is a moderate about of humming</p>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Chatter</label>
-        <p class="text-muted">Space is loud</p>
-      </div>
-      <h4>Food & Coffee</h4>
-      <div class="radio">
-        <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-          In space
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-          In building
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
-          In neighboring building
-        </label>
-      </div>
-    </div>
-    <!--  End edit access -->
-
-
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="#">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
         <h3 class="panel-title">Images</h3>
       </div>
         <div id="carousel-example-generic" class="carousel slide">
@@ -357,57 +151,6 @@
         </div>      
     </div>
     
-    <!-- image edit -->
-    <div class="panel">
-      <h4>Images <small> Select Primary</small></h4>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-      <div class="row image-select">
-        <div class="col-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-            </label>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-3">
-          <a href="#">Delete?</a>
-        </div>
-      </div>
-
-    </div>
-
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <h3 class="panel-title">Incomplete Items</h3>
@@ -435,26 +178,6 @@
       <a href="/space" class="btn btn-default btn-lg btn-block" disabled>Hide</a>
     </div>
     
-    <div class="md-modal md-effect-17" id="modal-3" style="">
-		<div class="md-content" style="">
-			<button class="md-close edit-panel-close">Close me!</button>
-			
-			<div class="edit-container">
-			    <h2 style="font-family: 'Lato', sans-serif; font-weight:400; text-transform:capitalize; color:#333;">Allen 3rd N/S Bridge EDIT</h2>
-				<p>This is a modal window. You can do the following things with it:</p>
-				<ul>
-					<li><strong>Read:</strong> modal windows will probably tell you something important so don't forget to read what they say.</li>
-					<li><strong>Look:</strong> a modal window enjoys a certain kind of attention; just look at it and appreciate its presence.</li>
-					<li><strong>Close:</strong> click on the button below to close the modal.</li>
-				</ul>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-
-Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Sed posuere consectetur est at lobortis. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-				
-			</div>
-			
-		</div>
-	</div>
-    
+       
     
 {% endblock %}
