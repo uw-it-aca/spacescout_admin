@@ -20,4 +20,10 @@ $(function() {
         $("#show-days").html(list.join(""));
     });
     
+    /* home tabs */
+    $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    })
+
 });

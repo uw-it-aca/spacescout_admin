@@ -4,118 +4,122 @@
 
 {% block content %}
 
-<h2>Published</h2>
-<ul class="space-list">
-	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-		<ul class="building-list">
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-		</ul>
-	</li>
-	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-		<ul class="building-list">
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-		</ul>
-	</li>
+
+<ul id="myTab" class="nav nav-pills">
+    <li class="active"><a href="#published" data-toggle="tab">Published</a></li>
+    <li><a href="#unpublished" data-toggle="tab">Unpublished</a></li>
+    <li><a href="#incomplete" data-toggle="tab">Incomplete</a></li>
 </ul>
 
-<h2>Unpublished</h2>
-<ul class="space-list">
-	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-		<ul class="building-list">
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-		</ul>
-	</li>
-	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-		<ul class="building-list">
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-			<li class="space-list-item">
-				<a href="/space">Space Name</a>
-				<span class="item-description">Space Description</span>
-				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-			</li>
-		</ul>
-	</li>
-</ul>
+<div class="tab-content">
+    <ul class="space-list tab-pane active" id="published">
+    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
+    		<ul class="building-list">
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    		</ul>
+    	</li>
+    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
+    		<ul class="building-list">
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    		</ul>
+    	</li>
+    </ul>
+    
+    <ul class="space-list tab-pane" id="unpublished">
+    	<li class="space-list-header"><h3 class="building-name">Building A</h3>
+    		<ul class="building-list">
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    		</ul>
+    	</li>
+    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
+    		<ul class="building-list">
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    			<li class="space-list-item">
+    				<a href="/space">Space Name</a>
+    				<span class="item-description">Space Description</span>
+    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    			</li>
+    		</ul>
+    	</li>
+    </ul>
+    
+    <ul class="space-list incomplete-list tab-pane" id="incomplete">
+    	<li class="space-list-item">
+    		<a href="/space">Space Name</a>
+    		<div class="item-incomplete">
+    			<span class="label label-danger">Description</span>
+    			<span class="label label-danger">Photo</span>
+    			<span class="label label-danger">Hours</span>
+    			<span class="label label-danger">Resources</span>
+    			<span class="label label-danger">Type</span>
+    		</div>
+    		<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    	</li>
+    	<li class="space-list-item">
+    		<a href="/space">Space Name</a>
+    		<div class="item-incomplete">
+    			<span class="label label-danger">Description</span>
+    			<span class="label label-danger">Photo</span>
+    			<span class="label label-danger">Hours</span>
+    			<span class="label label-danger">Resources</span>
+    			<span class="label label-danger">Type</span>
+    		</div>
+    		<span class="item-modified">8/5/13 12:12PM by NetID</span>
+    	</li>
+    </ul>
+</div>	
 
-<h2>Incomplete</h2>
-<ul class="space-list incomplete-list">
-	<li class="space-list-item">
-		<a href="/space">Space Name</a>
-		<div class="item-incomplete">
-			<span class="label label-danger">Description</span>
-			<span class="label label-danger">Photo</span>
-			<span class="label label-danger">Hours</span>
-			<span class="label label-danger">Resources</span>
-			<span class="label label-danger">Type</span>
-		</div>
-		<span class="item-modified">8/5/13 12:12PM by NetID</span>
-	</li>
-	<li class="space-list-item">
-		<a href="/space">Space Name</a>
-		<div class="item-incomplete">
-			<span class="label label-danger">Description</span>
-			<span class="label label-danger">Photo</span>
-			<span class="label label-danger">Hours</span>
-			<span class="label label-danger">Resources</span>
-			<span class="label label-danger">Type</span>
-		</div>
-		<span class="item-modified">8/5/13 12:12PM by NetID</span>
-	</li>
-</ul>
-	
-
-</div>
     
 
 {% endblock %}
