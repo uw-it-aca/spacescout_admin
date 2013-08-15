@@ -8,11 +8,6 @@ def home(request):
                             {},     
                             context_instance=RequestContext(request))
                             
-def login(request):
-   return render_to_response('login.html',
-                            {},     
-                            context_instance=RequestContext(request))
-                            
 def space(request):
    return render_to_response('space.html',
                             {},     

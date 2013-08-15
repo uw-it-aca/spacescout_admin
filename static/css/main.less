@@ -10,7 +10,7 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;
 
 .alert { margin-top: 20px; }
 .navbar { margin-bottom: 0;  border-bottom: solid 5px #5a58a3; }
-.navbar-brand { text-align: left; margin-left: 0; margin-right: 0; padding: 0; padding-left: 33px; line-height: 60px; background: #eee url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; 
+.navbar-brand { text-align: left; margin-left: 0; margin-right: 0; padding: 0; padding-left: 33px; line-height: 60px; background: #eee url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; max-width: 300px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
     h1 { font-size: 30px; display: inline; text-transform: uppercase; color: #333; line-height: 60px; font-family: 'Dosis', sans-serif; font-weight: 500; }
 }
 .navbar-nav { 
@@ -134,6 +134,8 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;
 	.panel-heading { 
 	    h3 { font-weight: 700; font-size: 1.1em; }
     }
+    
+    h4 { font-weight: 700; font-size: 1em; }
     
 	.section-edit { float: right;}
 	.space-detail-item { font-size: 1em; font-weight: 300;
