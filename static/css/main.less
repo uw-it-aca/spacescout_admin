@@ -21,7 +21,6 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;
 }
 .navbar-nav { 
     li { font-family: 'Dosis', sans-serif; font-weight: 500; text-transform: uppercase;
-        
         @media screen and (min-width: 768px) { padding-left: 40px; }
         
         a { color: @gray;
@@ -29,6 +28,9 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;
         }
     }
 }
+.navbar-nav:last-child li:first-child a { color: @space-purple;}
+.navbar-nav:last-child li:last-child a { color: red;}
+
 
 .navbar-toggle { padding: 0; right: 0; top: 15px; }
 .nav-collapse { background: @gray-light; margin: 0 -15px;
