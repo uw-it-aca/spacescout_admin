@@ -80,15 +80,12 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  mi
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     
     @media screen and (max-width: 767px) {
         margin: 0 -15px;
-        
         border-top: 1px solid @gray-light; border-bottom: 1px solid @gray-light; 
-        
         -webkit-border-radius: 0;
         -moz-border-radius: 0;
         border-radius: 0;    
@@ -97,12 +94,16 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  mi
 	.space-list-header { line-height: 2em;  font-weight: 400;
 	
 	    .building-name { padding: 10px 15px; background: @gray-lightest; margin: 0; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  font-size: 1.1em; }
-	
     	.building-list { list-style: none; padding: 0; margin: 0; }
 		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em;
 			a {	display: block; font-size: 1.2em; color: @space-purple; font-weight: 400; }
 			.item-description { display: block;}
-			.item-modified { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }	
+			.item-modified { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
+			@media screen and (min-width: 767px) {
+				a { display: inline-block; width: 33%;}
+				.item-description { display: inline-block; width: 43%;}
+				.item-modified { display: inline-block; width: 20%; text-align: right; padding-right: 15px; float: right;}
+			}	
 		}
 	}
 	.space-list-header:first-child { 
