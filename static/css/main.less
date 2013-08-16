@@ -14,6 +14,18 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  mi
     &.freeze { position:relative; overflow-y: hidden !important;}
 }
 
+html, body { height: 100%;}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 80px;
+}
+
 .alert { margin-top: 20px; }
 .navbar { margin-bottom: 0;  border-bottom: solid 5px @space-purple; }
 .navbar-brand { text-align: left; margin-left: 0; margin-right: 0; padding: 0; padding-left: 33px; line-height: 60px; background: @gray-lighter url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; max-width: 300px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -95,14 +107,14 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  mi
 	
 	    .building-name { padding: 10px 15px; background: @gray-lightest; margin: 0; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  font-size: 1.1em; }
     	.building-list { list-style: none; padding: 0; margin: 0; }
-		.space-list-item { padding: 8px 0 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em;
+		.space-list-item { padding: 8px 16px 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em;
 			a {	display: block; font-size: 1.2em; color: @space-purple; font-weight: 400; }
 			.item-description { display: block;}
 			.item-modified { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
 			@media screen and (min-width: 767px) {
 				a { display: inline-block; width: 32%;}
 				.item-description { display: inline-block; width: 43%;}
-				.item-modified { display: inline-block; width: 24%; text-align: right; padding-right: 15px; }
+				.item-modified { display: inline-block; width: 24%; text-align: right; }
 			}	
 		}
 	}
@@ -198,4 +210,4 @@ body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  mi
     }
 }
 
-.space-footer { background: @gray-lighter; margin-top:2em; }
+.space-footer { background: @gray-lighter; height: 60px; padding: 1em 0; .container {padding-top: 8px;}  }
