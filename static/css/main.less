@@ -10,7 +10,7 @@
 
 /* bootstrap overrides */
 
-body { padding-top: 60px; font-family: 'Lato', sans-serif; font-weight: 300;  
+body { padding-top: 70px; font-family: 'Lato', sans-serif; font-weight: 300;  
     &.freeze { position:relative; overflow-y: hidden !important;}
 }
 
@@ -27,16 +27,20 @@ html, body {  height: 100%;}
 }
 
 .alert { margin-top: 20px; }
-.navbar { margin-bottom: 0;  border-bottom: solid 5px @space-purple; }
-.navbar-brand { text-align: left; margin-left: 0; margin-right: 0; padding: 0; padding-left: 33px; line-height: 60px; background: @gray-lighter url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; max-width: 300px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
+.navbar { margin-bottom: 0;  border-bottom: solid 5px @space-purple; background-color: @gray-lighter;}
+.navbar-brand { text-align: left; padding: 0; margin: 0; padding-left: 33px; line-height: 60px; background: @gray-lighter url('/static/img/spacescout_logo.png') no-repeat 0 14px; background-size: 30px; max-width: 300px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
     h1 { font-size: 30px; display: inline; text-transform: uppercase; color: @gray-dark; line-height: 60px; font-family: 'Dosis', sans-serif; font-weight: 500; }
+}
+.navbar>.container .navbar-brand { 
+    margin-left: 15px;
+    @media screen and (min-width: 768px) { margin-left: 0; }
 }
 .navbar-nav { 
     li { font-family: 'Dosis', sans-serif; font-weight: 500; text-transform: uppercase;
-        @media screen and (min-width: 768px) { padding-left: 40px; }
+        @media screen and (min-width: 768px) { padding-left: 40px; a { padding: 0;} }
         
         a { color: @gray;
-            @media screen and (min-width: 768px) { padding: 0; line-height: 65px; }
+            @media screen and (min-width: 768px) { line-height: 65px; }
         }
     }
 }
@@ -44,11 +48,11 @@ html, body {  height: 100%;}
 .navbar-nav:last-child li:last-child a { color: red;}
 
 
-.navbar-toggle { padding: 0; right: 0; top: 15px; }
-.nav-collapse { background: @gray-light; margin: 0 -15px;
+.navbar-toggle { padding: 8px; right: 0; top: 7px; color: @gray; }
+.navbar-collapse { background-color: @gray-light;/* margin: 0 15px; padding: 0 -15px;*/
     
     @media screen and (min-width: 768px) {
-      background: transparent;
+    background: transparent;
       margin: 0;
     }
 }
@@ -166,7 +170,7 @@ html, body {  height: 100%;}
 
 
 .space-detail-section { font-family: 'Lato', sans-serif;
-            
+            border-color: #ddd;
     @media screen and (max-width: 767px) {
         margin: 0 -15px; border-left: none; border-right: none; border-bottom: 0; border-radius: 0; 
 	}
