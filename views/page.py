@@ -8,7 +8,7 @@ def home(request):
                             {},     
                             context_instance=RequestContext(request))
                             
-def space(request):
+def space(request, space_id):
    return render_to_response('space.html',
                             {},     
                             context_instance=RequestContext(request))

@@ -48,7 +48,6 @@ def SpotView(request, spot_id, return_json=False):
     # FILTER: params["manager"] == REMOTE_USER
     #
 
-
     string_val = ''
     for x in range(0, len(params['type'])):
         if x is 0:
@@ -72,6 +71,7 @@ def SpotSearch(request):
 
     search_args = {
 #        'manager': '',
+#        'editors': '',
         'limit': '0'
    }
 

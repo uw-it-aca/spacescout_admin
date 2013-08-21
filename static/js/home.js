@@ -202,7 +202,7 @@ $(document).ready(function() {
                 spot_data = {
                     id: spot.id,
                     name: spot.name,
-                    description: spot.extended_info.location_description,
+                    description: spot.extended_info.hasOwnProperty('location_description') ? spot.extended_info.location_description : '',
                     modified: modifiedTime(new Date(spot.last_modified)),
                     manager: (spot.manager.length > 0) ? spot.manager : "Unknown"
                 };

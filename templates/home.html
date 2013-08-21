@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
+{% load verbatim %}
+
 {% block title %}Spaces{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/home.js"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -15,119 +21,65 @@
     
     <!-- published spaces -->
     <ul class="space-list tab-pane active" id="published">
-    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-    		<ul class="building-list">
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name really long nameMMMMMMM</a>
-    				<span class="item-description">Space Description that is really long MMMM MMMMMMMM MMMMMM</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    		</ul>
-    	</li>
-    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-    		<ul class="building-list">
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    		</ul>
-    	</li>
+      <li>Loading...</li>
     </ul>
     <!-- end of published -->
     
     <!-- unpublished spaces -->
     <ul class="space-list tab-pane" id="unpublished">
-    	<li class="space-list-header"><h3 class="building-name">Building A</h3>
-    		<ul class="building-list">
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    		</ul>
-    	</li>
-    	<li class="space-list-header"><h3 class="building-name">Building Name</h3>
-    		<ul class="building-list">
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    			<li class="space-list-item">
-    				<a href="/space">Space Name</a>
-    				<span class="item-description">Space Description</span>
-    				<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    			</li>
-    		</ul>
-    	</li>
+      <li>Loading...</li>
     </ul>
     <!-- end of unpublished -->
     
     <!-- incomplete spaces -->
     <ul class="space-list tab-pane incomplete-list" id="incomplete">
-    	<li class="space-list-item">
-    		<a href="/space">Space Name</a>
-    		<div class="item-incomplete">
-    			<span class="label label-danger">Description</span>
-    			<span class="label label-danger">Photo</span>
-    			<span class="label label-danger">Hours</span>
-    			<span class="label label-danger">Resources</span>
-    			<span class="label label-danger">Type</span>
-    		</div>
-    		<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    	</li>
-    	<li class="space-list-item">
-    		<a href="/space">Space Name</a>
-    		<div class="item-incomplete">
-    			<span class="label label-danger">Description</span>
-    			<span class="label label-danger">Photo</span>
-    			<span class="label label-danger">Hours</span>
-    			<span class="label label-danger">Resources</span>
-    			<span class="label label-danger">Type</span>
-    		</div>
-    		<span class="item-modified">8/5/13 12:12PM by NetID</span>
-    	</li>
+      <li>Loading...</li>
     </ul>
     <!-- end of incomplete -->
     
 </div>	
 
-    
+
+<script id="building-groups" type="text/html">
+{% verbatim %}
+{{# each buildings }}
+<li class="space-list-header"><h3 class="building-name">{{ name }}</h3>
+  <ul class="building-list">
+    {{# each spots }}
+    <li class="space-list-item">
+      <a href="/space/{{ id }}">{{ name }}</a>
+      <span class="item-description">{{ description }}</span>
+      <span class="item-modified">{{ modified }} by {{ manager }}</span>
+    </li>
+    {{/each}}
+  </ul>
+</li>
+{{/each}}
+{% endverbatim %}
+</script>
+
+<script id="incomplete-spots" type="text/html">
+{% verbatim %}
+{{# each spots }}
+<li class="space-list-item">
+  <a href="/pending/{{ id }}">{{ name }}</a>
+  <div class="item-incomplete">
+    {{# each unfinished }}
+    <span class="label label-danger">{{ element }}</span>
+    {{/each}}
+  </div>
+  <span class="item-modified">{{ modified }} by {{ manager }}</span>
+</li>
+{{/each}}
+{% endverbatim %}
+</script>
+
+<script id="list-item-loading" type="text/html">
+  <li>Loading...</li>
+</script>
+
+<script id="no-spots" type="text/html">
+  <li>Drats.  You have no spaces to manage.</li>
+</script>
 
 {% endblock %}
