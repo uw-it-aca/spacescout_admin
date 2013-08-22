@@ -217,6 +217,11 @@ html, body {  height: 100%;}
 
 .space-footer { background: @gray-lighter; height: 60px; padding: 1em 0; }
 
+.no-space {
+    span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px;
+   }
+margin: 20px 0 20px 20px;
+}
 /* fancy loading animation */
 .spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
 .spinner span {
@@ -228,7 +233,7 @@ html, body {  height: 100%;}
       left:0;
       border:3px solid @gray;
       opacity:0;
-      -webkit-animation: scale 1.5s ease-out infinite;
+      -webkit-animation: scale 1.8s ease-out infinite;
     }
 .loading {
   color:@gray;
@@ -240,12 +245,13 @@ html, body {  height: 100%;}
   letter-spacing: 2px;
   margin-left:7px;
 }
+
 .loading:after { content:'...' }
-.spinner span:nth-child(2) { -webkit-animation-delay:1s; }
-.spinner span:nth-child(3) { -webkit-animation-delay:500ms; }
+.spinner span:nth-child(2) { -webkit-animation-delay:1.2s; }
+.spinner span:nth-child(3) { -webkit-animation-delay:600ms; }
 
 @-webkit-keyframes scale {
-  0% {opacity:0;-webkit-transform:scale(0);}
+  0% {opacity:.2;-webkit-transform:scale(0);}
   70% {opacity:1;}
   100% {opacity:0;-webkit-transform:scale(1);}
 }
