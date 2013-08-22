@@ -216,3 +216,36 @@ html, body {  height: 100%;}
 .save-discard { margin-top: 2em;}
 
 .space-footer { background: @gray-lighter; height: 60px; padding: 1em 0; }
+
+/* fancy loading animation */
+.spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
+.spinner span {
+      border-radius: 40px;
+      position:absolute;
+      top:0;
+      bottom:0;
+      right:0;
+      left:0;
+      border:3px solid @gray;
+      opacity:0;
+      -webkit-animation: scale 1.5s ease-out infinite;
+    }
+.loading {
+  color:@gray;
+  font-size:30px;
+  font-weight:100;
+  display:inline-block;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-left:7px;
+}
+.loading:after { content:'...' }
+.spinner span:nth-child(2) { -webkit-animation-delay:1s; }
+.spinner span:nth-child(3) { -webkit-animation-delay:500ms; }
+
+@-webkit-keyframes scale {
+  0% {opacity:0;-webkit-transform:scale(0);}
+  70% {opacity:1;}
+  100% {opacity:0;-webkit-transform:scale(1);}
+}
