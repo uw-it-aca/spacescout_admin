@@ -225,7 +225,15 @@ html, body { height: 100%; }
 .image-select a { text-align: left;}
 .save-discard { margin-top: 2em;}
 
-.space-footer { background: @gray-lighter; line-height: 60px; font-size: 70%; }
+/* footer */
+.space-footer { background: @gray-lighter; line-height: 60px; font-size: 85%; }
+.space-footer-copyright:before { 
+    
+    @media screen and (max-width: 320px) { 
+        content: "Copyright © 2013 | ACA, UW-IT"; 
+    }
+    content: "Copyright © 2013 | Academic & Collaborative Applications, UW-IT"; 
+}
 
 .no-space {
     span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px;
