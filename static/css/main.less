@@ -17,13 +17,16 @@ body { padding-top: 70px; font-family: 'Lato', sans-serif; font-weight: 300;
 html, body { height: 100%; }
 
 #wrap { /*sticky footer*/
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by its height */
-  margin: 0 auto -60px;
-  /* Pad bottom by footer height */
-  padding: 0 0 80px;
+    min-height: 100%;
+    @media screen and (max-device-width: 320px) { 
+        min-height: 450px; 
+    }
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 110px;
 }
 
 .alert { margin-top: 20px; }
@@ -222,7 +225,7 @@ html, body { height: 100%; }
 .image-select a { text-align: left;}
 .save-discard { margin-top: 2em;}
 
-.space-footer { background: @gray-lighter; height: 60px; padding: 1em 0; }
+.space-footer { background: @gray-lighter; line-height: 60px; font-size: 70%; }
 
 .no-space {
     span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px;
