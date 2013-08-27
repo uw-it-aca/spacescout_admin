@@ -60,13 +60,20 @@ html, body { height: 100%; }
 
 .label { font-size: .8em; font-weight: 300; text-transform: uppercase; }
 
-.btn { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.3em;
+.btn { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.3em; border: none;
     
     -webkit-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
     -moz-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
     box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
     
 }
+
+.btn-success { background: desaturate(@space-purple, 10%); }
+.btn-success:hover { background: @space-purple; }
+
+.btn-default { background: desaturate(@gray-lightest, 10%); }
+.btn-default:hover { background: @gray-lightest; }
+
 .container { position: relative; }
 
 .space-container {
