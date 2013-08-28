@@ -135,14 +135,17 @@ html, body { height: 100%; }
     }
     .space-list-header:last-child { border-top: 1px solid @gray-light; }
 
-	.space-list-item { padding: 8px 16px 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em;
+	.space-list-item { padding: 8px 16px 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em; position: relative;
 		a {	display: block; font-size: 1.2em; color: @space-purple; font-weight: 400; }
 		.item-description { display: block;}
-		.item-modified { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
+		.item-modified-by { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
+		.item-modified { position: absolute; top:0; right: 0; border-radius: 0; }
+		
 		@media screen and (min-width: 767px) {
 			a { display: inline-block; width: 32%;}
 			.item-description { display: inline-block; width: 43%;}
-			.item-modified { display: inline-block; width: 24%; text-align: right; }
+			.item-modified-by { display: inline-block; width: 24%; text-align: right; }
+			.item-modified { }
             .item-incomplete { display: inline-block; width:43%;}
 		}	
 	}
