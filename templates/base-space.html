@@ -19,9 +19,26 @@
         <link href='http://fonts.googleapis.com/css?family=Dosis:300,500' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic' rel='stylesheet' type='text/css'>
         
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+
         <!-- Modernizr & LessJS -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
+
+        {% load compress %}
+ 
+        {% compress js %}
+
+        <script src="/static/js/hide-address-bar.js"></script>
+        <script src="/static/js/main.js"></script>
+ 
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/handlebars.js"></script>
+
+
+        {% endcompress %}
+        {% block extra_js %}{% endblock %}
         
     </head>
     <body>
@@ -51,13 +68,5 @@
                 </div>
             </div>
         </footer>
-        
-    <!-- jQuery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
-    
-    <script src="/static/js/hide-address-bar.js"></script>
-    <script src="/static/js/main.js"></script>
-
     </body>
 </html>

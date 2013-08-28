@@ -12,58 +12,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.conf import settings
 from django.utils.translation import ugettext as _
 import urllib
-import oauth2
 import simplejson
-import re
-import types
 from django.http import Http404
-
 from django.http import HttpResponse
+from spacescout_admin.oauth import oauth_initialization
 
-
-def SpotView(request, spot_id, return_json=False):
-    # Required settings for the client
-    consumer, client = oauth_initialization()
-
-    url = "{0}/api/v1/spot/{1}".format(settings.SS_WEB_SERVER_HOST, spot_id)
-
-    resp, content = client.request(url, 'GET')
-    if resp.status == 404:
-        url = request.get_host()
-        url = url + "/contact"
-        raise Http404
-    elif resp.status != 200:
-        response = HttpResponse("Error loading spot")
-        response.status_code = resp.status_code
-        return response
-
-    params = simplejson.loads(content)
-
-    #
-    # FILTER: params["manager"] == REMOTE_USER
-    #
-
-    string_val = ''
-    for x in range(0, len(params['type'])):
-        if x is 0:
-            string_val = _(params['type'][x])
-        else:
-            string_val = string_val + ', ' + _(params['type'][x])
-    params["type"] = string_val
-    modified_date = params["last_modified"][5:10] + '-' + params["last_modified"][:4]
-    params["last_modified"] = re.sub('-', '/', modified_date)
-
-    content = simplejson.dumps(params)
-
-    if return_json:
-        return HttpResponse(content, mimetype='application/json')
-    else:
-        return render_to_response('space.html', params, context_instance=RequestContext(request))
 
 def SpotSearch(request):
     # Required settings for the client
@@ -100,18 +56,24 @@ def SpotSearch(request):
     return response
 
 
-def oauth_initialization():
-    if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
-        raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
-    if not hasattr(settings, 'SS_WEB_OAUTH_KEY'):
-        raise(Exception("Required setting missing: SS_WEB_OAUTH_KEY"))
-    if not hasattr(settings, 'SS_WEB_OAUTH_SECRET'):
-        raise(Exception("Required setting missing: SS_WEB_OAUTH_SECRET"))
+def SpotImage(request, spot_id, image_id):
+    # Required settings for the client
+    consumer, client = oauth_initialization()
 
-    consumer = oauth2.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
-    client = oauth2.Client(consumer)
+    url = "{0}/api/v1/spot/{1}/image/{2}".format(settings.SS_WEB_SERVER_HOST, spot_id, image_id)
 
-    return consumer, client
+    resp, content = client.request(url, 'GET')
+
+    if resp.status != 200:
+        response = HttpResponse("Error loading image")
+        response.status_code = resp.status_code
+        return response
+
+    response = HttpResponse(content)
+
+    response["Content-type"] = "application/json"
+
+    return response
 
 
 def get_space_search_json(client, options):

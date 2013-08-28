@@ -10,7 +10,7 @@ def home(request):
                             
 def space(request, space_id):
    return render_to_response('space.html',
-                            {},     
+                            { 'SPOT_ID': space_id },     
                             context_instance=RequestContext(request))
 
 def edit(request):

@@ -32,7 +32,7 @@ $(document).ready(function() {
         spotsLoadingCue(selector);
 
         $.ajax({
-            url: 'app/v1/spot/',
+            url: 'api/v1/spot/',
             dataType: 'json',
             success: function (data) {
                 var tpl_src,

@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-27 13:12-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: views/space.py:83
+msgid "monday"
+msgstr "M"
+
+msgid "tuesday"
+msgstr "Tu"
+
+msgid "wednesday"
+msgstr "W"
+
+msgid "thursday"
+msgstr "Th"
+
+msgid "friday"
+msgstr "F"
+
+msgid "saturday"
+msgstr "Sa"
+
+msgid "sunday"
+msgstr "Su"
+
+msgid "unknown"
+msgstr "Not known"
+
+msgid "seattle"
+msgstr "Seattle"
+
+msgid "tacoma"
+msgstr "Tacoma"
+
+msgid "bothell"
+msgstr "Bothel"
+
+msgid "alcove"
+msgstr "Alcove"
+
+msgid "cafe"
+msgstr "Cafe"
+
+msgid "classroom"
+msgstr "Classroom"
+
+msgid "computer_lab"
+msgstr "Computer lab"
+
+msgid "lounge"
+msgstr "Lounge"
+
+msgid "open"
+msgstr "Open space"
+
+msgid "outdoor"
+msgstr "Outdoor area"
+
+msgid "studio"
+msgstr "Portfolio studio"
+
+msgid "study_area"
+msgstr "Study area"
+
+msgid "study_room"
+msgstr "Study room"
+
+msgid "natural"
+msgstr "Natural Light"
+
+msgid "unnatural"
+msgstr "Unnatural Light"
+
+msgid "building"
+msgstr "In Building"
+
+msgid "neighboring"
+msgstr "In Neighboring Building"
+
+msgid "space"
+msgstr "In the space"
+
+msgid "outlets"
+msgstr "Outlets"
+
+msgid "projector"
+msgstr "Projector"
+
+msgid "displays"
+msgstr "Displays"
+
+msgid "whiteboards"
+msgstr "Whiteboards"
+
+msgid "printing"
+msgstr "Printing"
+
+msgid "scanner"
+msgstr "Scanner"
+
+msgid "computers"
+msgstr "Computers"
+
+msgid "canreserve"
+msgstr "Can be reserved"
+
+msgid "mustreserve"
+msgstr "Must be reserved"
+
+msgid "noon"
+msgstr "Noon"
+
+msgid "midnight"
+msgstr "Midnight"
