@@ -1,175 +1,24 @@
 {% extends 'base-space.html' %}
 
+{% load verbatim %}
+
 {% block title %}Details{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/space.js"></script>
+{% endblock %}
 
 {% block content %}
     
     <div class="panel space-detail-section space-detail-header">
     	<div class="section-edit" style="margin-top:5px;"><a href="/edit" class="">edit</a></div>
-    	<h2>Allen 3rd N/S Bridge</h2>
-        <p class="space-detail-item">Study area, Open space</p>
-        <p class="space-detail-item"><strong>Owner </strong>netid</p>
-        <p class="space-detail-item"><strong>Editors </strong>netid, netid, uw_group</p>
     </div>
         
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
-      	<h3 class="panel-title">Location</h3>
-      </div>
-      <div class="space-detail-item">
-        <h4>Campus</h4>
-        <p>Seattle</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Building</h4>
-        <p>Allen Library</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Description</h4>
-        <p>Allen Library North, 4th floor</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Orientation</h4>
-        <p><em>No information</em></p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Lat & Long</h4>
-        <p>47.234323,-122.307213</p>
-      </div>
-    </div>
-    
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
-        <h3 class="panel-title">Hours</h3>
-      </div>
-      <div class="section-hours">
-        <h4>Space -</h4><em> Normal</em>
-        <ul>
-          <li><span class="label-day">M-Th</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">F</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">S,Su</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">M,W,Th,Su</span>12:30PM-12:30AM</li>
-        </ul>
-        <h4>Space -</h4><em> Summer</em>
-        <ul>
-          <li><span class="label-day">M-Th</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">F</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">S,Su</span>12:30PM-12:30AM</li>
-        </ul>
-        <h4>Cafe -</h4><em> Normal</em>
-        <ul>
-          <li><span class="label-day">M-Th</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">F</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">S,Su</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">M,W,Th,Su</span>12:30PM-12:30AM</li>
-        </ul>
-        <h4>Cafe -</h4><em> Summer</em>
-        <ul>
-          <li><span class="label-day">M-Th</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">F</span>12:30PM-12:30AM</li>
-          <li><span class="label-day">S,Su</span>12:30PM-12:30AM</li>
-        </ul>
-      </div>
-    </div>
-  
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
-        <h3 class="panel-title">Access</h3>
-      </div>
-      <div class="space-detail-item">
-        <h4>Access Notes</h4>
-        <p>After 5pm see front desk for access. Only available to building residents. Husky Card required.</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Reservability</h4>
-        <p><em>Can be reserved</em></p>
-        <p>This space can be reserved at the help desk or online at <a href="#">https://digital.lib.washington.edu/studyspaces/seattle?tab=rc</a></p>
-      </div>
-    </div>
-
-    
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
-        <h3 class="panel-title">Resources & Environment</h3>
-      </div>
-      <div class="space-detail-item">
-        <h4>Resources</h4>
-        <p>Whiteboard, Outlets, Scanner, Printing</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Capacity</h4>
-        <p>Seats 25</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Lighting</h4>
-        <p>Natural Light</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Noise Level</h4>
-        <p>Low Hum</p>
-      </div>
-      <div class="space-detail-item">
-        <h4>Food & Coffee</h4>
-        <p>In Building</p>
-      </div>
-    </div>
-
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
-        <h3 class="panel-title">Images</h3>
-      </div>
-      <div class="row">
-        <div id="image-carousel" class="col-xs-12 col-md-4 carousel slide carousel-test">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <li data-target="#image-carousel" data-slide-to="0" class="active"></li>
-            <li data-target="#image-carousel" data-slide-to="1"></li>
-            <li data-target="#image-carousel" data-slide-to="2"></li>
-          </ol>
-        
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <div class="item active">
-              <div class="thumb-test"><h1>1</h1></div>
-              <div class="carousel-caption">
-                Caption
-              </div>
-            </div>
-            <div class="item">
-              <div class="thumb-test"><h1>2</h1></div>
-              <div class="carousel-caption">
-                Caption2
-              </div>
-            </div>
-            <div class="item">
-              <div class="thumb-test"><h1>3</h1></div>
-              <div class="carousel-caption">
-                Caption3
-              </div>
-            </div>
-          </div>
-        
-          <!-- Controls -->
-          <a class="left carousel-control" href="#image-carousel" data-slide="prev">
-            <span class="icon-prev"></span>
-          </a>
-          <a class="right carousel-control" href="#image-carousel" data-slide="next">
-            <span class="icon-next"></span>
-          </a>
-        </div>
-      </div>     
-    </div>
-    
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <h3 class="panel-title">Incomplete Items</h3>
       </div>
-      <div class="space-detail-item">
+      <div class="space-detail-item" id="incomplete-items">
         <h4>Required</h4>
         <p>
           <span class="label label-danger">Hours</span>
@@ -185,7 +34,111 @@
       <a href="/space" class="btn btn-success btn-lg btn-block">Publish</a>
       <a href="/space" class="btn btn-default btn-lg btn-block">UN-Publish</a>
     </div>
-    
-       
+
+<script id="space-details" type="text/html">
+{% verbatim %}
+<h2>{{ name }}</h2>
+<p class="space-detail-item">{{ type }}</p>
+<p class="space-detail-item"><strong>Owner </strong>{{ manager }}</p>
+<p class="space-detail-item"><strong>Editors </strong>{{ editors }}</p>
+{% endverbatim %}
+</script>
+
+<script id="incomplete-item" type="text/html">
+{% verbatim %}
+<span class="label label-danger">{{ item }}</span>
+{% endverbatim %}
+</script>
+
+<script id="space-section" type="text/html">
+{% verbatim %}
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+      	<h3 class="panel-title">{{ section }}</h3>
+      </div>
+      {{# each fields }}
+      <div class="space-detail-item">
+        {{ #if has_name }} 
+        <h4>{{ name }}</h4>
+        {{ /if }}
+        <p>{{{ value }}}</p>
+      </div>
+      {{/each}}
+    </div>
+ {% endverbatim %}
+</script>
+
+<script id="space-section-hours" type="text/html">
+{% verbatim %}
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+      	<h3 class="panel-title">{{ section }}</h3>
+      </div>
+      <div class="section-hours">
+        <h4>Space -</h4><em> Normal</em>
+        <ul>
+        {{# each available_hours }}
+        <li><span class="label-day">{{ day }}</span>{{ hours }}</li>
+        {{/each}}
+        </ul>
+      </div>
+      {{# each fields }}
+      <div class="space-detail-item">
+        {{ #if has_name }} 
+        <h4>{{ name }}</h4>
+        {{ /if }}
+        <p>{{{ value }}}</p>
+      </div>
+      {{/each}}
+    </div>
+{% endverbatim %}
+</script>
+
+<script id="space-section-images" type="text/html">
+{% verbatim %}
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+        <h3 class="panel-title">{{ section }}</h3>
+      </div>
+      <div class="row">
+        <div id="image-carousel" class="col-xs-12 col-md-4 carousel slide carousel-test">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            {{# each thumbnails }}
+            <li data-target="#image-carousel" data-slide-to="{{ @index }}" {{#if @index}}{{else}}class="active"{{/if}}></li>
+            {{/each}}
+          </ol>
+        
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            {{# each thumbnails }}
+            <div class="item {{ active }}">
+              <img src="{{ img_url }}" />
+              <div class="carousel-caption">{{ caption }}</div>
+            </div>
+            {{/each}}
+          </div>
+        
+          <!-- Controls -->
+          <a class="left carousel-control" href="#image-carousel" data-slide="prev">
+            <span class="icon-prev"></span>
+          </a>
+          <a class="right carousel-control" href="#image-carousel" data-slide="next">
+            <span class="icon-next"></span>
+          </a>
+        </div>
+      </div>     
+    </div>
+{% endverbatim %}
+</script>
+
+<script type="text/javascript">
+window.spacescout_admin = {
+  spot_id: '{{ SPOT_ID }}'
+};
+</script>
     
 {% endblock %}
