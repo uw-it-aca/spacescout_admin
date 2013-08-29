@@ -58,7 +58,7 @@ msgid "cafe"
 msgstr "Cafe"
 
 msgid "classroom"
-msgstr "Classroom"
+msgstr "Conference/Classroom"
 
 msgid "computer_lab"
 msgstr "Computer lab"
@@ -82,19 +82,19 @@ msgid "study_room"
 msgstr "Study room"
 
 msgid "natural"
-msgstr "Natural Light"
+msgstr "Natural light"
 
 msgid "unnatural"
-msgstr "Building Light"
+msgstr "Does not have natural light"
 
 msgid "building"
-msgstr "In Building"
+msgstr "In building"
 
 msgid "neighboring"
-msgstr "In Neighboring Building"
+msgstr "In neighboring building"
 
 msgid "space"
-msgstr "In the space"
+msgstr "In space"
 
 msgid "outlets"
 msgstr "Outlets"
@@ -103,7 +103,7 @@ msgid "projector"
 msgstr "Projector"
 
 msgid "displays"
-msgstr "Displays"
+msgstr "Larg Display (for laptops)"
 
 msgid "whiteboards"
 msgstr "Whiteboards"
@@ -116,6 +116,9 @@ msgstr "Scanner"
 
 msgid "computers"
 msgstr "Computers"
+
+msgid "cannotreserve"
+msgstr "Cannot be reserved"
 
 msgid "canreserve"
 msgstr "Can be reserved"
