@@ -11,7 +11,7 @@
 {% block content %}
     
     <div class="panel space-detail-section space-detail-header">
-    	<div class="section-edit" style="margin-top:5px;"><a href="/edit" class="">edit</a></div>
+    	<div class="section-edit" style="margin-top:5px;"><a href="/edit" class="action-link">edit</a></div>
     </div>
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
@@ -31,11 +31,19 @@
     </div>-->
     
     <div style="margin-top: 2em;">
-      <p>This space has changes that differ from production. Last updated on 8/15/13 12:34PM by <strong>jcomis</strong></p>
-      <a href="/space" class="btn btn-success btn-lg btn-block">Commit Pending changes</a>
-      <p><a href="">Show modified changes?</a></p>
-      <br/></br/>
-      <a href="/space" class="btn btn-default btn-lg btn-block">Publish / Unpublish</a>
+      <p>Last updated on 8/15/13 12:34PM by <strong>jcomis</strong></p>
+      
+      <div>
+        <p>This space has changes that differ from production.</p>
+        <a href="/space" class="btn btn-success btn-lg btn-block">Publish modified</a>
+        <p><a href="">Show modified changes?</a></p>
+      </div>
+      
+      <div>
+        <a href="/space" class="btn btn-success btn-lg btn-block">Publish</a>
+        <a href="/space" class="btn btn-success btn-lg btn-block">Un-publish</a>
+      </div>
+      
     </div>
 
 <script id="space-details" type="text/html">
@@ -57,7 +65,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       {{# each fields }}
@@ -76,7 +84,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="section-hours">
@@ -103,7 +111,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="">edit</a></div>
+        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
         <h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="row">
