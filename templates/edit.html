@@ -131,7 +131,7 @@
         </select>
       </div>
 
-      <p class="text-center"><a href="#">Add another hour group</a></p>
+      <p class="text-center" style="font-size:.7em;"><a href="#0" class="btn btn-success btn-sm">Add another hour group</a></p>
    
     </div>
     <!-- end edit hours -->
@@ -237,60 +237,49 @@
         <div class="panel-heading">
             <h3 class="panel-title">Images</h3>
         </div>
-       
-     <label for="exampleInputFile" style="margin-top:1em;font-size:1.1em;">Select Image</label>
-      <div class="form-group">
-        <input type="file" id="exampleInputFile">
+        
+      <div style="margin:1.5em 0 0;font-size:.7em;" class="clearfix">        
+        <a href="#0" class="btn btn-success btn-sm pull-left">New Image</a>
+        
+        <a href="#0" class="btn btn-danger btn-sm pull-right">Delete</a>
+        <a href="#0" class="btn btn-default btn-sm pull-right">Make default</a>
       </div>
-      
-            
-      <div>
-        <button type="button" class="btn btn-default btn-xs">DELETE</button>
-        <button type="button" class="btn btn-default btn-xs">MAKE DEFAULT</button>
-    </div>
   
-      <div class="row image-select">
-        <div class="col-xs-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="imageOptions" id="optionsRadios1" value="image1" checked>
-            </label>
+       <div class="row">
+        <div id="image-carousel" class="col-xs-12 col-md-4 carousel slide carousel-test">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#image-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#image-carousel" data-slide-to="1" class="active"></li>
+          </ol>
+        
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+              
+            <div class="item active">
+              <img src="/api/v1/spot/2377/image/4083">
+              <div class="carousel-caption">DEFAULT</div>
+            </div>
+            <div class="item">
+              <img src="/api/v1/spot/2377/image/4084">
+              <div class="carousel-caption"></div>
+            </div>
+
           </div>
+        
+          <!-- Controls -->
+          <a class="left carousel-control" href="#image-carousel" data-slide="prev">
+            <span class="icon-prev"></span>
+          </a>
+          <a class="right carousel-control" href="#image-carousel" data-slide="next">
+            <span class="icon-next"></span>
+          </a>
         </div>
-        <div class="col-xs-6 col-md-2">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-xs-3"></div>
-      </div>
-      <div class="row image-select">
-        <div class="col-xs-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="imageOptions" id="optionsRadios1" value="image2">
-            </label>
-          </div>
-        </div>
-        <div class="col-xs-6 col-md-2">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-xs-3"></div>
-      </div>
-      <div class="row image-select">
-        <div class="col-xs-1">
-          <div class="radio">
-            <label>
-              <input type="radio" name="imageOptions" id="optionsRadios1" value="image3">
-            </label>
-          </div>
-        </div>
-        <div class="col-xs-6 col-md-2">
-          <div class="thumb-small"></div>
-        </div>
-        <div class="col-xs-3"></div>
-      </div>
+      </div>     
 
     </div>
     
+    <!-- Done -->
     <div class="save-discard">
       <a href="/space" class="btn btn-success btn-lg btn-block">Done</a>
     </div>
