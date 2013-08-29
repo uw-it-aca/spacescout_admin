@@ -148,13 +148,14 @@ select.form-control { }
 		a {	display: block; font-size: 1.2em; color: @space-purple; font-weight: 400; }
 		.item-description { display: block;}
 		.item-modified-by { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
-		.item-modified { position: absolute; top:0; right: 0; border-radius: 0; }
+		.item-modified { position: absolute; top:7px; right: 7px; border-radius: 0; color: red; font-size: 1em;}
 		
-		@media screen and (min-width: 767px) {
+		@media screen and (min-width: 767px) { padding-right: 30px;
+		
 			a { display: inline-block; width: 32%;}
 			.item-description { display: inline-block; width: 43%;}
 			.item-modified-by { display: inline-block; width: 24%; text-align: right; }
-			.item-modified { }
+			.item-modified { top: 12px; }
             .item-incomplete { display: inline-block; width:43%;}
 		}	
 	}

@@ -50,8 +50,10 @@
       <a href="/space/{{ id }}">{{ name }}</a> 
       <span class="item-description">{{ description }}</span>
       <span class="item-modified-by">{{ modified }} by {{ manager }}</span>
-      <!-- if the space has been modified -->
-      <span class="item-modified label label-danger">modified</span>
+      
+      <!-- TODO: if the space has been modified -->
+      <span class="item-modified glyphicon glyphicon-flash"></span>
+      
     </li>
     {{/each}}
   </ul>
