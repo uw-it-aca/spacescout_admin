@@ -258,6 +258,26 @@ select.form-control { }
    }
 margin: 20px 0 20px 20px;
 }
+
+/*bootstrap-select overrides */
+
+.bootstrap-select:not([class*="span"]) { width: 100%; }
+.bootstrap-select { 
+    .btn { box-shadow: none !important; -webkit-box-shadow: none !important; 
+        font-family: helvetica;
+        font-size: 14px;
+        -webkit-appearance: menulist;
+        border-radius: 4px;
+        
+        border: solid 1px #ccc;
+        height: 34px;
+        text-transform: capitalize;
+        
+        .caret { display: none; }
+    }
+}
+
+
 /* fancy loading animation */
 .spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
 .spinner span {
