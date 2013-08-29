@@ -101,9 +101,10 @@
         <span class="third">Open</span>
         <span class="third">Close</span>
       </div>
+      
       <!-- repeat this row with each new "add new group"-->
-      <div class="time-selector">
-        <div class="day-select-container third">
+      <div class="time-selector">    
+        <div class="day-select-container third"><!-- TODO: replace mobile multi select w/ a better desktop version -->
           <select multiple class="form-control day-select" id="days">
             <option value="M">M</option>
             <option value="T">T</option>
@@ -113,7 +114,7 @@
             <option value="S">S</option>
             <option value="Su">Su</option>
           </select>
-          <div id="show-days">Select Days</div>
+          <div id="show-days">Select days</div>
         </div>
         <select class="form-control third hour-select" id="opening-time">
           <option>12:30AM</option>
@@ -129,11 +130,41 @@
           <option>2:00AM</option>
           <option>2:30AM</option>
         </select>
-      </div>
-
-      <p class="text-center"><a href="#0" class="action-link">add another hour group</a></p>
-   
     </div>
+          
+    <div class="time-selector">    
+        <div class="day-select-container third">
+          <select multiple class="form-control day-select" id="">
+            <option value="M">M</option>
+            <option value="T">T</option>
+            <option value="W">W</option>
+            <option value="Th">Th</option>
+            <option value="F">F</option>
+            <option value="S">S</option>
+            <option value="Su">Su</option>
+          </select>
+          <div id="show-days">Select days</div>
+        </div>
+        <select class="form-control third hour-select" id="">
+          <option>12:30AM</option>
+          <option>1:00AM</option>
+          <option>1:30AM</option>
+          <option>2:00AM</option>
+          <option>2:30AM</option>
+        </select>
+        <select class="form-control third hour-select" id="">
+          <option>12:30AM</option>
+          <option>1:00AM</option>
+          <option>1:30AM</option>
+          <option>2:00AM</option>
+          <option>2:30AM</option>
+        </select>
+    </div>
+
+       
+    <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
+   
+   
     <!-- end edit hours -->
 
    
