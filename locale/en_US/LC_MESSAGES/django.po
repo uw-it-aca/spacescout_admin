@@ -85,7 +85,7 @@ msgid "natural"
 msgstr "Natural Light"
 
 msgid "unnatural"
-msgstr "Unnatural Light"
+msgstr "Building Light"
 
 msgid "building"
 msgstr "In Building"
@@ -128,3 +128,18 @@ msgstr "Noon"
 
 msgid "midnight"
 msgstr "Midnight"
+
+msgid "silent"
+msgstr "Silent"
+
+msgid "quiet"
+msgstr "Quiet"
+
+msgid "moderate"
+msgstr "Moderate"
+
+msgid "loud"
+msgstr "Loud"
+
+msgid "variable"
+msgstr "Variable"

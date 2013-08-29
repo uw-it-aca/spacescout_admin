@@ -13,7 +13,7 @@
     limitations under the License.
 """
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext
 from django.http import Http404
 from django.http import HttpResponse
 import simplejson
@@ -26,15 +26,6 @@ def SpaceView(request, space_id):
     # Required settings for the client
     consumer, client = oauth_initialization()
 
-#    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
-#    resp, content = client.request(url, 'GET')
-#    if resp.status == 200:
-#        schema = simplejson.loads(content)
-#    else:
-#        response = HttpResponse("Error loading schema")
-#        response.status_code = resp.status_code
-#        return response
-
     url = "{0}/api/v1/spot/{1}".format(settings.SS_WEB_SERVER_HOST, space_id)
     resp, content = client.request(url, 'GET')
     if resp.status == 404:
@@ -45,10 +36,6 @@ def SpaceView(request, space_id):
         response = HttpResponse("Error loading spot")
         response.status_code = resp.status_code
         return response
-
-#    f1 = open('/tmp/spot.log', 'a+')
-#    f1.write('SPOT: %s\n' % content)
-#    f1.close()
 
     params = simplejson.loads(content)
 
@@ -114,7 +101,7 @@ def SpaceView(request, space_id):
                             if val:
                                 vals.append(val)
 
-                        value = ', '.join(vals)
+                        value = list_to_string(vals)
 
                     if value:
                         field['value'] = value
@@ -128,35 +115,43 @@ def SpaceView(request, space_id):
     return HttpResponse(content, mimetype='application/json')
 
 
+def _(v):
+    return ugettext(v) if isinstance(v, str) else v
+
+
 def value_from_key(d, v):
+    val = None
+
     if 'key' in v:
         val = value_from_keylist(d, v['key'].split('.'))
         if 'boolean' in v:
             b = v['boolean']
-            if val is True or val == 'true':
+            if val or (isinstance(val, str) and val.lower() == 'true'):
                 if 'true' in b:
-                    return _(b['true'])
-            elif 'false' in b:
-                return _(b['false'])
-        elif val is not None:
+                    val = _(b['true'])
+            else:
+                if 'false' in b:
+                    val = _(b['false'])
+        else:
             if 'map' in v and val in v['map']:
-                val = _(v['map'][val])
+                val = v['map'][val]
 
             if 'format' in v:
-                return v['format'] % val
+                val = v['format'] % _(val)
 
-            return val
+            if isinstance(val, str) and len(val):
+                val = _(val)
 
-    return None
+    return val
 
 
 def value_from_keylist(d, klist):
     try:
         val = d[klist[0]]
-        return _(str(val)) if len(klist) == 1 else value_from_keylist(val, klist[1:])
+        return val if len(klist) == 1 else value_from_keylist(val, klist[1:])
     except KeyError:
-        return ''
+        return None
 
 
 def list_to_string(list):
-    return ', '.join([_(v) for v in list])
+    return ', '.join([_(str(v)) for v in list])
