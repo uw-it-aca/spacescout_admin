@@ -11,7 +11,7 @@
 {% block content %}
     
     <div class="panel space-detail-section space-detail-header">
-    	<div class="section-edit" style="margin-top:5px;"><a href="/edit" class="action-link">edit</a></div>
+    	<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ SPOT_ID }}/#basic" class="action-link">edit</a></div>
     </div>
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
@@ -65,7 +65,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
+        <div class="section-edit clearfix"><a href="{{ edit_url }}" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       {{# each fields }}
@@ -84,7 +84,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
+        <div class="section-edit clearfix"><a href="{{ edit_url }}" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="section-hours">
@@ -111,7 +111,7 @@
 {% verbatim %}
     <div class="panel space-detail-section">
       <div class="panel-heading">
-        <div class="section-edit clearfix"><a href="/edit" class="action-link">edit</a></div>
+        <div class="section-edit clearfix"><a href="{{ edit_url }}" class="action-link">edit</a></div>
         <h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="row">

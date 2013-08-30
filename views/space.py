@@ -26,6 +26,15 @@ def SpaceView(request, space_id):
     # Required settings for the client
     consumer, client = oauth_initialization()
 
+#    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
+#    resp, content = client.request(url, 'GET')
+#    if resp.status == 200:
+#        schema = simplejson.loads(content)
+#    else:
+#        response = HttpResponse("Error loading schema")
+#        response.status_code = resp.status_code
+#        return response
+
     url = "{0}/api/v1/spot/{1}".format(settings.SS_WEB_SERVER_HOST, space_id)
     resp, content = client.request(url, 'GET')
     if resp.status == 404:
@@ -36,6 +45,10 @@ def SpaceView(request, space_id):
         response = HttpResponse("Error loading spot")
         response.status_code = resp.status_code
         return response
+
+#    f1 = open('/tmp/spot.log', 'a+')
+#    f1.write('SPOT: %s\n' % content)
+#    f1.close()
 
     params = simplejson.loads(content)
 
@@ -49,9 +62,9 @@ def SpaceView(request, space_id):
 
     space = {
         'name': params['name'],
-        'type': list_to_string(params['type']),
-        'manager': params['manager'] if len(params['manager']) else _('unknown'),
-        'editors': list_to_string(params['editors']) if 'editors' in params else '',
+        'type': params['type'],
+        'manager': params['manager'],
+        'editors': params['editors'] if 'editors' in params else [],
         'sections': []
     }
 
@@ -66,7 +79,7 @@ def SpaceView(request, space_id):
             # present all 7 days so translation and order happen here
             for d in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
                 hrs = {
-                    'day': _(d)
+                    'day': d
                 }
                     
                 if d in params['available_hours']:
@@ -101,7 +114,7 @@ def SpaceView(request, space_id):
                             if val:
                                 vals.append(val)
 
-                        value = list_to_string(vals)
+                        value = vals
 
                     if value:
                         field['value'] = value
@@ -115,10 +128,6 @@ def SpaceView(request, space_id):
     return HttpResponse(content, mimetype='application/json')
 
 
-def _(v):
-    return ugettext(v) if isinstance(v, str) else v
-
-
 def value_from_key(d, v):
     val = None
 
@@ -128,19 +137,16 @@ def value_from_key(d, v):
             b = v['boolean']
             if val or (isinstance(val, str) and val.lower() == 'true'):
                 if 'true' in b:
-                    val = _(b['true'])
+                    val = b['true']
             else:
                 if 'false' in b:
-                    val = _(b['false'])
+                    val = b['false']
         else:
             if 'map' in v and val in v['map']:
                 val = v['map'][val]
 
             if 'format' in v:
-                val = v['format'] % _(val)
-
-            if isinstance(val, str) and len(val):
-                val = _(val)
+                val = v['format'] % val
 
     return val
 
@@ -151,7 +157,3 @@ def value_from_keylist(d, klist):
         return val if len(klist) == 1 else value_from_keylist(val, klist[1:])
     except KeyError:
         return None
-
-
-def list_to_string(list):
-    return ', '.join([_(str(v)) for v in list])

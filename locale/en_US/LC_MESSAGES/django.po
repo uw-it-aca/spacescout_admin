@@ -39,8 +39,23 @@ msgstr "Sa"
 msgid "sunday"
 msgstr "Su"
 
+msgid "am"
+msgstr "AM"
+
+msgid "pm"
+msgstr "PM"
+
+msgid "noon"
+msgstr "Noon"
+
+msgid "midnight"
+msgstr "Midnight"
+
 msgid "unknown"
 msgstr "Not known"
+
+msgid "noinfo"
+msgstr "No Information"
 
 msgid "seattle"
 msgstr "Seattle"
@@ -125,12 +140,6 @@ msgstr "Can be reserved"
 
 msgid "mustreserve"
 msgstr "Must be reserved"
-
-msgid "noon"
-msgstr "Noon"
-
-msgid "midnight"
-msgstr "Midnight"
 
 msgid "silent"
 msgstr "Silent"

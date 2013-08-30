@@ -11,17 +11,22 @@ $(document).ready(function() {
                 tpl = Handlebars.compile($('#space-details').html());
                 html = tpl({
                     name: data.name,
-                    type: data.type,
+                    type: listToString(data.type),
                     manager: data.manager,
                     editors: ''
                 });
 
                 $('.space-detail-header').append(html);
+                $('.space-detail-header > div > a').click(function () {
+                    window.location = '/edit/' + window.spacescout_admin.spot_id + '/#basic';
+                });
 
                 for (i in data.sections) {
                     section = data.sections[i];
                     context = {
-                        section: section.section
+                        section: section.section,
+                        edit_url: '/edit/' + window.spacescout_admin.spot_id
+                            + '/#' + encodeURIComponent(section.section)
                     };
 
                     if (section.section == 'hours') {
@@ -57,24 +62,24 @@ $(document).ready(function() {
                                     switch (runs[j].end - runs[j].start) {
                                     case 0:
                                         context.available_hours.push({
-                                            day: section['available_hours'][runs[j].start].day,
+                                            day: gettext(section['available_hours'][runs[j].start].day),
                                             hours: j
                                         });
                                         break;
                                     case 1:
                                         context.available_hours.push({
-                                            day: section['available_hours'][runs[j].start].day,
+                                            day: gettext(section['available_hours'][runs[j].start].day),
                                             hours: j
                                         });
                                         context.available_hours.push({
-                                            day: section['available_hours'][runs[j].end].day,
+                                            day: gettext(section['available_hours'][runs[j].end].day),
                                             hours: j
                                         });
                                         break;
                                     default:
                                         context.available_hours.push({
-                                            day: section['available_hours'][runs[j].start].day
-                                                  + ' - ' + section['available_hours'][runs[j].end].day,
+                                            day: gettext(section['available_hours'][runs[j].start].day)
+                                                + ' - ' + gettext(section['available_hours'][runs[j].end].day),
                                             hours: j
                                         });
                                         break;
@@ -102,11 +107,12 @@ $(document).ready(function() {
                         html = tpl(context);
                     }
 
+                    // insert html in section order
                     e = $('.space-detail-header');
                     for (j = 0; j < i; j++) {
                         e = e.next();
                     }
-                    
+
                     e.after(html);
                 }
             },
@@ -125,15 +131,37 @@ $(document).ready(function() {
 
     var _prepSectionFields = function (section) {
         var fields = [],
-            s, field;
+            s, i, t, field, value;
 
         if (section.hasOwnProperty('fields')) {
             for (s in section.fields) {
                 field = section.fields[s];
+
+                if (field.hasOwnProperty('value') && field.value.length > 0) {
+                    switch (typeof field.value) {
+                    case 'string':
+                        value = gettext(field.value);
+                        break;
+                    case 'number':
+                        value = field.value;
+                        break;
+                    case 'object':
+                        if ($.isArray(field.value)) {
+                            value = listToString(field.value);
+                        }
+                        break;
+                    default:
+                        value = gettext(field.value);
+                        break;
+                    }
+                } else {
+                    value = gettext('noinfo');
+                }
+
                 fields.push({
                     name: field.name,
                     has_name: (field.name.length > 0),
-                    value: (field.hasOwnProperty('value') && field.value.length > 0) ? field.value : 'No information'
+                    value: value
                 });
             }
         }
@@ -151,15 +179,15 @@ $(document).ready(function() {
 
             if (m == 0) {
                 if (h == 0 || h == 23) {
-                    return 'Midnight';
+                    return gettext('midnight');
                 } else if (h == 12) {
-                    return 'Noon';
+                    return gettext('noon');
                 }
             }
 
             return ((h > 12) ? (h - 12) : h)
                 + ':' + ((m < 10) ? ('0' + m) : m)
-                + ((h > 11) ? 'PM' : 'AM');
+                + gettext((h > 11) ? 'pm' : 'am');
         }
 
         return hours;
@@ -177,4 +205,13 @@ $(document).ready(function() {
                 + ' ' + hour + ':' + minutes + pm;
     };
 
+    var listToString = function(list) {
+        var i, t = [];
+
+        for (i = 0; i < list.length; i += 1) {
+            t.push(gettext(list[i]));
+        }
+
+        return t.join(', ');
+    };
 });

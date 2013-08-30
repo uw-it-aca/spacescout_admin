@@ -1,14 +1,19 @@
 from django.conf.urls.defaults import patterns, include, url
 
-urlpatterns = patterns('spacescout_admin.views',
+js_info_dict = {
+    'packages': ('spacescout_admin',),
+}
+
+urlpatterns = patterns('',
     #url(r'upload/$', 'upload.upload'),
-    url(r'^$', 'page.home'),
-    url(r'api/v1/space/(?P<space_id>\d+)/$', 'space.SpaceView'),
-    url(r'api/v1/spot/(?P<spot_id>\d+)/image/(?P<image_id>\d+)$', 'spot.SpotImage'),
-    url(r'api/v1/spot/$', 'spot.SpotSearch'),
-    url(r'api/v1/schema/$', 'schema.SchemaView'),
-    url(r'space/(?P<space_id>\d+)/$', 'page.space'),
-    url(r'edit/$', 'page.edit'),
-    url(r'add/$', 'page.add'),
-    url(r'upload/$', 'page.upload'),
+    url(r'^$', 'spacescout_admin.views.page.home'),
+    url(r'api/v1/space/(?P<space_id>\d+)/$', 'spacescout_admin.views.space.SpaceView'),
+    url(r'api/v1/spot/(?P<spot_id>\d+)/image/(?P<image_id>\d+)$', 'spacescout_admin.views.spot.SpotImage'),
+    url(r'api/v1/spot/$', 'spacescout_admin.views.spot.SpotSearch'),
+    url(r'api/v1/schema/$', 'spacescout_admin.views.schema.SchemaView'),
+    url(r'space/(?P<space_id>\d+)/$', 'spacescout_admin.views.page.space'),
+    url(r'edit/(?P<space_id>\d+)/$', 'spacescout_admin.views.page.edit'),
+    url(r'add/$', 'spacescout_admin.views.page.add'),
+    url(r'upload/$', 'spacescout_admin.views.page.upload'),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )

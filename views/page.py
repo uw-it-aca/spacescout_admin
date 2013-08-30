@@ -13,9 +13,9 @@ def space(request, space_id):
                             { 'SPOT_ID': space_id },     
                             context_instance=RequestContext(request))
 
-def edit(request):
+def edit(request, space_id):
    return render_to_response('edit.html',
-                            {},     
+                            { 'SPOT_ID': space_id },     
                             context_instance=RequestContext(request))
                                                         
 def add(request):
