@@ -88,6 +88,7 @@ html, body { height: 100%; }
 
 .form-control { box-shadow: none !important; -webkit-box-shadow: none !important; }
 input[type=text].form-control, textarea.form-control { -webkit-appearance: none; }
+textarea.form-control { resize: vertical; }
 select.form-control { }
 
 
@@ -180,7 +181,7 @@ select.form-control { }
 
 .time-selector { margin: 0 auto; padding-left:0; padding-bottom: 10px;
 	span { text-align: center; font-weight: bold;}
-	.third { width: 32.5%; display: inline-block; vertical-align: top;}
+	.third { width: 32.6%; display: inline-block; vertical-align: top;}
 	.hour-select,.day-select { /*-webkit-appearance: none; */}
 	.day-select { border: 1px solid #ccc; color: transparent; z-index: 2;}
 	.day-select-container {  border-radius: 4px; }
@@ -190,9 +191,9 @@ select.form-control { }
 .time-selector { 
 	/*show all days possible to select when not on mobile*/
 	@media screen and (min-width: 767px) { 
-		.third { width: 25%;}
+		.third { width: 33%;}
 		select[multiple] { top: 0; margin:0 auto; height: 145px; width: 50px; color: black; }
-		#show-days { display: none; }
+		.show-days { display: none; }
     } 
 }
 
@@ -266,7 +267,12 @@ margin: 20px 0 20px 20px;
     .btn { box-shadow: none !important; -webkit-box-shadow: none !important; 
         font-family: helvetica;
         font-size: 14px;
+        
+        appearance: menulist;
         -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        
+        background: none; 
         border-radius: 4px;
         
         border: solid 1px #ccc;
@@ -275,6 +281,13 @@ margin: 20px 0 20px 20px;
         
         .caret { display: none; }
     }
+    
+    .btn:focus { background: none; }
+}
+
+@-moz-document url-prefix() {
+    .bootstrap-select .btn:focus { border-color: #7dace9; }
+    .bootstrap-select .btn .caret { display: inline-block; }
 }
 
 
