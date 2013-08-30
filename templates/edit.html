@@ -93,76 +93,226 @@
 {% verbatim %}
     <!-- edit hours -->  
     <div class="panel space-detail-section ">
+        
         <div class="panel-heading">
             <h3 class="panel-title">Hours</h3>
         </div>
         
-        <h4>Space - <small>Normal</small></h4>
-        <div class="time-selector">
-            <span class="third">Days</span>
-            <span class="third">Open</span>
-            <span class="third">Close</span>
-        </div>
-      
-          <!-- repeat this row with each new "add new group"-->
-          <div class="time-selector">    
-            <div class="day-select-container third">
-              <select multiple class="form-control day-select" id="days"><!-- TODO: mobile time selector -->
-                <option value="M">M</option>
-                <option value="T">T</option>
-                <option value="W">W</option>
-                <option value="Th">Th</option>
-                <option value="F">F</option>
-                <option value="S">S</option>
-                <option value="Su">Su</option>
-              </select>
-              <div class="show-days">Select days</div>
+        <div style="margin-bottom:4em;"><!-- general hours -->
+        
+            <h4>Space - <small>General</small></h4>
+            <div class="time-selector">
+                <span class="third">Days</span>
+                <span class="third">Open</span>
+                <span class="third">Close</span>
             </div>
-            <select class="form-control third hour-select" id="opening-time">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
-            <select class="form-control third hour-select" id="closing-time">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
-        </div>
           
-        <div class="time-selector">    
-            <div class="day-select-container third">
-              <select class="selectpicker" multiple title='Select days'><!-- TODO: desktop time selector -->
-                <option value="M">M</option>
-                <option value="T">T</option>
-                <option value="W">W</option>
-                <option value="Th">Th</option>
-                <option value="F">F</option>
-                <option value="S">S</option>
-                <option value="Su">Su</option>
-              </select>
+              <!-- repeat this row with each new "add new group"-->
+              <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select multiple class="form-control day-select" id="days"><!-- TODO: mobile time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                  <div class="show-days">Select days</div>
+                </div>
+                <select class="form-control third hour-select" id="opening-time">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="closing-time">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
             </div>
-            <select class="form-control third hour-select" id="">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
-            <select class="form-control third hour-select" id="">
-              <option>12:30AM</option>
-              <option>1:00AM</option>
-              <option>1:30AM</option>
-              <option>2:00AM</option>
-              <option>2:30AM</option>
-            </select>
+              
+            <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select class="selectpicker" multiple title='Select days'><!-- TODO: desktop time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                </div>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+            </div>
+            
+            <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
+            
         </div>
         
-        <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
+        <div style="margin-bottom:4em;"><!-- summer hours -->
+            <h4>Space - <small>Summer</small></h4>
+            <div class="time-selector">
+                <span class="third">Days</span>
+                <span class="third">Open</span>
+                <span class="third">Close</span>
+            </div>
+          
+              <!-- repeat this row with each new "add new group"-->
+              <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select multiple class="form-control day-select" id="days"><!-- TODO: mobile time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                  <div class="show-days">Select days</div>
+                </div>
+                <select class="form-control third hour-select" id="opening-time">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="closing-time">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+            </div>
+              
+            <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select class="selectpicker" multiple title='Select days'><!-- TODO: desktop time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                </div>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+            </div>
+            
+            <div style="margin: 0 0 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
+        </div>
+        
+        <div style="margin-bottom:4em;"><!-- cafe hours -->
+            <h4>Space - <small>Cafe</small></h4>
+            <div class="checkbox">
+              <label><input type="checkbox" value="">Space includes a cafe whose hours are different than the space's</label>
+            </div>
+            
+            <div class="time-selector">
+                <span class="third">Days</span>
+                <span class="third">Open</span>
+                <span class="third">Close</span>
+            </div>
+            <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select class="selectpicker" multiple title='Select days'><!-- TODO: desktop time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                </div>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+            </div>
+            <div class="time-selector">    
+                <div class="day-select-container third">
+                  <select class="selectpicker" multiple title='Select days'><!-- TODO: desktop time selector -->
+                    <option value="M">M</option>
+                    <option value="T">T</option>
+                    <option value="W">W</option>
+                    <option value="Th">Th</option>
+                    <option value="F">F</option>
+                    <option value="S">S</option>
+                    <option value="Su">Su</option>
+                  </select>
+                </div>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+                <select class="form-control third hour-select" id="">
+                  <option>12:30AM</option>
+                  <option>1:00AM</option>
+                  <option>1:30AM</option>
+                  <option>2:00AM</option>
+                  <option>2:30AM</option>
+                </select>
+            </div>
+            <div style="margin: 0 0 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
+        </div>
+        
+        <div style="margin-bottom:4em;"><!-- hours hotes -->
+            <h4>Notes</h4>
+            <div class="checkbox">
+              <label><input type="checkbox" value="">Display hours note to users.</label>
+            </div>
+            <textarea class="form-control" rows="2" placeholder="Enter notes for the hours section">Hours vary between quarters and and on holidays</textarea>
+        </div>
    
     </div><!-- /hours -->
 {% endverbatim %}
@@ -180,11 +330,11 @@
       <textarea class="form-control" rows="2" placeholder="Enter Hours notes"></textarea>
       <h4>Reservability</h4>
       <div class="checkbox">
-      <label>
-        <input type="checkbox" value="">
-        Space is reservable
-      </label>
-    </div>
+          <label>
+            <input type="checkbox" value="">
+            Space is reservable
+          </label>
+      </div>
       <textarea class="form-control" rows="2" placeholder="Enter additional details such as reservation link"></textarea>
     </div>
 {% endverbatim %}
