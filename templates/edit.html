@@ -1,65 +1,60 @@
 {% extends 'base-space.html' %}
 
+{% load verbatim %}
+
 {% block title %}Edit{% endblock %}
 
+{% block extra_js %}
+<script src="/static/js/edit.js"></script>
+{% endblock %}
+
 {% block content %}
-    
-    <h2>Allen 3rd N/S Bridge</h2>
-    
+<h2 id="space-name">{{ name }}</h2>
+<div id="space_editor"></div>
+
+<!-- Done -->
+<div class="save-discard">
+  <a href="/space/{{SPOT_ID}}" class="btn btn-success btn-lg btn-block">Done</a>
+</div>
+
+
+<script id="space-edit-basic" type="text/html">
+{% verbatim %}
     <!-- Edit basic info -->
-    <div class="panel space-detail-section">
+    <div class="panel space-detail-section" id="basic">
         <div class="panel-heading">
             <h3 class="panel-title">Basic Information</h3>
         </div>
       
         <div class="form-group">
             <h4>Space Name</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="Allen 3rd N/S Bridge">
+            <input type="text" class="form-control" placeholder="Text input" value="{{ name }}">
         </div>
         
         <div class="form-group">
               <h4>Space Type <small> Select all that apply</small></h4>
+              {{# each types }}
               <div class="checkbox">
-                  <label><input type="checkbox" value="">Study room</label>
+                  <label><input type="checkbox" value="{{ value }}" {{ checked }}>{{ name }}</label>
               </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Study area</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Computer lab</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Portfolio studio</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Conference/classroom</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Open space</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Lounge</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Cafe</label>
-              </div>
-              <div class="checkbox">
-                  <label><input type="checkbox" value="">Outdoor area</label>
-              </div>
+              {{/each}}
         </div>
         
         <div class="form-group">
             <h4>Owner</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="netid">
+            <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
         </div>
         
         <div class="form-group">
             <h4>Editors</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="netid, netid, uw_group">
+            <input type="text" class="form-control" placeholder="Text input" value="{{ editors }}">
         </div>
     </div>
-    
-    
+{% endverbatim %}
+</script>
+
+<script id="space-edit-location" type="text/html">
+{% verbatim %}
     <!-- Edit location -->
     <div class="panel space-detail-section ">
         
@@ -91,8 +86,11 @@
         <input type="text" class="form-control" placeholder="Text input">
         
     </div>
+{% endverbatim %}
+</script>
 
-
+<script id="space-edit-hours" type="text/html">
+{% verbatim %}
     <!-- edit hours -->  
     <div class="panel space-detail-section ">
         <div class="panel-heading">
@@ -167,8 +165,11 @@
         <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
    
     </div><!-- /hours -->
-
+{% endverbatim %}
+</script>
    
+<script id="space-edit-access" type="text/html">
+{% verbatim %}
     <!-- Edit access -->
     <div class="panel space-detail-section ">
         <div class="panel-heading">
@@ -186,10 +187,14 @@
     </div>
       <textarea class="form-control" rows="2" placeholder="Enter additional details such as reservation link"></textarea>
     </div>
+{% endverbatim %}
+</script>
     
+<script id="space-edit-resources" type="text/html">
+{% verbatim %}
     <!-- Edit resources & environment -->
     <div class="panel space-detail-section ">
-        <div class="panel-heading">
+        <div class="panel-heading" id="resources & environment">
             <h3 class="panel-title">Resources &amp; Environment</h3>
         </div>
         
@@ -269,7 +274,11 @@
         </label>
       </div>
     </div>
+{% endverbatim %}
+</script>
 
+<script id="space-edit-images" type="text/html">
+{% verbatim %}
     <!-- Edit images -->
     <div class="panel space-detail-section ">
         
@@ -316,10 +325,21 @@
       </div>     
 
     </div>
-    
-    <!-- Done -->
-    <div class="save-discard">
-      <a href="/space" class="btn btn-success btn-lg btn-block">Done</a>
-    </div>
+{% endverbatim %}
+</script>
+
+<script id="no-section" type="text/html">
+{% verbatim %}
+  <div class="no-space">
+    <i class="icon-frown icon-3x"></i><span>No section to edit.</span>
+  </div>
+{% endverbatim %}
+</script>
+
+<script type="text/javascript">
+window.spacescout_admin = {
+  spot_id: '{{ SPOT_ID }}'
+};
+</script>
     
 {% endblock %}
