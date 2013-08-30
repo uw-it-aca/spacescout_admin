@@ -101,8 +101,12 @@ def SpaceView(request, space_id):
 
             for f in secdef['fields']:
                 field = {
-                    'name': f['name'] if 'name' in f else ''
+                    'name': f['name'] if 'name' in f else '',
+                    'key':  f['value']['key'] if isinstance(f['value'], dict) else [k['key'] for k in f['value']]
                 }
+
+                if 'help' in f:
+                    field['help'] = f['help']
 
                 if 'value' in f:
                     if isinstance(f['value'], dict):

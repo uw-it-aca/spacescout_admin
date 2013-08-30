@@ -21,8 +21,8 @@ $(document).ready(function() {
             url: '/api/v1/space/' + window.spacescout_admin.spot_id,
             dataType: 'json',
             success: function (data) {
-                window.spacescout_admin.spot_data = data;
-                editSpaceDetails();
+                editSpaceDetails(data);
+                $('.space-content-loading').hide();
             },
             error: function (xhr, textStatus, errorThrown) {
                 XHRError(xhr);
@@ -30,18 +30,22 @@ $(document).ready(function() {
         });
     };
 
-    var editSpaceDetails = function () {
-        var spot = window.spacescout_admin.spot_data,
-            hash = decodeURIComponent(window.location.hash.substr(1));
+    var editSpaceDetails = function (space) {
+        var hash = decodeURIComponent(window.location.hash.substr(1)),
+            i, node;
 
-        $('#space-name').html(spot.name);
+        $('#space-name').html(space.name);
 
         switch(hash) {
         case 'basic' :
-            $('#space_editor').html(editBasicInfo(spot));
+            $('#space-editor').html(editBasicInfo(space));
+            $('#input-space-name').keyup(function (e) {
+                $('#space-name').html($(e.target).val());
+            });
+
             break;
         case 'hours' :
-            $('#space_editor').html(editHoursInfo(spot));
+            $('#space-editor').html(editHoursInfo(space));
 
             // make the multi-day selector usable for desktop
             $('.selectpicker').selectpicker();
@@ -56,43 +60,46 @@ $(document).ready(function() {
                 
                 $(this).siblings(".show-days").html(list.join(""));
             });
-            
+
             break;
         case 'images' :
-            $('#space_editor').html(editImageInfo(spot));
-            break;
-        case 'location' :
-            $('#space_editor').html(editLocationInfo(spot));
-            break;
-        case 'access' :
-            $('#space_editor').html(editAccessInfo(spot));
-            break;
-        case 'resources & environment':
-            $('#space_editor').html(editResourcesInfo(spot));
+            $('#space-editor').html(editImageInfo(space));
             break;
         default:
-            $('#space_editor').html(Handlebars.compile($('#no-section').html())({}));
+            node = null;
+            for (i = 0; i < space.sections.length; i += 1) {
+                if (hash == space.sections[i].section) {
+                    node = editSectionInfo(space.sections[i]);
+                    break;
+                }
+            }
+
+            if (node) {
+                $('#space-editor').append(node);
+            } else {
+                $('#space-editor').html(Handlebars.compile($('#no-section').html())({}));
+            }
+
             break;
         }
     };
 
-    var editBasicInfo = function () {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
+    var editBasicInfo = function (space) {
+        var schema = window.spacescout_admin.spot_schema,
             tpl = Handlebars.compile($('#space-edit-basic').html()),
             context = {
-                name: spot.name,
-                manager: spot.manager,
+                name: space.name,
+                manager: space.manager,
                 types: [],
-                editors: spot.editors.join(', ')
+                editors: space.editors.join(', ')
             },
             i, j, checked;
 
         for (i = 0; i < schema.type.length; i += 1) {
             checked = '';
 
-            for (j = 0; j < spot.type.length; j += 1) {
-                if (spot.type[j] == schema.type[i]) {
+            for (j = 0; j < space.type.length; j += 1) {
+                if (space.type[j] == schema.type[i]) {
                     checked = 'checked';
                     break;
                 }
@@ -108,44 +115,159 @@ $(document).ready(function() {
         return tpl(context);
     };
 
-    var editHoursInfo = function (spot) {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
+    var editHoursInfo = function (space) {
+        var schema = window.spacescout_admin.spot_schema,
             tpl = Handlebars.compile($('#space-edit-hours').html());
 
         return tpl({});
     };
 
-    var editImageInfo = function (spot) {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
+    var editImageInfo = function (space) {
+        var schema = window.spacescout_admin.spot_schema,
             tpl = Handlebars.compile($('#space-edit-images').html());
 
         return tpl({});
     };
 
-    var editLocationInfo = function (spot) {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-location').html());
+    var editSectionInfo = function (space) {
+        var schema = window.spacescout_admin.spot_schema,
+            field, section, i, tpl;
 
-        return tpl({});
+        tpl = Handlebars.compile($('#editor-container').html());
+        section = $(tpl({section: space.section}));
+
+        for (i = 0; i < space.fields.length; i += 1) {
+            field = space.fields[i];
+
+            switch (typeof field.key) {
+            case 'string':
+                appendFieldValue(field, section);
+                break;
+            case 'object':
+                if ($.isArray(field.key)) {
+                    appendFieldList(field, section);
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
+        return section;
     };
 
-    var editAccessInfo = function (spot) {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-access').html());
+    var appendFieldValue = function (field, section) {
+        var tpl, vartype, data, i, node;
 
-        return tpl({});
+        // fields we know about
+        switch (field.key) {
+        case 'location.building_name':
+            tpl = Handlebars.compile($('#space-edit-select').html());
+            node = $(tpl({
+                name: field.name,
+                options: []
+            }));
+
+            section.append(node);
+
+            $.ajax({
+                url: '/api/v1/buildings/',
+                dataType: 'json',
+                success: function (data) {
+                    var select = node.next('select'),
+                        building = field.value,
+                        option;
+
+                    if (typeof data === 'object' && $.isArray(data)) {
+                        for (i = 0; i < data.length; i += 1) {
+                            option = $('<option></option>').val(i).html(data[i]);
+
+                            if (building == data[i]) {
+                                option.attr('selected', 'selected');
+                            }
+
+                            select.append(option);
+                        }
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    XHRError(xhr);
+                }
+            });
+            break;
+        default:
+            vartype = schemaVal(field.key);
+            switch (typeof vartype) {
+            case 'string':
+                switch (vartype.toLowerCase()) {
+                case 'unicode':
+                    tpl = Handlebars.compile($('#space-edit-input').html());
+                    section.append(tpl({
+                        name: field.name,
+                        help: (field.hasOwnProperty('help')) ? gettext(field.help) : '',
+                        inputs: [{ value: field.value ? field.value : '' }]
+                    }));
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case 'object':
+                if ($.isArray(vartype)) {
+                    data = [];
+                    for (i = 0; i < vartype.length; i += 1) {
+                        data.push({
+                            name: gettext(vartype[i]),
+                            value: vartype[i]
+                        });
+                    }
+
+                    tpl = Handlebars.compile($('#space-edit-select').html());
+                    section.append(tpl({
+                        name: field.name,
+                        options: data
+                    }));
+                }
+                break;
+            default:
+                break;
+            }
+        }
     };
 
-    var editResourcesInfo = function (spot) {
-        var spot = window.spacescout_admin.spot_data,
-            schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-resources').html());
+    var appendFieldList = function(field, section) {
+        var tpl, i, vartype, inputs = [];
 
-        return tpl({});
+        for (i = 0; i < field.key.length; i += 1) {
+            
+            vartype = schemaVal(field.key[i]);
+            if (typeof vartype === 'string'
+                && (vartype == 'unicode'
+                    || vartype == 'decimal')) {
+                inputs.push( field.value[i] );
+            }
+        }
+
+        tpl = Handlebars.compile($('#space-edit-input').html());
+        section.append(tpl({
+            name: field.name,
+            help: (field.hasOwnProperty('help')) ? gettext(field.help) : '',
+            inputs: [{ value: inputs.join(', ') }]
+        }));
+    };
+
+    var schemaVal = function (key) {
+        var schema = window.spacescout_admin.spot_schema,
+            keys = key.split('.'),
+            val = null,
+            i;
+
+        val = schema[keys[0]];
+        for (i = 1; i < keys.length; i += 1) {
+            val = val[keys[i]];
+        }
+
+        return val;
     };
 
     var XHRError = function (xhr) {

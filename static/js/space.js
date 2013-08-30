@@ -8,6 +8,8 @@ $(document).ready(function() {
             success: function (data) {
                 var tpl, context, section, field, html, e, h, i, j, d, runs, s;
 
+                $('.space-content-loading').hide();
+
                 tpl = Handlebars.compile($('#space-details').html());
                 html = tpl({
                     name: data.name,

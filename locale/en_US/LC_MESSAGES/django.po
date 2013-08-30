@@ -155,3 +155,12 @@ msgstr "Loud"
 
 msgid "variable"
 msgstr "Variable"
+
+msgid "description_help"
+msgstr "Be specific as possible?"
+
+msgid "orientation_help"
+msgstr "Further refine the description"
+
+msgid "latlong_help"
+msgstr "Use Google Maps <a href=\"javascript:void(0)\">Tutorial</a>"
