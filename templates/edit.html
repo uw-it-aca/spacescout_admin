@@ -9,7 +9,16 @@
 {% endblock %}
 
 {% block content %}
+
 <h2 id="space-name">{{ name }}</h2>
+
+<div class="panel space-detail-section space-content-loading">
+    <div class="spinner" role="alert">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="loading">Loading</div>
+</div>
+
 <div id="space_editor"></div>
 
 <!-- Done -->

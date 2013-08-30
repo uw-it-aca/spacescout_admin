@@ -10,9 +10,17 @@
 
 {% block content %}
     
-    <div class="panel space-detail-section space-detail-header">
-    	<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ SPOT_ID }}/#basic" class="action-link">edit</a></div>
+    <div class="space-content-loading">
+        <div class="spinner" role="alert">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="loading">Loading</div>
     </div>
+    
+    
+    <div class="panel space-detail-section space-detail-header">
+    	<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ SPOT_ID }}/#basic" class="action-link">edit</a></div>    
+    </div>    
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
     <!--<div class="panel space-detail-section">
