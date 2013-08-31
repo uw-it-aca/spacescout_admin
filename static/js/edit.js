@@ -32,9 +32,21 @@ $(document).ready(function() {
 
     var editSpaceDetails = function (space) {
         var hash = decodeURIComponent(window.location.hash.substr(1)),
-            i, node;
+            i, node, section = null;
 
         $('#space-name').html(space.name);
+
+        for (i = 0; i < space.sections.length; i += 1) {
+            if (hash == space.sections[i].section) {
+                section = space.sections[i];
+                break;
+            }
+        }
+
+        if (!section) {
+            $('#space-editor').html(Handlebars.compile($('#no-section').html())({}));
+            return;
+        }
 
         switch(hash) {
         case 'basic' :
@@ -63,23 +75,10 @@ $(document).ready(function() {
 
             break;
         case 'images' :
-            $('#space-editor').html(editImageInfo(space));
+            $('#space-editor').html(editImageInfo(section));
             break;
         default:
-            node = null;
-            for (i = 0; i < space.sections.length; i += 1) {
-                if (hash == space.sections[i].section) {
-                    node = editSectionInfo(space.sections[i]);
-                    break;
-                }
-            }
-
-            if (node) {
-                $('#space-editor').append(node);
-            } else {
-                $('#space-editor').html(Handlebars.compile($('#no-section').html())({}));
-            }
-
+            $('#space-editor').append(editSectionInfo(section));
             break;
         }
     };
@@ -122,11 +121,17 @@ $(document).ready(function() {
         return tpl({});
     };
 
-    var editImageInfo = function (space) {
+    var editImageInfo = function (section) {
         var schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-images').html());
+            tpl = Handlebars.compile($('#space-edit-images').html()),
+            context = {};
 
-        return tpl({});
+        context['thumbnails'] = section['thumbnails'];
+        if (context['thumbnails'].length) {
+            context['thumbnails'][0]['active'] = 'active';
+        }
+
+        return tpl(context);
     };
 
     var editSectionInfo = function (space) {
