@@ -4,7 +4,9 @@
 
 	// If there's a hash, or addEventListener is undefined, stop here
 	if( !location.hash && win.addEventListener ){
-
+        
+        alert('hide address bar!');
+        
 		//scroll to 1
 		win.scrollTo( 0, 1 );
 		var scrollTop = 1,
