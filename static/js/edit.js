@@ -61,10 +61,10 @@ $(document).ready(function() {
         case 'hours' :
             $('#space-editor').html(editHoursInfo(space));
 
-            // make the multi-day selector usable for desktop
+            // DESKTOP: make the multi-day selector usable
             $('.selectpicker').selectpicker();
             
-            // handle multi-day selection and display
+            // MOBILE: handle multi-day selection and display
             $('.day-select').change(function(){
                 var selected = $(this).val();
 
@@ -72,7 +72,7 @@ $(document).ready(function() {
                     return(value);
                 });
                 
-                $(this).siblings(".show-days").html(list.join(""));
+                $(this).siblings(".show-days").html(list.join(", "));
             });
 
             break;
