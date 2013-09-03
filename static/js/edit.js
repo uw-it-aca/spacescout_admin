@@ -1,6 +1,8 @@
 $(document).ready(function() {
-
-
+    
+    // hide the address bar... TODO: use the actual hide-address-bar.js script instead    
+    window.scrollTo(0, 1);
+        
     // fetch spot data
     (function () {
         $.ajax({

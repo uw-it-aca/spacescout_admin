@@ -1,11 +1,11 @@
 /*! Normalized address bar hiding for iOS & Android (c) @scottjehl MIT License */
-(function( win ){
+(function ( win ){
 	var doc = win.document;
 
 	// If there's a hash, or addEventListener is undefined, stop here
 	if( !location.hash && win.addEventListener ){
         
-        alert('hide address bar!');
+        console.log('hide address bar!');
         
 		//scroll to 1
 		win.scrollTo( 0, 1 );
