@@ -6,10 +6,12 @@ $(document).ready(function() {
       $(this).tab('show');
       $($(this).attr('href')).children().trigger('exposed', ['Custom', 'Event']);
     });
-
+    
     /* deal with tab exposure */
     $('#published').on('exposed', function (event) {
         loadPublishedSpots();
+        loadUnpublishedSpots();
+        loadIncompleteSpots();
     });
 
     $('#unpublished').on('exposed', function (event) {
