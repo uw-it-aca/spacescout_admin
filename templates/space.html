@@ -17,9 +17,8 @@
         <div class="loading">Loading</div>
     </div>
     
-    
     <div class="panel space-detail-section space-detail-header">
-    	<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ SPOT_ID }}/#basic" class="action-link">edit</a></div>    
+    	  
     </div>    
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
@@ -56,6 +55,7 @@
 
 <script id="space-details" type="text/html">
 {% verbatim %}
+<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ SPOT_ID }}/#basic" class="action-link">edit</a></div>  
 <h2>{{ name }}</h2>
 <p class="space-detail-item">{{ type }}</p>
 <p class="space-detail-item"><strong>Owner </strong>{{ manager }}</p>
