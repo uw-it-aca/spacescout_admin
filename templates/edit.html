@@ -141,7 +141,7 @@
                 <div class="day-select-container third">
                   
                   <!-- TODO: mobile time selector -->
-                  <select multiple class="form-control day-select" id="days">
+                  <select multiple id="days">
                     <option value="M">M</option>
                     <option value="T">T</option>
                     <option value="W">W</option>
@@ -169,54 +169,10 @@
                   <option>2:30AM</option>
                 </select>
             </div>
-              
-            <div class="time-selector">    
-                <div class="day-select-container third">
-                  
-                  <!-- TODO: desktop time selector -->
-                  <select class="selectpicker" multiple title='Select days'>
-                    <option value="M">M</option>
-                    <option value="T">T</option>
-                    <option value="W">W</option>
-                    <option value="Th">Th</option>
-                    <option value="F">F</option>
-                    <option value="S">S</option>
-                    <option value="Su">Su</option>
-                  </select>
-                  <!-- /desktop time selector -->
-                  
-                </div>
-                <select class="form-control third hour-select" id="">
-                  <option>12:30AM</option>
-                  <option>1:00AM</option>
-                  <option>1:30AM</option>
-                  <option>2:00AM</option>
-                  <option>2:30AM</option>
-                </select>
-                <select class="form-control third hour-select" id="">
-                  <option>12:30AM</option>
-                  <option>1:00AM</option>
-                  <option>1:30AM</option>
-                  <option>2:00AM</option>
-                  <option>2:30AM</option>
-                </select>
-            </div>
-            
             <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
             
         </div>
         
-        <div><!-- hours hotes -->
-            <h4>Hours Notes</h4>
-            <textarea class="form-control" rows="2" placeholder="Enter notes for the hours section">Hours vary between quarters and and on holidays</textarea>
-        </div>
-        
-        <div><!-- cafe hours -->
-            <h4>Cafe Hours</h4>
-            <textarea class="form-control" rows="2" placeholder="Enter notes for the cafe hours">This space contains a cafe that has hours that differ from the normal hours</textarea>
-        </div>
-        
-   
     </div><!-- /hours -->
 {% endverbatim %}
 </script>
@@ -387,7 +343,8 @@
 
 <script type="text/javascript">
 window.spacescout_admin = {
-  spot_id: '{{ SPOT_ID }}'
+  spot_id: '{{ SPOT_ID }}',
+  is_mobile: {{ IS_MOBILE }}
 };
 </script>
     

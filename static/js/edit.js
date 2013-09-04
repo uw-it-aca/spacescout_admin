@@ -61,21 +61,26 @@ $(document).ready(function() {
 
             break;
         case 'hours' :
-            $('#space-editor').html(editHoursInfo(space));
+            $('#space-editor').html(editHoursInfo(section));
 
-            // DESKTOP: make the multi-day selector usable
-            $('.selectpicker').selectpicker();
-            
-            // MOBILE: handle multi-day selection and display
-            $('.day-select').change(function(){
-                var selected = $(this).val();
+            if (window.spacescout_admin.is_mobile) {
+                // MOBILE: handle multi-day selection and display
+                $('#days').addClass('form-control');
+                $('#days').addClass('day-select');
+                $('#days').change(function(){
+                    var selected = $(this).val();
 
-                var list = $.map(selected, function(value) {
-                    return(value);
-                });
+                    var list = $.map(selected, function(value) {
+                        return(value);
+                    });
                 
-                $(this).siblings(".show-days").html(list.join(", "));
-            });
+                    $(this).siblings(".show-days").html(list.join(", "));
+                });
+            } else {
+                // DESKTOP: make the multi-day selector usable
+                $('#days').selectpicker();
+            }
+            
 
             break;
         case 'images' :
@@ -118,11 +123,13 @@ $(document).ready(function() {
         return tpl(context);
     };
 
-    var editHoursInfo = function (space) {
+    var editHoursInfo = function (section) {
         var schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-hours').html());
+            tpl = Handlebars.compile($('#space-edit-hours').html()),
+            section_node = $(tpl({}));
 
-        return tpl({});
+        appendSectionFields(section.fields, section_node);
+        return section_node;
     };
 
     var editImageInfo = function (section) {
@@ -138,15 +145,21 @@ $(document).ready(function() {
         return tpl(context);
     };
 
-    var editSectionInfo = function (space) {
+    var editSectionInfo = function (section) {
         var schema = window.spacescout_admin.spot_schema,
-            field, section, i, tpl;
+            field, section_node, tpl;
 
         tpl = Handlebars.compile($('#editor-container').html());
-        section = $(tpl({section: space.section}));
+        section_node = $(tpl({section: section.section}));
+        appendSectionFields(section.fields, section_node);
+        return section_node;
+    };
 
-        for (i = 0; i < space.fields.length; i += 1) {
-            field = space.fields[i];
+    var appendSectionFields = function (fields, section) {
+        var i, field;
+
+        for (i = 0; i < fields.length; i += 1) {
+            field = fields[i];
 
             switch (typeof field.key) {
             case 'string':
@@ -161,8 +174,6 @@ $(document).ready(function() {
                 break;
             }
         }
-
-        return section;
     };
 
     var appendFieldValue = function (field, section) {
