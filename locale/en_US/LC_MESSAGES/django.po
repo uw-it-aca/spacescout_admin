@@ -164,3 +164,12 @@ msgstr "Further refine the description"
 
 msgid "latlong_help"
 msgstr "Use Google Maps <a href=\"javascript:void(0)\">Tutorial</a>"
+
+msgid "access_notes"
+msgstr "Enter Hours notes"
+
+msgid "reservation_notes"
+msgstr "Enter additional details such as reservation link"
+
+msgid "hours_notes"
+msgstr "Enter notes for the hours section"

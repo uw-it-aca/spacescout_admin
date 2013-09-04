@@ -166,7 +166,7 @@ $(document).ready(function() {
     };
 
     var appendFieldValue = function (field, section) {
-        var tpl, vartype, data, i, node;
+        var tpl, vartype, varedit, context, data, i, node;
 
         // fields we know about
         switch (field.key) {
@@ -206,16 +206,28 @@ $(document).ready(function() {
             break;
         default:
             vartype = schemaVal(field.key);
+            varedit = (field.hasOwnProperty('edit')) ? field.edit: null;
             switch (typeof vartype) {
             case 'string':
                 switch (vartype.toLowerCase()) {
                 case 'unicode':
-                    tpl = Handlebars.compile($('#space-edit-input').html());
-                    section.append(tpl({
+                    context = {
                         name: field.name,
                         help: (field.hasOwnProperty('help')) ? gettext(field.help) : '',
                         inputs: [{ value: field.value ? field.value : '' }]
-                    }));
+                    };
+
+                    if (varedit && varedit.hasOwnProperty('tag') && varedit.tag == 'textarea') {
+                        if (varedit.hasOwnProperty('placeholder')) {
+                            context.placeholder = gettext(varedit.placeholder);
+                        }
+
+                        tpl = Handlebars.compile($('#space-edit-textarea').html());
+                    } else {
+                        tpl = Handlebars.compile($('#space-edit-input').html());
+                    }
+
+                    section.append(tpl(context));
                     break;
                 default:
                     break;

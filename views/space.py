@@ -105,6 +105,14 @@ def SpaceView(request, space_id):
                     'key':  f['value']['key'] if isinstance(f['value'], dict) else [k['key'] for k in f['value']]
                 }
 
+                if 'edit' in f['value']:
+                    field['edit'] = {}
+                    if 'tag' in f['value']['edit']:
+                        field['edit']['tag'] = f['value']['edit']['tag']
+
+                    if 'placeholder' in f['value']['edit']:
+                        field['edit']['placeholder'] = f['value']['edit']['placeholder']
+
                 if 'help' in f:
                     field['help'] = f['help']
 
