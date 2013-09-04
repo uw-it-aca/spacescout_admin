@@ -12,6 +12,7 @@ $(document).ready(function() {
 
                 tpl = Handlebars.compile($('#space-details').html());
                 html = tpl({
+                    id: window.spacescout_admin.spot_id,
                     name: data.name,
                     type: listToString(data.type),
                     manager: data.manager,
