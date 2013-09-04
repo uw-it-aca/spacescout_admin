@@ -192,7 +192,7 @@ select.form-control { }
 .time-selector { margin: 0 auto; padding-left:0;
 	span { text-align: center; font-weight: bold;}
 	.third { width: 32.6%; display: inline-block; vertical-align: top;}
-	.hour-select,.day-select { /*-webkit-appearance: none; */}
+	.hour-select,.day-select { /*-webkit-appearance: none;*/ }
 	.day-select { border: 1px solid #ccc; color: transparent; z-index: 2;}
 	.day-select-container {  border-radius: 4px; }
 	.show-days { color: @gray; font-family: helvetica; font-size: 14px; text-align: left; margin-top: -27px; z-index: -999; margin-left: 10px; width: 65%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -274,27 +274,35 @@ margin: 20px 0 20px 20px;
 
 .bootstrap-select:not([class*="span"]) { width: 100%; }
 .bootstrap-select { 
+    
+    
     .btn { box-shadow: none !important; -webkit-box-shadow: none !important; 
         font-family: helvetica;
         font-size: 14px;
+
+        /*appearance: menulist !important;
+        -webkit-appearance: menulist !important;
+        -moz-appearance: menulist !important;*/
         
-        appearance: menulist;
-        -webkit-appearance: menulist;
-        -moz-appearance: menulist;
-        
-        background: none; 
+        background: #fff;
+                
         border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
         
         border: solid 1px #ccc;
         height: 34px;
         text-transform: capitalize;
         
-        .caret { display: none; }
+        .caret { /*display: none; */}
     }
     
     .btn:focus { background: none; }
+    
+
 }
 
+/** bootstrap-select styling specialy for firefox **/
 @-moz-document url-prefix() {
     .bootstrap-select .btn:focus { border-color: #7dace9; }
     .bootstrap-select .btn .caret { display: inline-block; }
