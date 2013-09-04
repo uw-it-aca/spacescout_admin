@@ -38,16 +38,18 @@ $(document).ready(function() {
 
         $('#space-name').html(space.name);
 
-        for (i = 0; i < space.sections.length; i += 1) {
-            if (hash == space.sections[i].section) {
-                section = space.sections[i];
-                break;
+        if (hash != 'basic') {
+            for (i = 0; i < space.sections.length; i += 1) {
+                if (hash == space.sections[i].section) {
+                    section = space.sections[i];
+                    break;
+                }
             }
-        }
 
-        if (!section) {
-            $('#space-editor').html(Handlebars.compile($('#no-section').html())({}));
-            return;
+            if (!section) {
+                $('#space-editor').html(Handlebars.compile($('#no-section').html())({}));
+                return;
+            }
         }
 
         switch(hash) {
