@@ -185,11 +185,11 @@ select.form-control { }
 
 .image-select { margin:1.5em 0 0;
     
-    input[type="file"] { display: inline-block; 
+    .fileupload-preview { display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  margin-left:5px;
         @media screen and (max-width: 320px) { 
-            width: 230px;
+            max-width: 160px;
         }
-    }
+    }    
 }
 
 .third { width: 32%; display: inline-block;}
@@ -256,7 +256,6 @@ select.form-control { }
 
 
 /* edit */
-.image-select a { text-align: left;}
 .save-discard { margin-top: 2em;}
 
 /* footer */
@@ -311,7 +310,6 @@ margin: 20px 0 20px 20px;
 @-moz-document url-prefix() {
     .bootstrap-select .btn:focus { border-color: #7dace9; }
     .bootstrap-select .btn .caret { display: inline-block; }
-    .image-select input[type="file"] { width: auto; }
 }
 
 

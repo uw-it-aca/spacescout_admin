@@ -294,12 +294,14 @@
         <div class="panel-heading">
             <h3 class="panel-title">Images</h3>
         </div>
-        
-      <div class="image-select clearfix">        
-        <!-- IF mobile: set size=13 ELSE  size=55-->
-        <input type="file" class="pull-left" id="" size="13">
-        <a href="#0" class="action-link pull-right">upload</a>
-      </div>
+      
+        <div class="image-select fileupload fileupload-new clearfix" data-provides="fileupload">
+            <span class="btn-file pull-left action-link"><span class="fileupload-new">select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+            <span class="fileupload-preview pull-left"></span>
+            <a href="#" class="close fileupload-exists pull-left" data-dismiss="fileupload" style="margin-left:5px; font-size:20px;">×</a>
+            
+            <a href="#0" class="action-link pull-right">upload</a>
+        </div>
   
       <div class="row">
         <div id="image-carousel" class="col-xs-12 carousel slide carousel-test">
