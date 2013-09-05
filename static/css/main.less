@@ -308,43 +308,40 @@ margin: 20px 0 20px 20px;
 
 }
 
-/** bootstrap-select styling specialy for firefox **/
+/*** bootstrap-select styling specialy for firefox ***/
 @-moz-document url-prefix() {
     .bootstrap-select .btn:focus { border-color: #7dace9; }
     .bootstrap-select .btn .caret { display: inline-block; }
 }
 
-
-/* fancy loading animation */
+/*** fancy loading animation ***/
 .spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
 .spinner span {
-      border-radius: 40px;
-      position:absolute;
-      top:0;
-      bottom:0;
-      right:0;
-      left:0;
-      border:3px solid @gray;
-      opacity:0;
-      -webkit-animation: scale 1.8s ease-out infinite;
-    }
-.loading {
-  color:@gray-light;
-  font-size:20px;
-  font-weight:100;
-  display:inline-block;
-  vertical-align: middle;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-left:7px;
+    border-radius: 40px;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    border:3px solid @gray;
+    opacity:0;
+    -webkit-animation: scale 1.8s ease-out infinite;
 }
-
+.loading {
+    color:@gray-light;
+    font-size:20px;
+    font-weight:100;
+    display:inline-block;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-left:7px;
+}
 .loading:after { content:'...' }
 .spinner span:nth-child(2) { -webkit-animation-delay:1.2s; }
 .spinner span:nth-child(3) { -webkit-animation-delay:600ms; }
-
 @-webkit-keyframes scale {
-  0% {opacity:.2;-webkit-transform:scale(0);}
-  70% {opacity:1;}
-  100% {opacity:0;-webkit-transform:scale(1);}
+    0% {opacity:.2;-webkit-transform:scale(0);}
+    70% {opacity:1;}
+    100% {opacity:0;-webkit-transform:scale(1);}
 }
