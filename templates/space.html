@@ -27,7 +27,7 @@
         <h3 class="panel-title">Incomplete Items</h3>
       </div>
       <div class="space-detail-item" id="incomplete-items">
-        <h4>Required</h4>
+        <h4>Required Fields</h4>
         <p>
           <span class="label label-danger">Space Hours</span>
           <span class="label label-danger">Lat & Long</span>
@@ -56,9 +56,9 @@
 {% verbatim %}
 <div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ id }}/#basic" class="action-link">edit</a></div>  
 <h2>{{ name }}</h2>
-<p class="space-detail-item">{{ type }}</p>
-<p class="space-detail-item"><strong>Owner </strong>{{ manager }}</p>
-<p class="space-detail-item"><strong>Editors </strong>{{ editors }}</p>
+<p class="space-detail-item"><strong>Type</strong> {{ type }}</p>
+<p class="space-detail-item"><strong>Owner</strong> {{ manager }}</p>
+<p class="space-detail-item"><strong>Editors</strong> {{ editors }}</p>
 {% endverbatim %}
 </script>
 
