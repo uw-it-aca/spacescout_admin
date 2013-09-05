@@ -22,20 +22,19 @@
     </div>    
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
-    <!--<div class="panel space-detail-section">
+    <div class="panel space-detail-section">
       <div class="panel-heading">
         <h3 class="panel-title">Incomplete Items</h3>
       </div>
       <div class="space-detail-item" id="incomplete-items">
         <h4>Required</h4>
         <p>
-          <span class="label label-danger">Hours</span>
+          <span class="label label-danger">Space Hours</span>
           <span class="label label-danger">Lat & Long</span>
-          <span class="label label-danger">Resources</span>
-          <span class="label label-danger">Food/Coffee</span>
+          <span class="label label-danger">Building</span>
         </p>
       </div>
-    </div>-->
+    </div>
     
     <div style="margin-top: 2em;">
       <p>Last updated on 8/15/13 12:34PM by <strong>jcomis</strong></p>
@@ -123,7 +122,7 @@
         <h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="row">
-        <div id="image-carousel" class="col-xs-12 carousel slide carousel-test">
+        <div id="image-carousel" class="col-xs-12 carousel slide carousel-test" data-interval="false">
           <!-- Indicators -->
           <ol class="carousel-indicators">
             {{# each thumbnails }}

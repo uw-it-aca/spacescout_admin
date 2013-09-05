@@ -1,5 +1,5 @@
+/*** variables ***/
 
-/*variables*/
 @gray-dark: #333;
 @gray: #555;
 @gray-light: #ddd;
@@ -7,8 +7,9 @@
 @gray-lightest: #f7f5fa;
 
 @space-purple: #5a58a3;
+@danger: #d9534f;
 
-/* bootstrap overrides */
+/*** bootstrap overrides ***/
 
 body { padding-top: 70px; font-family: 'Lato', sans-serif; font-weight: 300;  
     &.freeze { position:relative; overflow-y: hidden !important;}
@@ -16,17 +17,16 @@ body { padding-top: 70px; font-family: 'Lato', sans-serif; font-weight: 300;
 
 html, body { height: 100%; }
 
-#wrap { /*sticky footer*/
+/*** sticky footer ***/
+#wrap {
     min-height: 100%;
     @media screen and (max-device-width: 320px) { 
         min-height: 450px; 
     }
     height: auto !important;
-    height: 100%;
-    /* Negative indent footer by its height */
-    margin: 0 auto -60px;
-    /* Pad bottom by footer height */
-    padding: 0 0 110px;
+    height: 100%;    
+    margin: 0 auto -60px; /* Negative indent footer by its height */
+    padding: 0 0 110px; /* Pad bottom by footer height */
 }
 
 .alert { margin-top: 20px; }
@@ -41,23 +41,20 @@ html, body { height: 100%; }
 .nav>li>a { padding-top: 15px;}
 .navbar-nav { 
     li { font-family: 'Dosis', sans-serif; font-weight: 500; text-transform: uppercase;
-        @media screen and (min-width: 768px) { padding-left: 40px; a { padding: 0;} }
+        @media screen and (min-width: 768px) { padding-left: 40px; a { padding: 0; } }
         
         a { color: @gray;
             @media screen and (min-width: 768px) { line-height: 65px; }
         }
     }
 }
-.navbar-nav:last-child li:first-child a { color: @space-purple;}
-.navbar-nav:last-child li:last-child a { color: red;}
-
-
+.navbar-nav:last-child li:first-child a { color: @space-purple; }
+.navbar-nav:last-child li:last-child a { color: @danger; }
 .navbar-toggle { padding: 8px; right: 0; top: 7px; color: @gray; }
-.navbar-collapse { background-color: @gray-light;/* margin: 0 15px; padding: 0 -15px;*/
-    
+.navbar-collapse { background-color: @gray-light;    
     @media screen and (min-width: 768px) {
-    background: transparent;
-      margin: 0;
+        background: transparent;
+        margin: 0;
     }
 }
 
@@ -68,7 +65,6 @@ html, body { height: 100%; }
     -webkit-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
     -moz-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
     box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
-    
 }
 
 .btn-success { background: desaturate(@space-purple, 0%); }
@@ -82,11 +78,8 @@ html, body { height: 100%; }
 .container { position: relative; }
 
 .space-container {
-    
     h2 { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.8em; color: #999; font-weight: 300; color: #625fab; margin-top: 1.2em; margin-bottom: 1em;}
 }
-
-.space-content-loading { /*min-height: 500px;*/ }
 
 .panel-heading { background: @gray-lightest; }
 
@@ -95,12 +88,12 @@ input[type=text].form-control, textarea.form-control { -webkit-appearance: none;
 textarea.form-control { resize: vertical; }
 select.form-control { }
 
-
-/* action links */
+/*** action link ***/
 
 .action-link { color: @space-purple; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  }
+.required-field { color: @danger; font-weight: normal; font-size: 70%; padding-bottom: 1px; }
 
-/* home */
+/*** home ***/
 
 .nav-pills { margin: 1.5em 0 1em;
     
@@ -137,6 +130,7 @@ select.form-control { }
 	    .building-name { padding: 10px 15px; background: @gray-lightest; margin: 0; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  font-size: 1.1em; }
     	.building-list { list-style: none; padding: 0; margin: 0; }
     }
+    
     .space-list-header:first-child { 
         .building-name {
             -webkit-border-top-left-radius: 4px;
@@ -150,10 +144,11 @@ select.form-control { }
     .space-list-header:last-child { border-top: 1px solid @gray-light; }
 
 	.space-list-item { padding: 8px 16px 8px 16px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em; position: relative;
+		
 		a {	display: block; font-size: 1.2em; color: @space-purple; font-weight: 400; }
 		.item-description { display: block;}
 		.item-modified-by { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
-		.item-modified { position: absolute; top:-2px; right: 7px; border-radius: 0; color: @space-purple; font-size: 1.2em;}
+		.item-modified { position: absolute; top:-2px; right: 7px; border-radius: 0; color: @danger; font-size: 1.2em;}
 		
 		@media screen and (min-width: 1024px) { padding-right: 30px;
 		
@@ -206,6 +201,7 @@ select.form-control { }
 }
 
 .time-selector { 
+	
 	/*show all days possible to select when not on mobile*/
 	@media screen and (min-width: 767px) { 
 		.third { width: 33%;}
@@ -228,12 +224,11 @@ select.form-control { }
     h4 { font-weight: 700; font-size: 1em; }
     
 	.section-edit { float: right;
-    	.action-link { color: red; }
+    	.action-link { color: @danger; }
 	}
 	.space-detail-item { font-size: 1em; font-weight: 300;
 		h4 { margin-bottom: 5px; font-size: 1em; }
-		//p { float: right; line-height: 38px; margin-bottom: 0; }
-		p { color: @gray; }
+		p { color: @gray; word-break: break-word; }
 		p a { white-space: pre-wrap; word-wrap: break-word;}
 	}
 	.section-hours {
@@ -254,13 +249,12 @@ select.form-control { }
     }
 }
 
+/*** actions container (buttons) ***/
 
+.save-discard { margin-top: 2em; } /* TODO: change this to more global space-actions class */
 
+/*** footer ***/
 
-/* edit */
-.save-discard { margin-top: 2em;}
-
-/* footer */
 .space-footer { background: @gray-lighter; line-height: 60px; font-size: 85%; }
 .space-footer-copyright:after { 
     
@@ -270,26 +264,18 @@ select.form-control { }
     content: " Academic & Collaborative Applications, UW-IT"; 
 }
 
-.no-space {
-    span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px;
-   }
-margin: 20px 0 20px 20px;
-}
 
-/*bootstrap-select overrides */
+
+/*** bootstrap-select overrides ***/
 
 .bootstrap-select:not([class*="span"]) { width: 100%; }
 .bootstrap-select { 
     
-    
     .btn { box-shadow: none !important; -webkit-box-shadow: none !important; 
+        
         font-family: helvetica;
         font-size: 14px;
 
-        /*appearance: menulist !important;
-        -webkit-appearance: menulist !important;
-        -moz-appearance: menulist !important;*/
-        
         background: #fff;
                 
         border-radius: 4px;
@@ -299,22 +285,26 @@ margin: 20px 0 20px 20px;
         border: solid 1px #ccc;
         height: 34px;
         text-transform: capitalize;
-        
-        .caret { /*display: none; */}
     }
     
     .btn:focus { background: none; }
-    
-
 }
 
-/*** bootstrap-select styling specialy for firefox ***/
+/*** bootstrap-select overrides - specific to firefox ***/
+
 @-moz-document url-prefix() {
     .bootstrap-select .btn:focus { border-color: #7dace9; }
     .bootstrap-select .btn .caret { display: inline-block; }
 }
 
+/*** no spaces to manager ***/
+
+.no-space { margin: 20px 0 20px 20px;
+    span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px; }
+}
+
 /*** fancy loading animation ***/
+
 .spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
 .spinner span {
     border-radius: 40px;
