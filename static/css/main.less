@@ -90,7 +90,10 @@ html, body { height: 100%; }
 .form-control { box-shadow: none !important; -webkit-box-shadow: none !important; }
 input[type=text].form-control, textarea.form-control { -webkit-appearance: none; }
 textarea.form-control { resize: vertical; }
-select.form-control { }
+
+select.form-control { 
+     @media screen and (min-width: 768px) { /*-webkit-appearance: none;*/ }
+}
 
 /*** action link ***/
 
@@ -206,7 +209,9 @@ select.form-control { }
 .time-selector { margin: 0 auto; padding-left:0;
 	span { text-align: center; font-weight: bold;}
 	.third { width: 32.6%; display: inline-block; vertical-align: top;}
-	.hour-select,.day-select { /*-webkit-appearance: none;*/ }
+	
+	.hour-select,.day-select { }
+	
 	.day-select { border: 1px solid #ccc; color: transparent; z-index: 2;}
 	.day-select-container {  border-radius: 4px; }
 	.show-days { color: @gray; font-family: helvetica; font-size: 14px; text-align: left; margin-top: -27px; z-index: -999; margin-left: 10px; width: 65%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -287,9 +292,7 @@ select.form-control { }
         
         font-family: helvetica;
         font-size: 14px;
-
-        background: #fff;
-                
+                                
         border-radius: 4px;
         -webkit-border-radius: 4px;
         -moz-border-radius: 4px;
@@ -297,9 +300,17 @@ select.form-control { }
         border: solid 1px #ccc;
         height: 34px;
         text-transform: capitalize;
+        
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+        background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
+        background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
+        background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
+        background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
+        background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
+ 
     }
     
-    .btn:focus { background: none; }
+    .btn:focus { /*background: none;*/ border-color: #7dace9; }
 }
 
 /*** bootstrap-select overrides - specific to firefox ***/
