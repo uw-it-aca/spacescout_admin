@@ -46,6 +46,10 @@ html, body { height: 100%; }
         a { color: @gray;
             @media screen and (min-width: 768px) { line-height: 65px; }
         }
+        
+        .space-owner { line-height: 65px; padding-left: 15px; color: @gray-lighter; 
+            @media screen and (min-width: 768px) { color: @gray-light; }
+        }
     }
 }
 .navbar-nav:last-child li:first-child a { color: @space-purple; }
@@ -62,9 +66,9 @@ html, body { height: 100%; }
 
 .btn { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-size: 1.3em; border: none;
     
-    -webkit-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
-    -moz-box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
-    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .btn-success { background: desaturate(@space-purple, 0%); }
@@ -90,7 +94,15 @@ select.form-control { }
 
 /*** action link ***/
 
-.action-link { color: @space-purple; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  }
+.action-link { color: @space-purple; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  background: @gray-lighter; padding: 2px 8px; 
+    
+    -webkit-border-radius: .25em;
+    -moz-border-radius: .25em;
+    border-radius: .25em;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
 .required-field { color: @danger; font-weight: normal; font-size: 70%; padding-bottom: 1px; }
 
 /*** home ***/
@@ -224,7 +236,7 @@ select.form-control { }
     h4 { font-weight: 700; font-size: 1em; }
     
 	.section-edit { float: right;
-    	.action-link { color: @danger; }
+    	.action-link { color: @danger; background: none; box-shadow: none; }
 	}
 	.space-detail-item { font-size: 1em; font-weight: 300;
 		h4 { margin-bottom: 5px; font-size: 1em; }
