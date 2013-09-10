@@ -281,15 +281,21 @@ $(document).ready(function() {
     var appendFieldValue = function (field, section) {
         var tpl, vartype, varedit, context, data, i, node, src, choice, group;
 
+        context = {
+            name: field.name,
+            help: (field.hasOwnProperty('help')) ? gettext(field.help) : ''
+        };
+
+        if (field.hasOwnProperty('required')) {
+            context.required = field.required;
+        }
+
         // fields we know about
         switch (field.value.key) {
         case 'location.building_name':
             tpl = Handlebars.compile($('#space-edit-select').html());
-            node = $(tpl({
-                name: field.name,
-                options: []
-            }));
-
+            context.options = [];
+            node = $(tpl(context));
             section.append(node);
 
             $.ajax({
@@ -326,11 +332,6 @@ $(document).ready(function() {
                 case 'int':
                 case 'decimal':
                 case 'unicode':
-                    context = {
-                        name: field.name,
-                        help: (field.hasOwnProperty('help')) ? gettext(field.help) : ''
-                    };
-
                     if (varedit && varedit.hasOwnProperty('tag') && varedit.tag == 'textarea') {
                         if (varedit.hasOwnProperty('placeholder')) {
                             context.placeholder = gettext(varedit.placeholder);
@@ -378,11 +379,10 @@ $(document).ready(function() {
                         }
                     }
 
+                    context.inputs = data;
+
                     tpl = Handlebars.compile($(src).html());
-                    section.append(tpl({
-                        name: field.name,
-                        inputs: data
-                    }));
+                    section.append(tpl(context));
                 } else {
                     if (typeof field.value.value === 'boolean') {
                         src = '#space-edit-checkboxes';
@@ -397,11 +397,9 @@ $(document).ready(function() {
                         }];
                     }
 
+                    context.inputs = data;
                     tpl = Handlebars.compile($(src).html());
-                    section.append(tpl({
-                        name: field.name,
-                        inputs: data
-                    }));
+                    section.append(tpl(context));
                 }
                 break;
             default:
@@ -414,7 +412,15 @@ $(document).ready(function() {
         var tpl, i, vartype,
             values = [],
             bool = false,
-            src_selector, inputs;
+            context = {
+                name: field.name,
+                help: (field.hasOwnProperty('help')) ? gettext(field.help) : ''
+            },
+            src_selector;
+
+        if (field.hasOwnProperty('required')) {
+            context.required = field.required;
+        }
 
         for (i = 0; i < field.value.length; i += 1) {
             if (i == 0 && typeof field.value[i].value === 'boolean') {
@@ -444,18 +450,14 @@ $(document).ready(function() {
 
         if (bool) {
             src_selector = "#space-edit-checkboxes";
-            inputs = values;
+            context.inputs = values;
         } else {
             src_selector = "#space-edit-input";
-            inputs = [{ value: values.join(', ') }];
+            context.inputs = [{ value: values.join(', ') }];
         }
 
         tpl = Handlebars.compile($(src_selector).html());
-        section.append(tpl({
-            name: field.name,
-            help: (field.hasOwnProperty('help')) ? gettext(field.help) : '',
-            inputs: inputs
-        }));
+        section.append(tpl(context));
     };
 
     var booleanEditStruct = function (v) {
