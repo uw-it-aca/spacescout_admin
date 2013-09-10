@@ -292,9 +292,8 @@ $(document).ready(function() {
         case 'location.building_name':
             tpl = Handlebars.compile($('#space-edit-select').html());
             context.options = [];
-            node = $(tpl(context));
-            section.append(node);
-            node = section.find('select');
+            section.append(tpl(context));
+            node = section.find('select').last();
 
             $.ajax({
                 url: '/api/v1/buildings/',
