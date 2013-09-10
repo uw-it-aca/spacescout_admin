@@ -180,13 +180,16 @@ select.form-control {
 
 
 /* details */
-.carousel { margin-top: 1em; }
+.carousel { margin-top: 1em; max-width: 768px; 
+     @media screen and (min-width: 1024px) {
+        margin: 1em auto;
+     } 
+}
 
 .carousel-inner { min-height: 193px; background: @gray-lighter;
     @media screen and (min-width: 480px) { min-height: 299px; }
     @media screen and (min-width: 768px) { min-height: 457px; }
-    @media screen and (min-width: 1024px) { min-height: 604px; }
-    @media screen and (min-width: 1280px) { min-height: 737px; }
+    @media screen and (min-width: 1024px) { min-height: 511px; }
 }
 
 .carousel-control.right { background-image: none;}
@@ -197,11 +200,21 @@ select.form-control {
 
 .image-select { margin:1.5em 0 0;
     
+    @media screen and (min-width: 1024px) {
+        max-width: 768px; margin: 1em auto;
+    }
+    
     .fileupload-preview { display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  margin-left:5px;
         @media screen and (max-width: 320px) { 
             max-width: 160px;
         }
     }    
+}
+
+.image-actions { margin:1.5em 0 0;
+    @media screen and (min-width: 1024px) {
+        max-width: 768px; margin: 1em auto;
+    }
 }
 
 .third { width: 32%; display: inline-block;}
