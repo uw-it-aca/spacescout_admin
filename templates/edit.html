@@ -96,11 +96,13 @@
       {{/if}}
       <small>{{{ help }}}</small>
     </h4>
+    <div class="panel space-types-panel">
     {{ #each inputs }}
     <div class="checkbox">
       <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
     </div>
     {{/each}}
+    </div>
 {% endverbatim %}
 </script>
 
@@ -112,11 +114,13 @@
       {{/if}}
       <small>{{{ help }}}</small>
     </h4>
+    <div class="panel space-types-panel">
     {{ #each inputs }}
     <div class="radio">
       <label><input type="radio" value="{{ value }}" name="{{ group }}" {{ choice }}>{{ name }}</label>
     </div>
     {{/each}}
+    </div>
 {% endverbatim %}
 </script>
 
