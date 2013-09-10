@@ -146,14 +146,14 @@ def value_from_key(d, v, s):
         if 'format' in v:
             val_obj['format'] = v['format']
 
+        if 'map' in v:
+            val_obj['map'] = v['map']
+
         k = v['key'].split('.')
         val = value_from_keylist(d, k)
 
         if type_from_keylist(s, k) == 'boolean':
             val = True if val or (isinstance(val, str) and val.lower() == 'true') else False
-
-        if 'map' in v and val in v['map']:
-            val = v['map'][val]
 
         val_obj['value'] = val
 
@@ -171,6 +171,6 @@ def value_from_keylist(d, klist):
 def type_from_keylist(schema, klist):
     t = value_from_keylist(schema, klist)
     if isinstance(t, list):
-        return 'boolean' if len(t) and t[0].lower() == 'true' else list
+        return 'boolean' if len(t) == 1 and t[0].lower() == 'true' else list
 
     return t

@@ -32,12 +32,12 @@
 {% verbatim %}
     <!-- Edit basic info -->
     <div class="form-group">
-        <h4>Space Name</h4>
+        <h4>Space Name <span class="glyphicon glyphicon-asterisk required-field"></span></h4>
         <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
     </div>
     
     <div class="form-group">
-          <h4>Space Type <small>Select all that apply</small></h4>
+          <h4>Space Type  <span class="glyphicon glyphicon-asterisk required-field"></span><small>Select all that apply</small></h4>
           {{# each types }}
           <div class="checkbox">
               <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
@@ -49,7 +49,7 @@
     </div>
     
     <div class="form-group">
-        <h4>Owner</h4>
+        <h4>Owner <span class="glyphicon glyphicon-asterisk required-field"></span></h4>
         <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
     </div>
     
@@ -72,7 +72,11 @@
 
 <script id="space-edit-select" type="text/html">
 {% verbatim %}
-    <h4>{{ name }}</h4>
+    <h4>{{ name }}
+      {{#if required}}
+      <span class="glyphicon glyphicon-asterisk required-field"></span>
+      {{/if}}
+    </h4>
     <select class="form-control">
       {{ #each inputs }}
         <option value="{{ value }}" {{ choice }}>{{ name }}</option>
@@ -83,7 +87,12 @@
 
 <script id="space-edit-checkboxes" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    <h4>{{name}}
+      {{#if required}}
+      <span class="glyphicon glyphicon-asterisk required-field"></span>
+      {{/if}}
+      <small>{{{ help }}}</small>
+    </h4>
     {{ #each inputs }}
     <div class="checkbox">
       <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
@@ -94,7 +103,12 @@
 
 <script id="space-edit-radio" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    <h4>{{name}}
+      {{#if required}}
+      <span class="glyphicon glyphicon-asterisk required-field"></span>
+      {{/if}}
+      <small>{{{ help }}}</small>
+    </h4>
     {{ #each inputs }}
     <div class="radio">
       <label><input type="radio" value="{{ value }}" name="{{ group }}" {{ choice }}>{{ name }}</label>
@@ -105,7 +119,12 @@
 
 <script id="space-edit-input" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    <h4>{{name}}
+      {{#if required}}
+      <span class="glyphicon glyphicon-asterisk required-field"></span>
+      {{/if}}
+      <small>{{{ help }}}</small>
+    </h4>
     {{ #each inputs }}
     {{name}} <input type="text" class="form-control" placeholder="Text input" value="{{ value }}">
     {{/each}}
@@ -114,7 +133,12 @@
 
 <script id="space-edit-textarea" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    <h4>{{name}}
+      {{#if required}}
+      <span class="glyphicon glyphicon-asterisk required-field"></span>
+      {{/if}}
+      <small>{{{ help }}}</small>
+    </h4>
     <textarea class="form-control" rows="3" placeholder="{{ placeholder }}">{{ value }}</textarea>
 {% endverbatim %}
 </script>

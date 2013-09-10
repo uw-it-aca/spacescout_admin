@@ -192,6 +192,10 @@ $(document).ready(function() {
         if (f.hasOwnProperty('value') && typeof f.value === 'object') {
             v = window.spacescout_admin.getFieldValue(f.value);
 
+            if (f.value.hasOwnProperty('map') && f.value.map.hasOwnProperty(v)) {
+                v = gettext(f.value.map[v]);
+            }
+
             if (f.value.hasOwnProperty('format')) {
                 v = f.value.format.replace('\{0\}', v);
             }
