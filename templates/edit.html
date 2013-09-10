@@ -1,6 +1,7 @@
 {% extends 'base-space.html' %}
 
 {% load verbatim %}
+{% load i18n %}
 
 {% block title %}Edit{% endblock %}
 
@@ -30,34 +31,31 @@
 <script id="space-edit-basic" type="text/html">
 {% verbatim %}
     <!-- Edit basic info -->
-    <div class="panel space-detail-section" id="basic">
-        <div class="panel-heading">
-            <h3 class="panel-title">Basic Information</h3>
-        </div>
-      
-        <div class="form-group">
-            <h4>Space Name</h4>
-            <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
-        </div>
-        
-        <div class="form-group">
-              <h4>Space Type <small> Select all that apply</small></h4>
-              {{# each types }}
-              <div class="checkbox">
-                  <label><input type="checkbox" value="{{ value }}" {{ checked }}>{{ name }}</label>
-              </div>
-              {{/each}}
-        </div>
-        
-        <div class="form-group">
-            <h4>Owner</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
-        </div>
-        
-        <div class="form-group">
-            <h4>Editors</h4>
-            <input type="text" class="form-control" placeholder="Text input" value="{{ editors }}">
-        </div>
+    <div class="form-group">
+        <h4>Space Name</h4>
+        <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
+    </div>
+    
+    <div class="form-group">
+          <h4>Space Type <small> Select all that apply</small></h4>
+          {{# each types }}
+          <div class="checkbox">
+              <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
+              {{# if has_help }}
+              <p class="text-muted">{{ help }}</p>
+              {{/if}}
+          </div>
+          {{/each}}
+    </div>
+    
+    <div class="form-group">
+        <h4>Owner</h4>
+        <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
+    </div>
+    
+    <div class="form-group">
+        <h4>Editors</h4>
+        <input type="text" class="form-control" placeholder="Text input" value="{{ editors }}">
     </div>
 {% endverbatim %}
 </script>
@@ -76,27 +74,30 @@
 {% verbatim %}
     <h4>{{ name }}</h4>
     <select class="form-control">
-      {{ #each options }}
-        <option value="{{ value }}">{{ name }}</option>
+      {{ #each inputs }}
+        <option value="{{ value }}" {{ choice }}>{{ name }}</option>
       {{/each}}
     </select>
 {% endverbatim %}
 </script>
 
-<script id="space-edit-checkbox" type="text/html">
+<script id="space-edit-checkboxes" type="text/html">
 {% verbatim %}
+    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    {{ #each inputs }}
     <div class="checkbox">
-      <label><input type="checkbox" value="{{ value }}">{{ name }}</label>
+      <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
     </div>
+    {{/each}}
 {% endverbatim %}
 </script>
 
-<script id="space-edit-checkboxes" type="text/html">
+<script id="space-edit-radio" type="text/html">
 {% verbatim %}
-    <h4>{{ name }}</h4>
-    {{ #each checkboxes }}
-    <div class="checkbox">
-      <label><input type="checkbox" value="{{ value }}">{{ name }}</label>
+    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    {{ #each inputs }}
+    <div class="radio">
+      <label><input type="radio" value="{{ value }}" name="{{ group }}" {{ choice }}>{{ name }}</label>
     </div>
     {{/each}}
 {% endverbatim %}
@@ -104,7 +105,7 @@
 
 <script id="space-edit-input" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{ help }}</small></h4>
+    <h4>{{name}} <small>{{{ help }}}</small></h4>
     {{ #each inputs }}
     {{name}} <input type="text" class="form-control" placeholder="Text input" value="{{ value }}">
     {{/each}}
@@ -113,70 +114,35 @@
 
 <script id="space-edit-textarea" type="text/html">
 {% verbatim %}
-    <h4>{{name}} <small>{{ help }}</small></h4>
-    <textarea class="form-control" rows="2" placeholder="{{ placeholder }}"></textarea>
+    <h4>{{name}} <small>{{{ help }}}</small></h4>
+    <textarea class="form-control" rows="2" placeholder="{{ placeholder }}">{{ value }}</textarea>
 {% endverbatim %}
 </script>
 
 <script id="space-edit-hours" type="text/html">
+    <h4>Space - <small>Normal</small></h4>
+    <div class="time-selector">
+      <span class="third">Days</span>
+      <span class="third">Open</span>
+      <span class="third">Close</span>
+    </div>
+    <div style="margin: 1em 0;"><a id="add-hours" href="javascript:void(0);" class="action-link">{% trans "add_hours_group" %}</a></div>
+</script>
+
+<script id="hours-editor" type="text/html">
 {% verbatim %}
-    <!-- edit hours -->  
-    <div class="panel space-detail-section ">
-        
-        <div class="panel-heading">
-            <h3 class="panel-title">Hours</h3>
-        </div>
-        
-        <div><!-- normal hours -->
-        
-            <h4>Space - <small>Normal</small></h4>
-            <div class="time-selector">
-                <span class="third">Days</span>
-                <span class="third">Open</span>
-                <span class="third">Close</span>
-            </div>
-          
-              <!-- repeat this row with each new "add new group"-->
-              <div class="time-selector">    
-                <div class="day-select-container third">
-                  
-                  <!-- TODO: mobile time selector -->
-                  <select multiple id="days">
-                    <option value="M">M</option>
-                    <option value="T">T</option>
-                    <option value="W">W</option>
-                    <option value="Th">Th</option>
-                    <option value="F">F</option>
-                    <option value="S">S</option>
-                    <option value="Su">Su</option>
-                  </select>
-                  <div class="show-days">Select days</div>
-                  <!-- /mobile time selector -->
-                  
-                </div>
-                <select class="form-control third hour-select" id="opening-time">
-                  <option>12:30AM</option>
-                  <option>1:00AM</option>
-                  <option>1:30AM</option>
-                  <option>2:00AM</option>
-                  <option>2:30AM</option>
-                </select>
-                <select class="form-control third hour-select" id="closing-time">
-                  <option>12:30AM</option>
-                  <option>1:00AM</option>
-                  <option>1:30AM</option>
-                  <option>2:00AM</option>
-                  <option>2:30AM</option>
-                </select>
-            </div>
-            <div style="margin: 1em 0;"><a href="#0" class="action-link">add another hour group</a></div>
-            
-        </div>
-        
-    </div><!-- /hours -->
+    <!-- repeat this row with each new "add new group"-->
+    <div class="time-selector">    
+      <div class="day-select-container third">
+        <select multiple id="days"></select>
+        <div class="show-days">Select days</div>
+      </div>
+      <select class="form-control third hour-select" id="opening-time"></select>
+      <select class="form-control third hour-select" id="closing-time"></select>
+    </div>
 {% endverbatim %}
 </script>
-   
+
 <script id="space-edit-access" type="text/html">
 {% verbatim %}
     <!-- Edit access -->
@@ -199,110 +165,18 @@
 {% endverbatim %}
 </script>
     
-<script id="space-edit-resources" type="text/html">
-{% verbatim %}
-    <!-- Edit resources & environment -->
-    <div class="panel space-detail-section ">
-        <div class="panel-heading" id="resources & environment">
-            <h3 class="panel-title">Resources &amp; Environment</h3>
-        </div>
-        
-      <h4>Resources <small> Select all that apply</small></h4>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Whiteboard</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Outlets</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Computers</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Large Display (for laptops)</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Projector</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Printing</label>
-      </div>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Scanner</label>
-      </div>
-        
-      <h4>Capacity</h4>
-      <select class="form-control">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10</option>
-        <option>15</option>
-        <option>20</option>
-        <option>25+</option>
-      </select>
-      <h4>Lighting</h4>
-      <div class="checkbox">
-          <label><input type="checkbox" value="">Space has natural light</label>
-      </div>
-      <h4>Noise Level</h4>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Silent</label>
-        <p class="text-muted">Little to no noise in space</p>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Low Hum</label>
-        <p class="text-muted">There is a moderate about of humming</p>
-      </div>
-      <div class="checkbox">
-        <label><input type="checkbox" value="">Chatter</label>
-        <p class="text-muted">Space is loud</p>
-      </div>
-      <h4>Food & Coffee</h4>
-      <div class="radio">
-        <label>
-          <input type="radio" name="foodOptions" id="optionsRadios1" value="option1" checked>
-          In space
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="foodOptions" id="optionsRadios2" value="option2">
-          In building
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="foodOptions" id="optionsRadios3" value="option3">
-          In neighboring building
-        </label>
-      </div>
-    </div>
-{% endverbatim %}
-</script>
-
 <script id="space-edit-images" type="text/html">
 {% verbatim %}
     <!-- Edit images -->
-    <div class="panel space-detail-section ">
-        
-        <div class="panel-heading">
-            <h3 class="panel-title">Images</h3>
-        </div>
-      
-        <div class="image-select fileupload fileupload-new clearfix" data-provides="fileupload">
-            <span class="btn-file pull-left action-link"><span class="fileupload-new">select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
-            <span class="fileupload-preview pull-left"></span>
-            <a href="#" class="close fileupload-exists pull-left" data-dismiss="fileupload" style="margin-left:5px; font-size:20px;">×</a>
-            
-            <a href="#0" class="action-link pull-right">upload</a>
-        </div>
-  
+
+      <div class="image-select fileupload fileupload-new clearfix" data-provides="fileupload">
+          <span class="btn-file pull-left action-link"><span class="fileupload-new">select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+          <span class="fileupload-preview pull-left"></span>
+          <a href="#" class="close fileupload-exists pull-left" data-dismiss="fileupload" style="margin-left:5px; font-size:20px;">×</a>
+          
+          <a href="#0" class="action-link pull-right">upload</a>
+      </div>
+
       <div class="row">
         <div id="image-carousel" class="col-xs-12 carousel slide carousel-test" data-interval="false">
           <!-- Indicators -->
@@ -320,21 +194,20 @@
               <div class="carousel-caption">{{ caption }}</div>
             </div>
             {{/each}}
-          </div>
-        
-          <!-- Controls -->
-          <a class="left carousel-control" href="#image-carousel" data-slide="prev">
-            <span class="icon-prev"></span>
-          </a>
-          <a class="right carousel-control" href="#image-carousel" data-slide="next">
-            <span class="icon-next"></span>
-          </a>
         </div>
+      
+        <!-- Controls -->
+        <a class="left carousel-control" href="#image-carousel" data-slide="prev">
+          <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#image-carousel" data-slide="next">
+          <span class="icon-next"></span>
+        </a>
       </div>
       
       <div class="clearfix" style="margin-top:1em;">
-        <a href="#0" class="action-link pull-left" style="margin-right:15px;">make default</a>
-        <a href="#0" class="action-link pull-left">delete</a>
+        <a href="javascript:void(0);" class="action-link pull-left" style="margin-right:15px;">make default</a>
+        <a href="javascript:void(0);" class="action-link pull-left">delete</a>
       </div>
       
     </div>
@@ -350,10 +223,9 @@
 </script>
 
 <script type="text/javascript">
-window.spacescout_admin = {
-  spot_id: '{{ SPOT_ID }}',
-  is_mobile: {{ IS_MOBILE }}
-};
+window.spacescout_admin = window.spacescout_admin || {};
+window.spacescout_admin.spot_id = '{{ SPOT_ID }}';
+window.spacescout_admin.is_mobile = {{ IS_MOBILE }};
 </script>
     
 {% endblock %}

@@ -111,27 +111,6 @@ msgstr "In neighboring building"
 msgid "space"
 msgstr "In space"
 
-msgid "outlets"
-msgstr "Outlets"
-
-msgid "projector"
-msgstr "Projector"
-
-msgid "displays"
-msgstr "Larg Display (for laptops)"
-
-msgid "whiteboards"
-msgstr "Whiteboards"
-
-msgid "printing"
-msgstr "Printing"
-
-msgid "scanner"
-msgstr "Scanner"
-
-msgid "computers"
-msgstr "Computers"
-
 msgid "cannotreserve"
 msgstr "Cannot be reserved"
 
@@ -140,6 +119,9 @@ msgstr "Can be reserved"
 
 msgid "mustreserve"
 msgstr "Must be reserved"
+
+msgid "extended_info.reservable"
+msgstr "Can be reserved"
 
 msgid "silent"
 msgstr "Silent"
@@ -163,7 +145,7 @@ msgid "orientation_help"
 msgstr "Further refine the description"
 
 msgid "latlong_help"
-msgstr "Use Google Maps <a href=\"javascript:void(0)\">Tutorial</a>"
+msgstr "Use Google Maps <a href=\"https://support.google.com/maps/answer/18539?hl=en\" target=\"_blank\">Tutorial</a>"
 
 msgid "access_notes"
 msgstr "Enter Hours notes"
@@ -176,3 +158,66 @@ msgstr "Enter notes for the hours section"
 
 msgid "cafe_notes"
 msgstr "Enter notes for the cafe hours"
+
+msgid "add_hours_group"
+msgstr "add another hour group"
+
+msgid "basic-edit-title"
+msgstr "Basic Information"
+
+msgid "all-that-apply"
+msgstr "Select all that apply"
+
+msgid "extended_info.has_outlets"
+msgstr "Outlets"
+
+msgid "extended_info.has_projector"
+msgstr "Projector"
+
+msgid "extended_info.has_displays"
+msgstr "Large Display (for laptops)"
+
+msgid "extended_info.has_whiteboards"
+msgstr "Whiteboards"
+
+msgid "extended_info.has_printing"
+msgstr "Printing"
+
+msgid "extended_info.has_scanner"
+msgstr "Scanner"
+
+msgid "extended_info.has_computers"
+msgstr "Computers"
+
+msgid "extended_info.has_natural_light"
+msgstr "Space has natural light"
+
+msgid "alcove_help"
+msgstr "A quiet place in the corner"
+
+msgid "cafe_help"
+msgstr "Space that functions primarily as an eatery"
+
+msgid "classroom_help"
+msgstr "Larger-capacity rooms primarily used for classes, meetings, or workshops"
+
+msgid "computer_lab_help"
+msgstr "A number of computers grouped in a way that students would call a “lab”"
+
+msgid "lounge_help"
+msgstr "Indoor casual space, typically with lounge furniture and low tables"
+
+msgid "open_help"
+msgstr "Area for use by multiple individuals or groups; may contain a range of furniture -- carrels, tables, lounge furniture"
+
+msgid "outdoor_help"
+msgstr "Outdoor casual space"
+
+msgid "studio_help"
+msgstr "Work space with specialized equipment or technology, such as a multimedia studio"
+
+msgid "study_area_help"
+msgstr "Unenclosed space for individual or group"
+
+msgid "study_room_help"
+msgstr "Enclosed space for individual or group"
