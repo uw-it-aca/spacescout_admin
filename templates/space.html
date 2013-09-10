@@ -22,6 +22,7 @@
     </div>    
     
     <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
+
     <div class="panel space-detail-section">
       <div class="panel-heading">
         <h3 class="panel-title">Incomplete Items</h3>
@@ -56,8 +57,8 @@
 {% verbatim %}
 <div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ id }}/#basic" class="action-link">edit</a></div>  
 <h2>{{ name }}</h2>
-<p class="space-detail-item"><strong>Type</strong> {{ type }}</p>
-<p class="space-detail-item"><strong>Owner</strong> {{ manager }}</p>
+<p class="space-detail-item"><strong>Type <span class="glyphicon glyphicon-asterisk required-field"></span></strong> {{ type }}</p>
+<p class="space-detail-item"><strong>Owner <span class="glyphicon glyphicon-asterisk required-field"></span></strong> {{ manager }}</p>
 <p class="space-detail-item"><strong>Editors</strong> {{ editors }}</p>
 {% endverbatim %}
 </script>
@@ -78,7 +79,11 @@
       {{# each fields }}
       <div class="space-detail-item">
         {{ #if has_name }} 
-        <h4>{{ name }}</h4>
+        <h4>{{ name }}
+          {{#if required}}
+            <span class="glyphicon glyphicon-asterisk required-field"></span>
+          {{/if}}
+        </h4>
         {{ /if }}
         <p>{{{ value }}}</p>
       </div>
@@ -95,7 +100,7 @@
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="section-hours">
-        <h4>Space -</h4><em> Normal</em>
+        <h4>Space <span class="glyphicon glyphicon-asterisk required-field"></span> -</h4><em> Normal</em>
         <ul>
         {{# each available_hours }}
         <li><span class="label-day">{{ day }}</span>{{ hours }}</li>
@@ -154,9 +159,8 @@
 </script>
 
 <script type="text/javascript">
-window.spacescout_admin = {
-  spot_id: '{{ SPOT_ID }}'
-};
+window.spacescout_admin = window.spacescout_admin || {};
+window.spacescout_admin.spot_id = '{{ SPOT_ID }}';
 </script>
        
 {% endblock %}

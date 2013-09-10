@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-    // fetch spot schema
     (function () {
         $.ajax({
             url: '/api/v1/space/' + window.spacescout_admin.spot_id,
@@ -41,8 +40,8 @@ $(document).ready(function() {
                                 var hours = section['available_hours'][d].hours;
                                 if (hours.length) {
                                     for (j = 0; j < hours.length; j++) {
-                                        h.push(_prettyHours(hours[j][0])
-                                               + ' - ' + _prettyHours(hours[j][1]));
+                                        h.push(window.spacescout_admin.prettyHours(hours[j][0])
+                                               + ' - ' + window.spacescout_admin.prettyHours(hours[j][1]));
                                     }
                                 }
                             }
@@ -92,7 +91,7 @@ $(document).ready(function() {
                             }
                         }
 
-                        context.fields = _prepSectionFields(section);
+                        context.fields = prepSectionFields(section);
 
                         tpl = Handlebars.compile($('#space-section-hours').html());
                         html = tpl(context);
@@ -105,7 +104,7 @@ $(document).ready(function() {
                         tpl = Handlebars.compile($('#space-section-images').html());
                         html = tpl(context);
                     } else {
-                        context.fields = _prepSectionFields(section);
+                        context.fields = prepSectionFields(section);
                         tpl = Handlebars.compile($('#space-section').html());
                         html = tpl(context);
                     }
@@ -132,68 +131,23 @@ $(document).ready(function() {
         });
     }());
 
-    var _prepSectionFields = function (section) {
+    var prepSectionFields = function (section) {
         var fields = [],
-            s, i, t, field, value;
+            s, field;
 
         if (section.hasOwnProperty('fields')) {
             for (s in section.fields) {
                 field = section.fields[s];
-
-                if (field.hasOwnProperty('value') && field.value.length > 0) {
-                    switch (typeof field.value) {
-                    case 'string':
-                        value = gettext(field.value);
-                        break;
-                    case 'number':
-                        value = field.value;
-                        break;
-                    case 'object':
-                        if ($.isArray(field.value)) {
-                            value = listToString(field.value);
-                        }
-                        break;
-                    default:
-                        value = gettext(field.value);
-                        break;
-                    }
-                } else {
-                    value = gettext('noinfo');
-                }
-
                 fields.push({
                     name: field.name,
                     has_name: (field.name.length > 0),
-                    value: value
+                    value: getFieldValue(field),
+                    required: field.hasOwnProperty('required') ? field.required == true : false
                 });
             }
         }
 
         return fields;
-    };
-
-    var _prettyHours = function (hours) {
-        var t = hours.match(/^(([01]?\d)|2[0123]):([012345]\d)$/),
-            h, m;
-
-        if (t) {
-            h = parseInt(t[1]);
-            m = parseInt(t[3]);
-
-            if (m == 0) {
-                if (h == 0 || h == 23) {
-                    return gettext('midnight');
-                } else if (h == 12) {
-                    return gettext('noon');
-                }
-            }
-
-            return ((h > 12) ? (h - 12) : h)
-                + ':' + ((m < 10) ? ('0' + m) : m)
-                + gettext((h > 11) ? 'pm' : 'am');
-        }
-
-        return hours;
     };
 
     var modifiedTime = function (date) {
@@ -212,9 +166,42 @@ $(document).ready(function() {
         var i, t = [];
 
         for (i = 0; i < list.length; i += 1) {
-            t.push(gettext(list[i]));
+            switch (typeof list[i]) {
+            case 'string':
+                t.push(gettext(list[i]));
+                break;
+            case 'number':
+                t.push(String(list[i]));
+                break;
+            case 'object':
+                if ($.isArray(list[i])) {
+                    t.push(listToString(list[i]));
+                }
+                break;
+            default:
+                break;
+            }
         }
 
         return t.join(', ');
     };
+
+    var getFieldValue = function (f) {
+        var v;
+
+        if (f.hasOwnProperty('value') && typeof f.value === 'object') {
+            v = window.spacescout_admin.getFieldValue(f.value);
+
+            if (f.value.hasOwnProperty('format')) {
+                v = f.value.format.replace('\{0\}', v);
+            }
+
+            if (v.length) {
+                return v;
+            }
+        }
+
+        return gettext('noinfo');
+    };
+
 });

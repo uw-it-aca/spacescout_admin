@@ -13,7 +13,7 @@
     limitations under the License.
 """
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext as _
 from django.http import Http404
 from django.http import HttpResponse
 import simplejson
@@ -26,14 +26,14 @@ def SpaceView(request, space_id):
     # Required settings for the client
     consumer, client = oauth_initialization()
 
-#    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
-#    resp, content = client.request(url, 'GET')
-#    if resp.status == 200:
-#        schema = simplejson.loads(content)
-#    else:
-#        response = HttpResponse("Error loading schema")
-#        response.status_code = resp.status_code
-#        return response
+    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
+    resp, content = client.request(url, 'GET')
+    if resp.status == 200:
+        schema = simplejson.loads(content)
+    else:
+        response = HttpResponse("Error loading schema")
+        response.status_code = resp.status_code
+        return response
 
     url = "{0}/api/v1/spot/{1}".format(settings.SS_WEB_SERVER_HOST, space_id)
     resp, content = client.request(url, 'GET')
@@ -101,30 +101,22 @@ def SpaceView(request, space_id):
 
             for f in secdef['fields']:
                 field = {
-                    'name': f['name'] if 'name' in f else '',
-                    'key':  f['value']['key'] if isinstance(f['value'], dict) else [k['key'] for k in f['value']]
+                    'name': f['name'] if 'name' in f else ''
                 }
 
-                if 'edit' in f['value']:
-                    field['edit'] = {}
-                    if 'tag' in f['value']['edit']:
-                        field['edit']['tag'] = f['value']['edit']['tag']
-
-                    if 'placeholder' in f['value']['edit']:
-                        field['edit']['placeholder'] = f['value']['edit']['placeholder']
+                if 'required' in f:
+                    field['required'] = f['required']
 
                 if 'help' in f:
                     field['help'] = f['help']
 
                 if 'value' in f:
                     if isinstance(f['value'], dict):
-                        value = value_from_key(params, f['value'])
+                        value = value_from_key(params, f['value'], schema)
                     else:
                         vals = []
                         for v in f['value']:
-                            val = value_from_key(params, v)
-                            if val:
-                                vals.append(val)
+                            vals.append(value_from_key(params, v, schema))
 
                         value = vals
 
@@ -140,27 +132,32 @@ def SpaceView(request, space_id):
     return HttpResponse(content, mimetype='application/json')
 
 
-def value_from_key(d, v):
-    val = None
+def value_from_key(d, v, s):
+    val_obj = None
 
     if 'key' in v:
-        val = value_from_keylist(d, v['key'].split('.'))
-        if 'boolean' in v:
-            b = v['boolean']
-            if val or (isinstance(val, str) and val.lower() == 'true'):
-                if 'true' in b:
-                    val = b['true']
-            else:
-                if 'false' in b:
-                    val = b['false']
-        else:
-            if 'map' in v and val in v['map']:
-                val = v['map'][val]
+        val_obj = {
+            'key': v['key']
+        }
 
-            if 'format' in v:
-                val = v['format'] % val
+        if 'edit' in v:
+            val_obj['edit'] = v['edit']
 
-    return val
+        if 'format' in v:
+            val_obj['format'] = v['format']
+
+        k = v['key'].split('.')
+        val = value_from_keylist(d, k)
+
+        if type_from_keylist(s, k) == 'boolean':
+            val = True if val or (isinstance(val, str) and val.lower() == 'true') else False
+
+        if 'map' in v and val in v['map']:
+            val = v['map'][val]
+
+        val_obj['value'] = val
+
+    return val_obj
 
 
 def value_from_keylist(d, klist):
@@ -169,3 +166,11 @@ def value_from_keylist(d, klist):
         return val if len(klist) == 1 else value_from_keylist(val, klist[1:])
     except KeyError:
         return None
+
+
+def type_from_keylist(schema, klist):
+    t = value_from_keylist(schema, klist)
+    if isinstance(t, list):
+        return 'boolean' if len(t) and t[0].lower() == 'true' else list
+
+    return t
