@@ -368,14 +368,25 @@ $(document).ready(function() {
                             choice = 'checked';
                             group = field.name;
                         }
-                        
-                        for (i = 0; i < vartype.length; i += 1) {
-                            data.push({
-                                name: gettext(vartype[i]),
-                                value: vartype[i],
-                                choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
-                                group: group
-                            });
+
+                        if (field.value.hasOwnProperty('map')) {
+                            for (i in field.value.map) {
+                                data.push({
+                                    name: gettext(field.value.map[i]),
+                                    value: i,
+                                    choice: (field.value.value == i) ? choice : '',
+                                    group: group
+                                });
+                            }
+                        } else {
+                            for (i = 0; i < vartype.length; i += 1) {
+                                data.push({
+                                    name: gettext(vartype[i]),
+                                    value: vartype[i],
+                                    choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
+                                    group: group
+                                });
+                            }
                         }
                     }
 
