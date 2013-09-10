@@ -38,14 +38,17 @@
     
     <div class="form-group">
           <h4>Space Type  <span class="glyphicon glyphicon-asterisk required-field"></span><small>Select all that apply</small></h4>
-          {{# each types }}
-          <div class="checkbox">
-              <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
-              {{# if has_help }}
-              <p class="text-muted">{{ help }}</p>
-              {{/if}}
-          </div>
+          
+          <div class="panel space-types-panel">
+              {{# each types }}
+              <div class="checkbox">
+                  <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
+                  {{# if has_help }}
+                  <p class="text-muted">{{ help }}</p>
+                  {{/if}}
+              </div>
           {{/each}}
+          </div>
     </div>
     
     <div class="form-group">
