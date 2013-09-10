@@ -182,11 +182,14 @@ $(document).ready(function() {
                 var selected = $(this).val();
 
                 var list = $.map(selected, function(value) {
-                    return(value);
+                    return(gettext(value));
                 });
             
                 $(this).siblings(".show-days").html(list.join(", "));
             });
+            
+            select_days.trigger('change');
+            
         } else {
             // DESKTOP: make the multi-day selector usable
             select_days.selectpicker();
