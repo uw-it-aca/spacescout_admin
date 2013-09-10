@@ -294,13 +294,13 @@ $(document).ready(function() {
             context.options = [];
             node = $(tpl(context));
             section.append(node);
+            node = section.find('select');
 
             $.ajax({
                 url: '/api/v1/buildings/',
                 dataType: 'json',
                 success: function (data) {
-                    var select = node.next('select'),
-                        building = getFieldValue(field.value),
+                    var building = getFieldValue(field.value),
                         option;
 
                     if (typeof data === 'object' && $.isArray(data)) {
@@ -311,7 +311,7 @@ $(document).ready(function() {
                                 option.attr('selected', 'selected');
                             }
 
-                            select.append(option);
+                            node.append(option);
                         }
                     }
                 },

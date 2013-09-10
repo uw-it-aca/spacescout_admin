@@ -196,7 +196,7 @@ $(document).ready(function() {
                 v = gettext(f.value.map[v]);
             }
 
-            if (f.value.hasOwnProperty('format')) {
+            if (((typeof v != 'string') || v.length > 0) && f.value.hasOwnProperty('format')) {
                 v = f.value.format.replace('\{0\}', v);
             }
 
