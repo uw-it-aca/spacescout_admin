@@ -301,13 +301,15 @@ select.form-control {
         height: 34px;
         text-transform: capitalize;
         
+        background: #fff;
+        
+        /* give webkit browsers a gradient instead of the white */
         background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
         background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
-        background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
+        /*background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
         background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
         background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
-        background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);
- 
+        background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f5f5, endColorstr=#dfdddd);*/
     }
     
     .btn:focus { /*background: none;*/ border-color: #7dace9; }
