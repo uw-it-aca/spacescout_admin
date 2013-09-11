@@ -98,8 +98,7 @@ select.form-control {
 
 /*** action link ***/
 
-.action-link { color: @blue-primary; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  background: @gray-lighter; padding: 2px 8px; 
-    
+a.action-link { color: @blue-primary; font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500;  background: @gray-lighter; padding: 2px 8px; text-decoration: none;
     -webkit-border-radius: .25em;
     -moz-border-radius: .25em;
     border-radius: .25em;
@@ -107,6 +106,7 @@ select.form-control {
     -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
+
 .required-field { color: @danger; font-weight: normal; font-size: 70%; padding-bottom: 1px; }
 
 /*** home ***/
@@ -164,7 +164,10 @@ select.form-control {
 		a {	display: block; font-size: 1.2em; color: @blue-primary; font-weight: 400; }
 		.item-description { display: block;}
 		.item-modified-by { font-family: 'Lato', sans-serif; display: block; font-style: italic; color: gray; }
-		.item-modified { position: absolute; top:-2px; right: 7px; border-radius: 0; color: #16A085; font-size: 1.2em;}
+		.item-modified { position: absolute; top:-2px; right: 7px; border-radius: 0; color: #16A085; font-size: 1.2em; 
+    		/* tweak for retina displays */
+    		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { top: -3px; }
+		}
 		
 		@media screen and (min-width: 1024px) { padding-right: 30px;
 		
