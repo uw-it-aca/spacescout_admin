@@ -5,7 +5,7 @@ $(document).ready(function() {
             url: '/api/v1/space/' + window.spacescout_admin.spot_id,
             dataType: 'json',
             success: function (data) {
-                var tpl, context, section, field, html, e, h, i, j, d, runs, s;
+                var tpl, context, section, field, html, e, i, v, incomplete;
 
                 $('.space-content-loading').hide();
 
@@ -31,68 +31,9 @@ $(document).ready(function() {
                             + '/#' + encodeURIComponent(section.section)
                     };
 
-                    if (section.section == 'hours') {
-                        context['available_hours'] = [];
-                        runs = {};
-                        for (d = 0; d < 7; d += 1) {
-                            h = [];
-                            if (section['available_hours'][d].hasOwnProperty('hours')) {
-                                var hours = section['available_hours'][d].hours;
-                                if (hours.length) {
-                                    for (j = 0; j < hours.length; j++) {
-                                        h.push(window.spacescout_admin.prettyHours(hours[j][0])
-                                               + ' - ' + window.spacescout_admin.prettyHours(hours[j][1]));
-                                    }
-                                }
-                            }
-
-                            s = (h.length) ? h.join(', ') : 'none';
-
-                            if (d == 0 || !runs.hasOwnProperty(s)) {
-                                runs[s] = {
-                                    'start': d,
-                                    'end': d
-                                };
-                            } else {
-                                runs[s].end = d;
-                            }
-                        }
-
-                        for (d = 0; d < 7; d += 1) {
-                            for (j in runs) {
-                                if (runs[j].start == d && j != 'none') {
-                                    switch (runs[j].end - runs[j].start) {
-                                    case 0:
-                                        context.available_hours.push({
-                                            day: gettext(section['available_hours'][runs[j].start].day),
-                                            hours: j
-                                        });
-                                        break;
-                                    case 1:
-                                        context.available_hours.push({
-                                            day: gettext(section['available_hours'][runs[j].start].day),
-                                            hours: j
-                                        });
-                                        context.available_hours.push({
-                                            day: gettext(section['available_hours'][runs[j].end].day),
-                                            hours: j
-                                        });
-                                        break;
-                                    default:
-                                        context.available_hours.push({
-                                            day: gettext(section['available_hours'][runs[j].start].day)
-                                                + ' - ' + gettext(section['available_hours'][runs[j].end].day),
-                                            hours: j
-                                        });
-                                        break;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-
+                    if (section.section.toLowerCase() == 'hours') {
+                        context['available_hours'] = contextAvailableHours(section['available_hours']);
                         context.fields = prepSectionFields(section);
-
                         tpl = Handlebars.compile($('#space-section-hours').html());
                         html = tpl(context);
                         
@@ -109,13 +50,15 @@ $(document).ready(function() {
                         html = tpl(context);
                     }
 
-                    // insert html in section order
-                    e = $('.space-detail-header');
-                    for (j = 0; j < i; j++) {
-                        e = e.next();
-                    }
+                    $(html).insertAfter('.space-detail-section:last');
+                }
 
-                    e.after(html);
+                // validation cues
+                incomplete = incompleteFields();
+                if (incomplete && incomplete.length) {
+                    $(Handlebars.compile($('#incomplete-items').html())({
+                        incomplete: incomplete
+                    })).insertAfter('.space-detail-section:last');
                 }
             },
             error: function (xhr, textStatus, errorThrown) {
@@ -150,6 +93,71 @@ $(document).ready(function() {
         return fields;
     };
 
+    var contextAvailableHours = function (available_hours) {
+        var periods = [],
+            runs = {},
+            j, d, h, s;
+
+        for (d = 0; d < 7; d += 1) {
+            h = [];
+            if (available_hours[d].hasOwnProperty('hours')) {
+                var hours = available_hours[d].hours;
+                if (hours.length) {
+                    for (j = 0; j < hours.length; j++) {
+                        h.push(window.spacescout_admin.prettyHours(hours[j][0])
+                               + ' - ' + window.spacescout_admin.prettyHours(hours[j][1]));
+                    }
+                }
+            }
+
+            s = (h.length) ? h.join(', ') : 'none';
+
+            if (d == 0 || !runs.hasOwnProperty(s)) {
+                runs[s] = {
+                    'start': d,
+                    'end': d
+                };
+            } else {
+                runs[s].end = d;
+            }
+        }
+
+        for (d = 0; d < 7; d += 1) {
+            for (j in runs) {
+                if (runs[j].start == d && j != 'none') {
+                    switch (runs[j].end - runs[j].start) {
+                    case 0:
+                        periods.push({
+                            day: gettext(available_hours[runs[j].start].day),
+                            hours: j
+                        });
+                        break;
+                    case 1:
+                        periods.push({
+                            day: gettext(available_hours[runs[j].start].day),
+                            hours: j
+                        });
+                        periods.push({
+                            day: gettext(available_hours[runs[j].end].day),
+                            hours: j
+                        });
+                        break;
+                    default:
+                        periods.push({
+                            day: gettext(available_hours[runs[j].start].day)
+                                + ' - ' + gettext(available_hours[runs[j].end].day),
+                            hours: j
+                        });
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return periods;
+    };
+
     var modifiedTime = function (date) {
         var month = date.getMonth() + 1,
             hours = date.getHours(),
@@ -160,6 +168,26 @@ $(document).ready(function() {
 
             return month + '/' + date.getDate() + '/' + date.getFullYear()
                 + ' ' + hour + ':' + minutes + pm;
+    };
+
+    var incompleteFields = function () {
+        var incomplete = [];
+
+        $('.required-field').each(function () {
+            var field, edit, v;
+
+            v = $(this).parent().next().text();
+            if (v == '' || v.toLowerCase() == gettext('noinfo').toLowerCase()) {
+                field = $(this).parent().text().trim(),
+                edit = $(this).closest('.space-detail-section').find('div.section-edit a').attr('href');
+                incomplete.push({
+                    field: field,
+                    edit_url: edit
+                });
+            }
+        });
+
+        return incomplete;
     };
 
     var listToString = function(list) {

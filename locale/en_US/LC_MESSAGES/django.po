@@ -221,3 +221,12 @@ msgstr "Unenclosed space for individual or group"
 
 msgid "study_room_help"
 msgstr "Enclosed space for individual or group"
+
+msgid "incomplete_items"
+msgstr "Incomplete Items"
+
+msgid "required_fields"
+msgstr "Required Fields"
+
+msgid "details"
+msgstr "details"
