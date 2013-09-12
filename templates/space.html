@@ -9,6 +9,7 @@
 <script src="/static/js/space.js"></script>
 {% endblock %}
 
+
 {% block content %}
     
     <div class="space-content-loading">
@@ -47,7 +48,7 @@
       {{ #if has_name }} 
       <h4>{{ name }}
         {{#if is_missing }}
-          <span class="glyphicon glyphicon-asterisk required-field"></span>
+          <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
         {{ /if }}
       </h4>
       {{ /if }}

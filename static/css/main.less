@@ -117,7 +117,9 @@ select.form-control {
 
 a.action-link { text-decoration: none; }
 
-.required-field { color: @danger; font-weight: normal; font-size: 70%; padding-bottom: 1px; }
+.required-field-icon { color: @danger; font-weight: normal; font-size: 70%; padding-bottom: 1px; }
+.required-field-text { color: lighten(@danger, 20%); text-transform: uppercase; font-size: 80%; font-weight: normal; font-family: 'Dosis', sans-serif; }
+
 
 /*** home ***/
 
@@ -382,7 +384,13 @@ a.action-link { text-decoration: none; }
     span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px; }
 }
 
-/*** fancy loading animation ***/
+/*** fancy loading ***/
+
+.space-content-loading {
+    width: 230px;
+    margin: 0 auto;
+    padding: 110px 0;
+}
 
 .spinner { height:45px; width:45px;  position:relative; display:inline-block; vertical-align: middle; margin: 20px 0 20px 20px;}
 .spinner span {

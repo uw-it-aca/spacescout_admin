@@ -13,14 +13,14 @@
 
 {% include "input.html" %}
 
-<h2 id="space-name">{{ name }}</h2>
-
-<div class="panel space-detail-section space-content-loading">
+<div class="space-content-loading">
     <div class="spinner" role="alert">
       <span></span><span></span><span></span>
     </div>
     <div class="loading">Loading</div>
 </div>
+
+<h2 id="space-name">{{ name }}</h2>
 
 <div id="space-editor"></div>
 
@@ -35,7 +35,7 @@
     <div class="form-group">
         <h4>Space Name
           {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field"></span>
+            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
           {{ /if }}
         </h4>
         <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
@@ -44,7 +44,7 @@
     <div class="form-group">
           <h4>Space Type
             {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field"></span>
+            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
             {{ /if }}
             <small>{% trans "all_that_apply" %}</small></h4>
           
@@ -63,7 +63,7 @@
     <div class="form-group">
         <h4>Owner
             {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field"></span>
+            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
             {{ /if }}
         </h4>
         <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">

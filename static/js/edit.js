@@ -512,9 +512,11 @@ $(document).ready(function() {
         $('.value-required').each(function () {
             var show_cue = function (node, show) {
                 if (show) {
-                    node.children('.required-field').show();
+                    node.children('.required-field-icon').show();
+                    node.children('.required-field-text').show();
                 } else {
-                    node.children('.required-field').hide();
+                    node.children('.required-field-icon').hide();
+                    node.children('.required-field-text').hide();
                 }
             },
             set_cue = function (node, show) {
