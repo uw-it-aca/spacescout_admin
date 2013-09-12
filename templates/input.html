@@ -1,0 +1,90 @@
+{% load verbatim %}
+
+<script id="editor-container" type="text/html">
+{% verbatim %}
+    <div class="panel space-detail-section ">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ section }}</h3>
+        </div>
+    </div>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-textarea" type="text/html">
+{% verbatim %}
+    <textarea class="form-control {{ class }}" rows="3" placeholder="{{ placeholder }}">{{ value }}</textarea>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-field-header" type="text/html">
+{% verbatim %}
+    <h4 id="{{ name }}">{{ name }}
+      {{#if is_required}}
+      <span class="glyphicon glyphicon-asterisk required-field" style="display: none;"></span>
+      {{/if}}
+      <small>{{{ help }}}</small>
+    </h4>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-select" type="text/html">
+{% verbatim %}
+    <select class="form-control">
+      {{ #each inputs }}
+        <option value="{{ value }}" class="{{class}}" {{ choice }}>{{ name }}</option>
+      {{/each}}
+    </select>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-checkboxes" type="text/html">
+{% verbatim %}
+    <div class="panel space-types-panel">
+    {{ #each inputs }}
+    <div class="checkbox">
+      <label><input type="checkbox" value="{{ value }}" class="{{class}}" {{ choice }}>{{ name }}</label>
+      {{# if has_help }}
+      <p class="text-muted">{{ help }}</p>
+      {{/if}}
+    </div>
+    {{/each}}
+    </div>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-radio" type="text/html">
+{% verbatim %}
+    <div class="panel space-types-panel">
+    {{ #each inputs }}
+    <div class="radio">
+      <label><input type="radio" value="{{ value }}" name="{{ group }}" class="{{class}}" {{ choice }}>{{ name }}</label>
+    </div>
+    {{/each}}
+    </div>
+{% endverbatim %}
+</script>
+
+<script id="space-edit-input" type="text/html">
+{% verbatim %}
+    {{ #each inputs }}
+    {{name}} <input type="text" class="form-control {{ class }}" placeholder="{{ placeholder }}" value="{{ value }}">
+    {{/each}}
+{% endverbatim %}
+</script>
+
+<script id="space-edit-number" type="text/html">
+{% verbatim %}
+    {{ #each inputs }}
+    {{name}} <input type="number" class="form-control {{ class }}" pattern="\d*" value="{{ value }}">
+    {{/each}}
+{% endverbatim %}
+</script>
+
+<script id="no-section" type="text/html">
+{% verbatim %}
+  <div class="no-space">
+    <i class="icon-frown icon-3x"></i><span>No section to edit.</span>
+  </div>
+{% endverbatim %}
+</script>
+

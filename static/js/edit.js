@@ -39,75 +39,29 @@ $(document).ready(function() {
 
         $('#space-name').html(space.name);
 
-        if (hash == 'basic') {
-            editBasicDetails(space, editor);
-        } else {
-            for (i = 0; i < space.sections.length; i += 1) {
-                section = space.sections[i];
-                if (hash == section.section) {
-                    switch(hash) {
-                    case 'hours' :
-                        editHoursDetails(section, editor);
-                        break;
-                    case 'images' :
-                        editImageDetails(section, editor);
-                        break;
-                    default:
-                        editSectionDetails(section, editor);
-                        break;
-                    }
-
-                    return;
-                }
-            }
-
-            editor.append(Handlebars.compile($('#no-section').html())({}));
-        }
-    };
-
-    var editBasicDetails = function (space, editor_node) {
-        var section_node = newSectionEditor(gettext('basic-edit-title')),
-            schema = window.spacescout_admin.spot_schema,
-            tpl = Handlebars.compile($('#space-edit-basic').html()),
-            context = {
-                name: space.name,
-                manager: space.manager,
-                types: [],
-                editors: space.editors.join(', ')
-            },
-            i, j, checked, help, help_name;
-
-        for (i = 0; i < schema.type.length; i += 1) {
-            checked = '';
-
-            for (j = 0; j < space.type.length; j += 1) {
-                if (space.type[j] == schema.type[i]) {
-                    checked = 'checked';
+        for (i = 0; i < space.sections.length; i += 1) {
+            section = space.sections[i];
+            if (hash == section.section) {
+                switch(hash) {
+                case 'hours' :
+                    editHoursDetails(section, editor);
+                    break;
+                case 'images' :
+                    editImageDetails(section, editor);
+                    break;
+                default:
+                    editSectionDetails(section, editor);
                     break;
                 }
+
+                validateFields();
+                $('input, textarea').change(validateFields);
+
+                return;
             }
-
-            console.log('msgid = "' + schema.type[i] + '"');
-
-            help_name = schema.type[i] + '_help';
-            help = gettext(help_name);
-
-            context.types.push({
-                name: gettext(schema.type[i]),
-                value: 'schema.type[i]',
-                choice: checked,
-                help: help,
-                has_help: (help.length > 0 && help != help_name)
-            });
         }
 
-        section_node.append($(tpl(context)));
-
-        editor_node.append(section_node);
-
-        $('#input-space-name').keyup(function (e) {
-            $('#space-name').html($(e.target).val());
-        });
+        editor.append(Handlebars.compile($('#no-section').html())({}));
     };
 
     var editHoursDetails = function (section, editor_node) {
@@ -148,7 +102,7 @@ $(document).ready(function() {
         editor_node.append(section_node);
 
         $('#space-editor #add-hours').click(function (e) {
-            $(e.target).parent().before(hoursNode());
+            hoursNode().insertBefore($(e.target).parent());
         });
     };
 
@@ -176,13 +130,16 @@ $(document).ready(function() {
             // MOBILE: handle multi-day selection and display
             select_days.addClass('form-control day-select');
             select_days.change(function(){
-                var selected = $(this).val();
+                var selected = $(this).val(),
+                    list;
 
-                var list = $.map(selected, function(value) {
-                    return(gettext(value));
-                });
+                if (selected) {
+                    list = $.map(selected, function(value) {
+                        return(gettext(value));
+                    });
             
-                $(this).siblings(".show-days").html(list.join(", "));
+                    $(this).siblings(".show-days").html(list.join(", "));
+                }
             });
             
             select_days.trigger('change');
@@ -256,9 +213,9 @@ $(document).ready(function() {
     };
 
     var newSectionEditor = function (title) {
-        var tpl = Handlebars.compile($('#editor-container').html());
-
-        return $(tpl({section: title}));
+        return $(Handlebars.compile($('#editor-container').html())({
+            section: gettext(title)
+        }));
     };
 
     var appendSectionFields = function (fields, section) {
@@ -275,17 +232,23 @@ $(document).ready(function() {
         }
     };
 
+    var appendFieldHeader = function (name, help, is_required, section) {
+        section.append(Handlebars.compile($('#space-edit-field-header').html())({
+            name: name,
+            help: help,
+            is_required: is_required
+        }));
+    };
+
     var appendFieldValue = function (field, section) {
-        var tpl, vartype, varedit, context, data, i, node, src, choice, group;
+        var required = (field.hasOwnProperty('required') && field.required),
+            context = {},
+            tpl, vartype, varedit, data, i, node, src, choice, group;
 
-        context = {
-            name: field.name,
-            help: (field.hasOwnProperty('help')) ? gettext(field.help) : ''
-        };
-
-        if (field.hasOwnProperty('required')) {
-            context.required = field.required;
-        }
+        appendFieldHeader(field.name,
+                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
+                          required,
+                          section);
 
         // fields we know about
         switch (field.value.key) {
@@ -322,11 +285,24 @@ $(document).ready(function() {
         default:
             vartype = schemaVal(field.value.key);
             varedit = (field.value.hasOwnProperty('edit')) ? field.value.edit: null;
+
+            if (vartype == undefined) {
+                vartype = 'unicode'; //default
+            }
+
             switch (typeof vartype) {
             case 'string':
                 switch (vartype.toLowerCase()) {
                 case 'int':
                 case 'decimal':
+                    context.inputs = [{
+                        value: getFieldValue(field.value),
+                        class: required ? 'value-required' : ''
+                    }];
+                    tpl = Handlebars.compile($('#space-edit-number').html());
+                    node = $(tpl(context));
+                    section.append(node);
+                    break;
                 case 'unicode':
                     if (varedit && varedit.hasOwnProperty('tag') && varedit.tag == 'textarea') {
                         if (varedit.hasOwnProperty('placeholder')) {
@@ -334,9 +310,14 @@ $(document).ready(function() {
                         }
 
                         context.value = getFieldValue(field.value);
+                        context.class = required ? 'value-required' : '';
                         tpl = Handlebars.compile($('#space-edit-textarea').html());
                     } else {
-                        context.inputs = [{ value: getFieldValue(field.value)}];
+                        context.inputs = [{
+                            value: getFieldValue(field.value),
+                            placeholder: gettext((varedit && varedit.hasOwnProperty('placeholder')) ? varedit.placeholder : 'text_input'),
+                            class: required ? 'value-required' : ''
+                        }];
                         tpl = Handlebars.compile($('#space-edit-input').html());
                     }
 
@@ -359,18 +340,32 @@ $(document).ready(function() {
                             src = '#space-edit-select';
                             choice = 'selected';
                             group = null;
+                        } else if (field.value.hasOwnProperty('edit')
+                              && field.value.edit.hasOwnProperty('multi_select')) {
+                            src = '#space-edit-checkboxes';
+                            choice = 'checked';
+                            group = null;
                         } else {
                             src = '#space-edit-radio';
                             choice = 'checked';
                             group = field.name;
+                            if (field.value.hasOwnProperty('edit')
+                                && field.value.edit.hasOwnProperty('allow_none')) {
+                                data.push({
+                                    name: gettext('unset'),
+                                    value: field.value.key + ':',
+                                    group: group
+                                });
+                            }
                         }
 
                         if (field.value.hasOwnProperty('map')) {
                             for (i in field.value.map) {
                                 data.push({
                                     name: gettext(field.value.map[i]),
-                                    value: i,
+                                    value: field.value.key + ':' + i,
                                     choice: (field.value.value == i) ? choice : '',
+                                    class: required ? 'value-required' : '',
                                     group: group
                                 });
                             }
@@ -378,8 +373,11 @@ $(document).ready(function() {
                             for (i = 0; i < vartype.length; i += 1) {
                                 data.push({
                                     name: gettext(vartype[i]),
-                                    value: vartype[i],
+                                    value: field.value.key + ':' + vartype[i],
                                     choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
+                                    class: required ? 'value-required' : '',
+                                    has_help: true,
+                                    help: gettext(vartype[i] + '_help'),
                                     group: group
                                 });
                             }
@@ -394,10 +392,13 @@ $(document).ready(function() {
                     if (typeof field.value.value === 'boolean') {
                         src = '#space-edit-checkboxes';
                         data = [ booleanEditStruct(field.value) ];
+                    } else if (vartype == 'int' || vartype == 'decimal') {
+                        src = '#space-edit-number';
+                        data = [ {
+                            value: getFieldValue(field.value)
+                        }];
                     } else if (typeof vartype === 'string'
-                               && (vartype == 'unicode'
-                                   || vartype == 'int'
-                                   || vartype == 'decimal')) {
+                               || (vartype == 'unicode')) {
                         src = '#space-edit-input';
                         data = [ {
                             value: getFieldValue(field.value)
@@ -405,6 +406,7 @@ $(document).ready(function() {
                     }
 
                     context.inputs = data;
+                    context.class = required ? 'value-required' : '';
                     tpl = Handlebars.compile($(src).html());
                     section.append(tpl(context));
                 }
@@ -416,17 +418,20 @@ $(document).ready(function() {
     };
 
     var appendFieldList = function(field, section) {
-        var tpl, i, vartype,
+        var vartype, i,
             values = [],
             bool = false,
-            context = {
-                name: field.name,
-                help: (field.hasOwnProperty('help')) ? gettext(field.help) : ''
-            },
-            src_selector;
+            context = {},
+            src_selector,
+            required = (field.hasOwnProperty('required') && field.required);
 
-        if (field.hasOwnProperty('required')) {
-            context.required = field.required;
+        appendFieldHeader(field.name,
+                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
+                          required,
+                          section);
+
+        if (required) {
+            context.class = 'value-required';
         }
 
         for (i = 0; i < field.value.length; i += 1) {
@@ -463,8 +468,7 @@ $(document).ready(function() {
             context.inputs = [{ value: values.join(', ') }];
         }
 
-        tpl = Handlebars.compile($(src_selector).html());
-        section.append(tpl(context));
+        section.append(Handlebars.compile($(src_selector).html())(context));
     };
 
     var booleanEditStruct = function (v) {
@@ -504,4 +508,53 @@ $(document).ready(function() {
         return window.spacescout_admin.getFieldValue(v);
     };
 
+    var validateFields = function () {
+        $('.value-required').each(function () {
+            var show_cue = function (node, show) {
+                if (show) {
+                    node.children('.required-field').show();
+                } else {
+                    node.children('.required-field').hide();
+                }
+            },
+            set_cue = function (node, show) {
+                var i, n;
+
+                if (node.prev().is('h4')) {
+                    show_cue(node.prev(), show);
+                } else { 
+                    for (i = 0; i < 8; i += 1) {
+                        n = node.parents().eq(i).prev();
+                        if (n.is('h4')) {
+                            show_cue(n, show);
+                            break;
+                        }
+                    }
+                }
+            };
+
+            switch ($(this).prop('tagName').toLowerCase()) {
+            case 'input':
+                switch ($(this).attr('type')) {
+                case 'radio':
+                    set_cue($(this), ($('input[name="' + $(this).attr('name') + '"]:checked').length <= 0));
+                    break;
+                case 'checkbox':
+                    set_cue($(this), ($(this).is(':checked')));
+                    break;
+                case 'text':
+                    set_cue($(this), ($(this).val().trim().length == 0));
+                    break;
+                };
+                break;
+            case 'textarea':
+                set_cue($(this), ($(this).val().trim().length == 0));
+                break;
+            case 'select':
+                break;
+            default :
+                break;
+            };
+        });
+    };
 });

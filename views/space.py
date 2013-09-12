@@ -57,14 +57,13 @@ def SpaceView(request, space_id):
     #
 
     
-    modified_date = params["last_modified"][5:10] + '-' + params["last_modified"][:4]
-    params["last_modified"] = re.sub('-', '/', modified_date)
-
     space = {
         'name': params['name'],
         'type': params['type'],
         'manager': params['manager'],
         'editors': params['editors'] if 'editors' in params else [],
+        'modified_by': '',
+        'last_modified': params["last_modified"],
         'sections': []
     }
 

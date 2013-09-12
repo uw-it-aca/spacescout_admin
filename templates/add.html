@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 
+{% load verbatim %}
+{% load i18n %}
+
 {% block title %}Spaces{% endblock %}
 
 {% block content %}
     
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" style="display: none;">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Oh snap!</strong> Change a few things up and try submitting again.
+        <strong>{% trans "exclaim" %}</strong> {% trans "suggestion" %}
     </div>
     
-    <h2>Add New Space</h2>
-    <p>All fields on this page are required in order to create the initial space listing.</p>
+    <h2>{% trans "add_new_space" %}</h2>
+    <p>{% trans "all_fields_required" %}</p>
     
     <div class="space-add-section">
     <div class="panel">
@@ -30,15 +33,16 @@
         </div>
         
         <div class="form-group">
-            <h4>Space type <span class="glyphicon glyphicon-asterisk required-field"></span> <small>Select up to two</small></h4>        
+            <h4>Space type <span class="glyphicon glyphicon-asterisk required-field"></span> <small>{% trans "choose_up_to_2" %}</small></h4>
             <div class="panel space-types-panel">  
                 <div class="checkbox">
-                    <label><input type="checkbox" value="">Study room</label>
-                    <p class="text-muted">Enclosed space for individual or group</p>
+                    <label><input type="checkbox" value="">{% trans "study_room" %}</label>
+                    <p class="text-muted">{% trans "study_room_help" %}</p>
+
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox" value="">Study area</label>
-                    <p class="text-muted">Unenclosed space for individual or group</p>
+                    <label><input type="checkbox" value="">{% trans "study_area" %}</label>
+                    <p class="text-muted">{% trans "study_area_help" %}</p>
                 </div>
                 <div class="checkbox">
                     <label><input type="checkbox" value="">Computer lab</label>
@@ -84,6 +88,12 @@
         <a href="/space" class="btn btn-success btn-lg btn-block" disabled>Add Space</a>
     </div>
     
+<script id="add-form-group" type="text/html">
+{% verbatim %}
+<div class="form-group">
+</div>
+{% endverbatim %}
+</script>
     
 
 {% endblock %}

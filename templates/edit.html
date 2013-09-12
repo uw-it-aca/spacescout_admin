@@ -11,6 +11,8 @@
 
 {% block content %}
 
+{% include "input.html" %}
+
 <h2 id="space-name">{{ name }}</h2>
 
 <div class="panel space-detail-section space-content-loading">
@@ -27,17 +29,24 @@
   <a href="/space/{{SPOT_ID}}" class="btn btn-success btn-lg btn-block">Done</a>
 </div>
 
-
 <script id="space-edit-basic" type="text/html">
 {% verbatim %}
     <!-- Edit basic info -->
     <div class="form-group">
-        <h4>Space Name <span class="glyphicon glyphicon-asterisk required-field"></span></h4>
+        <h4>Space Name
+          {{#if is_missing }}
+            <span class="glyphicon glyphicon-asterisk required-field"></span>
+          {{ /if }}
+        </h4>
         <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
     </div>
     
     <div class="form-group">
-          <h4>Space Type  <span class="glyphicon glyphicon-asterisk required-field"></span><small>Select all that apply</small></h4>
+          <h4>Space Type
+            {{#if is_missing }}
+            <span class="glyphicon glyphicon-asterisk required-field"></span>
+            {{ /if }}
+            <small>{% trans "all_that_apply" %}</small></h4>
           
           <div class="panel space-types-panel">
               {{# each types }}
@@ -52,7 +61,11 @@
     </div>
     
     <div class="form-group">
-        <h4>Owner <span class="glyphicon glyphicon-asterisk required-field"></span></h4>
+        <h4>Owner
+            {{#if is_missing }}
+            <span class="glyphicon glyphicon-asterisk required-field"></span>
+            {{ /if }}
+        </h4>
         <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
     </div>
     
@@ -60,93 +73,6 @@
         <h4>Editors</h4>
         <input type="text" class="form-control" placeholder="Text input" value="{{ editors }}">
     </div>
-{% endverbatim %}
-</script>
-
-<script id="editor-container" type="text/html">
-{% verbatim %}
-    <div class="panel space-detail-section ">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{ section }}</h3>
-        </div>
-    </div>
-{% endverbatim %}
-</script>
-
-<script id="space-edit-select" type="text/html">
-{% verbatim %}
-    <h4>{{ name }}
-      {{#if required}}
-      <span class="glyphicon glyphicon-asterisk required-field"></span>
-      {{/if}}
-    </h4>
-    <select class="form-control">
-      {{ #each inputs }}
-        <option value="{{ value }}" {{ choice }}>{{ name }}</option>
-      {{/each}}
-    </select>
-{% endverbatim %}
-</script>
-
-<script id="space-edit-checkboxes" type="text/html">
-{% verbatim %}
-    <h4>{{name}}
-      {{#if required}}
-      <span class="glyphicon glyphicon-asterisk required-field"></span>
-      {{/if}}
-      <small>{{{ help }}}</small>
-    </h4>
-    <div class="panel space-types-panel">
-    {{ #each inputs }}
-    <div class="checkbox">
-      <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
-    </div>
-    {{/each}}
-    </div>
-{% endverbatim %}
-</script>
-
-<script id="space-edit-radio" type="text/html">
-{% verbatim %}
-    <h4>{{name}}
-      {{#if required}}
-      <span class="glyphicon glyphicon-asterisk required-field"></span>
-      {{/if}}
-      <small>{{{ help }}}</small>
-    </h4>
-    <div class="panel space-types-panel">
-    {{ #each inputs }}
-    <div class="radio">
-      <label><input type="radio" value="{{ value }}" name="{{ group }}" {{ choice }}>{{ name }}</label>
-    </div>
-    {{/each}}
-    </div>
-{% endverbatim %}
-</script>
-
-<script id="space-edit-input" type="text/html">
-{% verbatim %}
-    <h4>{{name}}
-      {{#if required}}
-      <span class="glyphicon glyphicon-asterisk required-field"></span>
-      {{/if}}
-      <small>{{{ help }}}</small>
-    </h4>
-    {{ #each inputs }}
-    {{name}} <input type="text" class="form-control" placeholder="Text input" value="{{ value }}">
-    {{/each}}
-{% endverbatim %}
-</script>
-
-<script id="space-edit-textarea" type="text/html">
-{% verbatim %}
-    <h4>{{name}}
-      {{#if required}}
-      <span class="glyphicon glyphicon-asterisk required-field"></span>
-      {{/if}}
-      <small>{{{ help }}}</small>
-    </h4>
-    <textarea class="form-control" rows="3" placeholder="{{ placeholder }}">{{ value }}</textarea>
 {% endverbatim %}
 </script>
 
@@ -242,14 +168,6 @@
         <a href="javascript:void(0);" class="action-link pull-left">delete</a>
     </div>
       
-{% endverbatim %}
-</script>
-
-<script id="no-section" type="text/html">
-{% verbatim %}
-  <div class="no-space">
-    <i class="icon-frown icon-3x"></i><span>No section to edit.</span>
-  </div>
 {% endverbatim %}
 </script>
 

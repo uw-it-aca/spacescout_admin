@@ -5,52 +5,49 @@ $(document).ready(function() {
             url: '/api/v1/space/' + window.spacescout_admin.spot_id,
             dataType: 'json',
             success: function (data) {
-                var tpl, context, section, field, html, e, i, v, incomplete;
+                var tpl, context, section, html, i, incomplete;
 
                 $('.space-content-loading').hide();
 
-                tpl = Handlebars.compile($('#space-details').html());
-                html = tpl({
-                    id: window.spacescout_admin.spot_id,
-                    name: data.name,
-                    type: listToString(data.type),
-                    manager: data.manager,
-                    editors: ''
-                });
-
-                $('.space-detail-header').append(html);
-                $('.space-detail-header > div > a').click(function () {
-                    window.location = '/edit/' + window.spacescout_admin.spot_id + '/#basic';
-                });
-
-                for (i in data.sections) {
+                for (i = 0; i < data.sections.length; i += 1) {
                     section = data.sections[i];
                     context = {
-                        section: section.section,
+                        section: gettext(section.section),
                         edit_url: '/edit/' + window.spacescout_admin.spot_id
                             + '/#' + encodeURIComponent(section.section)
                     };
 
-                    if (section.section.toLowerCase() == 'hours') {
-                        context['available_hours'] = contextAvailableHours(section['available_hours']);
-                        context.fields = prepSectionFields(section);
-                        tpl = Handlebars.compile($('#space-section-hours').html());
-                        html = tpl(context);
-                        
-                    } else if (section.section == 'images') {
-                        context['thumbnails'] = section['thumbnails'];
-                        if (context['thumbnails'].length) {
-                            context['thumbnails'][0]['active'] = 'active';
-                        }
-                        tpl = Handlebars.compile($('#space-section-images').html());
-                        html = tpl(context);
+                    if (i == 0) { // basic section
+                        context.name = gettext(data.name);
+                        context.fields = prepSectionFields(section.fields.slice(1));
+                        tpl = Handlebars.compile($('#space-details').html());
+                        $('.space-detail-header').append(tpl(context));
+                        tpl = Handlebars.compile($('#space-section-fields').html());
+                        $('.space-detail-header').append(tpl(context));
                     } else {
-                        context.fields = prepSectionFields(section);
-                        tpl = Handlebars.compile($('#space-section').html());
-                        html = tpl(context);
-                    }
+                        switch (section.section) {
+                        case 'hours':
+                            context['available_hours'] = contextAvailableHours(section['available_hours']);
+                            context.fields = prepSectionFields(section.fields);
+                            html = $(Handlebars.compile($('#space-section-hours').html())(context));
+                            break;
+                        case 'images':
+                            context['thumbnails'] = section['thumbnails'];
+                            if (context['thumbnails'].length) {
+                                context['thumbnails'][0]['active'] = 'active';
+                            }
+                            html = $(Handlebars.compile($('#space-section-images').html())(context));
+                            break;
+                        default:
+                            context.fields = prepSectionFields(section.fields);
+                            html = $(Handlebars.compile($('#space-section').html())(context));
+                            tpl = Handlebars.compile($('#space-section-fields').html());
+                            html.append(tpl(context));
+                            break;
+                        }
 
-                    $(html).insertAfter('.space-detail-section:last');
+                        html.insertAfter('.space-detail-section:last');
+                    }
                 }
 
                 // validation cues
@@ -60,6 +57,15 @@ $(document).ready(function() {
                         incomplete: incomplete
                     })).insertAfter('.space-detail-section:last');
                 }
+
+                // actions
+                $(Handlebars.compile($('#space-actions').html())({
+                    is_complete: !(incomplete && incomplete.length),
+                    is_modified: false,
+                    is_published: false,
+                    modified_by: (data.modified_by.length) ? data.modified_by : gettext('unknown'),
+                    last_modified: window.spacescout_admin.modifiedTime(new Date(data.last_modified))
+                })).insertAfter('.space-detail-section:last');
             },
             error: function (xhr, textStatus, errorThrown) {
                 var json;
@@ -74,23 +80,26 @@ $(document).ready(function() {
         });
     }());
 
-    var prepSectionFields = function (section) {
-        var fields = [],
-            s, field;
+    var prepSectionFields = function (fields) {
+        var contexts = [],
+            i, field, value;
 
-        if (section.hasOwnProperty('fields')) {
-            for (s in section.fields) {
-                field = section.fields[s];
-                fields.push({
-                    name: field.name,
-                    has_name: (field.name.length > 0),
-                    value: getFieldValue(field),
-                    required: field.hasOwnProperty('required') ? field.required == true : false
-                });
-            }
+        for (i = 0; i < fields.length; i += 1) {
+            field = fields[i];
+            value = getFieldValue(field);
+            contexts.push({
+                name: gettext(field.name),
+                has_name: (field.name.length > 0),
+                value: value,
+                is_missing: (field.hasOwnProperty('required')
+                             && field.required
+                             && (!value
+                                 || value == ''
+                                 || value.toLowerCase() == gettext('noinfo').toLowerCase()))
+            });
         }
 
-        return fields;
+        return contexts;
     };
 
     var contextAvailableHours = function (available_hours) {
@@ -174,17 +183,10 @@ $(document).ready(function() {
         var incomplete = [];
 
         $('.required-field').each(function () {
-            var field, edit, v;
-
-            v = $(this).parent().next().text();
-            if (v == '' || v.toLowerCase() == gettext('noinfo').toLowerCase()) {
-                field = $(this).parent().text().trim(),
-                edit = $(this).closest('.space-detail-section').find('div.section-edit a').attr('href');
-                incomplete.push({
-                    field: field,
-                    edit_url: edit
-                });
-            }
+            incomplete.push({
+                field: $(this).parent().text().trim(),
+                edit_url: $(this).closest('.space-detail-section').find('div.section-edit a').attr('href')
+            });
         });
 
         return incomplete;

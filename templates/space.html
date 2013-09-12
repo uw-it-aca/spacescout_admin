@@ -19,53 +19,14 @@
     </div>
     
     <div class="panel space-detail-section space-detail-header"></div>
-    
-    <div style="margin-top: 2em;">
-      <p>Last updated on 8/15/13 12:34PM by <strong>jcomis</strong></p>
-      
-      <!-- TODO: show this if modifications different from published in production -->
-      <div style="position:relative;">
-        <span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085; position:absolute; top: 24px; left:10px;"></span> 
-        <p style="color:#aaa; text-transform:uppercase; margin-bottom:5px;">Changes differ from production</p>
-        <a href="/space" class="btn btn-success btn-lg btn-block">Publish changes</a>
-        <p><a href="">Show modified changes?</a></p>
-      </div>
-      
-      <div>
-        <a href="/space" class="btn btn-success btn-lg btn-block">Publish</a>
-        <a href="/space" class="btn btn-success btn-lg btn-block">Un-publish</a>
-      </div>
-      
-    </div>
 
 <script id="space-details" type="text/html">
 {% verbatim %}
-<div class="section-edit" style="margin-top:5px;"><a href="/edit/{{ id }}/#basic" class="action-link">edit</a></div>  
-<h2>{{ name }}</h2>
-<strong>Type <span class="glyphicon glyphicon-asterisk required-field"></span></strong><p class="space-detail-item">{{ type }}</p>
-<strong>Owner <span class="glyphicon glyphicon-asterisk required-field"></span></strong><p class="space-detail-item">{{ manager }}</p>
-<strong>Editors</strong><p class="space-detail-item">{{ editors }}</p>
-
-{% endverbatim %}
-</script>
-
-<script id="incomplete-items" type="text/html">
-    <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
-    <div class="panel space-detail-section">
-      <div class="panel-heading">
-        <h3 class="panel-title">{% trans "incomplete_items" %}</h3>
-      </div>
-      <div class="space-detail-item" id="incomplete-items">
-        <h4>{% trans "required_fields" %}</h4>
-        <p>
-          {% verbatim %}
-          {{# each incomplete }}
-          <span class="label label-danger"><a href="{{ edit_url }}">{{ field }}</a></span>
-          {{/each}}
-          {% endverbatim %}
-        </p>
-      </div>
-    </div>
+<div>
+  <div class="section-edit" style="margin-top:5px;"><a href="{{ edit_url }}" class="action-link">edit</a></div>  
+  <h2>{{ name }}</h2>
+  {% endverbatim %}
+</div>
 </script>
 
 <script id="space-section" type="text/html">
@@ -75,20 +36,25 @@
         <div class="section-edit clearfix"><a href="{{ edit_url }}" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
-      {{# each fields }}
-      <div class="space-detail-item">
-        {{ #if has_name }} 
-        <h4>{{ name }}
-          {{#if required}}
-            <span class="glyphicon glyphicon-asterisk required-field"></span>
-          {{/if}}
-        </h4>
-        {{ /if }}
-        <p>{{{ value }}}</p>
-      </div>
-      {{/each}}
     </div>
- {% endverbatim %}
+{% endverbatim %}
+</script>
+
+<script id="space-section-fields" type="text/html">
+{% verbatim %}
+    {{# each fields }}
+    <div class="space-detail-item">
+      {{ #if has_name }} 
+      <h4>{{ name }}
+        {{#if is_missing }}
+          <span class="glyphicon glyphicon-asterisk required-field"></span>
+        {{ /if }}
+      </h4>
+      {{ /if }}
+      <p>{{{ value }}}</p>
+    </div>
+    {{ /each }}
+{% endverbatim %}
 </script>
 
 <script id="space-section-hours" type="text/html">
@@ -99,7 +65,11 @@
       	<h3 class="panel-title">{{ section }}</h3>
       </div>
       <div class="section-hours">
-        <h4>Normal Hours <span class="glyphicon glyphicon-asterisk required-field"></span></h4>
+        <h4>Normal Hours
+          {{ #if is_missing }}
+          <span class="glyphicon glyphicon-asterisk required-field"></span>
+          {{ /if }}
+        </h4>
         <ul>
         {{# each available_hours }}
         <li><span class="label-day">{{ day }}</span>{{ hours }}</li>
@@ -153,6 +123,51 @@
           </a>
         </div>
       </div>     
+    </div>
+{% endverbatim %}
+</script>
+
+<script id="incomplete-items" type="text/html">
+    <!-- TODO: Incomplete items should only appear during the "add space" phase. They will not appear in this template -->    
+    <div class="panel space-detail-section">
+      <div class="panel-heading">
+        <h3 class="panel-title">{% trans "incomplete_items" %}</h3>
+      </div>
+      <div class="space-detail-item" id="incomplete-items">
+        <h4>{% trans "required_fields" %}</h4>
+        <p>
+          {% verbatim %}
+          {{# each incomplete }}
+          <span class="label label-danger"><a href="{{ edit_url }}">{{ field }}</a></span>
+          {{/each}}
+          {% endverbatim %}
+        </p>
+      </div>
+    </div>
+</script>
+
+<script id="space-actions" type="text/html">
+{% verbatim %}
+    <div style="margin-top: 2em;">
+      <p>Last updated on {{last_modified}} by <strong>{{ modified_by }}</strong></p>
+      <div>
+        {{ #if is_complete }}
+        {{ #if is_modified }}
+        <div style="position:relative;">
+          <span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085; position:absolute; top: 24px; left:10px;"></span> 
+          <p style="color:#aaa; text-transform:uppercase; margin-bottom:5px;">Changes differ from production</p>
+          <a href="/space" class="btn btn-success btn-lg btn-block">Publish changes</a>
+          <p><a href="">Show modified changes?</a></p>
+        </div>
+        {{ else }}
+        {{ #if is_published }}
+        <a href="/space" class="btn btn-success btn-lg btn-block">Un-publish</a>
+          {{ else }}
+        <a href="/space" class="btn btn-success btn-lg btn-block">Publish</a>
+          {{ /if }}
+        {{ /if }}
+      {{ /if }}
+      </div>
     </div>
 {% endverbatim %}
 </script>

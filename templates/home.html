@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% load verbatim %}
+{% load i18n %}
 
-{% block title %}Spaces{% endblock %}
+{% block title %}{% trans "spaces" %}{% endblock %}
 
 {% block extra_js %}
 <script src="/static/js/home.js"></script>
@@ -49,10 +50,11 @@
     <li class="space-list-item">
       <a href="/space/{{ id }}">{{ name }}</a> 
       <span class="item-description">{{ description }}</span>
-      <span class="item-modified-by">{{ modified }} by {{ manager }}</span>
+      <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
       
-      <!-- TODO: if the space has been modified -->
+      {{ #if is_modified }}
       <span class="item-modified glyphicon glyphicon-bookmark"></span>
+      {{ /if }}
       
     </li>
     {{/each}}
@@ -72,7 +74,7 @@
     <span class="label label-danger">{{ element }}</span>
     {{/each}}
   </div>
-  <span class="item-modified-by">{{ modified }} by {{ manager }}</span>
+  <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
 </li>
 {{/each}}
 {% endverbatim %}

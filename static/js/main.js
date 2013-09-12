@@ -9,7 +9,7 @@ $(document).ready(function() {
         var i, v, fmt,
             t = [],
             value = function (vo) {
-                var rv = '';
+                var rv = '', i, v;
 
                 switch (typeof vo.value) {
                 case 'string':
@@ -23,8 +23,20 @@ $(document).ready(function() {
                 case 'boolean':
                     rv = (vo.value) ? gettext(vo.key) : null;
                     break;
-                    
+
+                case 'object':
+                    if ($.isArray(vo.value)) {
+                        v = [];
+                        for (i = 0; i < vo.value.length; i += 1) {
+                            v.push(gettext(vo.value[i]));
+                        }
+
+                        rv = v.join(',');
+                    }
+                    break;
+
                 default:
+                    rv = null;
                     break;
                 };
 
@@ -54,8 +66,14 @@ $(document).ready(function() {
         return '';
     };
 
+    window.spacescout_admin.modifiedTime = function (date) {
+        return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear()
+            + ' ' + window.spacescout_admin.prettyHours(date.getHours()
+                                                        + ':' + date.getMinutes());
+    };
+
     window.spacescout_admin.prettyHours = function (hours) {
-        var t = hours.match(/^(([01]?\d)|2[0123]):([012345]\d)$/),
+        var t = hours.match(/^(([01]?\d)|2[0123]):([012345]?\d)$/),
             h, m;
 
         if (t) {

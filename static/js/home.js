@@ -42,7 +42,7 @@ $(document).ready(function() {
 
                 if (data.length) {
                     tpl_src = $('#building-groups').html();
-                    context = getBuildingGroupContext(data);
+                    context = buildingGroupContext(data);
                 } else {
                     tpl_src = $('#no-spots').html();
                     context = {};
@@ -110,7 +110,7 @@ $(document).ready(function() {
 
         if (data.length) {
             tpl_src = $('#building-groups').html();
-            context = getBuildingGroupContext(data);
+            context = buildingGroupContext(data);
         } else {
             tpl_src = $('#no-spots').html();
             context = {};
@@ -177,20 +177,22 @@ $(document).ready(function() {
                     id: data[i].id,
                     name: data[i].name,
                     unfinished: unfinished,
-                    modified: modifiedTime(new Date(data[i].last_modified)),
+                    last_modified: window.spacescout_admin.modifiedTime(new Date(data[i].last_modified)),
+                    modified_by: (data[i].hasOwnProperty('modified_by') && data[i].modified_by.length) ?
+                        data[i].modified_by : gettext('unknown'),
                     manager: data[i].manager
                 });
             });
        } else {
            tpl = Handlebars.compile($('#no-spots').html());
-           context = {}
+           context = {};
        }
         
         $(selector).html(tpl(context));
         }, Math.floor(Math.random() * (2250 - 250 + 1) + 250));
     };
 
-    var getBuildingGroupContext = function (data) {
+    var buildingGroupContext = function (data) {
         var spots = [],
             buildings = [],
             context = {
@@ -205,8 +207,10 @@ $(document).ready(function() {
                     id: spot.id,
                     name: spot.name,
                     description: spot.extended_info.hasOwnProperty('location_description') ? spot.extended_info.location_description : '',
-                    modified: modifiedTime(new Date(spot.last_modified)),
-                    manager: (spot.manager.length > 0) ? spot.manager : "Unknown"
+                    last_modified: window.spacescout_admin.modifiedTime(new Date(spot.last_modified)),
+                    modified_by: (spot.hasOwnProperty('modified_by') && spot.modified_by.length) ? spot.modified_by : gettext('unknown'),
+                    manager: (spot.manager.length > 0) ? spot.manager : gettext('unknown'),
+                    is_modified: true
                 };
 
             if (building in spots) {
@@ -225,18 +229,6 @@ $(document).ready(function() {
         }
 
         return context;
-    };
-
-    var modifiedTime = function (date) {
-        var month = date.getMonth() + 1,
-            hours = date.getHours(),
-            late = (hours > 12),
-            pm = late ? 'PM' : 'AM',
-            hour = late ? (hours - 12) : hours,
-            minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes();
-
-            return month + '/' + date.getDate() + '/' + date.getFullYear()
-                + ' ' + hour + ':' + minutes + pm;
     };
 
     // initialize

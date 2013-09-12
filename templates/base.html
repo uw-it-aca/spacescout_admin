@@ -33,6 +33,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
 
         {% load compress %}
+        <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
  
         {% compress js %}
 
@@ -41,9 +42,9 @@
  
         <script src="{{ STATIC_URL }}lib/handlebars.js"></script>
 
-
         {% endcompress %}
         <script src="/static/js/main.js"></script>
+
         {% block extra_js %}{% endblock %}
     </head>
 

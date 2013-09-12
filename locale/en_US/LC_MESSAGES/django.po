@@ -57,6 +57,9 @@ msgstr "Not known"
 msgid "noinfo"
 msgstr "No Information"
 
+msgid "unset"
+msgstr "Unavailable"
+
 msgid "seattle"
 msgstr "Seattle"
 
@@ -70,7 +73,7 @@ msgid "alcove"
 msgstr "Alcove"
 
 msgid "cafe"
-msgstr "Cafe"
+msgstr "Café"
 
 msgid "classroom"
 msgstr "Conference/Classroom"
@@ -127,13 +130,13 @@ msgid "silent"
 msgstr "Silent"
 
 msgid "quiet"
-msgstr "Quiet"
+msgstr "Low hum"
 
 msgid "moderate"
-msgstr "Moderate"
+msgstr "Chatter"
 
 msgid "loud"
-msgstr "Loud"
+msgstr "Rowdy"
 
 msgid "variable"
 msgstr "Variable"
@@ -193,7 +196,7 @@ msgid "extended_info.has_natural_light"
 msgstr "Space has natural light"
 
 msgid "alcove_help"
-msgstr "A quiet place in the corner"
+msgstr "That quiet place in the corner"
 
 msgid "cafe_help"
 msgstr "Space that functions primarily as an eatery"
@@ -230,3 +233,45 @@ msgstr "Required Fields"
 
 msgid "details"
 msgstr "details"
+
+msgid "add_new_space"
+msgstr "Add New Space"
+
+msgid "exclaim"
+msgstr "Oh snap!"
+
+msgid "suggestion"
+msgstr "Change a few things up and try submitting again."
+
+msgid "all_fields_required"
+msgstr "All fields on this page are required in order to create the initial space listing."
+
+msgid "choose_up_to_2"
+msgstr "Select up to two"
+
+msgid "seats_available"
+msgstr "Number of seats available"
+
+msgid "text_input"
+msgstr "Text input"
+
+msgid "spaces"
+msgstr "Spaces"
+
+msgid "extended_info.has_labstats"
+msgstr "Space has LabStats tracking"
+
+msgid "basic"
+msgstr "Basic Information"
+
+msgid "hours"
+msgstr "Hours"
+
+msgid "images"
+msgstr "Images"
+
+msgid "access"
+msgstr "Access"
+
+msgid "resources"
+msgstr "Resources & Environment"
