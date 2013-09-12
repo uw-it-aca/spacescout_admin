@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     var weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-        
+
     // fetch spot data
     (function () {
         $.ajax({
@@ -54,8 +54,8 @@ $(document).ready(function() {
                     break;
                 }
 
-                validateFields();
-                $('input, textarea').change(validateFields);
+                window.spacescout_admin.validateFields();
+                $('input, textarea').change(window.spacescout_admin.validateFields);
 
                 return;
             }
@@ -224,273 +224,12 @@ $(document).ready(function() {
         for (i = 0; i < fields.length; i += 1) {
             if (typeof fields[i].value === 'object') {
                 if ($.isArray(fields[i].value)) {
-                    appendFieldList(fields[i], section);
+                    window.spacescout_admin.appendFieldList(fields[i], getFieldValue, section);
                 } else {
-                    appendFieldValue(fields[i], section);
+                    window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, section);
                 }
             }
         }
-    };
-
-    var appendFieldHeader = function (name, help, is_required, section) {
-        section.append(Handlebars.compile($('#space-edit-field-header').html())({
-            name: name,
-            help: help,
-            is_required: is_required
-        }));
-    };
-
-    var appendFieldValue = function (field, section) {
-        var required = (field.hasOwnProperty('required') && field.required),
-            context = {},
-            tpl, vartype, varedit, data, i, node, src, choice, group;
-
-        appendFieldHeader(field.name,
-                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
-                          required,
-                          section);
-
-        // fields we know about
-        switch (field.value.key) {
-        case 'location.building_name':
-            tpl = Handlebars.compile($('#space-edit-select').html());
-            context.options = [];
-            section.append(tpl(context));
-            node = section.find('select').last();
-
-            $.ajax({
-                url: '/api/v1/buildings/',
-                dataType: 'json',
-                success: function (data) {
-                    var building = getFieldValue(field.value),
-                        option;
-
-                    if (typeof data === 'object' && $.isArray(data)) {
-                        for (i = 0; i < data.length; i += 1) {
-                            option = $('<option></option>').val(i).html(data[i]);
-
-                            if (building == data[i]) {
-                                option.attr('selected', 'selected');
-                            }
-
-                            node.append(option);
-                        }
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    XHRError(xhr);
-                }
-            });
-            break;
-        default:
-            vartype = schemaVal(field.value.key);
-            varedit = (field.value.hasOwnProperty('edit')) ? field.value.edit: null;
-
-            if (vartype == undefined) {
-                vartype = 'unicode'; //default
-            }
-
-            switch (typeof vartype) {
-            case 'string':
-                switch (vartype.toLowerCase()) {
-                case 'int':
-                case 'decimal':
-                    context.inputs = [{
-                        value: getFieldValue(field.value),
-                        class: required ? 'value-required' : ''
-                    }];
-                    tpl = Handlebars.compile($('#space-edit-number').html());
-                    node = $(tpl(context));
-                    section.append(node);
-                    break;
-                case 'unicode':
-                    if (varedit && varedit.hasOwnProperty('tag') && varedit.tag == 'textarea') {
-                        if (varedit.hasOwnProperty('placeholder')) {
-                            context.placeholder = gettext(varedit.placeholder);
-                        }
-
-                        context.value = getFieldValue(field.value);
-                        context.class = required ? 'value-required' : '';
-                        tpl = Handlebars.compile($('#space-edit-textarea').html());
-                    } else {
-                        context.inputs = [{
-                            value: getFieldValue(field.value),
-                            placeholder: gettext((varedit && varedit.hasOwnProperty('placeholder')) ? varedit.placeholder : 'text_input'),
-                            class: required ? 'value-required' : ''
-                        }];
-                        tpl = Handlebars.compile($('#space-edit-input').html());
-                    }
-
-                    section.append(tpl(context));
-                    break;
-                default:
-                    break;
-                }
-                break;
-            case 'object':
-                if ($.isArray(vartype)) {
-                    data = [];
-                    if (vartype.length == 1 && vartype[0].toLowerCase() == 'true') {
-                        src = '#space-edit-checkboxes';
-                        data.push(booleanEditStruct(field.value));
-                    } else {
-                        if (field.value.hasOwnProperty('edit')
-                              && field.value.edit.hasOwnProperty('tag')
-                               && field.value.edit.tag == 'select') {
-                            src = '#space-edit-select';
-                            choice = 'selected';
-                            group = null;
-                        } else if (field.value.hasOwnProperty('edit')
-                              && field.value.edit.hasOwnProperty('multi_select')) {
-                            src = '#space-edit-checkboxes';
-                            choice = 'checked';
-                            group = null;
-                        } else {
-                            src = '#space-edit-radio';
-                            choice = 'checked';
-                            group = field.name;
-                            if (field.value.hasOwnProperty('edit')
-                                && field.value.edit.hasOwnProperty('allow_none')) {
-                                data.push({
-                                    name: gettext('unset'),
-                                    value: field.value.key + ':',
-                                    group: group
-                                });
-                            }
-                        }
-
-                        if (field.value.hasOwnProperty('map')) {
-                            for (i in field.value.map) {
-                                data.push({
-                                    name: gettext(field.value.map[i]),
-                                    value: field.value.key + ':' + i,
-                                    choice: (field.value.value == i) ? choice : '',
-                                    class: required ? 'value-required' : '',
-                                    group: group
-                                });
-                            }
-                        } else {
-                            for (i = 0; i < vartype.length; i += 1) {
-                                data.push({
-                                    name: gettext(vartype[i]),
-                                    value: field.value.key + ':' + vartype[i],
-                                    choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
-                                    class: required ? 'value-required' : '',
-                                    has_help: true,
-                                    help: gettext(vartype[i] + '_help'),
-                                    group: group
-                                });
-                            }
-                        }
-                    }
-
-                    context.inputs = data;
-
-                    tpl = Handlebars.compile($(src).html());
-                    section.append(tpl(context));
-                } else {
-                    if (typeof field.value.value === 'boolean') {
-                        src = '#space-edit-checkboxes';
-                        data = [ booleanEditStruct(field.value) ];
-                    } else if (vartype == 'int' || vartype == 'decimal') {
-                        src = '#space-edit-number';
-                        data = [ {
-                            value: getFieldValue(field.value)
-                        }];
-                    } else if (typeof vartype === 'string'
-                               || (vartype == 'unicode')) {
-                        src = '#space-edit-input';
-                        data = [ {
-                            value: getFieldValue(field.value)
-                        }];
-                    }
-
-                    context.inputs = data;
-                    context.class = required ? 'value-required' : '';
-                    tpl = Handlebars.compile($(src).html());
-                    section.append(tpl(context));
-                }
-                break;
-            default:
-                break;
-            }
-        }
-    };
-
-    var appendFieldList = function(field, section) {
-        var vartype, i,
-            values = [],
-            bool = false,
-            context = {},
-            src_selector,
-            required = (field.hasOwnProperty('required') && field.required);
-
-        appendFieldHeader(field.name,
-                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
-                          required,
-                          section);
-
-        if (required) {
-            context.class = 'value-required';
-        }
-
-        for (i = 0; i < field.value.length; i += 1) {
-            if (i == 0 && typeof field.value[i].value === 'boolean') {
-                bool = true;
-            } else if (typeof field.value[i].value === 'boolean') {
-                if (!bool) {
-                    values = [];
-                    break;
-                }
-            } else if (bool) {
-                values = [];
-                break;
-            }
-
-            if (bool) {
-                values.push(booleanEditStruct(field.value[i]));
-            } else {
-                vartype = schemaVal(field.value[i].key);
-                if (typeof vartype === 'string'
-                    && (vartype == 'unicode'
-                        || vartype == 'int'
-                        || vartype == 'decimal')) {
-                    values.push(getFieldValue(field.value[i]));
-                }
-            }
-        }
-
-        if (bool) {
-            src_selector = "#space-edit-checkboxes";
-            context.inputs = values;
-        } else {
-            src_selector = "#space-edit-input";
-            context.inputs = [{ value: values.join(', ') }];
-        }
-
-        section.append(Handlebars.compile($(src_selector).html())(context));
-    };
-
-    var booleanEditStruct = function (v) {
-        return {
-            choice: v.value ? 'checked' : '',
-            name: gettext(v.key),
-            value: v.key
-        };
-    };
-
-    var schemaVal = function (key) {
-        var schema = window.spacescout_admin.spot_schema,
-            keys = key.split('.'),
-            val = '',
-            i;
-
-        val = schema[keys[0]];
-        for (i = 1; i < keys.length; i += 1) {
-            val = val[keys[i]];
-        }
-
-        return val;
     };
 
     var XHRError = function (xhr) {
@@ -506,57 +245,5 @@ $(document).ready(function() {
 
     var getFieldValue = function (v) {
         return window.spacescout_admin.getFieldValue(v);
-    };
-
-    var validateFields = function () {
-        $('.value-required').each(function () {
-            var show_cue = function (node, show) {
-                if (show) {
-                    node.children('.required-field-icon').show();
-                    node.children('.required-field-text').show();
-                } else {
-                    node.children('.required-field-icon').hide();
-                    node.children('.required-field-text').hide();
-                }
-            },
-            set_cue = function (node, show) {
-                var i, n;
-
-                if (node.prev().is('h4')) {
-                    show_cue(node.prev(), show);
-                } else { 
-                    for (i = 0; i < 8; i += 1) {
-                        n = node.parents().eq(i).prev();
-                        if (n.is('h4')) {
-                            show_cue(n, show);
-                            break;
-                        }
-                    }
-                }
-            };
-
-            switch ($(this).prop('tagName').toLowerCase()) {
-            case 'input':
-                switch ($(this).attr('type')) {
-                case 'radio':
-                    set_cue($(this), ($('input[name="' + $(this).attr('name') + '"]:checked').length <= 0));
-                    break;
-                case 'checkbox':
-                    set_cue($(this), ($(this).is(':checked')));
-                    break;
-                case 'text':
-                    set_cue($(this), ($(this).val().trim().length == 0));
-                    break;
-                };
-                break;
-            case 'textarea':
-                set_cue($(this), ($(this).val().trim().length == 0));
-                break;
-            case 'select':
-                break;
-            default :
-                break;
-            };
-        });
     };
 });

@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.utils.safestring import SafeString
+import simplejson as json
 
 
 # Create your views here.
@@ -23,7 +26,9 @@ def edit(request, space_id):
 
 def add(request):
    return render_to_response('add.html',
-                             {},
+                             {
+                                 'SPACE_FIELDS': SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS))
+                             },
                              context_instance=RequestContext(request))
 
 def upload(request):
