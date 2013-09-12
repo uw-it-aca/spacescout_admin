@@ -23,9 +23,11 @@
     <div style="margin-top: 2em;">
       <p>Last updated on 8/15/13 12:34PM by <strong>jcomis</strong></p>
       
-      <div>
-        <p>This space has changes that differ from production.</p>
-        <a href="/space" class="btn btn-success btn-lg btn-block">Publish modified</a>
+      <!-- TODO: show this if modifications different from published in production -->
+      <div style="position:relative;">
+        <span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085; position:absolute; top: 24px; left:10px;"></span> 
+        <p style="color:#aaa; text-transform:uppercase; margin-bottom:5px;">Changes differ from production</p>
+        <a href="/space" class="btn btn-success btn-lg btn-block">Publish changes</a>
         <p><a href="">Show modified changes?</a></p>
       </div>
       
@@ -43,9 +45,6 @@
 <strong>Type <span class="glyphicon glyphicon-asterisk required-field"></span></strong><p class="space-detail-item">{{ type }}</p>
 <strong>Owner <span class="glyphicon glyphicon-asterisk required-field"></span></strong><p class="space-detail-item">{{ manager }}</p>
 <strong>Editors</strong><p class="space-detail-item">{{ editors }}</p>
-
-<!-- TODO: show this if modifications different from published in production -->
-<div style="margin-top:1.5em; color:#bbb; text-transform:uppercase;"><span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085;"></span> Changes differ from production</div>
 
 {% endverbatim %}
 </script>
