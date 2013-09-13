@@ -20,7 +20,7 @@
     <div class="loading">Loading</div>
 </div>
 
-<h2 id="space-name">{{ name }}</h2>
+<h2 id="space-name"></h2>
 
 <div id="space-editor"></div>
 
@@ -29,55 +29,8 @@
   <a href="/space/{{SPOT_ID}}" class="btn btn-success btn-lg btn-block">Done</a>
 </div>
 
-<script id="space-edit-basic" type="text/html">
-{% verbatim %}
-    <!-- Edit basic info -->
-    <div class="form-group">
-        <h4>Space Name
-          {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
-          {{ /if }}
-        </h4>
-        <input type="text" class="form-control" id="input-space-name" placeholder="Text input" value="{{ name }}">
-    </div>
-    
-    <div class="form-group">
-          <h4>Space Type
-            {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
-            {{ /if }}
-            <small>{% trans "all_that_apply" %}</small></h4>
-          
-          <div class="panel space-types-panel">
-              {{# each types }}
-              <div class="checkbox">
-                  <label><input type="checkbox" value="{{ value }}" {{ choice }}>{{ name }}</label>
-                  {{# if has_help }}
-                  <p class="text-muted">{{ help }}</p>
-                  {{/if}}
-              </div>
-          {{/each}}
-          </div>
-    </div>
-    
-    <div class="form-group">
-        <h4>Owner
-            {{#if is_missing }}
-            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
-            {{ /if }}
-        </h4>
-        <input type="text" class="form-control" placeholder="Text input" value="{{ manager }}">
-    </div>
-    
-    <div class="form-group">
-        <h4>Editors</h4>
-        <input type="text" class="form-control" placeholder="Text input" value="{{ editors }}">
-    </div>
-{% endverbatim %}
-</script>
-
 <script id="space-edit-hours" type="text/html">
-    <h4>Normal Hours</h4>
+    <h4>{% trans "normal_hours" %}</h4>
     <div class="time-selector">
       <span class="third">Day(s)</span>
       <span class="third">Open</span>
@@ -100,28 +53,6 @@
 {% endverbatim %}
 </script>
 
-<script id="space-edit-access" type="text/html">
-{% verbatim %}
-    <!-- Edit access -->
-    <div class="panel space-detail-section ">
-        <div class="panel-heading">
-            <h3 class="panel-title">Access</h3>
-        </div>
-    
-      <h4>Access Notes</h4>
-      <textarea class="form-control" rows="3" placeholder="Enter Hours notes"></textarea>
-      <h4>Reservability</h4>
-      <div class="checkbox">
-          <label>
-            <input type="checkbox" value="">
-            Space is reservable
-          </label>
-      </div>
-      <textarea class="form-control" rows="3" placeholder="Enter additional details such as reservation link"></textarea>
-    </div>
-{% endverbatim %}
-</script>
-    
 <script id="space-edit-images" type="text/html">
 {% verbatim %}
     <!-- Edit images -->

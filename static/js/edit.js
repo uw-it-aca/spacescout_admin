@@ -54,14 +54,19 @@ $(document).ready(function() {
                     break;
                 }
 
-                window.spacescout_admin.validateFields();
-                $('input, textarea').change(window.spacescout_admin.validateFields);
+                validate();
 
+                $('input, textarea').change(validate);
+                $('input').keydown(window.spacescout_admin.validateInput);
                 return;
             }
         }
 
         editor.append(Handlebars.compile($('#no-section').html())({}));
+    };
+
+    var validate = function () {
+        window.spacescout_admin.validateFields();
     };
 
     var editHoursDetails = function (section, editor_node) {

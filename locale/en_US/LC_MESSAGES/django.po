@@ -258,8 +258,17 @@ msgstr "Text input"
 msgid "spaces"
 msgstr "Spaces"
 
+msgid "labstats"
+msgstr "Has LabStats"
+
 msgid "extended_info.has_labstats"
 msgstr "Space has LabStats tracking"
+
+msgid "noise_level"
+msgstr "Noise Level"
+
+msgid "food_coffee"
+msgstr "Food & Coffee"
 
 msgid "basic"
 msgstr "Basic Information"
@@ -275,3 +284,6 @@ msgstr "Access"
 
 msgid "resources"
 msgstr "Resources & Environment"
+
+msgid "normal_hours"
+msgstr "Normal Hours"

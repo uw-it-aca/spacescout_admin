@@ -132,7 +132,7 @@ $(document).ready(function() {
             context = {},
             tpl, vartype, varedit, data, i, node, src, choice, group;
 
-        appendFieldHeader(field.name,
+        appendFieldHeader(gettext(field.name),
                           (field.hasOwnProperty('help')) ? gettext(field.help) : '',
                           required,
                           section);
@@ -375,6 +375,33 @@ $(document).ready(function() {
         }
 
         section.append(Handlebars.compile($(src_selector).html())(context));
+    };
+
+    window.spacescout_admin.validateInput = function (event) {
+        var el = $(event.target),
+            key = event.keyCode,
+            v = el.val();
+
+        switch (el.prop('type')) {
+        case 'number':
+            if (key == 8 || key == 9 || key == 27 || key == 13 || key == 16 || key == 17 || key == 18 || key == 91) {
+                return;
+            }
+
+            if (!event.shiftKey && ((key > 47 && key < 58) || (key > 95 && key < 106))) {
+            } else {
+                event.preventDefault();
+            }
+            break;
+        case 'text':
+            if (v.trim().length <= 2) {
+                setInterval(window.spacescout_admin.validateFields, 100);
+            }
+
+            break;
+        default:
+            break;
+        }
     };
 
     window.spacescout_admin.validateFields = function () {
