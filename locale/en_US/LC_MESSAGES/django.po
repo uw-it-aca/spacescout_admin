@@ -259,7 +259,7 @@ msgid "spaces"
 msgstr "Spaces"
 
 msgid "labstats"
-msgstr "Has LabStats"
+msgstr "LabStats"
 
 msgid "extended_info.has_labstats"
 msgstr "Space has LabStats tracking"
