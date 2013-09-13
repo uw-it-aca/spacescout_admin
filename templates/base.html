@@ -8,44 +8,42 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>SpaceScout&trade; Admin Application</title>
         <meta name="description" content="">
-        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0; user-scalable=no">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="apple-touch-fullscreen" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+        
+        {% load compress %}
+        
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-        <!-- jQuery -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
+        
+        <!-- Bootstrap -->   
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
-        <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
-        <link rel="stylesheet" href="/static/css/bootstrap-fileupload.min.css">
-        <link type="text/less" rel="stylesheet" href="/static/css/main.less" media="screen, handheld" charset="utf-8" />
+        
+        {% compress css %}
+            <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-select.min.css">
+            <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-fileupload.min.css">
+            <link rel="stylesheet" href="{{ STATIC_URL }}css/main.less" type="text/less">
+        {% endcompress %}
         
         <link href='http://fonts.googleapis.com/css?family=Dosis:300,500' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic' rel='stylesheet' type='text/css'>
         
-        <!-- Modernizr & LessJS -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js"></script>
-
-        {% load compress %}
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
+             
         <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
  
         {% compress js %}
-
-        <script src="/static/js/bootstrap-select.min.js"></script>
-        <script src="/static/js/bootstrap-fileupload.min.js"></script>
- 
-        <script src="{{ STATIC_URL }}lib/handlebars.js"></script>
-
+            <script src="{{ STATIC_URL }}js/bootstrap-select.min.js"></script>
+            <script src="{{ STATIC_URL }}js/bootstrap-fileupload.min.js"></script>
+            <script src="{{ STATIC_URL }}js/main.js"></script>
+            {% block extra_js %}{% endblock %}
         {% endcompress %}
-        <script src="/static/js/main.js"></script>
-
-        {% block extra_js %}{% endblock %}
+    
     </head>
 
     <body>
