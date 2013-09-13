@@ -48,7 +48,9 @@
       {{ #if has_name }} 
       <h4>{{ name }}
         {{#if is_missing }}
-          <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
+            <div class="required-field">
+                <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
+            </div>
         {{ /if }}
       </h4>
       {{ /if }}
@@ -68,7 +70,9 @@
       <div class="section-hours">
         <h4>Normal Hours
           {{ #if is_missing }}
-          <span class="glyphicon glyphicon-asterisk required-field"></span>
+          <div class="required-field">
+            <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
+          </div>
           {{ /if }}
         </h4>
         <ul>
