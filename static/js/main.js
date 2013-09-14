@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
-    $('.fileupload').fileupload()
+    var required_class = 'required-field';
+    var dependent_prefix = 'required-key-';
+
+    $('.fileupload').fileupload();
 
     window.spacescout_admin = window.spacescout_admin || {};
 
@@ -110,27 +113,32 @@ $(document).ready(function() {
         return val;
     };
 
-    var booleanEditStruct = function (v) {
-        return {
-            choice: v.value ? 'checked' : '',
-            name: gettext(v.key),
-            key: v.key + ':' + String(v.value),
-            value: v.key
-        };
-    };
-
     var appendFieldHeader = function (name, help, is_required, section) {
-        section.append(Handlebars.compile($('#space-edit-field-header').html())({
-            name: name,
-            help: help,
-            is_required: is_required
-        }));
+        var tpl = Handlebars.compile($('#space-edit-field-header').html()),
+            node = $(tpl({
+                name: name
+            }));
+        
+        section.append(node);
+
+        if (is_required) {
+            tpl = Handlebars.compile($('#space-edit-field-required').html());
+            node.append(tpl());
+        }
+
+        if (help && help.length) {
+            tpl = Handlebars.compile($('#space-edit-field-help').html());
+            node.append(tpl({
+                help: help
+            }));
+        }
     };
 
     window.spacescout_admin.appendFieldValue = function (field, getval, section) {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
-            tpl, vartype, varedit, data, i, node, src, choice, group;
+            choice, has_choice = false,
+            input_class, tpl, vartype, varedit, data, i, node, src,  group;
 
         appendFieldHeader(gettext(field.name),
                           (field.hasOwnProperty('help')) ? gettext(field.help) : '',
@@ -185,7 +193,7 @@ $(document).ready(function() {
                     context.inputs = [{
                         key: field.value.key,
                         value: getval(field.value),
-                        class: required ? 'value-required' : ''
+                        class: required ? required_class : ''
                     }];
                     tpl = Handlebars.compile($('#space-edit-number').html());
                     node = $(tpl(context));
@@ -197,15 +205,16 @@ $(document).ready(function() {
                             context.placeholder = gettext(varedit.placeholder);
                         }
 
+                        context.key = field.value.key;
                         context.value = getval(field.value);
-                        context.class = required ? 'value-required' : '';
+                        context.class = required ? required_class : '';
                         tpl = Handlebars.compile($('#space-edit-textarea').html());
                     } else {
                         context.inputs = [{
                             key: field.value.key,
                             value: getval(field.value),
                             placeholder: gettext((varedit && varedit.hasOwnProperty('placeholder')) ? varedit.placeholder : 'text_input'),
-                            class: required ? 'value-required' : ''
+                            class: required ? required_class : ''
                         }];
                         tpl = Handlebars.compile($('#space-edit-input').html());
                     }
@@ -251,28 +260,53 @@ $(document).ready(function() {
 
                         if (field.value.hasOwnProperty('map')) {
                             for (i in field.value.map) {
+                                if (!has_choice && (field.value.value == i)) {
+                                    has_choice = true;
+                                }
+
+                                input_class = required ? required_class : '';
+                                if (field.value.hasOwnProperty('edit')
+                                    && field.value.edit.hasOwnProperty('requires')) {
+                                    input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
+                                }
+
                                 data.push({
                                     name: gettext(field.value.map[i]),
                                     key: field.value.key + ':' + i,
                                     value: field.value.key + ':' + i,
                                     choice: (field.value.value == i) ? choice : '',
-                                    class: required ? 'value-required' : '',
+                                    class: input_class,
                                     group: group
                                 });
                             }
                         } else {
                             for (i = 0; i < vartype.length; i += 1) {
+                                if (!has_choice && (String(field.value.value).toLowerCase() == vartype[i])) {
+                                    has_choice = true;
+                                }
+
+                                input_class = required ? required_class : '';
+                                if (field.value.hasOwnProperty('edit')
+                                    && field.value.edit.hasOwnProperty('requires')) {
+                                    input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
+                                }
+
                                 data.push({
                                     name: gettext(vartype[i]),
                                     key: field.value.key + ':' + vartype[i],
                                     value: field.value.key + ':' + vartype[i],
                                     choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
-                                    class: required ? 'value-required' : '',
+                                    class: input_class,
                                     has_help: true,
                                     help: gettext(vartype[i] + '_help'),
                                     group: group
                                 });
                             }
+                        }
+
+                        if (!has_choice && (field.value.hasOwnProperty('edit')
+                                            && field.value.edit.hasOwnProperty('allow_none'))) {
+                            data[0].choice = choice;
                         }
                     }
 
@@ -300,7 +334,7 @@ $(document).ready(function() {
                     }
 
                     context.inputs = data;
-                    context.class = required ? 'value-required' : '';
+                    context.class = required ? required_class : '';
                     tpl = Handlebars.compile($(src).html());
                     section.append(tpl(context));
                 }
@@ -321,14 +355,10 @@ $(document).ready(function() {
             src_selector,
             required = (field.hasOwnProperty('required') && field.required);
 
-        appendFieldHeader(field.name,
+        appendFieldHeader(gettext(field.name),
                           (field.hasOwnProperty('help')) ? gettext(field.help) : '',
                           required,
                           section);
-
-        if (required) {
-            context.class = 'value-required';
-        }
 
         for (i = 0; i < field.value.length; i += 1) {
             if (i == 0 && typeof field.value[i].value === 'boolean') {
@@ -345,8 +375,9 @@ $(document).ready(function() {
 
             keys.push(field.value[i].key);
 
-            if (field.value[i].hasOwnProperty('placeholder')) {
-                placeholder.push(field.value[i].placeholder);
+            if (field.value[i].hasOwnProperty('edit')
+                && field.value[i].edit.hasOwnProperty('placeholder')) {
+                placeholder.push(field.value[i].edit.placeholder);
             }
 
             if (bool) {
@@ -370,6 +401,7 @@ $(document).ready(function() {
             context.inputs = [{
                 key: keys.join('|'),
                 placeholder: placeholder.join(', '),
+                class: (required) ? required_class : '',
                 value: values.join(', ')
             }];
         }
@@ -377,10 +409,20 @@ $(document).ready(function() {
         section.append(Handlebars.compile($(src_selector).html())(context));
     };
 
+    var booleanEditStruct = function (v) {
+        return {
+            choice: v.value ? 'checked' : '',
+            name: gettext(v.key),
+            key: v.key,
+            value: v.key
+        };
+    };
+
     window.spacescout_admin.validateInput = function (event) {
         var el = $(event.target),
             key = event.keyCode,
-            v = el.val();
+            v = el.val(),
+            multi = ($.inArray('|') >= 0);
 
         switch (el.prop('type')) {
         case 'number':
@@ -388,16 +430,12 @@ $(document).ready(function() {
                 return;
             }
 
-            if (!event.shiftKey && ((key > 47 && key < 58) || (key > 95 && key < 106))) {
-            } else {
+            if (!(!event.shiftKey && ((key > 47 && key < 58) || (key > 95 && key < 106)))) {
                 event.preventDefault();
             }
-            break;
-        case 'text':
-            if (v.trim().length <= 2) {
-                setInterval(window.spacescout_admin.validateFields, 100);
-            }
 
+        case 'text':
+            setInterval(window.spacescout_admin.validateFields, 100);
             break;
         default:
             break;
@@ -405,46 +443,62 @@ $(document).ready(function() {
     };
 
     window.spacescout_admin.validateFields = function () {
-        $('.value-required').each(function () {
-            var show_cue = function (node, show) {
-                    if (show) {
-                        node.children('.required-field').show();
-                    } else {
-                        node.children('.required-field').hide();
-                    }
-                },
-                set_cue = function (node, show) {
-                    var i, n;
+        var show_cue = function (n, s) {
+                var req_node = n.children('.' + required_class);
 
-                    if (node.prev().is('h4')) {
-                        show_cue(node.prev(), show);
-                    } else { 
-                        for (i = 0; i < 8; i += 1) {
-                            n = node.parents().eq(i).prev();
-                            if (n.is('h4')) {
-                                show_cue(n, show);
-                                break;
-                            }
+                if (!req_node.length) {
+                    var tpl = Handlebars.compile($('#space-edit-field-required').html());
+                    req_node = $(tpl());
+                    n.prepend(req_node);
+                }
+
+                if (s) {
+                    req_node.show();
+                } else {
+                    req_node.hide();
+                }
+            },
+            set_cue = function (node, show) {
+                var i, n;
+
+                if (node.prev().hasClass('field-header')) {
+                    show_cue(node.prev(), show);
+                } else { 
+                    for (i = 0; i < 8; i += 1) {
+                        n = node.parents().eq(i).prev();
+                        if (n.hasClass('field-header')) {
+                            show_cue(n, show);
+                            break;
                         }
                     }
-                };
+                }
+            };
 
-            switch ($(this).prop('tagName').toLowerCase()) {
+        $('.' + required_class).each(function () {
+            var el = $(this);
+
+            switch (el.prop('tagName').toLowerCase()) {
             case 'input':
-                switch ($(this).attr('type')) {
+                switch (el.attr('type')) {
                 case 'radio':
-                    set_cue($(this), ($('input[name="' + $(this).attr('name') + '"]:checked').length <= 0));
+                    set_cue(el, ($('input[name="' + el.attr('name') + '"]:checked').length <= 0));
                     break;
                 case 'checkbox':
-                    set_cue($(this), ($(this).closest('div.panel').find('input:checked').length <= 0));
+                    set_cue(el, (el.closest('div.panel').find('input:checked').length <= 0));
                     break;
+                case 'number':
                 case 'text':
-                    set_cue($(this), ($(this).val().trim().length == 0));
+                    if (el.attr('name').indexOf('|') >= 0) {
+                        set_cue(el, (multiValueInput(el) == null));
+                        break;
+                    }
+
+                    set_cue(el, (el.val().trim().length == 0));
                     break;
                 };
                 break;
             case 'textarea':
-                set_cue($(this), ($(this).val().trim().length == 0));
+                set_cue(el, (el.val().trim().length == 0));
                 break;
             case 'select':
                 break;
@@ -452,6 +506,122 @@ $(document).ready(function() {
                 break;
             };
         });
+
+        $('input[class^="' + dependent_prefix + '"]:checked').each(function () {
+            var el = $(this),
+                p = keyValuePair(el.val()),
+                m = el.prop('class').slice(dependent_prefix.length).match(/([^\s]+)(\s|$)/),
+                target_el;
+
+            if (m) {
+                target_el = $('*[name="' + m[1] + '"]');
+                if (p) {
+                    if (p.value == 'null' || p.value.toLowerCase() == 'false') {
+                        set_cue(target_el, false);
+                        if (target_el.hasClass(required_class)) {
+                            target_el.removeClass(required_class);
+                        }
+                    } else if (target_el.val().trim().length == 0) {
+                        set_cue(target_el, true);
+                        if (!target_el.hasClass(required_class)) {
+                            target_el.addClass(required_class);
+                        }
+                    }
+                } else {
+                    set_cue(target_el, true);
+                }
+            }
+        });
+    };
+
+    window.spacescout_admin.collectInput = function () {
+        var data = {};
+
+        $('input, textarea').each(function () {
+            var v = $(this).val().trim(),
+                checked = $(this).is(':checked'),
+                p, i;
+
+            switch ($(this).prop('type')) {
+            case 'checkbox':
+                p = keyValuePair(v);
+
+                if (p) {
+                    if (checked) {
+                        data[p.key] = p.value;
+                    }
+                } else {
+                    data[v] = checked;
+                }
+
+                break;
+            case 'radio':
+                if (checked) {
+                    p = keyValuePair(v);
+
+                    if (p) {
+                        data[p.key] = p.value;
+                    } else {
+                        data[v] = checked;
+                    }
+                }
+
+                break;
+            case 'text':
+                p = multiValueInput($(this));
+                if (p) {
+                    for (i in p) {
+                        data[i] = p[i];
+                    }
+
+                    break;
+                }
+
+            default:
+                data[$(this).attr('name')] = v;
+                break;
+            }
+        });
+
+        $('select').each(function () {
+            var s = $(this).children('option:selected'),
+                v = s.val().trim(),
+                p = keyValuePair(v);
+
+            if (p) {
+                data[p.key] = p.value;
+            } else {
+                data[v] = s.text();
+            }
+        });
+
+        return data;
+    };
+
+    var keyValuePair = function (s) {
+        var m = s.match(/^([^:]+):(.*)$/);
+        return m ? { key: m[1], value: m[2] } : null;
+    };
+
+    var multiValueInput = function (input) {
+        var v = input.val().trim(),
+            name = input.attr('name'),
+            data = {},
+            ka, va, i;
+
+        ka = name.match(/(([^|]+)(|$))/g);
+        if (ka && ka.length > 1) {
+            va = v.match(/(([^,'"]+)(,\s*|$))/g);
+            if (va && va.length == ka.length) {
+                for (i = 0; i < ka.length; i += 1) {
+                    data[ka[i]] = va[i];
+                }
+
+                return data;
+            }
+        }
+
+        return null;
     };
 
 });

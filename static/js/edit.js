@@ -58,6 +58,18 @@ $(document).ready(function() {
 
                 $('input, textarea').change(validate);
                 $('input').keydown(window.spacescout_admin.validateInput);
+                $('a.btn').click(function (event) {
+                    var data = window.spacescout_admin.collectInput(),
+                        x;
+
+                    // POST changes
+                    for (x in data) {
+                       console.log('data: ' + x + ' is ' + data[x]);
+                    }
+
+                    event.preventDefault();
+                });
+
                 return;
             }
         }

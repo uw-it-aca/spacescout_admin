@@ -184,7 +184,7 @@ $(document).ready(function() {
 
         $('.required-field').each(function () {
             incomplete.push({
-                field: $(this).parent().text().trim(),
+                field: $(this).parent().contents().eq(0).text().trim(),
                 edit_url: $(this).closest('.space-detail-section').find('div.section-edit a').attr('href')
             });
         });

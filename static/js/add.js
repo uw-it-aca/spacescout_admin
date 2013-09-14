@@ -24,12 +24,27 @@ $(document).ready(function() {
 
                 validate();
                 $('input, textarea').change(validate);
+                $('input').keydown(validateInput);
+                $('a.btn').click(function (event) {
+                    var data = window.spacescout_admin.collectInput(),
+                        x;
+
+                    // POST changes
+                    for (x in data) {
+                        console.log('data: ' + x + ' is ' + data[x]);
+                    }
+                });
             },
             error: function (xhr, textStatus, errorThrown) {
                 XHRError(xhr);
             }
         });
     }());
+
+    var validateInput = function (event) {
+        window.spacescout_admin.validateInput(event);
+        setInterval(validate, 200);
+    };
 
     var validate = function () {
         window.spacescout_admin.validateFields();

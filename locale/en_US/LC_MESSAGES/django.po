@@ -150,8 +150,11 @@ msgstr "Further refine the description"
 msgid "latlong_help"
 msgstr "Use Google Maps <a href=\"https://support.google.com/maps/answer/18539?hl=en\" target=\"_blank\">Tutorial</a>"
 
-msgid "access_notes"
+msgid "access_hour_notes"
 msgstr "Enter Hours notes"
+
+msgid "access_notes"
+msgstr "Access Notes"
 
 msgid "reservation_notes"
 msgstr "Enter additional details such as reservation link"
@@ -160,7 +163,10 @@ msgid "hours_notes"
 msgstr "Enter notes for the hours section"
 
 msgid "cafe_notes"
-msgstr "Enter notes for the cafe hours"
+msgstr "Enter notes for the café hours"
+
+msgid "cafe_hours"
+msgstr "Café Hours"
 
 msgid "add_hours_group"
 msgstr "add another hour group"
@@ -287,3 +293,9 @@ msgstr "Resources & Environment"
 
 msgid "normal_hours"
 msgstr "Normal Hours"
+
+msgid "latlong"
+msgstr "Lat & Long"
+
+msgid "required"
+msgstr "Required"
