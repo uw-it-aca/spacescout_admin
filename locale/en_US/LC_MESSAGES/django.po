@@ -67,7 +67,7 @@ msgid "tacoma"
 msgstr "Tacoma"
 
 msgid "bothell"
-msgstr "Bothel"
+msgstr "Bothell"
 
 msgid "alcove"
 msgstr "Alcove"
@@ -142,7 +142,7 @@ msgid "variable"
 msgstr "Variable"
 
 msgid "description_help"
-msgstr "Be specific as possible?"
+msgstr "Be specific as possible"
 
 msgid "orientation_help"
 msgstr "Further refine the description"
@@ -253,7 +253,7 @@ msgid "all_fields_required"
 msgstr "All fields on this page are required in order to create the initial space listing."
 
 msgid "choose_up_to_2"
-msgstr "Select up to two"
+msgstr "Select up to two (2)"
 
 msgid "seats_available"
 msgstr "Number of seats available"
@@ -268,7 +268,7 @@ msgid "labstats"
 msgstr "LabStats"
 
 msgid "extended_info.has_labstats"
-msgstr "Space has LabStats tracking"
+msgstr "Space is tracked by LabStats"
 
 msgid "noise_level"
 msgstr "Noise Level"
@@ -288,6 +288,9 @@ msgstr "Images"
 msgid "access"
 msgstr "Access"
 
+msgid "access_hours_notes"
+msgstr "Enter details about accessing this space"
+
 msgid "resources"
 msgstr "Resources & Environment"
 
@@ -299,3 +302,18 @@ msgstr "Lat & Long"
 
 msgid "required"
 msgstr "Required"
+
+msgid "manager_placeholder"
+msgstr "Enter the UW NetId for the space owner"
+
+msgid "name_placeholder"
+msgstr "Enter a name for this space"
+
+msgid "editor_placeholder"
+msgstr "Enter a comma-separated list of UW NetID"
+
+msgid "description_placeholder"
+msgstr "Describe the space"
+
+msgid "orientation_placeholder"
+msgstr "Orientation of the space"

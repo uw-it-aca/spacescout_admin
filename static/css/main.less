@@ -96,7 +96,7 @@ html, body { height: 100%; }
 
 .panel-heading { background: @gray-lightest; }
 
-.form-control { box-shadow: none !important; -webkit-box-shadow: none !important; }
+.form-control { box-shadow: none !important; -webkit-box-shadow: none !important; color: @gray-dark; }
 input[type=text].form-control, input[type=number].form-control, textarea.form-control { -webkit-appearance: none; }
 textarea.form-control { resize: vertical; }
 
@@ -440,4 +440,21 @@ a.action-link { text-decoration: none; }
     0% {opacity:.2; transform:scale(0); }
     70% {opacity:1;}
     100% {opacity:0; transform:scale(1); }
+}
+
+
+::-webkit-input-placeholder {
+   color: @gray-light !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: @gray-light !important;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: @gray-light !important;  
+}
+
+:-ms-input-placeholder {  
+   color: @gray-light !important;  
 }
