@@ -211,7 +211,8 @@ a.action-link { text-decoration: none; }
         border-top: 1px solid @gray-light; border-bottom: 1px solid @gray-light; 
         -webkit-border-radius: 0;
         -moz-border-radius: 0;
-        border-radius: 0;    
+        border-radius: 0; 
+        border-bottom: none;   
     }
     
 	.space-list-header { line-height: 2em;  font-weight: 400; padding: 0;
@@ -506,8 +507,8 @@ a.action-link { text-decoration: none; }
 
 /*** no spaces to manager ***/
 
-.no-space { margin: 20px 0 20px 20px;
-    span { color:@gray; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px; }
+.no-space { /*margin: 20px 0 20px 20px;*/ margin: 0; padding: 131px 0; text-align: center; text-transform: uppercase;
+    span { color:@gray-light; margin-top: -25px; font-size:20px; font-weight:100; display:inline-block; vertical-align: middle; margin-left:12px; }
 }
 
 /*** fancy loading ***/
