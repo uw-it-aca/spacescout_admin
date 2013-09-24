@@ -18,23 +18,23 @@
     <li><a href="#incomplete" data-toggle="tab">Incomplete</a></li>
 </ul>
 
-<div class="tab-content">
+<div class="tab-content" id="tab_content">
     
     <!-- published spaces -->
-    <ul class="space-list tab-pane active" id="published">
-        <li></li>
+    <ul class="list-group space-list tab-pane active" id="published">
+        <li class="list-group-item"></li>
     </ul>
     <!-- end of published -->
     
     <!-- unpublished spaces -->
-    <ul class="space-list tab-pane" id="unpublished">
-        <li></li>
+    <ul class="list-group space-list tab-pane" id="unpublished">
+        <li class="list-group-item"></li>
     </ul>
     <!-- end of unpublished -->
     
     <!-- incomplete spaces -->
-    <ul class="space-list tab-pane incomplete-list" id="incomplete">
-        <li></li>
+    <ul class="list-group space-list tab-pane incomplete-list" id="incomplete">
+        <li class="list-group-item"></li>
     </ul>
     <!-- end of incomplete -->
     
@@ -44,18 +44,19 @@
 <script id="building-groups" type="text/html">
 {% verbatim %}
 {{# each buildings }}
-<li class="space-list-header"><h3 class="building-name">{{ name }}</h3>
-  <ul class="building-list">
+<li class="list-group-item space-list-header"><h3 class="building-name">{{ name }}</h3>
+  <ul class="list-group building-list">
     {{# each spots }}
-    <li class="space-list-item">
-      <a href="/space/{{ id }}">{{ name }}</a> 
-      <span class="item-description">{{ description }}</span>
-      <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
-      
-      {{ #if is_modified }}
-      <span class="item-modified glyphicon glyphicon-bookmark"></span>
-      {{ /if }}
-      
+    <li class="list-group-item  space-list-item">
+      <a href="/space/{{ id }}">
+          <span class="list-group-item-heading item-name">{{ name }}</span>
+          <span class="item-description">{{ description }}</span>
+          <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
+          
+          {{ #if is_modified }}
+          <span class="item-modified glyphicon glyphicon-bookmark"></span>
+          {{ /if }}
+      </a>
     </li>
     {{/each}}
   </ul>
@@ -67,30 +68,32 @@
 <script id="incomplete-spots" type="text/html">
 {% verbatim %}
 {{# each spots }}
-<li class="space-list-item">
-  <a href="/pending/{{ id }}">{{ name }}</a>
-  <div class="item-incomplete">
-    {{# each unfinished }}
-    <span class="label label-danger">{{ element }}</span>
-    {{/each}}
-  </div>
-  <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
+<li class="list-group-item space-list-item">
+  <a href="/pending/{{ id }}">
+      <span class="list-group-item-heading item-name">{{ name }}</span>
+      <div class="item-incomplete">
+        {{# each unfinished }}
+        <span class="label label-danger">{{ element }}</span>
+        {{/each}}
+      </div>
+      <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
+  </a>
 </li>
 {{/each}}
 {% endverbatim %}
 </script>
 
 <script id="list-item-loading" type="text/html">
-  <li class="space-content-loading">
+  <div class="space-content-loading">
     <div class="spinner" role="alert">
       <span></span><span></span><span></span>
     </div>
     <div class="loading">Loading</div>
-  </li>
+  </div>
 </script>
 
 <script id="no-spots" type="text/html">
-  <li>
+  <li class="list-group-item">
     <div class="no-space">
       <i class="icon-frown icon-3x"></i><span>No spaces to manage.</span>
     </div>
