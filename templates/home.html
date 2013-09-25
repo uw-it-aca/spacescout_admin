@@ -71,15 +71,17 @@
 {% verbatim %}
 {{# each spaces }}
 <li class="list-group-item space-list-item">
-  <a href="/space/{{ id }}">
-      <span class="list-group-item-heading item-name">{{ name }}</span>
-      <div class="item-incomplete">
-        {{# each unfinished }}
+    
+    <a class="item-name-link" href="/space/{{ id }}"><span class="list-group-item-heading item-name">{{ name }}</span></a>
+    
+    <div class="item-incomplete">
+    {{# each unfinished }}
         <a href="/edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ element }}</span></a>
-        {{/each}}
-      </div>
-      <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
-  </a>
+    {{/each}}
+    </div>
+    
+    <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
+ 
 </li>
 {{/each}}
 {% endverbatim %}
