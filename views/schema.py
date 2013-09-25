@@ -15,29 +15,43 @@
 from django.conf import settings
 from django.http import Http404
 from django.http import HttpResponse
+import simplejson as json
 from spacescout_admin.oauth import oauth_initialization
 
 
+class SpotSchemaException(Exception): pass
+
+
+class SpotSchema():
+    def get(self):
+        # Required settings for the client
+        consumer, client = oauth_initialization()
+
+        url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
+        resp, content = client.request(url, 'GET')
+        if resp.status == 200:
+            schema = json.loads(content)
+        else:
+            raise SpotSchemaException({
+                    'status_code': resp.status,
+                    'status_text': "Error loading schema"
+                    })
+
+        return schema
+
+
 def SchemaView(request):
-    # Required settings for the client
-    consumer, client = oauth_initialization()
 
-    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
+    try:
+        schema = SpotSchema().get()
+    except SpotSchemaException as e:
+        if e.args[0]['status'] == 404:
+            url = request.get_host()
+            url = url + "/contact"
+            raise Http404
+        elif e.args[0]['status'] != 200:
+            response = HttpResponse("Error loading spot")
+            response.status_code = e.args[0]['status_code']
+            return response
 
-    resp, content = client.request(url, 'GET')
-    if resp.status == 404:
-        url = request.get_host()
-        url = url + "/contact"
-        raise Http404
-    elif resp.status != 200:
-        response = HttpResponse("Error loading spot")
-        response.status_code = resp.status_code
-        return response
-
-    #
-    # FILTER: params["manager"] == REMOTE_USER
-    #
-
-
-
-    return HttpResponse(content, mimetype='application/json')
+    return HttpResponse(json.dumps(schema), mimetype='application/json')

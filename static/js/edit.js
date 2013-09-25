@@ -2,6 +2,11 @@ $(document).ready(function() {
 
     var weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
+    // prep for api post/put
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": window.spacescout_admin.csrf_token }
+    });
+
     // fetch spot data
     (function () {
         $.ajax({
@@ -58,17 +63,7 @@ $(document).ready(function() {
 
                 $('input, textarea').change(validate);
                 $('input').keydown(window.spacescout_admin.validateInput);
-                $('a.btn').click(function (event) {
-                    var data = window.spacescout_admin.collectInput(),
-                        x;
-
-                    // POST changes
-                    for (x in data) {
-                       console.log('data: ' + x + ' is ' + data[x]);
-                    }
-
-                    event.preventDefault();
-                });
+                $('a.btn').click(modifySpace);
 
                 return;
             }
@@ -79,6 +74,22 @@ $(document).ready(function() {
 
     var validate = function () {
         window.spacescout_admin.validateFields();
+    };
+
+    var modifySpace = function (event) {
+        $.ajax({
+            url: "/api/v1/space/" + window.spacescout_admin.spot_id,
+            dataType: 'json',
+            contentType: "application/json",
+            data: JSON.stringify(window.spacescout_admin.collectInput()),
+            type: "PUT",
+            success: function (data) {
+                window.location.href = '/space/' + window.spacescout_admin.spot_id;
+            },
+            error: XHRError
+        });
+
+        event.preventDefault();
     };
 
     var editHoursDetails = function (section, editor_node) {

@@ -14,162 +14,301 @@
 """
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from django.http import Http404
-from django.http import HttpResponse
-import simplejson
-import re
+from spacescout_admin.models import *
+from spacescout_admin.spot import Spot, SpotException
+from spacescout_admin.space_map import SpaceMap, SpaceMapException
+from spacescout_admin.rest_dispatch import RESTDispatch
 from spacescout_admin.oauth import oauth_initialization
+from spacescout_admin.permitted import Permitted, PermittedException
+from spacescout_admin.views.schema import SpotSchema, SpotSchemaException
+import simplejson as json
 
 
-def SpaceView(request, space_id):
+class SpaceManager(RESTDispatch):
+    """ Performs query of Admin models at /api/v1/admins/?.
+        GET returns 200 with Admin models
+    """
+    def __init__(self):
+        self._spacemap = SpaceMap()
 
-    # Required settings for the client
-    consumer, client = oauth_initialization()
+    def GET(self, args, **kwargs):
+        if 'space_id' in kwargs:
+            return self._space_detail(kwargs['space_id'])
 
-    url = "{0}/api/v1/schema".format(settings.SS_WEB_SERVER_HOST)
-    resp, content = client.request(url, 'GET')
-    if resp.status == 200:
-        schema = simplejson.loads(content)
-    else:
-        response = HttpResponse("Error loading schema")
-        response.status_code = resp.status_code
-        return response
+        return self._space_list()
 
-    url = "{0}/api/v1/spot/{1}".format(settings.SS_WEB_SERVER_HOST, space_id)
-    resp, content = client.request(url, 'GET')
-    if resp.status == 404:
-        url = request.get_host()
-        url = url + "/contact"
-        raise Http404
-    elif resp.status != 200:
-        response = HttpResponse("Error loading spot")
-        response.status_code = resp.status_code
-        return response
+    def PUT(self, args, **kwargs):
+        try:
+            # partial representation allowed
+            schema = SpotSchema().get()
+            space_id = kwargs['space_id']
+            space = Space.objects.get(id=space_id)
+            if space.spot_id:
+                spot = Spot().get(space.spot_id)
+            else:
+                spot = self._spacemap.pending_spot(space, schema)
 
-#    f1 = open('/tmp/spot.log', 'a+')
-#    f1.write('SPOT: %s\n' % content)
-#    f1.close()
+            Permitted().edit(self._request.user, space, spot)
+            pending = json.loads(space.pending)
+            data = json.loads(self._request.read())
+            space.is_complete = True
+            for section in settings.SS_SPACE_DEFINITIONS:
+                if 'fields' in section:
+                    for field in section['fields']:
+                        if isinstance(field['value'], list):
+                            for v in field['value']:
+                                key = v['key']
+                                if key in data:
+                                    value = data[key]
+                                    orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
+                                    if value != orig_val:
+                                        pending[key] = value
 
-    params = simplejson.loads(content)
+                                if 'required' in v:
+                                    orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
+                                    value = data[key] if key in data else None
+                                    if not value or len(str(value).strip()) == 0 or not orig_val or len(str(orig_val).strip()) == 0:
+                                        space.is_complete = False
+                        else:
+                            key = field['value']['key']
+                            if key in data:
+                                value = data[key]
+                                orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
+                                if value != orig_val:
+                                    pending[key] = value
 
-    #
-    # FILTER: params["manager"] == REMOTE_USER
-    #
+                            if 'required' in field['value']:
+                                orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
+                                value = data[key] if key in data else None
+                                if not value or len(str(value).strip()) == 0 or not orig_val or len(str(orig_val).strip()) == 0:
+                                    space.is_complete = False
 
-    
-    space = {
-        'name': params['name'],
-        'type': params['type'],
-        'manager': params['manager'],
-        'editors': params['editors'] if 'editors' in params else [],
-        'modified_by': '',
-        'last_modified': params["last_modified"],
-        'sections': []
-    }
 
-    for secdef in settings.SS_SPACE_DEFINITIONS:
-        section = {
-            'section': secdef['section']
-        }
+            space.pending = json.dumps(pending)
+            space.save()
+            return self.json_response(json.dumps('{ ok: true }'))
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
+        except Space.DoesNotExist:
+            if e.args[0]['status_code'] == 404:
+                self.error404_response()
+                # no return
+        except (SpaceMapException, SpotException, SpotSchemaException) as e:
+            return self.error_response(e.args[0]['status_code'],
+                                       e.args[0]['status_text'])
 
-        if secdef['section'] == 'hours':
-            section['available_hours'] = []
-
-            # present all 7 days so translation and order happen here
-            for d in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
-                hrs = {
-                    'day': d
-                }
-                    
-                if d in params['available_hours']:
-                    hrs['hours'] = params['available_hours'][d]
-
-                section['available_hours'].append(hrs)
-
-        elif secdef['section'] == 'images':
-            section['thumbnails'] = [];
-            section['images'] = params['images']
-            for j in params['images']:
-                section['thumbnails'].append({
-                        'img_url': j['url'],
-                        'caption': j['description']
-                })
-
-        if 'fields' in secdef:
-            section['fields'] = []
-
-            for f in secdef['fields']:
-                field = {
-                    'name': f['name'] if 'name' in f else ''
-                }
-
-                if 'required' in f:
-                    field['required'] = f['required']
-
-                if 'help' in f:
-                    field['help'] = f['help']
-
-                if 'value' in f:
-                    if isinstance(f['value'], dict):
-                        value = value_from_key(params, f['value'], schema)
-                    else:
-                        vals = []
-                        for v in f['value']:
-                            vals.append(value_from_key(params, v, schema))
-
-                        value = vals
+    def POST(self, args, **kwargs):
+        try:
+            Permitted().create(self._request.user)
+            data = json.loads(self._request.read())
+            pending = {}
+            for field in settings.SS_SPACE_CREATION_FIELDS:
+                if 'value' in field and 'key' in field['value']:
+                    key = field['value']['key']
+                    value = data[key] if key in data else None
+                    if 'required' in field and value == None or len(str(value).strip()) == 0:
+                        return self.error_response(400, "Bad Request")
 
                     if value:
-                        field['value'] = value
+                        pending[key] = value
 
-                section['fields'].append(field)
+            space = Space(manager=self._request.user,
+                          modified_by=self._request.user,
+                          pending=json.dumps(pending))
+            space.save()
+            return self.json_response(json.dumps('{ space_id: %s }' % space.id))
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
 
-        space['sections'].append(section)
+    def _space_detail(self, space_id):
+        try:
+            schema = SpotSchema().get()
+            space_model = Space.objects.get(id=space_id)
+            if space_model.spot_id:
+                spot = Spot().get(space_model.spot_id)
+            else:
+                spot = self._spacemap.pending_spot(space_model, schema)
 
-    content = simplejson.dumps(space)
+            Permitted().view(self._request.user, space_model, spot)
+            space_rep = self._spacemap.space_representation(space_model, spot, schema)
+            return self.json_response(json.dumps(space_rep))
+        except Space.DoesNotExist:
+            self.error404_response()
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
+        except (SpaceMapException, SpotException, SpotSchemaException) as e:
+            return self.error_response(e.args[0]['status_code'],
+                                       e.args[0]['status_text'])
 
-    return HttpResponse(content, mimetype='application/json')
+    def _space_list(self):
+        filter = {}
+        published = True
+        complete = True
+        json_rep = []
+        seen = {}
 
+        try:
+            schema = SpotSchema().get()
+        except SpotSchemaException as e:
+            return self.error_response(e.args[0]['status_code'],
+                                       e.args[0]['status_text'])
 
-def value_from_key(d, v, s):
-    val_obj = None
+        if 'published' in self._request.GET:
+            p = self._request.GET.get('published')
+            published = True if (p == '1' or p.lower() == 'true') else False
+            filter['spot_id__isnull'] = True if (not published) else False
 
-    if 'key' in v:
-        val_obj = {
-            'key': v['key']
+        if 'complete' in self._request.GET:
+            i = self._request.GET.get('complete')
+            complete = (i == '1' or i.lower() == 'true')
+            filter['spot_id__isnull'] = True
+            if not complete:
+                filter['is_complete__isnull'] = True
+            else:
+                filter['is_complete'] = True
+
+        if published:
+            search_args = {
+                #'manager': '',
+                #'editors': '',
+                'limit': '0'
+            }
+
+            try:
+                spots = self._get_spots(search_args)
+            except Exception, errstr:
+                return self.error_response(500, ("%s" % (errstr)))
+
+            for spot in spots:
+                try:
+                    spot_id = spot.get('id')
+                    try:
+                        space = Space.objects.get(spot_id=spot_id)
+                    except Space.DoesNotExist:
+                        space = Space(spot_id=spot_id,
+                                      manager=spot.get('manager'),
+                                      is_complete=True)
+                        space.save()
+
+                    Permitted().view(self._request.user, space, spot)
+                    seen[str(spot_id)] = 1
+                    json_rep.append(self._search_result(space, spot, schema))
+                except PermittedException:
+                    pass
+                except SpaceMapException as e:
+                    return self.error_response(e.args[0]['status_code'],
+                                               e.args[0]['status_text'])
+
+        for space in Space.objects.filter(**filter):
+            if str(space.spot_id) in seen:
+                continue
+
+            try:
+                Permitted().view(self._request.user, space, {})
+                json_rep.append(self._search_result(space, None, schema))
+            except PermittedException:
+                pass
+            except SpaceMapException as e:
+                return self.error_response(e.args[0]['status_code'],
+                                           e.args[0]['status_text'])
+
+        return self.json_response(json.dumps(json_rep))
+
+    def _search_result(self, space, spot, schema):
+        if spot is None:
+            spot = self._spacemap.pending_spot(space, schema)
+
+        missing_sections = []
+        for secdef in settings.SS_SPACE_DEFINITIONS:
+            if 'fields' in secdef:
+                for f in secdef['fields']:
+                    if 'required' in f:
+                        missed = None
+                        if isinstance(f['value'], list):
+                            for i in f['value']:
+                                v = self._spacemap.get_value_by_keylist(spot, i['key'].split('.'))
+                                if v == None or (isinstance(v, str) and len(v.strip()) == 0):
+                                    missed = {
+                                        'section': secdef['section'],
+                                        'element': f['name']
+                                    }
+                        else:
+                            v = self._spacemap.get_value_by_keylist(spot, f['value']['key'].split('.'))
+                            if v == None or (isinstance(v, str) and len(v.strip()) == 0):
+                                missed = {
+                                    'section': secdef['section'],
+                                    'element': f['name']
+                                }
+
+                        if missed:
+                                missing_sections.append(missed)
+
+        return {
+            'id': space.id,
+            'spot_id': spot.get('id', None),
+            'is_published': True if space.spot_id is not None else False,
+            'is_modified': True if space.pending is not None else False,
+            'name': spot.get('name', ''),
+            'type': spot.get('type', ''),
+            'location': spot.get('location', ''),
+            'manager': spot.get('manager', ''),
+            'extended_info.location_description': spot['extended_info'].get('location_description', '') if 'extended_info' in spot else '',
+            'editors': spot.get('editors', []),
+            'modified_by': spot.get('modified_by', None),
+            'last_modified': spot.get('last_modified', None),
+            'missing_sections': missing_sections
         }
 
-        if 'edit' in v:
-            val_obj['edit'] = v['edit']
+    def _get_spots(self, search_args):
+        consumer, client = oauth_initialization()
 
-        if 'format' in v:
-            val_obj['format'] = v['format']
+        #for key in options:
+        #    if isinstance(options[key], types.ListType):
+        #        for item in options[key]:
+        #            args.append("{0}={1}".format(urllib.quote(key), urllib.quote(item)))
+        #    else:
+        #        args.append("{0}={1}".format(urllib.quote(key), urllib.quote(options[key])))
 
-        if 'map' in v:
-            val_obj['map'] = v['map']
+        #url = "{0}/api/v1/spot/search?{1}".format(settings.SS_WEB_SERVER_HOST, "&".join(search_args))
+        url = "{0}/api/v1/spot/all".format(settings.SS_WEB_SERVER_HOST, "&".join(search_args))
 
-        k = v['key'].split('.')
-        val = value_from_keylist(d, k)
+        resp, content = client.request(url, 'GET')
 
-        if type_from_keylist(s, k) == 'boolean':
-            val = True if val or (isinstance(val, str) and val.lower() == 'true') else False
+        if resp.status != 200:
+            Exception("Unable to load spots")
 
-        val_obj['value'] = val
+        i18n_json = []
+        permitted = Permitted()
+        for spot in json.loads(content):
+            try:
+                permitted.view(self._request.user, {}, spot)
+                string_val = ''
+                for x in range(0, len(spot['type'])):
+                    if x is 0:
+                        string_val = _(spot['type'][x])
+                    else:
+                        string_val = string_val + ', ' + _(spot['type'][x])
+    
+                    spot['type'] = string_val
+                    i18n_json.append(spot)
+            except PermittedException:
+                pass
 
-    return val_obj
+        return i18n_json
 
 
-def value_from_keylist(d, klist):
-    try:
-        val = d[klist[0]]
-        return val if len(klist) == 1 else value_from_keylist(val, klist[1:])
-    except KeyError:
-        return None
+class SpaceImage(RESTDispatch):
+    def GET(self, args, **kwargs):
 
+        # Required settings for the client
+        consumer, client = oauth_initialization()
 
-def type_from_keylist(schema, klist):
-    t = value_from_keylist(schema, klist)
-    if isinstance(t, list):
-        return 'boolean' if len(t) == 1 and t[0].lower() == 'true' else list
+        url = "{0}/api/v1/spot/{1}/image/{2}".format(settings.SS_WEB_SERVER_HOST,
+                                                     kwargs['space_id'], kwargs['image_id'])
 
-    return t
+        resp, content = client.request(url, 'GET')
+
+        if resp.status != 200:
+            return self.error_response(resp.status_code, msg="Error loading image")
+
+        return self.json_response(content)

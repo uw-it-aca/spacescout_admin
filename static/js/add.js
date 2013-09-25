@@ -1,45 +1,46 @@
 $(document).ready(function() {
 
-    // fetch spot data
-    (function () {
-        $.ajax({
-            url: '/api/v1/schema',
-            dataType: 'json',
-            success: function (data) {
-                var editor = $('.space-add-section > div'),
-                    fields = window.spacescout_admin.fields,
-                    i;
+    // prep for api post/put
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": window.spacescout_admin.csrf_token }
+    });
 
-                window.spacescout_admin.spot_schema = data;
+    var startAddEditor = function (data) {
+        var editor = $('.space-add-section > div'),
+            fields = window.spacescout_admin.fields,
+            i;
 
-                for (i = 0; i < fields.length; i += 1) {
-                    if (typeof fields[i].value === 'object') {
-                        if ($.isArray(fields[i].value)) {
-                            window.spacescout_admin.appendFieldList(fields[i], getFieldValue, editor);
-                        } else {
-                            window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, editor);
-                        }
-                    }
+        window.spacescout_admin.spot_schema = data;
+
+        for (i = 0; i < fields.length; i += 1) {
+            if (typeof fields[i].value === 'object') {
+                if ($.isArray(fields[i].value)) {
+                    window.spacescout_admin.appendFieldList(fields[i], getFieldValue, editor);
+                } else {
+                    window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, editor);
                 }
-
-                validate();
-                $('input, textarea').change(validate);
-                $('input').keydown(validateInput);
-                $('a.btn').click(function (event) {
-                    var data = window.spacescout_admin.collectInput(),
-                        x;
-
-                    // POST changes
-                    for (x in data) {
-                        console.log('data: ' + x + ' is ' + data[x]);
-                    }
-                });
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                XHRError(xhr);
             }
+        }
+
+        validate();
+        $('input, textarea').change(validate);
+        $('input').keydown(validateInput);
+        $('a.btn').click(createSpace);
+    };
+
+    var createSpace = function (event) {
+        $.ajax({
+            url: "/api/v1/space/",
+            dataType: 'json',
+            contentType: "application/json",
+            data: JSON.stringify(window.spacescout_admin.collectInput()),
+            type: "POST",
+            success: function (data) {
+                window.location.href = '/#incomplete';
+            },
+            error: XHRError
         });
-    }());
+    };
 
     var validateInput = function (event) {
         window.spacescout_admin.validateInput(event);
@@ -69,4 +70,13 @@ $(document).ready(function() {
     var getFieldValue = function (v) {
         return '';
     };
+
+    // fetch spot data
+    $.ajax({
+        url: '/api/v1/schema',
+        dataType: 'json',
+        success: startAddEditor,
+        error: XHRError
+    });
+
 });
