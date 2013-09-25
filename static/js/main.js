@@ -551,7 +551,7 @@ $(document).ready(function() {
         $('input, textarea').each(function () {
             var v = $(this).val().trim(),
                 checked = $(this).is(':checked'),
-                p, i;
+                p, q, i;
 
             switch ($(this).prop('type')) {
             case 'checkbox':
@@ -588,15 +588,16 @@ $(document).ready(function() {
 
                 break;
             case 'text':
-                p = multiValueInput($(this));
+                p = isMultiValueInput($(this));
                 if (p) {
-                    for (i in p) {
-                        data[i] = p[i];
+                    q = getMultiValues(p, v);
+                    for (i = 0; i < p.length; i += 1) {
+                        data[p[i]] = q ? q[p[i]] : '';
                     }
 
                     break;
                 }
-
+                // ELSE fall thru and set simple value
             default:
                 data[$(this).attr('name')] = v;
                 break;
@@ -624,24 +625,36 @@ $(document).ready(function() {
     };
 
     var multiValueInput = function (input) {
-        var v = input.val().trim(),
-            name = input.attr('name'),
-            data = {},
-            ka, va, i;
+        return getMultiValues(isMultiValueInput(input), input.val().trim());
+    };
 
-        ka = name.match(/(([^|]+)(|$))/g);
+    var isMultiValueInput = function (input) {
+        var ka = input.attr('name').match(/(([^|]+)(|$))/g),
+            data = [], i;
+
         if (ka && ka.length > 1) {
-            va = v.match(/(([^,'"\s]+)(\s,\s*|$))/g);
-            if (va && va.length == ka.length) {
-                for (i = 0; i < ka.length; i += 1) {
-                    data[ka[i]] = va[i];
-                }
-
-                return data;
+            for (i = 0; i < ka.length; i += 1) {
+                data.push(ka[i]);
             }
+
+            return data;
         }
 
         return null;
     };
 
+    var getMultiValues = function (keys, value) {
+        var values = value.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g),
+            data = {}, i;
+
+        if (values && keys.length > 1 && values.length == keys.length) {
+            for (i = 0; i < keys.length; i += 1) {
+                data[keys[i]] = values[i];
+            }
+
+            return data;
+        }
+
+        return null;
+    };
 });

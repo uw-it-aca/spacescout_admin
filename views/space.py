@@ -64,11 +64,11 @@ class SpaceManager(RESTDispatch):
                                     if value != orig_val:
                                         pending[key] = value
 
-                                if 'required' in v:
+                                if 'required' in field:
                                     orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
                                     value = data[key] if key in data else None
-                                    if not value or len(str(value).strip()) == 0 or not orig_val or len(str(orig_val).strip()) == 0:
-                                        space.is_complete = False
+                                    if (not value or len(str(value).strip()) == 0) and (not orig_val or len(str(orig_val).strip()) == 0):
+                                        space.is_complete = None
                         else:
                             key = field['value']['key']
                             if key in data:
@@ -77,11 +77,11 @@ class SpaceManager(RESTDispatch):
                                 if value != orig_val:
                                     pending[key] = value
 
-                            if 'required' in field['value']:
+                            if 'required' in field:
                                 orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
                                 value = data[key] if key in data else None
-                                if not value or len(str(value).strip()) == 0 or not orig_val or len(str(orig_val).strip()) == 0:
-                                    space.is_complete = False
+                                if (not value or len(str(value).strip()) == 0) and (not orig_val or len(str(orig_val).strip()) == 0):
+                                    space.is_complete = None
 
 
             space.pending = json.dumps(pending)
