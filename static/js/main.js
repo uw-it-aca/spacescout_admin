@@ -34,7 +34,7 @@ $(document).ready(function() {
                             v.push(gettext(vo.value[i]));
                         }
 
-                        rv = v.join(',');
+                        rv = v.join(', ');
                     }
                     break;
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
                 for (i = 0; i < fv.length; i += 1) {
                     if (fv[i].hasOwnProperty('value')) {
                         v = value(fv[i]);
-                        if (v) {
+                        if (v && v.length) {
                             t.push(v);
                         }
                     }
@@ -137,7 +137,7 @@ $(document).ready(function() {
     window.spacescout_admin.appendFieldValue = function (field, getval, section) {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
-            choice, has_choice = false,
+            choice, has_choice = false, chosen,
             input_class, tpl, vartype, varedit, data, i, node, src,  group;
 
         appendFieldHeader(gettext(field.name),
@@ -291,11 +291,16 @@ $(document).ready(function() {
                                     input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
                                 }
 
+                                chosen = (((typeof field.value.value === 'object')
+                                           && $.isArray(field.value.value)
+                                           && $.inArray(vartype[i], field.value.value) >= 0)
+                                          || String(field.value.value).toLowerCase() == vartype[i]);
+                                
                                 data.push({
                                     name: gettext(vartype[i]),
                                     key: field.value.key + ':' + vartype[i],
                                     value: field.value.key + ':' + vartype[i],
-                                    choice: (String(field.value.value).toLowerCase() == vartype[i]) ? choice : '',
+                                    choice: (chosen) ? choice : '',
                                     class: input_class,
                                     has_help: true,
                                     help: gettext(vartype[i] + '_help'),
@@ -348,6 +353,7 @@ $(document).ready(function() {
     window.spacescout_admin.appendFieldList = function(field, getval, section) {
         var vartype, i,
             values = [],
+            values_length,
             keys = [],
             placeholder = [],
             bool = false,
@@ -397,12 +403,17 @@ $(document).ready(function() {
             src_selector = "#space-edit-checkboxes";
             context.inputs = values;
         } else {
+            values_length = 0;
+            for (i = 0; i < values.length; i += 1) {
+                values_length += values[i].trim().length; 
+            }
+
             src_selector = "#space-edit-input";
             context.inputs = [{
                 key: keys.join('|'),
                 placeholder: placeholder.join(', '),
                 class: (required) ? required_class : '',
-                value: values.join(', ')
+                value: values_length ? values.join(', ') : ''
             }];
         }
 
@@ -548,7 +559,16 @@ $(document).ready(function() {
 
                 if (p) {
                     if (checked) {
-                        data[p.key] = p.value;
+                        if (data.hasOwnProperty(p.key)) {
+                            if (typeof(data[p.key]) == 'object'
+                                && $.isArray(data[p.key])) {
+                                data[p.key].push(p.value);
+                            } else {
+                                data[p.key] = [data[p.key], p.value];
+                            }
+                        } else {
+                            data[p.key] = p.value;
+                        }
                     }
                 } else {
                     data[v] = checked;
@@ -611,7 +631,7 @@ $(document).ready(function() {
 
         ka = name.match(/(([^|]+)(|$))/g);
         if (ka && ka.length > 1) {
-            va = v.match(/(([^,'"]+)(,\s*|$))/g);
+            va = v.match(/(([^,'"\s]+)(\s,\s*|$))/g);
             if (va && va.length == ka.length) {
                 for (i = 0; i < ka.length; i += 1) {
                     data[ka[i]] = va[i];

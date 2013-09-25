@@ -5,6 +5,8 @@
 
 {% block title %}{% trans "spaces" %}{% endblock %}
 
+{% block userid %}{{ remote_user }}{% endblock %}
+
 {% block extra_js %}
 <script src="/static/js/home.js"></script>
 {% endblock %}
@@ -46,7 +48,7 @@
 {{# each buildings }}
 <li class="list-group-item space-list-header"><h3 class="building-name">{{ name }}</h3>
   <ul class="list-group building-list">
-    {{# each spots }}
+    {{# each spaces }}
     <li class="list-group-item  space-list-item">
       <a href="/space/{{ id }}">
           <span class="list-group-item-heading item-name">{{ name }}</span>
@@ -65,15 +67,15 @@
 {% endverbatim %}
 </script>
 
-<script id="incomplete-spots" type="text/html">
+<script id="incomplete-spaces" type="text/html">
 {% verbatim %}
-{{# each spots }}
+{{# each spaces }}
 <li class="list-group-item space-list-item">
-  <a href="/pending/{{ id }}">
+  <a href="/space/{{ id }}">
       <span class="list-group-item-heading item-name">{{ name }}</span>
       <div class="item-incomplete">
         {{# each unfinished }}
-        <span class="label label-danger">{{ element }}</span>
+        <a href="/edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ element }}</span></a>
         {{/each}}
       </div>
       <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
@@ -92,7 +94,7 @@
   </div>
 </script>
 
-<script id="no-spots" type="text/html">
+<script id="no-spaces" type="text/html">
   <li class="">
     <div class="no-space">
       <i class="icon-frown icon-3x"></i><span>No spaces</span>

@@ -5,6 +5,8 @@
 
 {% block title %}{% trans "spaces" %}{% endblock %}
 
+{% block userid %}{{ remote_user }}{% endblock %}
+
 {% block extra_js %}
 <script src="/static/js/add.js"></script>
 {% endblock %}
@@ -29,6 +31,7 @@
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
 window.spacescout_admin.fields = {{ SPACE_FIELDS }};
+window.spacescout_admin.csrf_token = '{{ csrf_token }}';
 </script>
 
 {% endblock %}
