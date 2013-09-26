@@ -13,11 +13,13 @@
     limitations under the License.
 """
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
 from spacescout_admin.oauth import oauth_initialization
 
 
+@login_required
 def BuildingsView(request):
     # Required settings for the client
     consumer, client = oauth_initialization()
