@@ -54,28 +54,30 @@ class SpaceManager(RESTDispatch):
             data = json.loads(self._request.read())
             space.is_complete = True
             for section in settings.SS_SPACE_DEFINITIONS:
-                if 'fields' in section:
-                    for field in section['fields']:
-                        if isinstance(field['value'], list):
-                            for v in field['value']:
-                                key = v['key']
-                                val = self._normal(data[key]) if key in data else ""
-                                orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
-                                if key in data and val != orig_val:
-                                    pending[key] = val
+                for field in section['fields'] if 'fields' in section else []:
+                    for value in field['value'] if isinstance(field['value'], list) else [field['value']]:
+                        key = value['key']
+                        val = data[key] if key in data else None
+                        orig_val = self._spot_value(spot, key)
+                        if key in data and val != orig_val:
+                            pending[key] = val
 
-                                if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
-                                    space.is_complete = None
+                        if 'required' in field and ((val == None or len(val) == 0)
+                                                    and (orig_val == None or len(orig_val) == 0)):
+                            space.is_complete = None
+
+            if 'available_hours' in data:
+                valid_hours = True
+                for d in data['available_hours']:
+                    for h in data['available_hours'][d]:
+                        if len(h) == 2:
+                            if int("".join(h[0].split(":"))) >= int("".join(h[1].split(":"))):
+                                valid_hours = False
                         else:
-                            key = field['value']['key']
-                            val = self._normal(data[key]) if key in data else ""
-                            orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
-                            if key in data and val != orig_val:
-                                pending[key] = val
+                            valid_hours = False
 
-                            if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
-                                space.is_complete = None
-
+                if valid_hours:
+                    pending['available_hours'] = data['available_hours']
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
@@ -212,22 +214,18 @@ class SpaceManager(RESTDispatch):
             spot = self._spacemap.pending_spot(space, schema)
 
         missing_sections = []
+        missing_names = {}
         for secdef in settings.SS_SPACE_DEFINITIONS:
-            if 'fields' in secdef:
-                for f in secdef['fields']:
-                    if 'required' in f:
-                        if isinstance(f['value'], list):
-                            for i in f['value']:
-                                if self._normal(self._spacemap.get_value_by_keylist(spot, i['key'].split('.'))) == "":
-                                    missing_sections.append({
-                                        'section': secdef['section'],
-                                        'element': f['name']
-                                    })
-                        elif self._normal(self._spacemap.get_value_by_keylist(spot, f['value']['key'].split('.'))) == "":
-                            missing_sections.append({
-                                'section': secdef['section'],
-                                'element': f['name']
-                            })
+            for f in secdef['fields'] if 'fields' in secdef else []:
+                if 'required' in f:
+                    for v in f['value'] if isinstance(f['value'], list) else [f['value']]:
+                        if not bool(self._spot_value(spot, v['key'])):
+                            if secdef['section'] + f['name'] not in missing_names:
+                                missing_names[secdef['section'] + f['name']] = True
+                                missing_sections.append({
+                                    'section': secdef['section'],
+                                    'element': f['name']
+                                })
 
         json_rep = {
             'id': space.id,
@@ -245,7 +243,7 @@ class SpaceManager(RESTDispatch):
         }
 
         if settings.SS_SPACE_DESCRIPTION:
-            json_rep['description'] = self._spacemap.get_value_by_keylist(spot, settings.SS_SPACE_DESCRIPTION.split('.'))
+            json_rep['description'] = self._spot_value(spot, settings.SS_SPACE_DESCRIPTION)
 
         return json_rep
 
@@ -286,8 +284,8 @@ class SpaceManager(RESTDispatch):
 
         return i18n_json
 
-    def _normal(self, value):
-        return "" if value == None else unicode(value).strip()
+    def _spot_value(self, spot, key):
+        return self._spacemap.get_value_by_keylist(spot, key.split('.'))
 
 
 class SpaceImage(RESTDispatch):
