@@ -61,7 +61,7 @@ class SpaceManager(RESTDispatch):
                                 key = v['key']
                                 val = self._normal(data[key]) if key in data else ""
                                 orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
-                                if val != "" and val != orig_val:
+                                if key in data and val != orig_val:
                                     pending[key] = val
 
                                 if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
@@ -70,7 +70,7 @@ class SpaceManager(RESTDispatch):
                             key = field['value']['key']
                             val = self._normal(data[key]) if key in data else ""
                             orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
-                            if val != "" and val != orig_val:
+                            if key in data and val != orig_val:
                                 pending[key] = val
 
                             if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
@@ -239,7 +239,7 @@ class SpaceManager(RESTDispatch):
                         if missed:
                                 missing_sections.append(missed)
 
-        return {
+        json_rep = {
             'id': space.id,
             'spot_id': spot.get('id', None),
             'is_published': True if space.spot_id is not None else False,
@@ -248,12 +248,16 @@ class SpaceManager(RESTDispatch):
             'type': spot.get('type', ''),
             'location': spot.get('location', ''),
             'manager': spot.get('manager', ''),
-            'extended_info.location_description': spot['extended_info'].get('location_description', '') if 'extended_info' in spot else '',
             'editors': spot.get('editors', []),
             'modified_by': spot.get('modified_by', None),
             'last_modified': spot.get('last_modified', None),
             'missing_sections': missing_sections
         }
+
+        if settings.SS_SPACE_DESCRIPTION:
+            json_rep['description'] = self._spacemap.get_value_by_keylist(spot, settings.SS_SPACE_DESCRIPTION.split('.'))
+
+        return json_rep
 
     def _get_spots(self, search_args):
         consumer, client = oauth_initialization()

@@ -16,12 +16,13 @@ from django.conf import settings
 import simplejson as json
 import copy
 
+
 class SpaceMapException(Exception): pass
+
 
 class SpaceMap(object):
     """Layers Spaces over Spots
     """
-
     def space_representation(self, space, spot, schema):
         json_rep = {
             'id': space.id,
