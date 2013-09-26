@@ -40,6 +40,7 @@ class SpaceManager(RESTDispatch):
     def PUT(self, args, **kwargs):
         try:
             # partial representation allowed
+            # only space.pending is written
             schema = SpotSchema().get()
             space_id = kwargs['space_id']
             space = Space.objects.get(id=space_id)
@@ -49,7 +50,7 @@ class SpaceManager(RESTDispatch):
                 spot = self._spacemap.pending_spot(space, schema)
 
             Permitted().edit(self._request.user, space, spot)
-            pending = json.loads(space.pending)
+            pending = json.loads(space.pending) if space.pending else {}
             data = json.loads(self._request.read())
             space.is_complete = True
             for section in settings.SS_SPACE_DEFINITIONS:
@@ -58,33 +59,25 @@ class SpaceManager(RESTDispatch):
                         if isinstance(field['value'], list):
                             for v in field['value']:
                                 key = v['key']
-                                if key in data:
-                                    value = data[key]
-                                    orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
-                                    if value != orig_val:
-                                        pending[key] = value
+                                val = self._normal(data[key]) if key in data else ""
+                                orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
+                                if val != "" and val != orig_val:
+                                    pending[key] = val
 
-                                if 'required' in field:
-                                    orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
-                                    value = data[key] if key in data else None
-                                    if (not value or len(str(value).strip()) == 0) and (not orig_val or len(str(orig_val).strip()) == 0):
-                                        space.is_complete = None
+                                if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
+                                    space.is_complete = None
                         else:
                             key = field['value']['key']
-                            if key in data:
-                                value = data[key]
-                                orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
-                                if value != orig_val:
-                                    pending[key] = value
+                            val = self._normal(data[key]) if key in data else ""
+                            orig_val = self._normal(self._spacemap.get_value_by_keylist(spot, key.split('.')))
+                            if val != "" and val != orig_val:
+                                pending[key] = val
 
-                            if 'required' in field:
-                                orig_val = self._spacemap.get_value_by_keylist(spot, key.split('.'))
-                                value = data[key] if key in data else None
-                                if (not value or len(str(value).strip()) == 0) and (not orig_val or len(str(orig_val).strip()) == 0):
-                                    space.is_complete = None
+                            if 'required' in field and (len(val) == 0 and len(orig_val) == 0):
+                                space.is_complete = None
 
 
-            space.pending = json.dumps(pending)
+            space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
             return self.json_response(json.dumps('{ ok: true }'))
         except PermittedException:
@@ -96,6 +89,9 @@ class SpaceManager(RESTDispatch):
         except (SpaceMapException, SpotException, SpotSchemaException) as e:
             return self.error_response(e.args[0]['status_code'],
                                        e.args[0]['status_text'])
+
+    def _normal(self, value):
+        return "" if value == None else str(value).strip()
 
     def POST(self, args, **kwargs):
         try:

@@ -78,7 +78,7 @@ $(document).ready(function() {
 
     var modifySpace = function (event) {
         $.ajax({
-            url: "/api/v1/space/" + window.spacescout_admin.spot_id,
+            url: "/api/v1/space/" + window.spacescout_admin.spot_id + '/',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(window.spacescout_admin.collectInput()),
