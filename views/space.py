@@ -287,7 +287,7 @@ class SpaceManager(RESTDispatch):
         return i18n_json
 
     def _normal(self, value):
-        return "" if value == None else str(value).strip()
+        return "" if value == None else unicode(value).strip()
 
 
 class SpaceImage(RESTDispatch):
