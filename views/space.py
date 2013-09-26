@@ -90,9 +90,6 @@ class SpaceManager(RESTDispatch):
             return self.error_response(e.args[0]['status_code'],
                                        e.args[0]['status_text'])
 
-    def _normal(self, value):
-        return "" if value == None else str(value).strip()
-
     def POST(self, args, **kwargs):
         try:
             Permitted().create(self._request.user)
@@ -219,25 +216,18 @@ class SpaceManager(RESTDispatch):
             if 'fields' in secdef:
                 for f in secdef['fields']:
                     if 'required' in f:
-                        missed = None
                         if isinstance(f['value'], list):
                             for i in f['value']:
-                                v = self._spacemap.get_value_by_keylist(spot, i['key'].split('.'))
-                                if v == None or (isinstance(v, str) and len(v.strip()) == 0):
-                                    missed = {
+                                if self._normal(self._spacemap.get_value_by_keylist(spot, i['key'].split('.'))) == "":
+                                    missing_sections.append({
                                         'section': secdef['section'],
                                         'element': f['name']
-                                    }
-                        else:
-                            v = self._spacemap.get_value_by_keylist(spot, f['value']['key'].split('.'))
-                            if v == None or (isinstance(v, str) and len(v.strip()) == 0):
-                                missed = {
-                                    'section': secdef['section'],
-                                    'element': f['name']
-                                }
-
-                        if missed:
-                                missing_sections.append(missed)
+                                    })
+                        elif self._normal(self._spacemap.get_value_by_keylist(spot, f['value']['key'].split('.'))) == "":
+                            missing_sections.append({
+                                'section': secdef['section'],
+                                'element': f['name']
+                            })
 
         json_rep = {
             'id': space.id,
@@ -295,6 +285,9 @@ class SpaceManager(RESTDispatch):
                 pass
 
         return i18n_json
+
+    def _normal(self, value):
+        return "" if value == None else str(value).strip()
 
 
 class SpaceImage(RESTDispatch):
