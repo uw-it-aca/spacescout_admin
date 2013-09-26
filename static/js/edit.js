@@ -77,6 +77,8 @@ $(document).ready(function() {
     };
 
     var modifySpace = function (event) {
+        event.preventDefault();
+
         $.ajax({
             url: "/api/v1/space/" + window.spacescout_admin.spot_id + '/',
             dataType: 'json',
@@ -88,41 +90,46 @@ $(document).ready(function() {
             },
             error: XHRError
         });
-
-        event.preventDefault();
     };
 
     var editHoursDetails = function (section, editor_node) {
         var section_node = newSectionEditor(section.section),
-            anchor_node, key, days, hours, i, j;
+            anchor_node, hours_node = null, key, days, hours, i, j;
 
         section_node.append($(Handlebars.compile($('#space-edit-hours').html())({})));
+
         anchor_node = section_node.find('a').parent();
         if (section.hasOwnProperty('available_hours')
             && typeof section.available_hours === 'object'
             && $.isArray(section.available_hours)) {
             days = section.available_hours;
-
             hours = {};
             for (i = 0; i < days.length; i += 1) {
-                for (j = 0; j < days[i].hours.length; j++) {
-                    if (days[i].hours[j].length == 2) {
-                        key = days[i].hours[j][0] + '-' + days[i].hours[j][1];
-                        if (hours.hasOwnProperty(key)) {
-                            hours[key].days.push(days[i].day);
-                        } else {
-                            hours[key] = {
-                                days: [ days[i].day ],
-                                hours: days[i].hours[j]
-                            };
+                if (days[i].hasOwnProperty('hours')) {
+                    for (j = 0; j < days[i].hours.length; j++) {
+                        if (days[i].hours[j].length == 2) {
+                            key = days[i].hours[j][0] + '-' + days[i].hours[j][1];
+                            if (hours.hasOwnProperty(key)) {
+                                hours[key].days.push(days[i].day);
+                            } else {
+                                hours[key] = {
+                                    days: [ days[i].day ],
+                                    hours: days[i].hours[j]
+                                };
+                            }
                         }
                     }
                 }
             }
 
             for (i in hours) {
-                anchor_node.before(hoursNode(hours[i]));
+                hours_node = hoursNode(hours[i]);
+                anchor_node.before(hours_node);
             }
+        }
+
+        if (!hours_node) {
+            anchor_node.before(hoursNode());
         }
 
         appendSectionFields(section.fields, section_node);
@@ -140,10 +147,10 @@ $(document).ready(function() {
             select_days = edit_node.find('select#days'),
             select_open = edit_node.find('select#opening-time'),
             select_close = edit_node.find('select#closing-time'),
-            i;
+            i, option;
 
         for (i = 0; i < weekdays.length; i += 1) {
-            option = $('<option></option>').val(weekdays[i]).html(gettext(weekdays[i]));
+            option = $('<option></option>').val(weekdays[i]).html(gettext(weekdays[i])).addClass('hours-value');
             if (t && t.hasOwnProperty('days') && $.inArray(weekdays[i], t.days) > -1) {
                 option.attr('selected', 'selected');
             }
@@ -153,6 +160,20 @@ $(document).ready(function() {
 
         appendHours(select_open, (t) ? t.hours[0] : null);
         appendHours(select_close, (t) ? t.hours[1] : null);
+
+        select_open.change(function () {
+            var node = select_close.find('option[value="' + $(this).val() + '"]');
+            select_close.find('option').removeAttr('disabled');
+            node.attr('disabled','disabled');
+            node.prevAll('option').attr('disabled','disabled');
+        });
+
+        select_close.change(function () {
+            var node = select_open.find('option[value="' + $(this).val() + '"]');
+            select_open.find('option').removeAttr('disabled');
+            node.attr('disabled','disabled');
+            node.nextAll('option').attr('disabled','disabled');
+        });
 
         if (window.spacescout_admin.is_mobile) {
             // MOBILE: handle multi-day selection and display
@@ -195,7 +216,7 @@ $(document).ready(function() {
         var am = gettext('am'),
             pm = gettext('pm'),
             value = leadingZero(hour) + ':' + leadingZero(minute),
-            option = $('<option></option>').val(value);
+            option = $('<option></option>').val(value).addClass('hours-value');
 
         if (choice == value) {
             option.attr('selected', 'selected');

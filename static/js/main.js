@@ -604,15 +604,47 @@ $(document).ready(function() {
             }
         });
 
-        $('select').each(function () {
-            var s = $(this).children('option:selected'),
-                v = s.val().trim(),
+        $('select option:selected').each(function () {
+            var node = $(this),
+                v, p;
+
+            if (!node.hasClass('hours-value')) {
+                v = node.val().trim(),
                 p = keyValuePair(v);
 
-            if (p) {
-                data[p.key] = p.value;
-            } else {
-                data[v] = s.text();
+                if (p) {
+                    data[p.key] = p.value;
+                } else {
+                    data[v] = $(this).text();
+                }
+            }
+        });
+
+        $('.time-selector').each(function ()  {
+            var open, open_v, close, close_v;
+
+            open = $(this).find('select#opening-time option:selected').val();
+            close = $(this).find('select#closing-time option:selected').val();
+
+            if (open && close) {
+                open_v = parseInt(open.split(':').join(''));
+                close_v = parseInt(open.split(':').join(''));
+
+                if (open < close) {
+                    $(this).find('select#days option:selected').each(function () {
+                        var day = $(this).val();
+
+                        if (!data.hasOwnProperty('available_hours')) {
+                            data['available_hours'] = {};
+                        }
+
+                        if (data['available_hours'].hasOwnProperty(day)) {
+                            data['available_hours'][day].push([open, close]);
+                        } else {
+                            data['available_hours'][day] = [[open, close]];
+                        }
+                    });
+                }
             }
         });
 

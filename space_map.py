@@ -104,6 +104,7 @@ class SpaceMap(object):
         spot['is_modified'] = True
         spot['last_modified'] = space.modified_date.isoformat()
         spot['modified_by'] = space.modified_by
+        spot['available_hours'] = {}
         if space.pending:
             j = json.loads(space.pending)
             for p in j:
