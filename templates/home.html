@@ -43,9 +43,9 @@
 </div>	
 
 
-<script id="building-groups" type="text/html">
+<script id="grouping-groups" type="text/html">
 {% verbatim %}
-{{# each buildings }}
+{{# each groupings }}
 <li class="list-group-item space-list-header"><h3 class="building-name">{{ name }}</h3>
   <ul class="list-group building-list">
     {{# each spaces }}
@@ -76,7 +76,7 @@
     
     <div class="item-incomplete">
     {{# each unfinished }}
-        <a href="/edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ element }}</span></a>
+        <a href="/edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ field }}</span></a>
     {{/each}}
     </div>
     

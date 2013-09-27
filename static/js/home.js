@@ -37,7 +37,7 @@ $(document).ready(function() {
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {
-                paintBuildlings(selector, data);
+                paintGroupings(selector, data);
             }
         });
     };
@@ -52,7 +52,7 @@ $(document).ready(function() {
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {
-                paintBuildlings(selector, data);
+                paintGroupings(selector, data);
             }
         });
     };
@@ -68,6 +68,7 @@ $(document).ready(function() {
             error: ajaxSpaceError,
             success: function (data) {
                 var tpl_src, context, i, j;
+
                 if (data.length) {
                     tpl_src = $('#incomplete-spaces').html();
                     context = {
@@ -76,12 +77,12 @@ $(document).ready(function() {
 
                     $.each(data, function (i) {
                         var unfinished = [];
-                        
-                        for (j in data[i].missing_sections) {
+
+                        for (j in data[i].missing_fields) {
                             unfinished.push({
                                 id: data[i].id,
-                                element: gettext(data[i].missing_sections[j].element),
-                                section: data[i].missing_sections[j].section
+                                field: gettext(data[i].missing_fields[j].field),
+                                section: data[i].missing_fields[j].section
                             });
                         }
 
@@ -105,13 +106,13 @@ $(document).ready(function() {
         });
     };
 
-    var paintBuildlings = function (selector, data) {
+    var paintGroupings = function (selector, data) {
         var tpl_src,
             context;
 
         if (data.length) {
-            tpl_src = $('#building-groups').html();
-            context = buildingGroupContext(data);
+            tpl_src = $('#grouping-groups').html();
+            context = groupContext(data);
         } else {
             tpl_src = $('#no-spaces').html();
             context = {};
@@ -120,17 +121,17 @@ $(document).ready(function() {
         $(selector).html(Handlebars.compile(tpl_src)(context));
     };
 
-    var buildingGroupContext = function (data) {
+    var groupContext = function (data) {
         var spaces = [],
-            buildings = [],
+            groupings = [],
             context = {
-                buildings: []
+                groupings: []
             },
             i;
 
         $.each(data, function (i) {
             var space = data[i],
-                building = space.location.building_name,
+                group = space.group,
                 space_data = {
                     id: space.id,
                     name: space.name,
@@ -142,18 +143,18 @@ $(document).ready(function() {
                     is_published: space.is_published
                 };
 
-            if (building in spaces) {
-                spaces[building].push(space_data);
+            if (group in spaces) {
+                spaces[group].push(space_data);
             } else {
-                buildings.push(building);
-                spaces[building] = [space_data];
+                groupings.push(group);
+                spaces[group] = [space_data];
             }
         });
 
-        for (i in buildings.sort()) {
-            context.buildings.push({
-                name: buildings[i],
-                spaces: spaces[buildings[i]]
+        for (i in groupings.sort()) {
+            context.groupings.push({
+                name: groupings[i],
+                spaces: spaces[groupings[i]]
             });
         }
 

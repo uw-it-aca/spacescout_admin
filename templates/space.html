@@ -104,17 +104,17 @@
         <div id="image-carousel" class="carousel slide carousel-test" data-interval="false">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            {{# each thumbnails }}
+            {{# each images }}
             <li data-target="#image-carousel" data-slide-to="{{ @index }}" {{#if @index}}{{else}}class="active"{{/if}}></li>
             {{/each}}
           </ol>
         
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            {{# each thumbnails }}
+            {{# each images }}
             <div class="item {{ active }}">
-              <img src="{{ img_url }}" />
-              <div class="carousel-caption">{{ caption }}</div>
+              <img src="{{ url }}" />
+              <div class="carousel-caption">{{ description }}</div>
             </div>
             {{/each}}
           </div>

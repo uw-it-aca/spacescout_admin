@@ -244,9 +244,11 @@ $(document).ready(function() {
             tpl = Handlebars.compile($('#space-edit-images').html()),
             context = {};
 
-        context['thumbnails'] = section['thumbnails'];
-        if (context['thumbnails'].length) {
-            context['thumbnails'][0]['active'] = 'active';
+        context['images'] = section['images'];
+        if (context['images'].length) {
+            if (context['images'].length > 0) {
+                context['images'][0]['active'] = 'active';
+            }
         }
 
         section_node.append($(tpl(context)));

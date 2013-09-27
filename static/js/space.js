@@ -32,9 +32,9 @@ $(document).ready(function() {
                             html = $(Handlebars.compile($('#space-section-hours').html())(context));
                             break;
                         case 'images':
-                            context['thumbnails'] = section['thumbnails'];
-                            if (context['thumbnails'].length) {
-                                context['thumbnails'][0]['active'] = 'active';
+                            context['images'] = section['images'];
+                            if (context['images'].length) {
+                                context['images'][0]['active'] = 'active';
                             }
                             html = $(Handlebars.compile($('#space-section-images').html())(context));
                             break;

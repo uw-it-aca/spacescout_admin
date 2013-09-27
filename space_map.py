@@ -13,6 +13,7 @@
     limitations under the License.
 """
 from django.conf import settings
+from spacescout_admin.models import *
 import simplejson as json
 import copy
 
@@ -21,23 +22,35 @@ class SpaceMapException(Exception): pass
 
 
 class SpaceMap(object):
-    """Layers Spaces over Spots
+    """Builds a Space representation, layering Space modifications over a new or existing Spot
     """
-    def space_representation(self, space, spot, schema):
-        json_rep = {
-            'id': space.id,
-            'spot_id': space.spot_id,
-            'is_published': True if (space.spot_id is not None) else False,
-            'is_modified': True if (space.pending is not None) else False,
-            'name': spot.get('name', ''),
-            'type': spot.get('type', ''),
-            'manager': spot.get('manager', space.manager),
-            'editors': spot.get('editors', []),
-            'modified_by': space.modified_by,
-            'last_modified': spot.get('last_modified', space.modified_date),
-            'sections': [],
-            'pending': space.pending
-        }
+    def space_rep(self, space, spot, schema):
+        json_rep = space.json_data_structure()
+
+        # overlay a spot copy with modifications
+        if space.pending and len(space.pending) > 0:
+            spot = copy.deepcopy(spot)
+            pending = json.loads(space.pending)
+            for p in pending:
+                self.set_by_key(p, pending.get(p), spot)
+
+            if not json_rep.get('is_complete') and '_missing_fields' in pending:
+                json_rep['missing_fields'] = pending.get('_missing_fields')
+
+
+        json_rep['is_published'] = (space.spot_id is not None)
+        json_rep['is_modified'] = (space.pending and len(space.pending) != 0)
+        json_rep['name'] = spot.get('name', '')
+        json_rep['type'] = spot.get('type', '')
+        json_rep['manager'] = spot.get('manager', space.manager)
+        json_rep['editors'] = spot.get('editors', [])
+        json_rep['modified_by'] = space.modified_by
+        json_rep['last_modified'] = spot.get('last_modified', space.modified_date)
+        json_rep['group'] = spot.get('location').get('building_name')
+        json_rep['sections'] = []
+
+        if settings.SS_SPACE_DESCRIPTION:
+            json_rep['description'] = self.get_value(settings.SS_SPACE_DESCRIPTION, spot, schema)
 
         for secdef in settings.SS_SPACE_DEFINITIONS:
             section = {
@@ -45,6 +58,7 @@ class SpaceMap(object):
             }
 
             if secdef['section'] == 'hours':
+                hours = spot['available_hours']
                 section['available_hours'] = []
                 # present all 7 days so translation and order happen here
                 for d in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']:
@@ -52,18 +66,24 @@ class SpaceMap(object):
                         'day': d
                     }
 
-                    if d in spot['available_hours']:
-                        hrs['hours'] = spot['available_hours'][d]
+                    if d in hours:
+                        hrs['hours'] = hours[d]
         
                     section['available_hours'].append(hrs)
             elif secdef['section'] == 'images':
-                section['thumbnails'] = [];
-                section['images'] = spot['images']
-                for j in spot['images']:
-                    section['thumbnails'].append({
-                                                      'img_url': j['url'].replace('/spot/', '/space/') if 'url' in j else '',
-                                                      'caption': j['description'] if 'description' in j else ''
-                                                 })
+                section['images'] = [];
+                if space.spot_id:
+                    for img in spot['images']:
+                        img['url'] = "/api/v1/space/{0}/image/-{1}".format(space.id, img.get('id'))
+                        section['images'].append(img)
+
+                try:
+                    images = SpaceImage.objects.filter(space=space)
+                    for img in images:
+                        pass
+
+                except SpaceImage.DoesNotExist:
+                    pass
 
             if 'fields' in secdef:
                 section['fields'] = []
@@ -81,11 +101,14 @@ class SpaceMap(object):
         
                     if 'value' in f:
                         if isinstance(f['value'], dict):
-                            value = self.get_value_by_key(spot, f['value'], schema)
+                            value = copy.deepcopy(f['value'])
+                            value['value'] = self.get_value(value['key'], spot, schema)
                         else:
                             vals = []
                             for v in f['value']:
-                                vals.append(self.get_value_by_key(spot, v, schema))
+                                vc = copy.deepcopy(v)
+                                vc['value'] = self.get_value(v['key'], spot, schema)
+                                vals.append(vc)
         
                             value = vals
         
@@ -100,16 +123,18 @@ class SpaceMap(object):
 
     def pending_spot(self, space, schema):
         spot = self._init_spot(schema)
+
+        # overlay a spot copy with modifications
+        if space.pending and len(space.pending) > 0:
+            spot = copy.deepcopy(spot)
+            pending = json.loads(space.pending)
+            for p in pending:
+                self.set_by_key(p, pending.get(p), spot)
+
         spot['is_published'] = False
         spot['is_modified'] = True
-        spot['last_modified'] = space.modified_date.isoformat()
+        spot['last_modified'] = space.modified_date.isoformat() if space.modified_date else None
         spot['modified_by'] = space.modified_by
-        spot['available_hours'] = {}
-        if space.pending:
-            j = json.loads(space.pending)
-            for p in j:
-                self.set_value_by_key(spot, p, j[p])
-
         return spot
 
     def _init_spot(self, data_src):
@@ -129,52 +154,27 @@ class SpaceMap(object):
                 
         return data
 
-    def get_value_by_key(self, d, v, s):
-        val_obj = None
+    def get_value(self, key, src_dict, schema):
+        kl = key.split('.')
+        v = self.get_by_keylist(kl, src_dict)
+        tv = self.get_by_keylist(kl, schema)
+        if isinstance(tv, list) and len(tv) == 1 and tv[0].lower() == 'true':
+            v = True if v or (isinstance(v, str) and v.lower() == 'true') else False
 
-        if 'key' in v:
-            val_obj = {
-                'key': v['key']
-            }
-    
-            if 'edit' in v:
-                val_obj['edit'] = v['edit']
-    
-            if 'format' in v:
-                val_obj['format'] = v['format']
-    
-            if 'map' in v:
-                val_obj['map'] = v['map']
-    
-            k = v['key'].split('.')
-            val = self.get_value_by_keylist(d, k)
-    
-            if self.type_from_keylist(s, k) == 'boolean':
-                val = True if val or (isinstance(val, str) and val.lower() == 'true') else False
-    
-            val_obj['value'] = val
-    
-        return val_obj
+        return v
 
-    def get_value_by_keylist(self, d, klist):
+    def get_by_keylist(self, kl, d):
         try:
-            val = d[klist[0]]
-            return val if len(klist) == 1 else self.get_value_by_keylist(val, klist[1:])
+            v = d[kl[0]]
+            return v if len(kl) == 1 else self.get_by_keylist(kl[1:], v)
         except KeyError:
             return None
 
-    def type_from_keylist(self, schema, klist):
-        t = self.get_value_by_keylist(schema, klist)
-        if isinstance(t, list):
-            return 'boolean' if len(t) == 1 and t[0].lower() == 'true' else list
-    
-        return t
-
-    def set_value_by_key(self, d, k, v):
+    def set_by_key(self, k, v, d):
         s = k.split('.')
         if len(s) > 1:
             if s[0] in d:
-                return self.set_value_by_key(d[s[0]], '.'.join(s[1:]), v)
+                return self.set_by_key('.'.join(s[1:]), v, d[s[0]])
         else:
             if k in d:
                 d[k] = v
