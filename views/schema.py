@@ -13,7 +13,6 @@
     limitations under the License.
 """
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.http import HttpResponse
 import simplejson as json
@@ -41,7 +40,6 @@ class SpotSchema():
         return schema
 
 
-@login_required
 def SchemaView(request):
 
     try:
