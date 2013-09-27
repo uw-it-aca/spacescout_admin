@@ -51,34 +51,20 @@ class SpaceManager(RESTDispatch):
                 spot = self._spacemap.pending_spot(space, schema)
 
             Permitted().edit(self._request.user, space, spot)
-            pending = json.loads(space.pending) if space.pending else {}
             data = json.loads(self._request.read())
-            space.is_complete = True
-            for section in settings.SS_SPACE_DEFINITIONS:
-                for field in section['fields'] if 'fields' in section else []:
-                    for value in field['value'] if isinstance(field['value'], list) else [field['value']]:
-                        key = value['key']
-                        val = data[key] if key in data else None
-                        orig_val = self._spot_value(spot, key)
-                        if key in data and val != orig_val:
-                            pending[key] = val
+            fields, missing_fields = self._validate(spot, data)
 
-                        if 'required' in field and ((val == None or len(val) == 0)
-                                                    and (orig_val == None or len(orig_val) == 0)):
-                            space.is_complete = None
+            pending = json.loads(space.pending) if space.pending else {}
 
-            if 'available_hours' in data:
-                valid_hours = True
-                for d in data['available_hours']:
-                    for h in data['available_hours'][d]:
-                        if len(h) == 2:
-                            if int("".join(h[0].split(":"))) >= int("".join(h[1].split(":"))):
-                                valid_hours = False
-                        else:
-                            valid_hours = False
+            for field in fields:
+                pending[field] = fields[field]
 
-                if valid_hours:
-                    pending['available_hours'] = data['available_hours']
+            if len(missing_fields) > 0:
+                space.is_complete = None
+                pending['_missing_fields'] = []
+                pending['_missing_fields'] = missing_fields
+            else:
+                space.is_complete = True
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
@@ -96,25 +82,71 @@ class SpaceManager(RESTDispatch):
     def POST(self, args, **kwargs):
         try:
             Permitted().create(self._request.user)
+            schema = SpotSchema().get()
+            space = Space(manager=self._request.user,
+                          modified_by=self._request.user)
+            spot = self._spacemap.pending_spot(space, schema)
             data = json.loads(self._request.read())
+
+            fields, missing_fields = self._validate(spot, data)
             pending = {}
+            for field in fields:
+                pending[field] = fields[field]
+
+            if len(missing_fields) > 0:
+                space.is_complete = None
+                pending['_missing_fields'] = []
+                pending['_missing_fields'] = missing_fields
+            else:
+                space.is_complete = True
+
             for field in settings.SS_SPACE_CREATION_FIELDS:
                 if 'value' in field and 'key' in field['value']:
                     key = field['value']['key']
-                    value = data[key] if key in data else None
-                    if 'required' in field and value == None or len(str(value).strip()) == 0:
+                    if 'required' in field and (key not in data or bool(data[key]) == False):
                         return self.error_response(400, "Bad Request")
 
-                    if value:
-                        pending[key] = value
+            space.pending = json.dumps(pending) if len(pending) > 0 else None
 
-            space = Space(manager=self._request.user,
-                          modified_by=self._request.user,
-                          pending=json.dumps(pending))
             space.save()
-            return self.json_response(json.dumps('{ space_id: %s }' % space.id))
+            return self.json_response(json.dumps("{'id' : %s}" % space.id))
         except PermittedException:
             return self.error_response(401, "Unauthorized")
+
+    def _validate(self, spot, data):
+        fields = {}
+        missing_fields = []
+        seen_fields = {}
+        for section in settings.SS_SPACE_DEFINITIONS:
+            for field in section['fields'] if 'fields' in section else []:
+                for value in field['value'] if isinstance(field['value'], list) else [field['value']]:
+                    key = value['key']
+                    val = data[key] if key in data else None
+                    orig_val = self._spot_value(key, spot)
+                    if key in data and val != orig_val:
+                        fields[key] = val
+
+                    if 'required' in field and bool(val) == False and bool(orig_val) == False:
+                        s = section.get('section')
+                        f = field.get('name')
+                        if s + f not in seen_fields:
+                            missing_fields.append({ 'section': s, 'field': f })
+                            seen_fields[s + f] = True
+
+        if 'available_hours' in data:
+            valid_hours = True
+            for d in data['available_hours']:
+                for h in data['available_hours'][d]:
+                    if len(h) == 2:
+                        if int("".join(h[0].split(":"))) >= int("".join(h[1].split(":"))):
+                            valid_hours = False
+                    else:
+                        valid_hours = False
+
+            if valid_hours:
+                fields['available_hours'] = data['available_hours']
+
+        return fields, missing_fields
 
     def _space_detail(self, space_id):
         try:
@@ -126,8 +158,8 @@ class SpaceManager(RESTDispatch):
                 spot = self._spacemap.pending_spot(space_model, schema)
 
             Permitted().view(self._request.user, space_model, spot)
-            space_rep = self._spacemap.space_representation(space_model, spot, schema)
-            return self.json_response(json.dumps(space_rep))
+
+            return self.json_response(json.dumps(self._spacemap.space_rep(space_model, spot, schema)))
         except Space.DoesNotExist:
             self.error404_response()
         except PermittedException:
@@ -188,7 +220,7 @@ class SpaceManager(RESTDispatch):
 
                     Permitted().view(self._request.user, space, spot)
                     seen[str(spot_id)] = 1
-                    json_rep.append(self._search_result(space, spot, schema))
+                    json_rep.append(self._spacemap.space_rep(space, spot, schema))
                 except PermittedException:
                     pass
                 except SpaceMapException as e:
@@ -200,8 +232,13 @@ class SpaceManager(RESTDispatch):
                 continue
 
             try:
-                Permitted().view(self._request.user, space, {})
-                json_rep.append(self._search_result(space, None, schema))
+                if space.spot_id:
+                    spot = Spot().get(space.spot_id)
+                else:
+                    spot = self._spacemap.pending_spot(space, schema)
+
+                Permitted().view(self._request.user, space, spot)
+                json_rep.append(self._spacemap.space_rep(space, spot, schema))
             except PermittedException:
                 pass
             except SpaceMapException as e:
@@ -209,44 +246,6 @@ class SpaceManager(RESTDispatch):
                                            e.args[0]['status_text'])
 
         return self.json_response(json.dumps(json_rep))
-
-    def _search_result(self, space, spot, schema):
-        if spot is None:
-            spot = self._spacemap.pending_spot(space, schema)
-
-        missing_sections = []
-        missing_names = {}
-        for secdef in settings.SS_SPACE_DEFINITIONS:
-            for f in secdef['fields'] if 'fields' in secdef else []:
-                if 'required' in f:
-                    for v in f['value'] if isinstance(f['value'], list) else [f['value']]:
-                        if not bool(self._spot_value(spot, v['key'])):
-                            if secdef['section'] + f['name'] not in missing_names:
-                                missing_names[secdef['section'] + f['name']] = True
-                                missing_sections.append({
-                                    'section': secdef['section'],
-                                    'element': f['name']
-                                })
-
-        json_rep = {
-            'id': space.id,
-            'spot_id': spot.get('id', None),
-            'is_published': True if space.spot_id is not None else False,
-            'is_modified': True if space.pending is not None else False,
-            'name': spot.get('name', ''),
-            'type': spot.get('type', ''),
-            'location': spot.get('location', ''),
-            'manager': spot.get('manager', ''),
-            'editors': spot.get('editors', []),
-            'modified_by': spot.get('modified_by', None),
-            'last_modified': spot.get('last_modified', None),
-            'missing_sections': missing_sections
-        }
-
-        if settings.SS_SPACE_DESCRIPTION:
-            json_rep['description'] = self._spot_value(spot, settings.SS_SPACE_DESCRIPTION)
-
-        return json_rep
 
     def _get_spots(self, search_args):
         consumer, client = oauth_initialization()
@@ -285,22 +284,5 @@ class SpaceManager(RESTDispatch):
 
         return i18n_json
 
-    def _spot_value(self, spot, key):
-        return self._spacemap.get_value_by_keylist(spot, key.split('.'))
-
-
-class SpaceImage(RESTDispatch):
-    def GET(self, args, **kwargs):
-
-        # Required settings for the client
-        consumer, client = oauth_initialization()
-
-        url = "{0}/api/v1/spot/{1}/image/{2}".format(settings.SS_WEB_SERVER_HOST,
-                                                     kwargs['space_id'], kwargs['image_id'])
-
-        resp, content = client.request(url, 'GET')
-
-        if resp.status != 200:
-            return self.error_response(resp.status_code, msg="Error loading image")
-
-        return self.json_response(content)
+    def _spot_value(self, key, spot):
+        return self._spacemap.get_by_keylist(key.split('.'), spot)
