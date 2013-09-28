@@ -13,6 +13,7 @@
     limitations under the License.
 """
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from spacescout_admin.models import *
 from spacescout_admin.spot import Spot, SpotException
