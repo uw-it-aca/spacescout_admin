@@ -2,9 +2,9 @@ $(document).ready(function() {
 
     /* home tabs */
     $('#myTab a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-      $($(this).attr('href')).children().trigger('exposed', ['Custom', 'Event']);
+        e.preventDefault();
+        $(this).tab('show');
+        $($(this).attr('href')).children().trigger('exposed', ['Custom', 'Event']);
     });
     
     /* deal with tab exposure */
