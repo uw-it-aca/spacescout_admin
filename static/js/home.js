@@ -23,7 +23,7 @@ $(document).ready(function() {
     var spacesLoadingCue = function (selector) {
         var tpl_src = $('#list-item-loading').html();
 
-        window.location.hash = selector.substr(1);
+        window.location.hash = selector.substr(1) + '-spaces';
         $(selector).html(Handlebars.compile(tpl_src)());
     };
 
@@ -174,11 +174,11 @@ $(document).ready(function() {
 
     // initialize
     switch(decodeURIComponent(window.location.hash.substr(1))) {
-    case 'unpublished' :
+    case 'unpublished-spaces' :
         $('a[href=#unpublished]').tab('show');
         loadUnpublishedSpaces();
         break;
-    case 'incomplete' :
+    case 'incomplete-spaces' :
         $('a[href=#incomplete]').tab('show');
         loadIncompleteSpaces();
         break;
