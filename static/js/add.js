@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     var createSpace = function (event) {
         $.ajax({
-            url: "/api/v1/space/",
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(window.spacescout_admin.collectInput()),
@@ -68,12 +68,24 @@ $(document).ready(function() {
     };
 
     var getFieldValue = function (v) {
+        var m;
+
+        if (v.hasOwnProperty('edit') && v.edit.hasOwnProperty('default')) {
+            m = v.edit.default.match(/{{\s*([\S]+)\s*}}/);
+            if (m && window.spacescout_admin.hasOwnProperty('vars')
+                && window.spacescout_admin.vars.hasOwnProperty(m[1])) {
+                return window.spacescout_admin.vars[m[1]];
+            }
+
+            return v.edit.default;
+        }
+
         return '';
     };
 
     // fetch spot data
     $.ajax({
-        url: '/api/v1/schema',
+        url: window.spacescout_admin.app_url_root + 'api/v1/schema',
         dataType: 'json',
         success: startAddEditor,
         error: XHRError

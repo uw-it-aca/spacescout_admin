@@ -10,7 +10,11 @@ import simplejson as json
 @login_required
 def home(request):
    return render_to_response('home.html',
-                             { 'remote_user': request.user },
+                             {
+                                  'remote_user': request.user,
+                                  'STATIC_URL': settings.STATIC_URL,
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT
+                              },
                              context_instance=RequestContext(request))
 
 @login_required
@@ -18,7 +22,9 @@ def space(request, space_id):
    return render_to_response('space.html',
                              {
                                   'remote_user': request.user,
-                                  'SPOT_ID': space_id
+                                  'SPACE_ID': space_id,
+                                  'STATIC_URL': settings.STATIC_URL,
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT
                              },
                              context_instance=RequestContext(request))
 
@@ -27,8 +33,10 @@ def edit(request, space_id):
    return render_to_response('edit.html',
                              {
                                   'remote_user': request.user,
-                                  'SPOT_ID': space_id,
-                                  'IS_MOBILE': request.MOBILE
+                                  'SPACE_ID': space_id,
+                                  'IS_MOBILE': request.MOBILE,
+                                  'STATIC_URL': settings.STATIC_URL,
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT
                              },
                              context_instance=RequestContext(request))
 
@@ -37,12 +45,8 @@ def add(request):
    return render_to_response('add.html',
                              {
                                   'remote_user': request.user,
-                                  'SPACE_FIELDS': SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS))
+                                  'SPACE_FIELDS': SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS)),
+                                  'STATIC_URL': settings.STATIC_URL,
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT
                              },
-                             context_instance=RequestContext(request))
-
-@login_required
-def upload(request):
-   return render_to_response('upload.html',
-                             { 'remote_user': request.user },
                              context_instance=RequestContext(request))

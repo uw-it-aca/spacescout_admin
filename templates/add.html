@@ -8,7 +8,7 @@
 {% block userid %}{{ remote_user }}{% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/add.js"></script>
+<script src="{{ STATIC_URL }}js/add.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,8 +30,11 @@
 
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
+window.spacescout_admin.app_url_root = '{{ APP_URL_ROOT }}';
 window.spacescout_admin.fields = {{ SPACE_FIELDS }};
 window.spacescout_admin.csrf_token = '{{ csrf_token }}';
+window.spacescout_admin.vars = {};
+window.spacescout_admin.vars.username = '{{ user.username }}';
 </script>
 
 {% endblock %}

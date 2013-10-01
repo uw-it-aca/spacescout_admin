@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     (function () {
         $.ajax({
-            url: '/api/v1/space/' + window.spacescout_admin.spot_id,
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
                 var tpl, context, section, html, i, incomplete;
@@ -13,41 +13,32 @@ $(document).ready(function() {
                     section = data.sections[i];
                     context = {
                         section: gettext(section.section),
-                        edit_url: '/edit/' + window.spacescout_admin.spot_id
+                        edit_url: '/edit/' + window.spacescout_admin.space_id
                             + '/#' + encodeURIComponent(section.section)
                     };
 
-                    if (i == 0) { // basic section
-                        context.name = gettext(data.name);
-                        context.fields = prepSectionFields(section.fields.slice(1));
-                        tpl = Handlebars.compile($('#space-details').html());
-                        $('.space-detail-header').append(tpl(context));
-                        tpl = Handlebars.compile($('#space-section-fields').html());
-                        $('.space-detail-header').append(tpl(context));
-                    } else {
-                        switch (section.section) {
-                        case 'hours':
-                            context['available_hours'] = contextAvailableHours(section['available_hours']);
-                            context.fields = prepSectionFields(section.fields);
-                            html = $(Handlebars.compile($('#space-section-hours').html())(context));
-                            break;
-                        case 'images':
-                            context['thumbnails'] = section['thumbnails'];
-                            if (context['thumbnails'].length) {
-                                context['thumbnails'][0]['active'] = 'active';
-                            }
-                            html = $(Handlebars.compile($('#space-section-images').html())(context));
-                            break;
-                        default:
-                            context.fields = prepSectionFields(section.fields);
-                            html = $(Handlebars.compile($('#space-section').html())(context));
-                            tpl = Handlebars.compile($('#space-section-fields').html());
-                            html.append(tpl(context));
-                            break;
+                    switch (section.section) {
+                    case 'hours':
+                        context['available_hours'] = contextAvailableHours(section['available_hours']);
+                        context.fields = prepSectionFields(section.fields);
+                        html = $(Handlebars.compile($('#space-section-hours').html())(context));
+                        break;
+                    case 'images':
+                        context['images'] = section['images'];
+                        if (context['images'].length) {
+                            context['images'][0]['active'] = 'active';
                         }
-
-                        html.insertAfter('.space-detail-section:last');
+                        html = $(Handlebars.compile($('#space-section-images').html())(context));
+                        break;
+                    default:
+                        context.fields = prepSectionFields(section.fields);
+                        html = $(Handlebars.compile($('#space-section').html())(context));
+                        tpl = Handlebars.compile($('#space-section-fields').html());
+                        html.append(tpl(context));
+                        break;
                     }
+
+                    html.insertAfter('.space-detail-section:last');
                 }
 
                 // validation cues

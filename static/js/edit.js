@@ -10,7 +10,7 @@ $(document).ready(function() {
     // fetch spot data
     (function () {
         $.ajax({
-            url: '/api/v1/schema',
+            url: window.spacescout_admin.app_url_root + 'api/v1/schema',
             dataType: 'json',
             success: function (data) {
                 window.spacescout_admin.spot_schema = data;
@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     var loadSpaceDetails = function () {
         $.ajax({
-            url: '/api/v1/space/' + window.spacescout_admin.spot_id,
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
                 editSpaceDetails(data);
@@ -48,7 +48,7 @@ $(document).ready(function() {
             section = space.sections[i];
             if (hash == section.section) {
                 switch(hash) {
-                case 'hours' :
+                case 'hours_access' :
                     editHoursDetails(section, editor);
                     break;
                 case 'images' :
@@ -80,13 +80,13 @@ $(document).ready(function() {
         event.preventDefault();
 
         $.ajax({
-            url: "/api/v1/space/" + window.spacescout_admin.spot_id + '/',
+            url: window.spacescout_admin.app_url_root + "api/v1/space/" + window.spacescout_admin.space_id + '/',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(window.spacescout_admin.collectInput()),
             type: "PUT",
             success: function (data) {
-                window.location.href = '/space/' + window.spacescout_admin.spot_id;
+                window.location.href = '/space/' + window.spacescout_admin.space_id;
             },
             error: XHRError
         });
@@ -244,14 +244,55 @@ $(document).ready(function() {
             tpl = Handlebars.compile($('#space-edit-images').html()),
             context = {};
 
-        context['thumbnails'] = section['thumbnails'];
-        if (context['thumbnails'].length) {
-            context['thumbnails'][0]['active'] = 'active';
+        context['images'] = section['images'];
+        if (context['images'].length) {
+            if (context['images'].length > 0) {
+                context['images'][0]['active'] = 'active';
+            }
         }
 
         section_node.append($(tpl(context)));
 
         editor_node.append(section_node);
+
+        $('#upload_form').ajaxForm({
+            type: 'POST',
+            url : window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id + '/image/',
+            dataType: 'json',
+            beforeSubmit: function (formData) {
+                var i;
+
+                for (i = 0; i < formData.length; i += 1) {
+                    if (formData[i].name == 'image' && !formData[i].value) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            success: function (responseJSON) {
+                console.log('response is ' + responseJSON.id);
+            },
+            error: function () {
+                console.log('ERROR');
+            }
+        });
+
+        $('#delete_button').click(function (e) {
+            var img_src = $('#image-carousel .active img').prop('src'),
+                id = img_src.match(/\/(\d+)$/)[1];
+
+            $.ajax({
+                url: img_src,
+                type: "DELETE",
+                success: function (data) {
+                    console.log('Image ' + id + ' Deleted.');
+                },
+                error: function () {
+                    console.log('ERROR');
+                }
+            });
+        });
     };
 
     var editSectionDetails = function (section, editor_node) {

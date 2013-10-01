@@ -6,7 +6,7 @@
 {% block title %}{% trans "edit" %}{% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/edit.js"></script>
+<script src="{{ STATIC_URL }}js/edit.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@
 
 <!-- Done -->
 <div class="save-discard">
-  <a href="/space/{{SPOT_ID}}" class="btn btn-success btn-lg btn-block">Done</a>
+  <a href="/space/{{SPACE_ID}}" class="btn btn-success btn-lg btn-block">Done</a>
 </div>
 
 <script id="space-edit-hours" type="text/html">
@@ -54,32 +54,34 @@
 </script>
 
 <script id="space-edit-images" type="text/html">
-{% verbatim %}
     <!-- Edit images -->
 
       <div class="image-select fileupload fileupload-new clearfix" data-provides="fileupload">
-          <span class="btn-file pull-left action-link"><span class="fileupload-new">select image</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+        <form id="upload_form" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <span class="btn-file pull-left action-link"><span class="fileupload-new">select image</span><span class="fileupload-exists">Change</span><input name="image" type="file" /></span>
           <span class="fileupload-preview pull-left"></span>
           <a href="#" class="close fileupload-exists pull-left" data-dismiss="fileupload" style="margin-left:5px; font-size:20px;">×</a>
-          
-          <a href="#0" class="action-link pull-right">upload</a>
+
+          <input type="submit" value="upload" class="action-link pull-right" id="upload_button" style="border: none;" />
+        </form>
       </div>
 
+{% verbatim %}
       <div class="">
         <div id="image-carousel" class="carousel slide carousel-test" data-interval="false">
           <!-- Indicators -->
           <ol class="carousel-indicators">
-            {{# each thumbnails }}
+            {{# each images }}
             <li data-target="#image-carousel" data-slide-to="{{ @index }}" {{#if @index}}{{else}}class="active"{{/if}}></li>
             {{/each}}
           </ol>
         
           <!-- Wrapper for slides -->
           <div class="carousel-inner">
-            {{# each thumbnails }}
+            {{# each images }}
             <div class="item {{ active }}">
-              <img src="{{ img_url }}" />
-              <div class="carousel-caption">{{ caption }}</div>
+              <img src="{{ url }}" />
+              <div class="carousel-caption">{{ description }}</div>
             </div>
             {{/each}}
         </div>
@@ -96,7 +98,7 @@
     
     <div class="clearfix image-actions">
         <a href="javascript:void(0);" class="action-link pull-left" style="margin-right:15px;">make default</a>
-        <a href="javascript:void(0);" class="action-link pull-left">delete</a>
+        <a href="javascript:void(0);" class="action-link pull-left" id="delete_button">delete</a>
     </div>
       
 {% endverbatim %}
@@ -104,7 +106,8 @@
 
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
-window.spacescout_admin.spot_id = '{{ SPOT_ID }}';
+window.spacescout_admin.app_url_root = '{{ APP_URL_ROOT }}';
+window.spacescout_admin.space_id = '{{ SPACE_ID }}';
 window.spacescout_admin.is_mobile = {{ IS_MOBILE }};
 window.spacescout_admin.csrf_token = '{{ csrf_token }}';
 </script>
