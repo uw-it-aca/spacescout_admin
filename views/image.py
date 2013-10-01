@@ -15,20 +15,21 @@
     Changes
     =================================================================
 
-    sbutler1@illinois.edu: adapt to the new RESTDispatch framework.
 """
 
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.http import http_date
 from django.core.servers.basehttp import FileWrapper
-from django.core.exceptions import ValidationError
 from spacescout_admin.models import *
 from spacescout_admin.rest_dispatch import RESTDispatch
 from spacescout_admin.oauth import oauth_initialization
+from spacescout_admin.permitted import Permitted, PermittedException
+import simplejson as json
+import time
 
 
-class SpaceImage(RESTDispatch):
+class SpaceImageManager(RESTDispatch):
     """ Handles actions at /api/v1/space/<space id>/image/<image id>.
     GET returns 200 with the image.
     PUT returns 200 and updates the image.
@@ -75,11 +76,20 @@ class SpaceImage(RESTDispatch):
         return self.json_response(content)
 
     def PUT(self, request, space_id, image_id):
-        img = SpaceImage.objects.get(pk=image_id)
-        space = img.space
+        try:
+            img = SpaceImage.objects.get(pk=image_id)
+            space = img.space
 
-        if int(space.pk) != int(space_id):
-            self.error404_response()
+            if int(space.pk) != int(space_id):
+                raise SpaceImage.DoesNotExist()
+
+            space = Space.objects.get(id=space_id)
+            Permitted().edit(request.user, space, {})
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
+        except (Space.DoesNotExist, SpaceImage.DoesNotExist):
+            if e.args[0]['status_code'] == 404:
+                self.error404_response()  # no return
 
         # This trick was taken from piston
         request.method = "POST"
@@ -94,12 +104,45 @@ class SpaceImage(RESTDispatch):
 
         return self.GET(request, space_id, image_id)
 
-    def DELETE(self, request, space_id, image_id):
-        img = SpaceImage.objects.get(pk=image_id)
-        space = img.space
+    def POST(self, request, space_id):
+        try:
+            space = Space.objects.get(id=space_id)
+            Permitted().edit(request.user, space, {})
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
+        except Space.DoesNotExist:
+            self.error404_response()  # no return
 
-        if int(space.pk) != int(space_id):
-            self.error404_response()
+        img = SpaceImage(
+            description="",
+            space=space,
+            upload_user=request.user,
+            upload_application="admin"
+        )
+
+        if "image" in request.FILES:
+            img.image = request.FILES["image"]
+        if "description" in request.POST:
+            img.description = request.POST["description"]
+
+        img.save()
+
+        return self.json_response(json.dumps({ 'id': img.id }))
+
+    def DELETE(self, request, space_id, image_id):
+        try:
+            img = SpaceImage.objects.get(pk=image_id)
+            space = img.space
+
+            if int(space.pk) != int(space_id):
+                raise SpaceImage.DoesNotExist()
+
+            space = Space.objects.get(id=space_id)
+            Permitted().edit(request.user, space, {})
+        except PermittedException:
+            return self.error_response(401, "Unauthorized")
+        except (Space.DoesNotExist, SpaceImage.DoesNotExist):
+            self.error404_response()  # no return
 
         img.delete()
 

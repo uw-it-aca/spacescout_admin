@@ -8,7 +8,7 @@
 {% block userid %}{{ remote_user }}{% endblock %}
 
 {% block extra_js %}
-<script src="{{ STATIC_URL}}js/home.js"></script>
+<script src="{{ STATIC_URL }}js/home.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -102,6 +102,11 @@
       <i class="icon-frown icon-3x"></i><span>No spaces</span>
     </div>
   </li>
+</script>
+
+<script type="text/javascript">
+window.spacescout_admin = window.spacescout_admin || {};
+window.spacescout_admin.app_url_root = '{{ APP_URL_ROOT }}';
 </script>
 
 {% endblock %}

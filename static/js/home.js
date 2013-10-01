@@ -33,7 +33,7 @@ $(document).ready(function() {
         spacesLoadingCue(selector);
 
         $.ajax({
-            url: 'api/v1/space/?published=1',
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/?published=1',
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {
@@ -48,7 +48,7 @@ $(document).ready(function() {
         spacesLoadingCue(selector);
 
         $.ajax({
-            url: 'api/v1/space/?complete=1&published=0',
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/?complete=1&published=0',
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {
@@ -63,7 +63,7 @@ $(document).ready(function() {
         spacesLoadingCue(selector);
 
         $.ajax({
-            url: 'api/v1/space/?complete=0&published=0',
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/?complete=0&published=0',
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {

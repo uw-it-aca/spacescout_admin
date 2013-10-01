@@ -6,7 +6,7 @@
 {% block title %}{% trans "details" %}{% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/space.js"></script>
+<script src="{{ STATIC_URL }}js/space.js"></script>
 {% endblock %}
 
 
@@ -179,7 +179,8 @@
 
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
-window.spacescout_admin.spot_id = '{{ SPOT_ID }}';
+window.spacescout_admin.app_url_root = '{{ APP_URL_ROOT }}';
+window.spacescout_admin.space_id = '{{ SPACE_ID }}';
 </script>
        
 {% endblock %}

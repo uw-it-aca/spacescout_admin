@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     var createSpace = function (event) {
         $.ajax({
-            url: "/api/v1/space/",
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(window.spacescout_admin.collectInput()),
@@ -73,7 +73,7 @@ $(document).ready(function() {
 
     // fetch spot data
     $.ajax({
-        url: '/api/v1/schema',
+        url: window.spacescout_admin.app_url_root + 'api/v1/schema',
         dataType: 'json',
         success: startAddEditor,
         error: XHRError

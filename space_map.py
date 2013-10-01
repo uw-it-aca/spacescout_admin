@@ -74,13 +74,16 @@ class SpaceMap(object):
                 section['images'] = [];
                 if space.spot_id:
                     for img in spot['images']:
-                        img['url'] = "/api/v1/space/{0}/image/-{1}".format(space.id, img.get('id'))
-                        section['images'].append(img)
-
+                        section['images'].append({
+                            'description': img.get('description'),
+                            'url': "/api/v1/space/{0}/image/-{1}".format(space.id, img.get('id'))
+                        })
                 try:
-                    images = SpaceImage.objects.filter(space=space)
-                    for img in images:
-                        pass
+                    for img in SpaceImage.objects.filter(space=space):
+                        section['images'].append({
+                            'description': img.description,
+                            'url': "/api/v1/space/{0}/image/{1}".format(space.id, img.id)
+                        })
 
                 except SpaceImage.DoesNotExist:
                     pass

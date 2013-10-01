@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from PIL import Image
 import hashlib
 from functools import wraps
@@ -27,7 +29,7 @@ class Space(models.Model):
 
 class SpaceImage(models.Model):
     """ An image of a Space. Multiple images can be associated
-    with a Spot, and Spot objects have a 'Spot.spotimage_set'
+    with a Space, and Space objects have a 'Space.spotimage_set'
     method that will return all SpotImage objects for the Spot.
     """
     CONTENT_TYPES = {
@@ -77,18 +79,18 @@ class SpaceImage(models.Model):
         except:
             raise ValidationError('Not a valid image format')
 
-        if not img.format in SpotImage.CONTENT_TYPES:
+        if not img.format in SpaceImage.CONTENT_TYPES:
             raise ValidationError('Not an accepted image format')
 
-        self.content_type = SpotImage.CONTENT_TYPES[img.format]
+        self.content_type = SpaceImage.CONTENT_TYPES[img.format]
         self.width, self.height = img.size
 
-        super(SpotImage, self).save(*args, **kwargs)
+        super(SpaceImage, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)
 
-        super(SpotImage, self).delete(*args, **kwargs)
+        super(SpaceImage, self).delete(*args, **kwargs)
 
     def rest_url(self):
         return reverse('spot-image', kwargs={'spot_id': self.spot.pk, 'image_id': self.pk})

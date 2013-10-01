@@ -33,13 +33,14 @@
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
         
         <script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
-        
+
         {% compress js %}
             <script src="{{ STATIC_URL }}js/bootstrap-select.min.js"></script>
             <script src="{{ STATIC_URL }}js/bootstrap-fileupload.min.js"></script>
+            <script src="{{ STATIC_URL }}lib/handlebars.js"></script>
+            <script src="{{ STATIC_URL }}lib/jquery.form.min.js"></script>
             <script src="{{ STATIC_URL }}js/main.js"></script>
             {% block extra_js %}{% endblock %}
         {% endcompress %}

@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     (function () {
         $.ajax({
-            url: '/api/v1/space/' + window.spacescout_admin.spot_id,
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
                 var tpl, context, section, html, i, incomplete;
@@ -13,7 +13,7 @@ $(document).ready(function() {
                     section = data.sections[i];
                     context = {
                         section: gettext(section.section),
-                        edit_url: '/edit/' + window.spacescout_admin.spot_id
+                        edit_url: '/edit/' + window.spacescout_admin.space_id
                             + '/#' + encodeURIComponent(section.section)
                     };
 
