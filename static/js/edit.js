@@ -48,7 +48,7 @@ $(document).ready(function() {
             section = space.sections[i];
             if (hash == section.section) {
                 switch(hash) {
-                case 'hours' :
+                case 'hours_access' :
                     editHoursDetails(section, editor);
                     break;
                 case 'images' :

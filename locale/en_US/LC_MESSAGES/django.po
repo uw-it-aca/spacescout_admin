@@ -320,3 +320,6 @@ msgstr "Orientation of the space"
 
 msgid "room_number"
 msgstr "Room Number"
+
+msgid "hours_access"
+msgstr "Hours & Access"

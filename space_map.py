@@ -146,8 +146,6 @@ class SpaceMap(object):
             if isinstance(data[k], list):
                 if data[k][0] == 'true':
                     data[k] = None
-                elif isinstance(data[k][0], dict):
-                    data[k] = []
                 else:
                     data[k] = []
             elif isinstance(data[k], dict):
