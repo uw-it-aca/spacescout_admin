@@ -69,7 +69,7 @@ $(document).ready(function() {
 
     var getFieldValue = function (v) {
         var m;
-            debugger
+
         if (v.hasOwnProperty('edit') && v.edit.hasOwnProperty('default')) {
             m = v.edit.default.match(/{{\s*([\S]+)\s*}}/);
             if (m && window.spacescout_admin.hasOwnProperty('vars')

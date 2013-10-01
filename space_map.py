@@ -149,7 +149,7 @@ class SpaceMap(object):
                 elif isinstance(data[k][0], dict):
                     data[k] = []
                 else:
-                    data[k] = [data[k][0]]
+                    data[k] = []
             elif isinstance(data[k], dict):
                 data[k] = self._init_spot(data[k])
             else:
