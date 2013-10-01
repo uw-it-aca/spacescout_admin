@@ -68,6 +68,18 @@ $(document).ready(function() {
     };
 
     var getFieldValue = function (v) {
+        var m;
+            debugger
+        if (v.hasOwnProperty('edit') && v.edit.hasOwnProperty('default')) {
+            m = v.edit.default.match(/{{\s*([\S]+)\s*}}/);
+            if (m && window.spacescout_admin.hasOwnProperty('vars')
+                && window.spacescout_admin.vars.hasOwnProperty(m[1])) {
+                return window.spacescout_admin.vars[m[1]];
+            }
+
+            return v.edit.default;
+        }
+
         return '';
     };
 
