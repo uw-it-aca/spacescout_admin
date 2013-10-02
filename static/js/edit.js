@@ -145,9 +145,58 @@ $(document).ready(function() {
         var tpl = Handlebars.compile($('#hours-editor').html()),
             edit_node = $(tpl()),
             select_days = edit_node.find('select#days'),
-            select_open = edit_node.find('select#opening-time'),
-            select_close = edit_node.find('select#closing-time'),
-            i, option;
+            i, option,
+            h_open, m_open,
+            h_close, m_close,
+            leadingZero = function (n) {
+                return (n < 10) ? '0' + n : String(n);
+            },
+            displayTime = function (m2h) {
+                return (m2h.h24 == '12:00')
+                         ? gettext('noon')
+                         : (m2h.h24 == '24:00')
+                             ? gettext('midnight') : m2h.h12;
+            },
+            min2hour = function (t) {
+                var h = t / 60,
+                    hv = Math.floor(h),
+                    m = (h - hv) * 60,
+                    pm = (h >= 12);
+
+                return {
+                    h24: leadingZero(hv) + ':' + leadingZero(m),
+                    h12: ((hv > 12) ? hv - 12 : hv)
+                          + ':' + leadingZero(m)
+                          + gettext(pm ? 'pm' : 'am')
+                };
+            },
+            hours2min = function (t) {
+                var hm = t.split(':');
+
+                return (parseInt(hm[0]) * 60) + parseInt(hm[1]);
+            };
+        m_open = (t) ? hours2min(t.hours[0]) : 480;
+        h_open = min2hour(m_open);
+        m_close = (t) ? hours2min(t.hours[1]) : 1020;
+        h_close = min2hour(m_close);
+
+        $('#hours-open', edit_node).val(h_open.h24);
+        $('#hours-close', edit_node).val(h_close.h24);
+        $("span", edit_node).text(displayTime(h_open) + ' - ' + displayTime(h_close));
+        $(".hours-slider", edit_node).noUiSlider({
+            range: [0, 1440],
+            start: [m_open, m_close],
+            step: 30,
+            slide: function () {
+                var values = $(this).val(),
+                    open = min2hour(values[0]),
+                    close =  min2hour(values[1]);
+
+                $(this).parent().siblings('#hours-open').val(open.h24);
+                $(this).parent().siblings('#hours-close').val(close.h24);
+                $(this).next('span').text(displayTime(open) + ' - ' + displayTime(close));
+            }
+        });
 
         for (i = 0; i < weekdays.length; i += 1) {
             option = $('<option></option>').val(weekdays[i]).html(gettext(weekdays[i])).addClass('hours-value');
@@ -157,23 +206,6 @@ $(document).ready(function() {
 
             select_days.append(option);
         }
-
-        appendHours(select_open, (t) ? t.hours[0] : null);
-        appendHours(select_close, (t) ? t.hours[1] : null);
-
-        select_open.change(function () {
-            var node = select_close.find('option[value="' + $(this).val() + '"]');
-            select_close.find('option').removeAttr('disabled');
-            node.attr('disabled','disabled');
-            node.prevAll('option').attr('disabled','disabled');
-        });
-
-        select_close.change(function () {
-            var node = select_open.find('option[value="' + $(this).val() + '"]');
-            select_open.find('option').removeAttr('disabled');
-            node.attr('disabled','disabled');
-            node.nextAll('option').attr('disabled','disabled');
-        });
 
         if (window.spacescout_admin.is_mobile) {
             // MOBILE: handle multi-day selection and display
@@ -199,44 +231,6 @@ $(document).ready(function() {
         }
 
         return edit_node;
-    };
-
-    var appendHours = function (select, choice) {
-        var i;
-
-        for (i = 0; i < 24; i += 1) {
-            appendHoursOption(select, i, 0, choice);
-            appendHoursOption(select, i, 30, choice);
-        }
-
-        appendHoursOption(select, 23, 59, choice);
-    };
-
-    var appendHoursOption = function (select, hour, minute, choice) {
-        var am = gettext('am'),
-            pm = gettext('pm'),
-            value = leadingZero(hour) + ':' + leadingZero(minute),
-            option = $('<option></option>').val(value).addClass('hours-value');
-
-        if (choice == value) {
-            option.attr('selected', 'selected');
-        }
-
-        if (hour == 0 && minute == 0) {
-            option.html(gettext('midnight'));
-        } else if (hour == 12 && minute == 0) {
-            option.html(gettext('noon'));
-        } else {
-            option.html(String((hour < 13) ? hour : (hour - 12))
-                        + ':' + leadingZero(minute)
-                        + ((hour > 11) ? pm : am));
-        }
-
-        return select.append(option);
-    };
-
-    var leadingZero = function (n) {
-        return (n < 10) ? '0' + n : String(n);
     };
 
     var editImageDetails = function (section, editor_node) {

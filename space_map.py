@@ -57,7 +57,7 @@ class SpaceMap(object):
                 'section': secdef['section']
             }
 
-            if secdef['section'] == 'hours':
+            if secdef['section'] == 'hours_access':
                 hours = spot['available_hours']
                 section['available_hours'] = []
                 # present all 7 days so translation and order happen here

@@ -24,6 +24,7 @@
         {% compress css %}
             <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-select.min.css">
             <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-fileupload.min.css">
+            <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.nouislider.min.css">
             <link rel="stylesheet" href="{{ STATIC_URL }}css/main.less" type="text/less">
         {% endcompress %}
         
@@ -41,6 +42,7 @@
             <script src="{{ STATIC_URL }}js/bootstrap-fileupload.min.js"></script>
             <script src="{{ STATIC_URL }}lib/handlebars.js"></script>
             <script src="{{ STATIC_URL }}lib/jquery.form.min.js"></script>
+            <script src="{{ STATIC_URL }}lib/jquery.nouislider.min.js"></script>
             <script src="{{ STATIC_URL }}js/main.js"></script>
             {% block extra_js %}{% endblock %}
         {% endcompress %}

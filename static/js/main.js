@@ -599,7 +599,10 @@ $(document).ready(function() {
                 }
                 // ELSE fall thru and set simple value
             default:
-                data[$(this).attr('name')] = v;
+                p = $(this).attr('name');
+                if (p) {
+                    data[p] = v;
+                }
                 break;
             }
         });
@@ -620,18 +623,24 @@ $(document).ready(function() {
             }
         });
 
-        $('.time-selector').each(function ()  {
-            var open, open_v, close, close_v;
+        $('.business-hours').each(function ()  {
+            var open,
+                close,
+                open_v,
+                close_v,
+                normalize = function (h) {
+                    return (h == '24:00' ? '23:59' : h);
+                };
 
-            open = $(this).find('select#opening-time option:selected').val();
-            close = $(this).find('select#closing-time option:selected').val();
+            open = normalize($('#hours-open', this).val());
+            close = normalize($('#hours-close', this).val());
 
             if (open && close) {
                 open_v = parseInt(open.split(':').join(''));
-                close_v = parseInt(open.split(':').join(''));
+                close_v = parseInt(close.split(':').join(''));
 
                 if (open < close) {
-                    $(this).find('select#days option:selected').each(function () {
+                    $('select#days option:selected', this).each(function () {
                         var day = $(this).val();
 
                         if (!data.hasOwnProperty('available_hours')) {

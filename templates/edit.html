@@ -39,8 +39,7 @@
     <h4>{% trans "normal_hours" %}</h4>
     <div class="time-selector">
       <span class="third">Day(s)</span>
-      <span class="third">Open</span>
-      <span class="third">Close</span>
+      <span class="two-thirds">Hours</span>
     </div>
     <div style="margin: 1em 0;"><a id="add-hours" href="javascript:void(0);" class="action-link">{% trans "add_hours_group" %}</a></div>
 </script>
@@ -48,13 +47,16 @@
 <script id="hours-editor" type="text/html">
 {% verbatim %}
     <!-- repeat this row with each new "add new group"-->
-    <div class="time-selector">    
+    <div class="time-selector business-hours">
       <div class="day-select-container third">
         <select multiple id="days"></select>
         <div class="show-days">Select days</div>
       </div>
-      <select class="form-control third hour-select" id="opening-time"></select>
-      <select class="form-control third hour-select" id="closing-time"></select>
+      <div class="hours-slider-container two-thirds">
+        <div class="noUiSlider hours-slider"></div><span>8:00am - 5:00pm</span>
+      </div>
+      <input type=hidden id="hours-open" value="">
+      <input type=hidden id="hours-close" value="">
     </div>
 {% endverbatim %}
 </script>

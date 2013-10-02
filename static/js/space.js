@@ -20,7 +20,7 @@ $(document).ready(function() {
                     };
 
                     switch (section.section) {
-                    case 'hours':
+                    case 'hours_access':
                         context['available_hours'] = contextAvailableHours(section['available_hours']);
                         context.fields = prepSectionFields(section.fields);
                         html = $(Handlebars.compile($('#space-section-hours').html())(context));

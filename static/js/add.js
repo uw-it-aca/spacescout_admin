@@ -36,7 +36,9 @@ $(document).ready(function() {
             data: JSON.stringify(window.spacescout_admin.collectInput()),
             type: "POST",
             success: function (data) {
-                window.location.href = window.spacescout_admin.app_url_root + '#incomplete';
+                var json = $.parseJSON(data);
+
+                window.location.href = window.spacescout_admin.app_url_root + 'space/' + json.id;
             },
             error: XHRError
         });

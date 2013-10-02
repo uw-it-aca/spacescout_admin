@@ -68,7 +68,7 @@ class SpaceManager(RESTDispatch):
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
-            return self.json_response(json.dumps('{ ok: true }'))
+            return self.json_response(json.dumps('{"id": "%s"}' % space.id))
         except PermittedException:
             return self.error_response(401, "Unauthorized")
         except Space.DoesNotExist:
@@ -109,7 +109,7 @@ class SpaceManager(RESTDispatch):
             space.pending = json.dumps(pending) if len(pending) > 0 else None
 
             space.save()
-            return self.json_response(json.dumps("{'id' : %s}" % space.id))
+            return self.json_response(json.dumps('{"id": "%s"}' % space.id))
         except PermittedException:
             return self.error_response(401, "Unauthorized")
 
