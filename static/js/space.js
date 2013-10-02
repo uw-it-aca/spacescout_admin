@@ -13,7 +13,7 @@ $(document).ready(function() {
                     section = data.sections[i];
                     context = {
                         section: gettext(section.section),
-                        edit_url: '/edit/' + window.spacescout_admin.space_id
+                        edit_url: window.spacescout_admin.app_url_root + 'edit/' + window.spacescout_admin.space_id
                             + '/#' + encodeURIComponent(section.section)
                     };
 

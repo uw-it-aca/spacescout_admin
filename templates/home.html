@@ -56,7 +56,7 @@
   <ul class="list-group building-list">
     {{# each spaces }}
     <li class="list-group-item  space-list-item">
-      <a href="/space/{{ id }}">
+      <a href="{{ APP_URL_ROOT }}space/{{ id }}">
           <span class="list-group-item-heading item-name">{{ name }}</span>
           <span class="item-description">{{ description }}</span>
           <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
@@ -78,11 +78,11 @@
 {{# each spaces }}
 <li class="list-group-item space-list-item">
     
-    <a class="item-name-link" href="/space/{{ id }}"><span class="list-group-item-heading item-name">{{ name }}</span></a>
+    <a class="item-name-link" href="{{ APP_URL_ROOT }}space/{{ id }}"><span class="list-group-item-heading item-name">{{ name }}</span></a>
     
     <div class="item-incomplete">
     {{# each unfinished }}
-        <a href="/edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ field }}</span></a>
+        <a href="{{ APP_URL_ROOT }}edit/{{ id }}/#{{ section }}"><span class="label label-danger">{{ field }}</span></a>
     {{/each}}
     </div>
     

@@ -154,7 +154,7 @@ $(document).ready(function() {
             node = section.find('select').last();
 
             $.ajax({
-                url: '/api/v1/buildings/',
+                url: window.spacescout_admin.app_url_root + 'api/v1/buildings/',
                 dataType: 'json',
                 success: function (data) {
                     var building = getval(field.value),

@@ -86,7 +86,7 @@ $(document).ready(function() {
             data: JSON.stringify(window.spacescout_admin.collectInput()),
             type: "PUT",
             success: function (data) {
-                window.location.href = '/space/' + window.spacescout_admin.space_id;
+                window.location.href = window.spacescout_admin.app_url_root + 'space/' + window.spacescout_admin.space_id;
             },
             error: XHRError
         });
