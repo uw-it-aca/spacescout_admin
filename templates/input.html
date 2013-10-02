@@ -32,14 +32,14 @@
 <script id="space-edit-input" type="text/html">
 {% verbatim %}
     {{ #each inputs }}
-    {{name}} <input type="text" name="{{ key }}" class="{{ class }} form-control" placeholder="{{ placeholder }}" value="{{ value }}">
+    {{name}} <input type="text" name="{{ key }}" class="{{ class }} form-control" value="{{ value }}">
     {{/each}}
 {% endverbatim %}
 </script>
 
 <script id="space-edit-textarea" type="text/html">
 {% verbatim %}
-    <textarea name="{{ key }}" class="{{ class }} form-control" rows="3" placeholder="{{ placeholder }}">{{ value }}</textarea>
+    <textarea name="{{ key }}" class="{{ class }} form-control" rows="3">{{ value }}</textarea>
 {% endverbatim %}
 </script>
 
