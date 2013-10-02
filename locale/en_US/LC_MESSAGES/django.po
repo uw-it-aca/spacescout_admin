@@ -258,8 +258,8 @@ msgstr "Select up to two (2)"
 msgid "seats_available"
 msgstr "Number of seats available"
 
-msgid "text_input"
-msgstr "Text input"
+msgid "default_placeholder"
+msgstr ""
 
 msgid "spaces"
 msgstr "Spaces"

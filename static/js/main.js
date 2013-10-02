@@ -213,7 +213,7 @@ $(document).ready(function() {
                         context.inputs = [{
                             key: field.value.key,
                             value: getval(field.value),
-                            placeholder: gettext((varedit && varedit.hasOwnProperty('placeholder')) ? varedit.placeholder : 'text_input'),
+                            placeholder: gettext((varedit && varedit.hasOwnProperty('placeholder')) ? varedit.placeholder : 'default_placeholder'),
                             class: required ? required_class : ''
                         }];
                         tpl = Handlebars.compile($('#space-edit-input').html());
