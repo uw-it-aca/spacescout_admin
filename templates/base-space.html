@@ -53,8 +53,9 @@
         <!-- Static navbar -->
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/"><h1>{% block title %}{% endblock %}</h1></a>
+                <div class="navbar-header clearfix" style="width:100%;">
+                    <a class="navbar-brand pull-left" href="/"><h1>{% block title %}{% endblock %}</h1></a>
+                    <a href="/add" style="display:inline-block;" class="pull-right">ADD</a>
                   </div>
             </div>
         </nav>
