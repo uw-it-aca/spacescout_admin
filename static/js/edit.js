@@ -187,6 +187,7 @@ $(document).ready(function() {
             range: [0, 1440],
             start: [m_open, m_close],
             step: 30,
+            connect: true,
             slide: function () {
                 var values = $(this).val(),
                     open = min2hour(values[0]),
