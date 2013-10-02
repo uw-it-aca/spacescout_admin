@@ -3,7 +3,13 @@
 {% load verbatim %}
 {% load i18n %}
 
-{% block title %}{% trans "space admin" %}{% endblock %}
+{% block title %}
+    {% if IS_MOBILE %}
+        {% trans "admin" %}
+    {% else %}
+        {% trans "spacescout admin" %}
+    {% endif %}
+{% endblock %}
 
 {% block extra_js %}
 <script src="{{ STATIC_URL }}js/edit.js"></script>

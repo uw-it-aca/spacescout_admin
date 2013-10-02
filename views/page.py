@@ -13,7 +13,8 @@ def home(request):
                              {
                                   'remote_user': request.user,
                                   'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
+                                  'IS_MOBILE': request.MOBILE,
                               },
                              context_instance=RequestContext(request))
 
@@ -24,7 +25,8 @@ def space(request, space_id):
                                   'remote_user': request.user,
                                   'SPACE_ID': space_id,
                                   'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
+                                  'IS_MOBILE': request.MOBILE,
                              },
                              context_instance=RequestContext(request))
 
@@ -47,6 +49,7 @@ def add(request):
                                   'remote_user': request.user,
                                   'SPACE_FIELDS': SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS)),
                                   'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT
+                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
+                                  'IS_MOBILE': request.MOBILE,
                              },
                              context_instance=RequestContext(request))
