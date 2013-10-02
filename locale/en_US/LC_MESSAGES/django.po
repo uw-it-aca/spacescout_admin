@@ -259,7 +259,7 @@ msgid "seats_available"
 msgstr "Number of seats available"
 
 msgid "default_placeholder"
-msgstr ""
+msgstr " "
 
 msgid "spaces"
 msgstr "Spaces"
