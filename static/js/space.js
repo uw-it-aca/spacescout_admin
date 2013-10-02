@@ -9,7 +9,7 @@ $(document).ready(function() {
 
                 $('.space-content-loading').hide();
                 html = $(Handlebars.compile($('#space-details').html())({ name: data.name }));
-                html.insertBefore('.space-detail-section:last');
+                $('.space-content-loading').siblings(':last').after(html);
 
                 for (i = 0; i < data.sections.length; i += 1) {
                     section = data.sections[i];
@@ -40,25 +40,29 @@ $(document).ready(function() {
                         break;
                     }
 
-                    html.insertAfter('.space-detail-section:last');
+                    $('.space-content-loading').siblings(':last').after(html);
                 }
 
                 // validation cues
                 incomplete = incompleteFields();
                 if (incomplete && incomplete.length) {
-                    $(Handlebars.compile($('#incomplete-items').html())({
+                    html = $(Handlebars.compile($('#incomplete-items').html())({
                         incomplete: incomplete
-                    })).insertAfter('.space-detail-section:last');
+                    }));
+
+                    $('.space-content-loading').siblings(':last').after(html);
                 }
 
                 // actions
-                $(Handlebars.compile($('#space-actions').html())({
+                html = $(Handlebars.compile($('#space-actions').html())({
                     is_complete: !(incomplete && incomplete.length),
                     is_modified: false,
                     is_published: false,
                     modified_by: (data.modified_by.length) ? data.modified_by : gettext('unknown'),
                     last_modified: window.spacescout_admin.modifiedTime(new Date(data.last_modified))
-                })).insertAfter('.space-detail-section:last');
+                }));
+
+                $('.space-content-loading').siblings(':last').after(html);
             },
             error: function (xhr, textStatus, errorThrown) {
                 var json;
