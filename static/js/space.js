@@ -8,6 +8,8 @@ $(document).ready(function() {
                 var tpl, context, section, html, i, incomplete;
 
                 $('.space-content-loading').hide();
+                html = $(Handlebars.compile($('#space-details').html())({ name: data.name }));
+                html.insertBefore('.space-detail-section:last');
 
                 for (i = 0; i < data.sections.length; i += 1) {
                     section = data.sections[i];

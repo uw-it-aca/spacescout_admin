@@ -12,6 +12,18 @@
 
 @logo-url: url('/static/img/spacescout_logo.png');
 
+/*** manteka web font for logo ***/
+
+@font-face {
+    font-family: 'MantekaRegular';
+    src: url('/static/fonts/manteka.eot');
+    src: url('/static/fonts/manteka.eot') format('embedded-opentype'),
+         url('/static/fonts/manteka.woff') format('woff'),
+         url('/static/fonts/manteka.ttf') format('truetype'),
+         url('/static/fonts/manteka.svg#MantekaRegular') format('svg');
+}
+
+
 /*** bootstrap overrides ***/
 
 body { padding-top: 70px; font-family: 'Lato', sans-serif; font-weight: 300;  
@@ -91,20 +103,18 @@ html, body { height: 100%; }
 .navbar { margin-bottom: 0;  border-bottom: solid 5px @space-purple; background-color: @gray-lighter;}
 
 .navbar-header {
-     .space-owner { line-height: 65px; padding-left: 12px; color: @space-purple;
+    .space-owner { line-height: 65px; padding-left: 12px; color: @danger;
             @media screen and (min-width: 768px) { }
-        }
+    }
 }
-.navbar-brand { text-align: left; padding: 0; margin: 0; padding-left: 33px; line-height: 60px;  max-width: 300px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
+.navbar-brand { text-align: left; padding: 0; margin: 0; padding-left: 33px; line-height: 60px; /*max-width: 300px;*/ overflow:hidden; text-overflow: ellipsis; white-space: nowrap;
     
     /* logo specific styles */    
     background: @gray-lighter @logo-url no-repeat 0 14px; 
     background-size: 30px; 
  
-    h1 { font-size: 30px; display: inline; text-transform: uppercase; color: @gray-dark; line-height: 60px; font-family: 'Dosis', sans-serif; font-weight: 500; }
-    
-   
-        
+    h1 { font-size: 26px; display: inline; text-transform: uppercase; color: @gray; line-height: 60px; font-family: 'MantekaRegular'; font-weight: 500; }
+ 
 }
 .navbar>.container .navbar-brand { 
     margin-left: 15px;
