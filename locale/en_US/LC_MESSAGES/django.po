@@ -162,6 +162,9 @@ msgstr "Enter additional details such as reservation link"
 msgid "hours_notes"
 msgstr "Enter notes for the hours section"
 
+msgid "notes"
+msgstr "Hours notes/exceptions"
+
 msgid "cafe_notes"
 msgstr "Enter notes for the café hours"
 

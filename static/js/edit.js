@@ -59,6 +59,8 @@ $(document).ready(function() {
                     break;
                 }
 
+                editor.append(Handlebars.compile($('#space-edit-save').html())({}));
+
                 validate();
 
                 $('input, textarea').change(validate);

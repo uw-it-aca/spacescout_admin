@@ -26,14 +26,9 @@
     <div class="loading">Loading</div>
 </div>
 
-<h2 id="space-name"></h2>
+<h2><a id="space-name" href="{{ APP_ROOT_URL }}space/{{SPACE_ID}}"></a></h2>
 
 <div id="space-editor"></div>
-
-<!-- Done -->
-<div class="save-discard">
-  <a href="{{ APP_ROOT_URL }}space/{{SPACE_ID}}" class="btn btn-success btn-lg btn-block">Save</a>
-</div>
 
 <script id="space-edit-hours" type="text/html">
     <h4>{% trans "normal_hours" %}</h4>
@@ -111,6 +106,13 @@
       
 {% endverbatim %}
 </script>
+
+<!-- Done -->
+<script id="space-edit-save" type="text/html">
+<div class="save-discard">
+  <a href="{{ APP_ROOT_URL }}space/{{SPACE_ID}}" class="btn btn-success btn-lg btn-block">Save</a>
+</script>
+</div>
 
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
