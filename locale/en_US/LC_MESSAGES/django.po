@@ -345,7 +345,7 @@ msgid "food_coffee_help"
 msgstr "Vending machines and coffee carts do not qualify as food/coffee."
 
 msgid "description_help"
-msgstr "Be specific as possible"
+msgstr "Used to help students find the space. See guidelines."
 
 msgid "orientation_help"
 msgstr "Further refine the description"
