@@ -624,8 +624,22 @@ a.action-link { text-decoration: none; }
 
 /*** noui slider overrides ***/
 
-.noUi-base { height: 5px; margin-top: 11px; }
-.noUi-handle { width: 20px; height: 20px; border-radius: 30px; margin-top: -8px; margin-left: 0; }
-.noUi-handle-lower { background: @gray-lighter; }
-.noUi-handle-upper { background: @gray-lighter; }
-.noUi-connect { background: lime; }
+.noUi-base { height: 5px; margin-top: 11px; border: none; }
+
+.noUi-handle { width: 12px; height: 12px; border-radius: 30px; margin-top: -4px;
+    @media screen and (min-width: 1024px) { 
+        width: 20px; height: 20px; border-radius: 30px; margin-top: -8px;
+    }
+    
+}
+.noUi-handle-lower { background: @gray-lighter; margin-left: -2px;
+    @media screen and (min-width: 1024px) { 
+        
+    }
+}
+.noUi-handle-upper { background: @gray-lighter; margin-left: -10px;
+    @media screen and (min-width: 1024px) { 
+        margin-left: -18px;
+    }
+}
+.noUi-connect { background: #5cb85c; }
