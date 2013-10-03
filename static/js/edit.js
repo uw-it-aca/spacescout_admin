@@ -184,7 +184,8 @@ $(document).ready(function() {
 
         $('#hours-open', edit_node).val(h_open.h24);
         $('#hours-close', edit_node).val(h_close.h24);
-        $("span", edit_node).text(displayTime(h_open) + ' - ' + displayTime(h_close));
+        $("span#opening-time", edit_node).text(displayTime(h_open));
+        $("span#closing-time", edit_node).text(displayTime(h_close));
         $(".hours-slider", edit_node).noUiSlider({
             range: [0, 1440],
             start: [m_open, m_close],
@@ -197,7 +198,8 @@ $(document).ready(function() {
 
                 $(this).parent().siblings('#hours-open').val(open.h24);
                 $(this).parent().siblings('#hours-close').val(close.h24);
-                $(this).next('span').text(displayTime(open) + ' - ' + displayTime(close));
+                $(this).parent().parent().find('span#opening-time').text(displayTime(open));
+                $(this).parent().parent().find('span#closing-time').text(displayTime(close));
             }
         });
 
