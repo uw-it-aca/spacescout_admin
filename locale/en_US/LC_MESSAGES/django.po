@@ -141,15 +141,6 @@ msgstr "Rowdy"
 msgid "variable"
 msgstr "Variable"
 
-msgid "description_help"
-msgstr "Be specific as possible"
-
-msgid "orientation_help"
-msgstr "Further refine the description"
-
-msgid "latlong_help"
-msgstr "Use Google Maps <a href=\"https://support.google.com/maps/answer/18539?hl=en\" target=\"_blank\">Tutorial</a>"
-
 msgid "access_hour_notes"
 msgstr "Enter Hours notes"
 
@@ -177,8 +168,7 @@ msgstr "add another hour group"
 msgid "basic-edit-title"
 msgstr "Basic Information"
 
-msgid "all-that-apply"
-msgstr "Select all that apply"
+
 
 msgid "extended_info.has_outlets"
 msgstr "Outlets"
@@ -204,36 +194,6 @@ msgstr "Computers"
 msgid "extended_info.has_natural_light"
 msgstr "Space has natural light"
 
-msgid "alcove_help"
-msgstr "That quiet place in the corner"
-
-msgid "cafe_help"
-msgstr "Space that functions primarily as an eatery"
-
-msgid "classroom_help"
-msgstr "Larger-capacity rooms primarily used for classes, meetings, or workshops"
-
-msgid "computer_lab_help"
-msgstr "A number of computers grouped in a way that students would call a “lab”"
-
-msgid "lounge_help"
-msgstr "Indoor casual space, typically with lounge furniture and low tables"
-
-msgid "open_help"
-msgstr "Area for use by multiple individuals or groups; may contain a range of furniture -- carrels, tables, lounge furniture"
-
-msgid "outdoor_help"
-msgstr "Outdoor casual space"
-
-msgid "studio_help"
-msgstr "Work space with specialized equipment or technology, such as a multimedia studio"
-
-msgid "study_area_help"
-msgstr "Unenclosed space for individual or group"
-
-msgid "study_room_help"
-msgstr "Enclosed space for individual or group"
-
 msgid "incomplete_items"
 msgstr "Incomplete Items"
 
@@ -255,14 +215,10 @@ msgstr "Change a few things up and try submitting again."
 msgid "all_fields_required"
 msgstr "All fields on this page are required in order to create the initial space listing."
 
-msgid "choose_up_to_2"
-msgstr "Select up to two (2)"
 
 msgid "seats_available"
 msgstr "Number of seats available"
 
-msgid "default_placeholder"
-msgstr " "
 
 msgid "spaces"
 msgstr "Spaces"
@@ -303,16 +259,112 @@ msgstr "Normal Hours"
 msgid "latlong"
 msgstr "Lat & Long"
 
-msgid "required"
-msgstr "Required"
+# field labels
 
-msgid "manager_placeholder"
+msgid "room_number"
+msgstr "Room Number"
+
+msgid "hours_access"
+msgstr "Hours & Access"
+
+# help 
+
+msgid "space_type_help"
+msgstr "Select up to two (2)"
+
+msgid "alcove_help"
+msgstr "That quiet place in the corner"
+
+msgid "cafe_help"
+msgstr "Space that functions primarily as an eatery"
+
+msgid "classroom_help"
+msgstr "Larger-capacity rooms primarily used for classes, meetings, or workshops"
+
+msgid "computer_lab_help"
+msgstr "A number of computers grouped in a way that students would call a “lab”"
+
+msgid "lounge_help"
+msgstr "Indoor casual space, typically with lounge furniture and low tables"
+
+msgid "open_help"
+msgstr "Area for use by multiple individuals or groups; may contain a range of furniture -- carrels, tables, lounge furniture"
+
+msgid "outdoor_help"
+msgstr "Outdoor casual space"
+
+msgid "studio_help"
+msgstr "Work space with specialized equipment or technology, such as a multimedia studio"
+
+msgid "study_area_help"
+msgstr "Unenclosed space for individual or group"
+
+msgid "study_room_help"
+msgstr "Enclosed space for individual or group"
+
+msgid "space_name_help"
+msgstr "Name commonly used by students, or easily understood new name if none exists."
+
+msgid "owner_help"
+msgstr "UW NetID of the person responsible for the space. Owner can both edit and publish space details. Never displayed to students."
+
+msgid "editors_help"
+msgstr "UW NetIDs of others who have permission to edit (but not publish) the space details."
+
+msgid "floor_help"
+msgstr "Format like an elevator button. Examples: B, LL, 1, M, 2."
+
+msgid "room_number_help"
+msgstr "Include only if the physical space is labeled with this number. Do not include room numbers that appear only on floor plans but not in the space. Examples: 322, C620, 401B, T317A."
+
+msgid "hours_notes_help"
+msgstr "Describe any predictable exceptions to the open hours of the space. Example: First Thursday of each month, open until 8pm."
+
+msgid "cafe_hours_help"
+msgstr "xxxxxxxxxx message about cafe hours being different, otherwise leave empty? xxxxxxxxxxxxx"
+
+msgid "access_notes_help"
+msgstr "If the space is only available to students at certain times, or when not in use for classes or events, describe the access restrictions here. If the space requires a key or card for access, describe that here. See examples."
+
+msgid "reservability_help"
+msgstr "Indicate if students are able to reserve the space for study, or are required to make a reservation in order to access the space."
+
+msgid "reservation_notes_help"
+msgstr "Instruct students on how to reserve a space. They should be able to take action to reserve the space based on this description. Include a URL if the space can be reserved online. See examples."
+
+msgid "resources_help"
+msgstr "Select all that apply."
+
+msgid "capacity_help"
+msgstr "Only include if less than 25."
+
+msgid "noise_level_help"
+msgstr "The amount of noise that is generally socially acceptable in the space. See examples. Do not list a noise level for study spaces, classrooms, or other spaces that are enclosed and in which the noise level is determined by the current occupants."
+
+msgid "food_coffee_help"
+msgstr "Vending machines and coffee carts do not qualify as food/coffee."
+
+msgid "description_help"
+msgstr "Be specific as possible"
+
+msgid "orientation_help"
+msgstr "Further refine the description"
+
+msgid "latlong_help"
+msgstr "Use Google Maps <a href=\"https://support.google.com/maps/answer/18539?hl=en\" target=\"_blank\">Tutorial</a>"
+
+# placeholders
+
+msgid "default_placeholder"
+msgstr " "
+
+msgid "owner_placeholder"
 msgstr "Enter the UW NetId for the space owner"
 
-msgid "name_placeholder"
+msgid "space_name_placeholder"
 msgstr "Enter a name for this space"
 
-msgid "editor_placeholder"
+msgid "editors_placeholder"
 msgstr "Enter a comma-separated list of UW NetID"
 
 msgid "description_placeholder"
@@ -321,8 +373,9 @@ msgstr "Describe the space"
 msgid "orientation_placeholder"
 msgstr "Orientation of the space"
 
-msgid "room_number"
-msgstr "Room Number"
+# validation
 
-msgid "hours_access"
-msgstr "Hours & Access"
+msgid "required"
+msgstr "Required"
+
+
