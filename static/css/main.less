@@ -402,7 +402,11 @@ a.action-link { text-decoration: none; }
 	.two-thirds { width: 65.2%; }
 	
 	.hours-slider {  }
-	.hours-slider-container { display: inline-block; vertical-align: top;
+	.hours-slider-container { display: inline-block; vertical-align: top; 
+	    
+	    background: transparent url("/static/img/noon-marker.png") 54% 20% no-repeat;
+	    @media screen and (min-width: 768px) { background: transparent url("/static/img/noon-marker.png") 51% 20% no-repeat; }
+
         span { width: 3em; }
     }
 	
@@ -431,7 +435,7 @@ a.action-link { text-decoration: none; }
 	    h3 { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500; font-size: 1.1em; }
     }
     
-    h4 { font-weight: 700; font-size: 1em; 
+    h4 { font-weight: 700; font-size: 1em; margin-top: 1.5em;
         small { color: @gray; font-size: .9em; padding-left: 1em; font-family: 'Lato', sans-serif; font-weight: 100; }
     }
     
