@@ -86,7 +86,9 @@ html, body { height: 100%; }
 
 .text-muted { color: @gray; }
 
-.well { box-shadow: none !important; }
+.well { box-shadow: none !important;
+    h6 { margin-top: 0; color: @gray; }
+}
 
 /*** sticky footer ***/
 
@@ -406,7 +408,7 @@ a.action-link { text-decoration: none; }
 	.hours-slider {  }
 	.hours-slider-container { display: inline-block; vertical-align: top; 
 	    
-	    background: transparent url("/static/spacescout_admin/img/noon-marker.png") 54.5% 20% no-repeat;
+	    background: transparent url("/static/spacescout_admin/img/noon-marker.png") 50% 20% no-repeat;
 	    @media screen and (min-width: 768px) { background: transparent url("/static/spacescout_admin/img/noon-marker.png") 51% 20% no-repeat; }
 
         span { width: 3em; }
@@ -630,22 +632,23 @@ a.action-link { text-decoration: none; }
 
 /*** noui slider overrides ***/
 
-.noUi-base { height: 5px; margin-top: 11px; border: none; }
+.noUi-base { height: 5px; margin-top: 11px; border: none; width: 98%; margin: 0 auto; margin-top: 10px; }
 
-.noUi-handle { width: 12px; height: 12px; border-radius: 30px; margin-top: -4px;
+.noUi-handle { width: 16px; height: 16px; border-radius: 30px; margin: 0; margin-top: -6px;
+
     @media screen and (min-width: 1024px) { 
         width: 20px; height: 20px; border-radius: 30px; margin-top: -8px;
     }
     
 }
-.noUi-handle-lower { background: @gray-lighter; margin-left: -2px;
+.noUi-handle-lower { background: @gray-lighter;
     @media screen and (min-width: 1024px) { 
         
     }
 }
-.noUi-handle-upper { background: @gray-lighter; margin-left: -10px;
+.noUi-handle-upper { background: @gray-lighter; 
     @media screen and (min-width: 1024px) { 
-        margin-left: -18px;
+
     }
 }
 .noUi-connect { background: #5cb85c; }
