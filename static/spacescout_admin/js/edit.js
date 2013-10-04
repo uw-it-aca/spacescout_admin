@@ -27,8 +27,8 @@ $(document).ready(function() {
             url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
-                editSpaceDetails(data);
                 $('.space-content-loading').hide();
+                editSpaceDetails(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 XHRError(xhr);
@@ -36,11 +36,12 @@ $(document).ready(function() {
         });
     };
 
+
     var editSpaceDetails = function (space) {
         var hash = decodeURIComponent(window.location.hash.substr(1)),
             editor = $('#space-editor'),
             section = null,
-            i;
+            node, i;
 
         $('#space-name').html(space.name);
 
@@ -56,6 +57,7 @@ $(document).ready(function() {
                     break;
                 default:
                     editSectionDetails(section, editor);
+                    wireBuildingSelect(section);
                     break;
                 }
 
@@ -156,7 +158,7 @@ $(document).ready(function() {
             displayTime = function (m2h) {
                 return (m2h.h24 == '12:00')
                          ? gettext('noon')
-                         : (m2h.h24 == '24:00')
+                         : (m2h.h24 == '24:00' || m2h.h24 == '00:00')
                              ? gettext('midnight') : m2h.h12;
             },
             min2hour = function (t) {
@@ -316,6 +318,78 @@ $(document).ready(function() {
                     window.spacescout_admin.appendFieldList(fields[i], getFieldValue, section);
                 } else {
                     window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, section);
+                }
+            }
+        }
+    };
+
+    var wireBuildingSelect = function (section) {
+        var selector = '.campus-buildings',
+            select = $(selector),
+            building,
+            loadBuildings = function (depend_node, building) {
+                var val, campus;
+
+                if (depend_node) {
+                    val = $(":selected", depend_node).val();
+                    if (val) {
+                        campus = val.split(':')[1];
+                    }
+                }
+                
+                $.ajax({
+                    url: window.spacescout_admin.app_url_root
+                        + 'api/v1/buildings/'
+                        + ((campus && campus.length) ? '?campus=' + campus : ''),
+                    dataType: 'json',
+                    success: function (data) {
+                        var option;
+
+                        select.find('option').remove();
+
+                        if (typeof data === 'object' && $.isArray(data)) {
+                            for (i = 0; i < data.length; i += 1) {
+                                option = $('<option></option>').val('location.building_name').html(data[i]);
+
+                                if (building == data[i]) {
+                                    option.attr('selected', 'selected');
+                                }
+
+                                select.append(option);
+                            }
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        XHRError(xhr);
+                    }
+                });
+            },
+            i;
+
+        if (select.length) {
+            for (i = 0; i < section.fields.length; i += 1) {
+                if (section.fields[i].hasOwnProperty('value')
+                    && section.fields[i].value.hasOwnProperty('key')
+                    && section.fields[i].value.key == 'location.building_name') {
+                    var bulding = section.fields[i].value.value,
+                        depend_node = null;
+
+                    if (section.fields[i].value.hasOwnProperty('edit')
+                        && section.fields[i].value.edit.hasOwnProperty('dependency')
+                        && section.fields[i].value.edit.dependency.hasOwnProperty('key')){
+                        depend_node = $('select[name="' + section.fields[i].value.edit.dependency.key + '"]');
+
+                        if (depend_node.length && depend_node.prop('tagName') == 'SELECT') {
+                            depend_node.change(function (e) {
+                                loadBuildings(depend_node, building);
+                            });
+                        } else {
+                            depend_node = null;
+                        }
+                    }
+
+
+                    loadBuildings(depend_node, building);
                 }
             }
         }

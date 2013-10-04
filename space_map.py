@@ -101,7 +101,7 @@ class SpaceMap(object):
         
                     if 'help' in f:
                         field['help'] = f['help']
-        
+
                     if 'value' in f:
                         if isinstance(f['value'], dict):
                             value = copy.deepcopy(f['value'])

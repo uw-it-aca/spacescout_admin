@@ -113,69 +113,75 @@ $(document).ready(function() {
         return val;
     };
 
-    var appendFieldHeader = function (name, help, is_required, section) {
+    var appendFieldHeader = function (field, section) {
         var tpl = Handlebars.compile($('#space-edit-field-header').html()),
-            node = $(tpl({
-                name: name
-            }));
-        
-        section.append(node);
+            header_node = $(tpl({
+                name: gettext(field.name)
+            })),
+            node,
+            link,
+            s;
 
-        if (is_required) {
+        section.append(header_node);
+
+        if ((field.hasOwnProperty('required') && field.required)) {
             tpl = Handlebars.compile($('#space-edit-field-required').html());
-            node.append(tpl());
+            header_node.append(tpl());
         }
 
-        if (help && help.length) {
-            tpl = Handlebars.compile($('#space-edit-field-help').html());
-            node.append(tpl({
-                help: help
-            }));
+        if (field.hasOwnProperty('help')) {
+            if (field.help.hasOwnProperty('text')) {
+                tpl = Handlebars.compile($('#space-edit-field-help').html());
+                node = $(tpl({
+                    help: gettext(field.help.text)
+                }));
+            }
+
+            if (node) {
+                if (field.help.hasOwnProperty('expanded')) {
+                    s = gettext(field.help.expanded.hasOwnProperty('link') ? field.help.expanded.link :'more');
+                    node.append(' ');
+                    link = $('<a></a>').prop('href', 'javascript:void(0);').html(s);
+                    link.click(function (e) {
+                        $(e.target).parent().parent().next('div').toggle();
+                    });
+
+                    node.append(link);
+                    header_node.append(node);
+
+                    tpl = Handlebars.compile($('#space-edit-field-more-help').html());
+                    node = $(tpl({
+                        more_help: gettext(field.help.expanded.text)
+                    }));
+                    node.insertAfter(header_node);
+                } else {
+                    header_node.append(node);
+                }
+            }
         }
     };
 
     window.spacescout_admin.appendFieldValue = function (field, getval, section) {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
-            choice, has_choice = false, chosen,
+            choice, has_choice = false,
+            name = null,
+            chosen,
             input_class, tpl, vartype, varedit, data, i, node, src,  group;
 
-        appendFieldHeader(gettext(field.name),
-                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
-                          required,
-                          section);
+        appendFieldHeader(field, section);
 
         // fields we know about
         switch (field.value.key) {
         case 'location.building_name':
             tpl = Handlebars.compile($('#space-edit-select').html());
             context.options = [];
-            section.append(tpl(context));
-            node = section.find('select').last();
+            node = $(tpl(context));
+            if (field.value.hasOwnProperty('edit') && field.value.edit.hasOwnProperty('dependency')) {
+                node.addClass('campus-buildings');
+            }
 
-            $.ajax({
-                url: window.spacescout_admin.app_url_root + 'api/v1/buildings/',
-                dataType: 'json',
-                success: function (data) {
-                    var building = getval(field.value),
-                        option;
-
-                    if (typeof data === 'object' && $.isArray(data)) {
-                        for (i = 0; i < data.length; i += 1) {
-                            option = $('<option></option>').val(field.value.key).html(data[i]);
-
-                            if (building == data[i]) {
-                                option.attr('selected', 'selected');
-                            }
-
-                            node.append(option);
-                        }
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    XHRError(xhr);
-                }
-            });
+            section.append(node);
             break;
         default:
             vartype = schemaVal(field.value.key);
@@ -238,6 +244,7 @@ $(document).ready(function() {
                             src = '#space-edit-select';
                             choice = 'selected';
                             group = null;
+                            name = field.value.key;
                         } else if (field.value.hasOwnProperty('edit')
                               && field.value.edit.hasOwnProperty('multi_select')) {
                             src = '#space-edit-checkboxes';
@@ -318,7 +325,12 @@ $(document).ready(function() {
                     context.inputs = data;
 
                     tpl = Handlebars.compile($(src).html());
-                    section.append(tpl(context));
+                    node = $(tpl(context));
+                    if (name) {
+                        node.attr('name', name);
+                    }
+
+                    section.append(node);
                 } else {
                     if (typeof field.value.value === 'boolean') {
                         src = '#space-edit-checkboxes';
@@ -361,10 +373,7 @@ $(document).ready(function() {
             src_selector,
             required = (field.hasOwnProperty('required') && field.required);
 
-        appendFieldHeader(gettext(field.name),
-                          (field.hasOwnProperty('help')) ? gettext(field.help) : '',
-                          required,
-                          section);
+        appendFieldHeader(field, section);
 
         for (i = 0; i < field.value.length; i += 1) {
             if (i == 0 && typeof field.value[i].value === 'boolean') {

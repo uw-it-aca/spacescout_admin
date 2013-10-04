@@ -24,7 +24,15 @@ def BuildingsView(request):
     # Required settings for the client
     consumer, client = oauth_initialization()
 
-    url = "{0}/api/v1/buildings".format(settings.SS_WEB_SERVER_HOST)
+    url_params = []
+
+    for key, value in request.GET.items():
+        if key.startswith('oauth_'):
+            pass
+        else:
+            url_params.append('{0}={1}'.format(key, value))
+
+    url = "{0}/api/v1/buildings?{1}".format(settings.SS_WEB_SERVER_HOST, '&'.join(url_params))
 
     resp, content = client.request(url, 'GET')
     if resp.status == 404:

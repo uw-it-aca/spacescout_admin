@@ -102,63 +102,57 @@ $(document).ready(function() {
     var contextAvailableHours = function (available_hours) {
         var periods = [],
             runs = {},
-            j, d, h, s;
+            context, h, i, l, n, r, d, s;
 
         for (d = 0; d < 7; d += 1) {
-            h = [];
             if (available_hours[d].hasOwnProperty('hours')) {
-                var hours = available_hours[d].hours;
-                if (hours.length) {
-                    for (j = 0; j < hours.length; j++) {
-                        h.push(window.spacescout_admin.prettyHours(hours[j][0])
-                               + ' - ' + window.spacescout_admin.prettyHours(hours[j][1]));
+                h = available_hours[d].hours;
+
+                for (i = 0; i < h.length; i++) {
+                    s = window.spacescout_admin.prettyHours(h[i][0])
+                        + ' - ' + window.spacescout_admin.prettyHours(h[i][1]);
+                    if (runs.hasOwnProperty(s)) {
+                        runs[s].push(d);
+                    } else {
+                        runs[s] = [d];
                     }
                 }
-            }
-
-            s = (h.length) ? h.join(', ') : 'none';
-
-            if (d == 0 || !runs.hasOwnProperty(s)) {
-                runs[s] = {
-                    'start': d,
-                    'end': d
-                };
-            } else {
-                runs[s].end = d;
             }
         }
 
-        for (d = 0; d < 7; d += 1) {
-            for (j in runs) {
-                if (runs[j].start == d && j != 'none') {
-                    switch (runs[j].end - runs[j].start) {
-                    case 0:
-                        periods.push({
-                            day: gettext(available_hours[runs[j].start].day),
-                            hours: j
-                        });
-                        break;
-                    case 1:
-                        periods.push({
-                            day: gettext(available_hours[runs[j].start].day),
-                            hours: j
-                        });
-                        periods.push({
-                            day: gettext(available_hours[runs[j].end].day),
-                            hours: j
-                        });
-                        break;
-                    default:
-                        periods.push({
-                            day: gettext(available_hours[runs[j].start].day)
-                                + ' - ' + gettext(available_hours[runs[j].end].day),
-                            hours: j
-                        });
-                        break;
+        for (r in runs) {
+            context = {
+                day: gettext(available_hours[runs[r][0]].day),
+                hours: r
+            };
+
+            l = runs[r].length;
+            n = runs[r][0] + 1;
+            h = null;
+            for (i = 1; i < l; i += 1) {
+                if (runs[r][i] == n) {
+                    n += 1;
+                    h = i;
+                    d = !(i < (l - 1));
+                } else {
+                    d = true;
+                }
+
+                if (d) {
+                    if (h) {
+                        context.day += ' - ' + gettext(available_hours[runs[r][h]].day);
+                        n = runs[r][i] + 1;
                     }
-                    break;
+
+                    if (!h || h != i) {
+                        context.day += ', ' + gettext(available_hours[runs[r][i]].day);
+                    }
+
+                    h = null;
                 }
             }
+
+            periods.push(context);
         }
 
         return periods;
