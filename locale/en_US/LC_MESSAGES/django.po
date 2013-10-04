@@ -353,6 +353,9 @@ msgstr "Further refine the description"
 msgid "latlong_help"
 msgstr "Use Google Maps <a href=\"https://support.google.com/maps/answer/18539?hl=en\" target=\"_blank\">Tutorial</a>"
 
+msgid "normal_hours_help"
+msgstr "The hours that the space is accessible to all students"
+
 # more help
 
 msgid "access_notes_more_help"
