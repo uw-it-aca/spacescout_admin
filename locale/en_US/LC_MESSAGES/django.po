@@ -324,13 +324,13 @@ msgid "cafe_hours_help"
 msgstr "xxxxxxxxxx message about cafe hours being different, otherwise leave empty? xxxxxxxxxxxxx"
 
 msgid "access_notes_help"
-msgstr "If the space is only available to students at certain times, or when not in use for classes or events, describe the access restrictions here. If the space requires a key or card for access, describe that here. See examples."
+msgstr "If the space is only available to students at certain times, or when not in use for classes or events, describe the access restrictions here. If the space requires a key or card for access, describe that here."
 
 msgid "reservability_help"
 msgstr "Indicate if students are able to reserve the space for study, or are required to make a reservation in order to access the space."
 
 msgid "reservation_notes_help"
-msgstr "Instruct students on how to reserve a space. They should be able to take action to reserve the space based on this description. Include a URL if the space can be reserved online. See examples."
+msgstr "Instruct students on how to reserve a space. They should be able to take action to reserve the space based on this description. Include a URL if the space can be reserved online."
 
 msgid "resources_help"
 msgstr "Select all that apply."
@@ -339,7 +339,7 @@ msgid "capacity_help"
 msgstr "Only include if less than 25."
 
 msgid "noise_level_help"
-msgstr "The amount of noise that is generally socially acceptable in the space. See examples. Do not list a noise level for study spaces, classrooms, or other spaces that are enclosed and in which the noise level is determined by the current occupants."
+msgstr "The amount of noise that is generally socially acceptable in the space. Do not list a noise level for study spaces, classrooms, or other spaces that are enclosed and in which the noise level is determined by the current occupants."
 
 msgid "food_coffee_help"
 msgstr "Vending machines and coffee carts do not qualify as food/coffee."
@@ -358,14 +358,33 @@ msgstr "The hours that the space is accessible to all students"
 
 # more help
 
+msgid "description_more_help"
+msgstr "<h6>GUIDELINES:</h6>\
+        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Maecenas faucibus mollis interdum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Nullam quis risus eget urna mollis ornare vel eu leo.</p>"
+
 msgid "access_notes_more_help"
-msgstr "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec id elit non mi porta gravida at eget metus. Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
+msgstr "<h6>EXAMPLES:</h6>\
+        <ul>\
+            <li>Scheduled courses and programs have priority.</li>\
+            <li>Available to residence hall students and escorted guests when not reserved for an event. Check out key at front desk.</li>\
+            <li>Husky Card required to access space 10pm-2am Sun-Thurs.</li>\
+        </ul>"
 
 msgid "noise_level_more_help"
-msgstr "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec id elit non mi porta gravida at eget metus. Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
+msgstr "<h6>EXAMPLES:</h6>\
+        <ul>\
+            <li>Silent: Suzzallo Reading Room</li>\
+            <li>Low Hum: Allen Gallery Study (4th floor)</li>\
+            <li>Chatter: Suzzallo Café</li>\
+            <li>Variable: High-traffic areas, 24-hour spaces, or other locations where the noise level changes depending on current occupation and time of day</li>\
+        </ul>"
 
 msgid "reservation_notes_more_help"
-msgstr "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec id elit non mi porta gravida at eget metus. Vestibulum id ligula porta felis euismod semper. Maecenas faucibus mollis interdum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Etiam porta sem malesuada magna mollis euismod. Morbi leo risus, porta ac consectetur ac, vestibulum at eros."
+msgstr "<h6>EXAMPLES:</h6>\
+        <ul>\
+            <li>This room can be reserved at http://...</li>\
+            <li>Reservations can be made at the circulation desk.</li>\
+        </ul>"
 
 # placeholders
 
