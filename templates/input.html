@@ -35,34 +35,34 @@
 {% endverbatim %}
 </script>
 
-<script id="space-edit-input" type="text/html">
-{% verbatim %}
-    {{ #each inputs }}
-    {{name}} <input type="text" name="{{ key }}" class="{{ class }} form-control" placeholder="{{ placeholder }}" value="{{ value }}">
-    {{/each}}
-{% endverbatim %}
-</script>
-
 <script id="space-edit-textarea" type="text/html">
 {% verbatim %}
     <textarea name="{{ key }}" class="{{ class }} form-control" rows="3" placeholder="{{ placeholder }}">{{ value }}</textarea>
 {% endverbatim %}
 </script>
 
+<script id="space-edit-input" type="text/html">
+{% verbatim %}
+    {{ #each inputs }}
+    {{ text }} <input type="text" name="{{ key }}" class="{{ class }} form-control" placeholder="{{ placeholder }}" value="{{ value }}">
+    {{ /each }}
+{% endverbatim %}
+</script>
+
 <script id="space-edit-number" type="text/html">
 {% verbatim %}
     {{ #each inputs }}
-    {{name}} <input type="number" name="{{ key }}" class="{{ class }} form-control" pattern="\d*" value="{{ value }}">
-    {{/each}}
+    {{ text }} <input type="number" name="{{ key }}" class="{{ class }} form-control" pattern="\d*" value="{{ value }}">
+    {{ /each }}
 {% endverbatim %}
 </script>
 
 <script id="space-edit-select" type="text/html">
 {% verbatim %}
-    <select class="form-control">
+    <select name="{{ name }}" class="form-control">
       {{ #each inputs }}
-        <option value="{{ key }}" class="{{ class }}" {{ choice }}>{{ name }}</option>
-      {{/each}}
+        <option value="{{ value }}" class="{{ class }}" {{ choice }}>{{ text }}</option>
+      {{ /each }}
     </select>
 {% endverbatim %}
 </script>
@@ -72,12 +72,12 @@
     <div class="panel space-types-panel">
     {{ #each inputs }}
     <div class="checkbox">
-      <label><input type="checkbox" value="{{ key }}" class="{{ class }}" {{ choice }}>{{ name }}</label>
+      <label><input type="checkbox" name="{{ key }}" value="{{ value }}" class="{{ class }}" {{ choice }}>{{ text }}</label>
       {{# if has_help }}
       <p class="text-muted">{{ help }}</p>
-      {{/if}}
+      {{ /if }}
     </div>
-    {{/each}}
+    {{ /each }}
     </div>
 {% endverbatim %}
 </script>
@@ -87,9 +87,9 @@
     <div class="panel space-types-panel">
     {{ #each inputs }}
     <div class="radio">
-      <label><input type="radio" value="{{ key }}" name="{{ group }}" class="{{ class }}" {{ choice }}>{{ name }}</label>
+      <label><input type="radio" name="{{ key }} "value="{{ value }}" class="{{ class }}" {{ choice }}>{{ text }}</label>
     </div>
-    {{/each}}
+    {{ /each }}
     </div>
 {% endverbatim %}
 </script>

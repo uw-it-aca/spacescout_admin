@@ -331,10 +331,7 @@ $(document).ready(function() {
                 var val, campus;
 
                 if (depend_node) {
-                    val = $(":selected", depend_node).val();
-                    if (val) {
-                        campus = val.split(':')[1];
-                    }
+                    campus = $(":selected", depend_node).val();
                 }
                 
                 $.ajax({
@@ -349,7 +346,7 @@ $(document).ready(function() {
 
                         if (typeof data === 'object' && $.isArray(data)) {
                             for (i = 0; i < data.length; i += 1) {
-                                option = $('<option></option>').val('location.building_name').html(data[i]);
+                                option = $('<option></option>').html(data[i]);
 
                                 if (building == data[i]) {
                                     option.attr('selected', 'selected');

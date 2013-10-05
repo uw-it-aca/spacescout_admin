@@ -165,9 +165,8 @@ $(document).ready(function() {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
             choice, has_choice = false,
-            name = null,
             chosen,
-            input_class, tpl, vartype, varedit, data, i, node, src,  group;
+            input_class, tpl, vartype, varedit, data, i, node, src;
 
         appendFieldHeader(field, section);
 
@@ -175,6 +174,7 @@ $(document).ready(function() {
         switch (field.value.key) {
         case 'location.building_name':
             tpl = Handlebars.compile($('#space-edit-select').html());
+            context.name = field.value.key;
             context.options = [];
             node = $(tpl(context));
             if (field.value.hasOwnProperty('edit') && field.value.edit.hasOwnProperty('dependency')) {
@@ -240,27 +240,23 @@ $(document).ready(function() {
                     } else {
                         if (field.value.hasOwnProperty('edit')
                               && field.value.edit.hasOwnProperty('tag')
-                               && field.value.edit.tag == 'select') {
+                            && field.value.edit.tag == 'select') {
+                            context.name = field.value.key;
                             src = '#space-edit-select';
                             choice = 'selected';
-                            group = null;
-                            name = field.value.key;
                         } else if (field.value.hasOwnProperty('edit')
                               && field.value.edit.hasOwnProperty('multi_select')) {
                             src = '#space-edit-checkboxes';
                             choice = 'checked';
-                            group = null;
                         } else {
                             src = '#space-edit-radio';
                             choice = 'checked';
-                            group = field.name;
                             if (field.value.hasOwnProperty('edit')
                                 && field.value.edit.hasOwnProperty('allow_none')) {
                                 data.push({
-                                    name: gettext('unset'),
+                                    text: gettext('unset'),
                                     key: field.value.key + ':',
-                                    value: field.value.key + ':',
-                                    group: group
+                                    value: field.value.key + ':'
                                 });
                             }
                         }
@@ -278,12 +274,11 @@ $(document).ready(function() {
                                 }
 
                                 data.push({
-                                    name: gettext(field.value.map[i]),
-                                    key: field.value.key + ':' + i,
-                                    value: field.value.key + ':' + i,
+                                    text: gettext(field.value.map[i]),
+                                    key: field.value.key,
+                                    value: i,
                                     choice: (field.value.value == i) ? choice : '',
-                                    class: input_class,
-                                    group: group
+                                    class: input_class
                                 });
                             }
                         } else {
@@ -304,14 +299,13 @@ $(document).ready(function() {
                                           || String(field.value.value).toLowerCase() == vartype[i]);
                                 
                                 data.push({
-                                    name: gettext(vartype[i]),
-                                    key: field.value.key + ':' + vartype[i],
-                                    value: field.value.key + ':' + vartype[i],
+                                    text: gettext(vartype[i]),
+                                    key: field.value.key,
+                                    value: vartype[i],
                                     choice: (chosen) ? choice : '',
                                     class: input_class,
                                     has_help: true,
-                                    help: gettext(vartype[i] + '_help'),
-                                    group: group
+                                    help: gettext(vartype[i] + '_help')
                                 });
                             }
                         }
@@ -326,10 +320,6 @@ $(document).ready(function() {
 
                     tpl = Handlebars.compile($(src).html());
                     node = $(tpl(context));
-                    if (name) {
-                        node.attr('name', name);
-                    }
-
                     section.append(node);
                 } else {
                     if (typeof field.value.value === 'boolean') {
@@ -420,9 +410,9 @@ $(document).ready(function() {
             src_selector = "#space-edit-input";
             context.inputs = [{
                 key: keys.join('|'),
+                value: values_length ? values.join(', ') : '',
                 placeholder: placeholder.join(', '),
-                class: (required) ? required_class : '',
-                value: values_length ? values.join(', ') : ''
+                class: (required) ? required_class : ''
             }];
         }
 
@@ -432,9 +422,9 @@ $(document).ready(function() {
     var booleanEditStruct = function (v) {
         return {
             choice: v.value ? 'checked' : '',
-            name: gettext(v.key),
+            text: gettext(v.key),
             key: v.key,
-            value: v.key
+            value: v.value ? v.value : ''
         };
     };
 
@@ -529,14 +519,14 @@ $(document).ready(function() {
 
         $('input[class^="' + dependent_prefix + '"]:checked').each(function () {
             var el = $(this),
-                p = keyValuePair(el.val()),
-                m = el.prop('class').slice(dependent_prefix.length).match(/([^\s]+)(\s|$)/),
+                el_value = el.attr('value'),
+                m = el.attr('class').slice(dependent_prefix.length).match(/([^\s]+)(\s|$)/),
                 target_el;
 
             if (m) {
                 target_el = $('*[name="' + m[1] + '"]');
-                if (p) {
-                    if (p.value == 'null' || p.value.toLowerCase() == 'false') {
+                if (typeof el_value !== 'undefined' && el_value !== false) {
+                    if (el_value == 'null' || el_value.toLowerCase() == 'false') {
                         set_cue(target_el, false);
                         if (target_el.hasClass(required_class)) {
                             target_el.removeClass(required_class);
@@ -558,40 +548,40 @@ $(document).ready(function() {
         var data = {};
 
         $('input, textarea').each(function () {
-            var v = $(this).val().trim(),
+            var key = $(this).attr('name'),
+                value,
                 checked = $(this).is(':checked'),
                 p, q, i;
 
             switch ($(this).prop('type')) {
             case 'checkbox':
-                p = keyValuePair(v);
+                value = $(this).attr('value');
 
-                if (p) {
+                if (typeof value !== 'undefined' && value !== false) {
                     if (checked) {
-                        if (data.hasOwnProperty(p.key)) {
-                            if (typeof(data[p.key]) == 'object'
-                                && $.isArray(data[p.key])) {
-                                data[p.key].push(p.value);
+                        if (data.hasOwnProperty(key)) {
+                            if (typeof(data[key]) == 'object' && $.isArray(data[key])) {
+                                data[key].push(value);
                             } else {
-                                data[p.key] = [data[p.key], p.value];
+                                data[key] = [data[key], value];
                             }
                         } else {
-                            data[p.key] = p.value;
+                            data[key] = value;
                         }
                     }
                 } else {
-                    data[v] = checked;
+                    data[key] = checked;
                 }
 
                 break;
             case 'radio':
-                if (checked) {
-                    p = keyValuePair(v);
+                value = $(this).attr('value');
 
-                    if (p) {
-                        data[p.key] = p.value;
+                if (checked) {
+                    if (typeof value !== 'undefined' && value !== false) {
+                        data[key] = value;
                     } else {
-                        data[v] = checked;
+                        data[key] = checked;
                     }
                 }
 
@@ -599,7 +589,7 @@ $(document).ready(function() {
             case 'text':
                 p = isMultiValueInput($(this));
                 if (p) {
-                    q = getMultiValues(p, v);
+                    q = getMultiValues(p, $(this).val().trim());
                     for (i = 0; i < p.length; i += 1) {
                         data[p[i]] = q ? q[p[i]] : '';
                     }
@@ -608,26 +598,23 @@ $(document).ready(function() {
                 }
                 // ELSE fall thru and set simple value
             default:
-                p = $(this).attr('name');
-                if (p) {
-                    data[p] = v;
+                if (key) {
+                    data[key] = $(this).val().trim();
                 }
+
                 break;
             }
         });
 
         $('select option:selected').each(function () {
-            var node = $(this),
-                v, p;
+            var key = $(this).parent().attr('name'),
+                value = $(this).attr('value');
 
-            if (!node.hasClass('hours-value')) {
-                v = node.val().trim(),
-                p = keyValuePair(v);
-
-                if (p) {
-                    data[p.key] = p.value;
+            if (key) {
+                if (value && value.length) {
+                    data[key] = value;
                 } else {
-                    data[v] = $(this).text();
+                    data[key] = $(this).text();
                 }
             }
         });

@@ -128,27 +128,22 @@ $(document).ready(function() {
 
             l = runs[r].length;
             n = runs[r][0] + 1;
-            h = null;
-            for (i = 1; i < l; i += 1) {
-                if (runs[r][i] == n) {
+            h = 0;
+            for (i = 1; i <= l; i += 1) {
+                if (i < l && runs[r][i] == n) {
                     n += 1;
-                    h = i;
-                    d = !(i < (l - 1));
+                    h += 1;
                 } else {
-                    d = true;
-                }
+                    if (h > 0) {
+                        context.day +=  ((h > 1) ? ' - ' : ', ')  + gettext(available_hours[runs[r][i-1]].day);
+                    }
 
-                if (d) {
-                    if (h) {
-                        context.day += ' - ' + gettext(available_hours[runs[r][h]].day);
+                    if (i < l) {
+                        context.day +=  ', ' + gettext(available_hours[runs[r][i]].day);
                         n = runs[r][i] + 1;
                     }
 
-                    if (!h || h != i) {
-                        context.day += ', ' + gettext(available_hours[runs[r][i]].day);
-                    }
-
-                    h = null;
+                    h = 0;
                 }
             }
 
