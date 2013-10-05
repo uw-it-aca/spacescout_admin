@@ -464,12 +464,12 @@ $(document).ready(function() {
 
     window.spacescout_admin.validateFields = function () {
         var show_cue = function (n, s) {
-                var req_node = n.children('.' + required_class);
+                var req_node = n.find('.' + required_class);
 
                 if (!req_node.length) {
                     var tpl = Handlebars.compile($('#space-edit-field-required').html());
                     req_node = $(tpl());
-                    n.prepend(req_node);
+                    $(':first', n).prepend(req_node);
                 }
 
                 if (s) {
