@@ -56,7 +56,7 @@
   <ul class="list-group building-list">
     {{# each spaces }}
     <li class="list-group-item  space-list-item">
-      <a href="{{ APP_URL_ROOT }}space/{{ id }}">
+      <a href="{% endverbatim %}{{ APP_URL_ROOT }}{% verbatim %}space/{{ id }}">
           <span class="list-group-item-heading item-name">{{ name }}</span>
           <span class="item-description">{{ description }}</span>
           <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
