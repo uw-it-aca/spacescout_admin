@@ -82,7 +82,7 @@ class SpaceMap(object):
                     for img in SpaceImage.objects.filter(space=space):
                         section['images'].append({
                             'description': img.description,
-                            'url': "{0}/api/v1/space/{1}/image/{2}".format(settings.APP_URL_ROOT, space.id, img.id)
+                            'url': "{0}api/v1/space/{1}/image/{2}".format(settings.APP_URL_ROOT, space.id, img.id)
                         })
 
                 except SpaceImage.DoesNotExist:
