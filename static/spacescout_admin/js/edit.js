@@ -272,7 +272,7 @@ $(document).ready(function() {
                 return true;
             },
             success: function (responseJSON) {
-                console.log('response is ' + responseJSON.id);
+                window.location.reload();
             },
             error: function () {
                 console.log('ERROR');
@@ -287,7 +287,7 @@ $(document).ready(function() {
                 url: img_src,
                 type: "DELETE",
                 success: function (data) {
-                    console.log('Image ' + id + ' Deleted.');
+                    window.location.reload();
                 },
                 error: function () {
                     console.log('ERROR');
