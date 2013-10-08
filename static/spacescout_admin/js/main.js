@@ -469,10 +469,10 @@ $(document).ready(function() {
                 }
             },
             set_cue = function (node, show) {
-                var i, n;
+                var i, n, h = node.prevAll('.field-header');
 
-                if (node.prev().hasClass('field-header')) {
-                    show_cue(node.prev(), show);
+                if (h.length) {
+                    show_cue(h.eq(0), show);
                 } else { 
                     for (i = 0; i < 8; i += 1) {
                         n = node.parents().eq(i).prev();
