@@ -71,20 +71,30 @@
       <div class="panel-heading">
         <div class="section-edit clearfix"><a href="{{ edit_url }}" class="action-link">edit</a></div>
       	<h3 class="panel-title">{{ section }}</h3>
+{% endverbatim %}
       </div>
       <div class="section-hours">
-        <h4>Normal Hours
+        <h4>{% trans "normal_hours" %}
+{% verbatim %}
           {{ #if is_missing }}
           <div class="required-field">
             <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
           </div>
           {{ /if }}
         </h4>
+      {{ #if is_missing }}
+{% endverbatim %}
+        <div>
+        {% trans "noinfo" %}
+        </div>
+{% verbatim %}
+        {{else}}
         <ul>
         {{# each available_hours }}
         <li><span class="label-day">{{ day }}</span>{{ hours }}</li>
         {{/each}}
         </ul>
+      {{/if}}
       </div>
       {{# each fields }}
       <div class="space-detail-item">

@@ -321,7 +321,10 @@ msgid "hours_notes_help"
 msgstr "Describe any predictable exceptions to the open hours of the space. Example: First Thursday of each month, open until 8pm."
 
 msgid "cafe_hours_help"
-msgstr "xxxxxxxxxx message about cafe hours being different, otherwise leave empty? xxxxxxxxxxxxx"
+msgstr "Include only if there is a café in the space with hours that differ from the space itself (e.g. Orin’s Place in Paccar Hall is both a cafe and an open space). Describe how the open hours of the café differ from the space."
+
+msgid "cafe_hours_link"
+msgstr "See Examples"
 
 msgid "access_notes_help"
 msgstr "If the space is only available to students at certain times, or when not in use for classes or events, describe the access restrictions here. If the space requires a key or card for access, describe that here."
@@ -389,7 +392,14 @@ msgstr "<ol>\
 <li>A green arrow marker will appear with a latitude and longitude value.</li>\
 <li>To check the placement of your pin, copy the lat/long values from the marker and put them in search; the pin that appears as a result will be more accurate.</li>\
 <li>Copy these lat and long measurements into the field below.</li>\
-</ol>"
+</ol><div id=\"latlong-picker\"></div>"
+
+msgid "cafe_hours_more_help"
+msgstr "<h6>EXAMPLES:</h6>\
+        <ul>\
+            <li>Café closes at 3pm.</li>\
+            <li>Café open weekdays, 8am-2pm</li>\
+        </ul>"
 
 msgid "access_notes_more_help"
 msgstr "<h6>EXAMPLES:</h6>\

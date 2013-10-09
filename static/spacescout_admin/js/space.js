@@ -5,64 +5,7 @@ $(document).ready(function() {
             url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
-                var tpl, context, section, html, i, incomplete;
-
-                $('.space-content-loading').hide();
-                html = $(Handlebars.compile($('#space-details').html())({ name: data.name }));
-                $('.space-content-loading').siblings(':last').after(html);
-
-                for (i = 0; i < data.sections.length; i += 1) {
-                    section = data.sections[i];
-                    context = {
-                        section: gettext(section.section),
-                        edit_url: window.spacescout_admin.app_url_root + 'edit/' + window.spacescout_admin.space_id
-                            + '/#' + encodeURIComponent(section.section)
-                    };
-
-                    switch (section.section) {
-                    case 'hours_access':
-                        context['available_hours'] = contextAvailableHours(section['available_hours']);
-                        context.fields = prepSectionFields(section.fields);
-                        html = $(Handlebars.compile($('#space-section-hours').html())(context));
-                        break;
-                    case 'images':
-                        context['images'] = section['images'];
-                        if (context['images'].length) {
-                            context['images'][0]['active'] = 'active';
-                        }
-                        html = $(Handlebars.compile($('#space-section-images').html())(context));
-                        break;
-                    default:
-                        context.fields = prepSectionFields(section.fields);
-                        html = $(Handlebars.compile($('#space-section').html())(context));
-                        tpl = Handlebars.compile($('#space-section-fields').html());
-                        html.append(tpl(context));
-                        break;
-                    }
-
-                    $('.space-content-loading').siblings(':last').after(html);
-                }
-
-                // validation cues
-                incomplete = incompleteFields();
-                if (incomplete && incomplete.length) {
-                    html = $(Handlebars.compile($('#incomplete-items').html())({
-                        incomplete: incomplete
-                    }));
-
-                    $('.space-content-loading').siblings(':last').after(html);
-                }
-
-                // actions
-                html = $(Handlebars.compile($('#space-actions').html())({
-                    is_complete: !(incomplete && incomplete.length),
-                    is_modified: false,
-                    is_published: false,
-                    modified_by: (data.modified_by.length) ? data.modified_by : gettext('unknown'),
-                    last_modified: window.spacescout_admin.modifiedTime(new Date(data.last_modified))
-                }));
-
-                $('.space-content-loading').siblings(':last').after(html);
+                showSpaceDetails(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 var json;
@@ -76,6 +19,71 @@ $(document).ready(function() {
             }
         });
     }());
+
+    var showSpaceDetails = function (details) {
+        var tpl, context, section, html, i, incomplete;
+
+        $('.space-content-loading').hide();
+        html = $(Handlebars.compile($('#space-details').html())({ name: details.name }));
+        $('.space-content-loading').siblings(':last').after(html);
+
+        for (i = 0; i < details.sections.length; i += 1) {
+            section = details.sections[i];
+            context = {
+                section: gettext(section.section),
+                edit_url: window.spacescout_admin.app_url_root + 'edit/' + window.spacescout_admin.space_id
+                    + '/#' + encodeURIComponent(section.section)
+            };
+
+            switch (section.section) {
+            case 'hours_access':
+                context['available_hours'] = contextAvailableHours(section['available_hours']);
+                if (!context['available_hours'].length) {
+                    context.is_missing = true;
+                }
+
+                context.fields = prepSectionFields(section.fields);
+                html = $(Handlebars.compile($('#space-section-hours').html())(context));
+                break;
+            case 'images':
+                context['images'] = section['images'];
+                if (context['images'].length) {
+                    context['images'][0]['active'] = 'active';
+                }
+                html = $(Handlebars.compile($('#space-section-images').html())(context));
+                break;
+            default:
+                context.fields = prepSectionFields(section.fields);
+                html = $(Handlebars.compile($('#space-section').html())(context));
+                tpl = Handlebars.compile($('#space-section-fields').html());
+                html.append(tpl(context));
+                break;
+            }
+
+            $('.space-content-loading').siblings(':last').after(html);
+        }
+
+        // validation cues
+        incomplete = incompleteFields();
+        if (incomplete && incomplete.length) {
+            html = $(Handlebars.compile($('#incomplete-items').html())({
+                incomplete: incomplete
+            }));
+
+            $('.space-content-loading').siblings(':last').after(html);
+        }
+
+        // actions
+        html = $(Handlebars.compile($('#space-actions').html())({
+            is_complete: !(incomplete && incomplete.length),
+            is_modified: false,
+            is_published: false,
+            modified_by: (details.modified_by.length) ? details.modified_by : gettext('unknown'),
+            last_modified: window.spacescout_admin.modifiedTime(new Date(details.last_modified))
+        }));
+
+        $('.space-content-loading').siblings(':last').after(html);
+    };
 
     var prepSectionFields = function (fields) {
         var contexts = [],
