@@ -172,7 +172,7 @@ $(document).ready(function() {
             context = {},
             choice, has_choice = false,
             chosen,
-            input_class, tpl, vartype, varedit, data, i, node, src;
+            input_class = '', tpl, vartype, varedit, data, i, node, src;
 
         appendFieldHeader(field, section);
 
@@ -254,6 +254,9 @@ $(document).ready(function() {
                               && field.value.edit.hasOwnProperty('multi_select')) {
                             src = '#space-edit-checkboxes';
                             choice = 'checked';
+                            if (field.value.edit.hasOwnProperty('limit')) {
+                                input_class = 'required-limit-' + field.value.edit.limit;
+                            }
                         } else {
                             src = '#space-edit-radio';
                             choice = 'checked';
@@ -273,7 +276,10 @@ $(document).ready(function() {
                                     has_choice = true;
                                 }
 
-                                input_class = required ? required_class : '';
+                                if (required) {
+                                    input_class = required_class +  ' ' + input_class;
+                                }
+
                                 if (field.value.hasOwnProperty('edit')
                                     && field.value.edit.hasOwnProperty('requires')) {
                                     input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
@@ -293,7 +299,10 @@ $(document).ready(function() {
                                     has_choice = true;
                                 }
 
-                                input_class = required ? required_class : '';
+                                if (required) {
+                                    input_class = required_class +  ' ' + input_class;
+                                }
+
                                 if (field.value.hasOwnProperty('edit')
                                     && field.value.edit.hasOwnProperty('requires')) {
                                     input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;

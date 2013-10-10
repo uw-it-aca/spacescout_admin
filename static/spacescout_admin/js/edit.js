@@ -68,6 +68,7 @@ $(document).ready(function() {
 
                 $('input, textarea').change(validate);
                 $('input').keydown(window.spacescout_admin.validateInput);
+                $('input[class*="required-limit-"]').click(limitChoiceCount);
                 $('a.btn').click(modifySpace);
 
                 return;
@@ -79,6 +80,15 @@ $(document).ready(function() {
 
     var validate = function () {
         window.spacescout_admin.validateFields();
+    };
+
+    var limitChoiceCount = function (e) {
+        var m = $(e.target).prop('class').match(/required-limit-(\d+)/);
+
+        if (m && $('input[name="' + $(e.target).prop('name') + '"]:checked').length > m[1]
+            && $(e.target).is(':checked')) {
+            e.preventDefault();
+        }
     };
 
     var modifySpace = function (event) {
