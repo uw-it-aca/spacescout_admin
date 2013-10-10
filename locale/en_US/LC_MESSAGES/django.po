@@ -51,6 +51,9 @@ msgstr "Noon"
 msgid "midnight"
 msgstr "Midnight"
 
+msgid "allday"
+msgstr "24 Hrs"
+
 msgid "unknown"
 msgstr "Not known"
 
@@ -243,6 +246,9 @@ msgstr "Hours"
 
 msgid "images"
 msgstr "Images"
+
+msgid "defaultimage"
+msgstr "Default Image"
 
 msgid "access"
 msgstr "Access"

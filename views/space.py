@@ -23,6 +23,8 @@ from spacescout_admin.oauth import oauth_initialization
 from spacescout_admin.permitted import Permitted, PermittedException
 from spacescout_admin.views.schema import SpotSchema, SpotSchemaException
 import simplejson as json
+import math
+import datetime
 
 
 class SpaceManager(RESTDispatch):
@@ -135,18 +137,49 @@ class SpaceManager(RESTDispatch):
 
         if 'available_hours' in data:
             valid_hours = True
+            available = {}
             for d in data['available_hours']:
+                hours = [0 for i in range(0,2400)]
                 for h in data['available_hours'][d]:
                     if len(h) == 2:
-                        if int("".join(h[0].split(":"))) >= int("".join(h[1].split(":"))):
+                        opn = int("".join(h[0].split(":")))
+                        cls = int("".join(h[1].split(":")))
+                        if opn < 0 or opn > 2359 or opn % 100 >= 60 or cls < 0 or cls > 2359 or cls % 100 >= 60 or opn >= cls:
                             valid_hours = False
+                        else:
+                            for i in range(opn, cls):
+                                if i % 100 < 60:
+                                    hours[i] = 1;
                     else:
                         valid_hours = False
 
+                available[d] = []
+                opn = 0
+                state = 0
+                for i in range(0, 2360):
+                    if i % 100 < 60:
+                        if state != hours[i]:
+                            state = hours[i]
+                            if hours[i]:
+                                opn = i
+                            else:
+                                available[d].append(self._hours_range([opn, i]))
+
             if valid_hours:
-                fields['available_hours'] = data['available_hours']
+                fields['available_hours'] = available
 
         return fields, missing_fields
+
+    def _hours_range(self, hours):
+        r = []
+        for i in range(0, 2):
+            r.append(":".join([self._double_digit(math.trunc(hours[i]/100)),
+                               self._double_digit(hours[i]%100)]))
+
+        return r
+
+    def _double_digit(self, d):
+        return "{0}{1}".format('0' if d < 10 else '', d)
 
     def _space_detail(self, space_id):
         try:

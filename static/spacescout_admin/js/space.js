@@ -49,6 +49,7 @@ $(document).ready(function() {
                 context['images'] = section['images'];
                 if (context['images'].length) {
                     context['images'][0]['active'] = 'active';
+                    context['images'][0]['description'] = gettext('defaultimage');
                 }
                 html = $(Handlebars.compile($('#space-section-images').html())(context));
                 break;
@@ -117,8 +118,13 @@ $(document).ready(function() {
                 h = available_hours[d].hours;
 
                 for (i = 0; i < h.length; i++) {
-                    s = window.spacescout_admin.prettyHours(h[i][0])
-                        + ' - ' + window.spacescout_admin.prettyHours(h[i][1]);
+                    if (h[i][0] == '00:00' && h[i][1] == '23:59') {
+                        s = gettext('allday');
+                    } else {
+                        s = window.spacescout_admin.prettyHours(h[i][0])
+                            + ' - ' + window.spacescout_admin.prettyHours(h[i][1]);
+                    }
+
                     if (runs.hasOwnProperty(s)) {
                         runs[s].push(d);
                     } else {
@@ -165,7 +171,7 @@ $(document).ready(function() {
         var month = date.getMonth() + 1,
             hours = date.getHours(),
             late = (hours > 12),
-            pm = late ? 'PM' : 'AM',
+            pm = gettext(late ? 'pm' : 'am'),
             hour = late ? (hours - 12) : hours,
             minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes();
 
