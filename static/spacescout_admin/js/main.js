@@ -89,6 +89,8 @@ $(document).ready(function() {
                 } else if (h == 12) {
                     return gettext('noon');
                 }
+            } else if (h == 23 && m == 59) {
+                return gettext('midnight');
             }
 
             return ((h > 12) ? (h - 12) : ((h == 0) ? '12' : h))
