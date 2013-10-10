@@ -15,6 +15,7 @@
 
 {% block extra_js %}
 <script src="{{ STATIC_URL }}spacescout_admin/js/edit.js"></script>
+<script src="{{ STATIC_URL }}spacescout_admin/lib/jquery-gmaps-latlon-picker.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -124,6 +125,7 @@
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};
 window.spacescout_admin.app_url_root = '{{ APP_URL_ROOT }}';
+window.spacescout_admin.static_url = '{{ STATIC_URL }}';
 window.spacescout_admin.space_id = '{{ SPACE_ID }}';
 window.spacescout_admin.is_mobile = {{ IS_MOBILE }};
 window.spacescout_admin.csrf_token = '{{ csrf_token }}';

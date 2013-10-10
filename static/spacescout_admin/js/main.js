@@ -143,7 +143,11 @@ $(document).ready(function() {
                     node.append(' ');
                     link = $('<a></a>').prop('href', 'javascript:void(0);').html(s);
                     link.click(function (e) {
-                        $(e.target).parent().parent().next('div').toggle();
+                        var div = $(e.target).parent().parent().next('div');
+                        div.toggle();
+                        if (div.is(':visible')) {
+                            div.trigger('displayed');
+                        }
                     });
 
                     node.append(link);

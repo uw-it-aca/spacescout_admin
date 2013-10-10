@@ -360,10 +360,10 @@ msgid "orientation_help"
 msgstr "Further refine the description"
 
 msgid "latlong_help"
-msgstr "Recommend using Google Maps on a computer following "
+msgstr "Not sure?  It may be helpful to consult your building plan.  Find lat/long using the "
 
 msgid "latlong_link"
-msgstr "these steps."
+msgstr "map below."
 
 msgid "normal_hours_help"
 msgstr "The hours that the space is accessible to all students"
@@ -384,15 +384,7 @@ Examples from UW-Seattle:\
 </ul>"
 
 msgid "latlong_more_help"
-msgstr "<ol>\
-<li>Go to Google Maps and search for your campus.</li>\
-<li>Using map (as opposed to satellite) view, zoom in on your targeted building as far as you can.</li>\
-<li>Point your cursor to the area of the building that represents your best guess for the location of the space. If your institution has a floor plan resource as described above, use that resource to help identify the location.</li>\
-<li>Right click and select &quot;What's here?&quot;</li>\
-<li>A green arrow marker will appear with a latitude and longitude value.</li>\
-<li>To check the placement of your pin, copy the lat/long values from the marker and put them in search; the pin that appears as a result will be more accurate.</li>\
-<li>Copy these lat and long measurements into the field below.</li>\
-</ol><div id=\"latlong-picker\"></div>"
+msgstr "<p>Click or drag map below to position cross hairs over desired location.</p><div id=\"latlong-picker\"></div>"
 
 msgid "cafe_hours_more_help"
 msgstr "<h6>EXAMPLES:</h6>\

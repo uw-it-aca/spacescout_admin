@@ -58,6 +58,7 @@ $(document).ready(function() {
                 default:
                     editSectionDetails(section, editor);
                     wireBuildingSelect(section);
+                    wireLatLongPicker(section);
                     break;
                 }
 
@@ -320,6 +321,94 @@ $(document).ready(function() {
                     window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, section);
                 }
             }
+        }
+    };
+
+    var wireLatLongPicker = function (section) {
+        var latlng_input = $('input[name="location.latitude|location.longitude"]'),
+            node = $("#latlong-picker"),
+            map, marker,
+            parseLatLongValue = function (s) {
+                return s.match(/^([-]?[\d\.]+)\s*,\s*([-]?[\d\.]+)$/);
+            },
+            getLatLongValue = function () {
+                var m = parseLatLongValue(latlng_input.val()),
+                    latlng = new google.maps.LatLng(47.653787, -122.307808);
+
+                if (m && m.length) {
+                    latlng = new google.maps.LatLng(m[1],m[2]);
+                } else if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        latlng = new google.maps.LatLng(position.coords.latitude,
+                                                        position.coords.longitude);
+                    }, function () {
+                        console.log('problem getting lat/long');
+                    });
+                } else {
+                    console.log('browser does not support lat/long');
+                }
+
+                return latlng;
+            },
+            setLatLongValue = function(latLng) {
+                latlng_input.val([latLng.lat(), latLng.lng()].join(', '));
+            };
+
+        if (node.length) {
+            var ll = getLatLongValue(),
+            map = new google.maps.Map(node.get(0), {
+			    mapTypeId: google.maps.MapTypeId.ROADMAP,
+			    mapTypeControl: false,
+                panControl: true,
+                draggableCursor: 'crosshair',
+			    disableDoubleClickZoom: true,
+			    zoomControlOptions: true,
+			    streetViewControl: false,
+                center: ll,
+                zoom: 18
+            });
+
+            latlng_input.prev().bind('displayed', function () {
+                var ctr = map.getCenter();
+
+                google.maps.event.trigger(map, 'resize');
+                map.setCenter(ctr);
+            });
+
+            marker = new google.maps.Marker({
+                map: map,
+                icon: window.spacescout_admin.static_url + 'spacescout_admin/img/cross-hairs.gif',
+                shape: {
+                    coords: [0,0,0,0],
+                    type: 'rect'
+                },
+            });
+
+            marker.bindTo('position', map, 'center'); 
+
+            google.maps.event.addListener(map, 'dblclick', function(e) {
+                setLatLongValue(e.latLng);
+                map.panTo(e.latLng);
+                map.setZoom(map.getZoom() + 1);
+            });  
+
+            google.maps.event.addListener(map, 'click', function(e) {
+                setLatLongValue(e.latLng);
+                map.panTo(e.latLng);
+            });  
+
+            google.maps.event.addListener(map, 'drag', function(e) {
+                setLatLongValue(map.getCenter());
+            });
+
+            latlng_input.change(function () {
+                var m = parseLatLongValue($(this).val());
+
+                if (m && m.length) {
+                    map.setCenter(new google.maps.LatLng(m[1],m[2]));
+
+                }
+            });
         }
     };
 
