@@ -261,6 +261,7 @@ $(document).ready(function() {
         if (context['images'].length) {
             if (context['images'].length > 0) {
                 context['images'][0]['active'] = 'active';
+                context['images'][0]['description'] = gettext('defaultimage');
             }
         }
 

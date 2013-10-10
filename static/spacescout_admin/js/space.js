@@ -49,6 +49,7 @@ $(document).ready(function() {
                 context['images'] = section['images'];
                 if (context['images'].length) {
                     context['images'][0]['active'] = 'active';
+                    context['images'][0]['description'] = gettext('defaultimage');
                 }
                 html = $(Handlebars.compile($('#space-section-images').html())(context));
                 break;

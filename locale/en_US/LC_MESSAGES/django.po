@@ -247,6 +247,9 @@ msgstr "Hours"
 msgid "images"
 msgstr "Images"
 
+msgid "defaultimage"
+msgstr "Default Image"
+
 msgid "access"
 msgstr "Access"
 
