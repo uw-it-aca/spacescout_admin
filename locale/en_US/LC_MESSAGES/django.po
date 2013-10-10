@@ -51,6 +51,9 @@ msgstr "Noon"
 msgid "midnight"
 msgstr "Midnight"
 
+msgid "allday"
+msgstr "24 Hrs"
+
 msgid "unknown"
 msgstr "Not known"
 

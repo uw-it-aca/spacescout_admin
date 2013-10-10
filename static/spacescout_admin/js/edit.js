@@ -159,13 +159,14 @@ $(document).ready(function() {
             displayTime = function (m2h) {
                 return (m2h.h24 == '12:00')
                          ? gettext('noon')
-                         : (m2h.h24 == '24:00' || m2h.h24 == '00:00')
-                             ? gettext('midnight') : m2h.h12;
+                         : (m2h.h24 == '24:00' || m2h.h24 == '23:59' || m2h.h24 == '00:00')
+                             ? gettext('midnight')
+                             : (m2h.h24 == '00:30') ? '12:30' + gettext('am') : m2h.h12;
             },
             min2hour = function (t) {
                 var h = t / 60,
                     hv = Math.floor(h),
-                    m = (h - hv) * 60,
+                    m = Math.floor((h - hv) * 60),
                     pm = (h >= 12);
 
                 return {

@@ -91,7 +91,7 @@ $(document).ready(function() {
                 }
             }
 
-            return ((h > 12) ? (h - 12) : h)
+            return ((h > 12) ? (h - 12) : ((h == 0) ? '12' : h))
                 + ':' + ((m < 10) ? ('0' + m) : m)
                 + gettext((h > 11) ? 'pm' : 'am');
         }
