@@ -47,7 +47,7 @@ def SchemaView(request):
     try:
         schema = SpotSchema().get()
     except SpotSchemaException as e:
-        if e.args[0]['status'] == 404:
+        if e.args[0]['status_code'] == 404:
             url = request.get_host()
             url = url + "/contact"
             raise Http404
