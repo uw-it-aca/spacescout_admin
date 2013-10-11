@@ -51,7 +51,7 @@ def SchemaView(request):
             url = request.get_host()
             url = url + "/contact"
             raise Http404
-        elif e.args[0]['status'] != 200:
+        elif e.args[0]['status_code'] != 200:
             response = HttpResponse("Error loading spot")
             response.status_code = e.args[0]['status_code']
             return response
