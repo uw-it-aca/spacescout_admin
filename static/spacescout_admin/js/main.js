@@ -484,15 +484,16 @@ $(document).ready(function() {
                 }
             },
             set_cue = function (node, show) {
-                var i, n, h = node.prevAll('.field-header');
+                var i, n, s, h = node.prevAll('.field-header');
 
                 if (h.length) {
                     show_cue(h.eq(0), show);
                 } else { 
+                    n = node.parents();
                     for (i = 0; i < 8; i += 1) {
-                        n = node.parents().eq(i).prev();
-                        if (n.hasClass('field-header')) {
-                            show_cue(n, show);
+                        s = n.eq(i).prevAll('.field-header');
+                        if (s.length) {
+                            show_cue(s.eq(0), show);
                             break;
                         }
                     }
