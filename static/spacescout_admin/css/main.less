@@ -460,7 +460,8 @@ a.action-link { text-decoration: none; }
 
 	}
 
-    #latlong-picker { height: 400px; width: 100%; 
+    #latlong-picker { height: 400px; width: 100%; max-width: 500px; margin: 0 auto;
+        @media screen and (min-width: 1025px) { max-width: none; } 
         img.cross-hair { position: absolute; width:20px; height: 20px; z-index: 9999; top: 50%; left: 50%; margin-top: -10px; margin-left: -10px; pointer-events: none; }
     }
 	
