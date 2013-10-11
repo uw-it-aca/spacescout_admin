@@ -377,9 +377,9 @@ msgstr "The hours that the space is accessible to all students"
 # more help
 
 msgid "description_more_help"
-msgstr "In general, the location description should start with the most broad information (&quot;Suzzallo Library&quot;)\
-and end with the most precise (&quot;Room 201,&quot; &quot;NW corner,&quot; etc.). Separate each with a comma. The minimum is the building name. \
-Examples from UW-Seattle:\
+msgstr "<p>In general, the location description should start with the most broad information (&quot;Suzzallo Library&quot;)\
+and end with the most precise (&quot;Room 201,&quot; &quot;NW corner,&quot; etc.). Separate each with a comma. The minimum is the building name. </p>\
+<h6>Examples from UW-Seattle:</h6>\
 <ul>\
 <li>Space name: Lobby Area; Location description: Fishery Sciences, Main floor</li>\
 <li>Space name: Orin's Place; Location description: Paccar Hall, 2nd floor</li>\
@@ -393,14 +393,14 @@ msgid "latlong_more_help"
 msgstr "<p>Click or drag map below to position cross hairs over desired location.</p><div id=\"latlong-picker\"></div>"
 
 msgid "cafe_hours_more_help"
-msgstr "<h6>EXAMPLES:</h6>\
+msgstr "<h6>Examples:</h6>\
         <ul>\
             <li>Café closes at 3pm.</li>\
             <li>Café open weekdays, 8am-2pm</li>\
         </ul>"
 
 msgid "access_notes_more_help"
-msgstr "<h6>EXAMPLES:</h6>\
+msgstr "<h6>Examples:</h6>\
         <ul>\
             <li>Scheduled courses and programs have priority.</li>\
             <li>Available to residence hall students and escorted guests when not reserved for an event. Check out key at front desk.</li>\
@@ -408,7 +408,7 @@ msgstr "<h6>EXAMPLES:</h6>\
         </ul>"
 
 msgid "noise_level_more_help"
-msgstr "<h6>EXAMPLES:</h6>\
+msgstr "<h6>Examples:</h6>\
         <ul>\
             <li>Silent: Suzzallo Reading Room</li>\
             <li>Low Hum: Allen Gallery Study (4th floor)</li>\
@@ -417,7 +417,7 @@ msgstr "<h6>EXAMPLES:</h6>\
         </ul>"
 
 msgid "reservation_notes_more_help"
-msgstr "<h6>EXAMPLES:</h6>\
+msgstr "<h6>Examples:</h6>\
         <ul>\
             <li>This room can be reserved at http://...</li>\
             <li>Reservations can be made at the circulation desk.</li>\
