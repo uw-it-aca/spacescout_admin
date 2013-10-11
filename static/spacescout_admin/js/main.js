@@ -438,8 +438,7 @@ $(document).ready(function() {
         return {
             choice: v.value ? 'checked' : '',
             text: gettext(v.key),
-            key: v.key,
-            value: v.value ? v.value : ''
+            key: v.key
         };
     };
 
@@ -573,7 +572,7 @@ $(document).ready(function() {
             case 'checkbox':
                 value = $(this).attr('value');
 
-                if (typeof value !== 'undefined' && value !== false) {
+                if (typeof value !== 'undefined' && value !== false && value.length) {
                     if (checked) {
                         if (data.hasOwnProperty(key)) {
                             if (typeof(data[key]) == 'object' && $.isArray(data[key])) {
@@ -582,7 +581,7 @@ $(document).ready(function() {
                                 data[key] = [data[key], value];
                             }
                         } else {
-                            data[key] = (value && value.length) ? value : true;
+                            data[key] = value;
                         }
                     }
                 } else {
