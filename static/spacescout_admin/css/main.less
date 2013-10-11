@@ -460,7 +460,9 @@ a.action-link { text-decoration: none; }
 
 	}
 
-    #latlong-picker { height: 400px; width: 100%; }
+    #latlong-picker { height: 400px; width: 100%; 
+        img.cross-hair { position: absolute; width:20px; height: 20px; z-index: 9999; top: 50%; left: 50%; margin-top: -10px; margin-left: -10px; pointer-events: none; }
+    }
 	
 	/* style incomplete fields indicator */
 	#incomplete-items {
