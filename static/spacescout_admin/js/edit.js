@@ -339,7 +339,7 @@ $(document).ready(function() {
     var wireLatLongPicker = function (section) {
         var latlng_input = $('input[name="location.latitude|location.longitude"]'),
             node = $("#latlong-picker"),
-            map, marker,
+            map,
             parseLatLongValue = function (s) {
                 return s.match(/^([-]?[\d\.]+)\s*,\s*([-]?[\d\.]+)$/);
             },
@@ -367,7 +367,6 @@ $(document).ready(function() {
             };
 
         if (node.length) {
-            var ll = getLatLongValue(),
             map = new google.maps.Map(node.get(0), {
 			    mapTypeId: google.maps.MapTypeId.ROADMAP,
 			    mapTypeControl: false,
@@ -376,27 +375,11 @@ $(document).ready(function() {
 			    disableDoubleClickZoom: true,
 			    zoomControlOptions: true,
 			    streetViewControl: false,
-                center: ll,
+                center: getLatLongValue(),
                 zoom: 18
             });
 
-            latlng_input.prev().bind('displayed', function () {
-                var ctr = map.getCenter();
-
-                google.maps.event.trigger(map, 'resize');
-                map.setCenter(ctr);
-            });
-
-            marker = new google.maps.Marker({
-                map: map,
-                icon: window.spacescout_admin.static_url + 'spacescout_admin/img/cross-hairs.gif',
-                shape: {
-                    coords: [0,0,0,0],
-                    type: 'rect'
-                },
-            });
-
-            marker.bindTo('position', map, 'center'); 
+            node.append($('<img />').prop('src', window.spacescout_admin.static_url + 'spacescout_admin/img/cross-hairs.gif').addClass('cross-hair'));
 
             google.maps.event.addListener(map, 'dblclick', function(e) {
                 setLatLongValue(e.latLng);
@@ -411,6 +394,13 @@ $(document).ready(function() {
 
             google.maps.event.addListener(map, 'drag', function(e) {
                 setLatLongValue(map.getCenter());
+            });
+
+            latlng_input.prev().bind('displayed', function () {
+                var ctr = map.getCenter();
+
+                google.maps.event.trigger(map, 'resize');
+                map.setCenter(ctr);
             });
 
             latlng_input.change(function () {
