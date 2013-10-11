@@ -52,7 +52,7 @@
 <script id="space-edit-number" type="text/html">
 {% verbatim %}
     {{ #each inputs }}
-    {{ text }} <input type="number" name="{{ key }}" class="{{ class }} form-control" pattern="\d*" value="{{ value }}">
+    {{ text }} <input type="number" name="{{ key }}" class="{{ class }} form-control" pattern="\d*" min="0" value="{{ value }}">
     {{ /each }}
 {% endverbatim %}
 </script>
