@@ -582,7 +582,7 @@ $(document).ready(function() {
                                 data[key] = [data[key], value];
                             }
                         } else {
-                            data[key] = value;
+                            data[key] = (value && value.length) ? value : true;
                         }
                     }
                 } else {
