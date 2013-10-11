@@ -418,8 +418,8 @@ $(document).ready(function() {
         var selector = '.campus-buildings',
             select = $(selector),
             building,
-            loadBuildings = function (depend_node, building) {
-                var val, campus;
+            loadBuildings = function (depend_node) {
+                var val, campus = null;
 
                 if (depend_node) {
                     campus = $(":selected", depend_node).val();
@@ -459,8 +459,9 @@ $(document).ready(function() {
                 if (section.fields[i].hasOwnProperty('value')
                     && section.fields[i].value.hasOwnProperty('key')
                     && section.fields[i].value.key == 'location.building_name') {
-                    var bulding = section.fields[i].value.value,
-                        depend_node = null;
+                    var depend_node = null;
+
+                    building = section.fields[i].value.value;
 
                     if (section.fields[i].value.hasOwnProperty('edit')
                         && section.fields[i].value.edit.hasOwnProperty('dependency')
@@ -469,7 +470,7 @@ $(document).ready(function() {
 
                         if (depend_node.length && depend_node.prop('tagName') == 'SELECT') {
                             depend_node.change(function (e) {
-                                loadBuildings(depend_node, building);
+                                loadBuildings(depend_node);
                             });
                         } else {
                             depend_node = null;
@@ -477,7 +478,7 @@ $(document).ready(function() {
                     }
 
 
-                    loadBuildings(depend_node, building);
+                    loadBuildings(depend_node);
                 }
             }
         }
