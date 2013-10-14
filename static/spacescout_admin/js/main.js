@@ -170,8 +170,7 @@ $(document).ready(function() {
     window.spacescout_admin.appendFieldValue = function (field, getval, section) {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
-            choice, has_choice = false,
-            chosen,
+            input, choice, choice_value,
             input_class = '', tpl, vartype, varedit, data, i, node, src;
 
         appendFieldHeader(field, section);
@@ -260,74 +259,79 @@ $(document).ready(function() {
                         } else {
                             src = '#space-edit-radio';
                             choice = 'checked';
-                            if (field.value.hasOwnProperty('edit')
-                                && field.value.edit.hasOwnProperty('allow_none')) {
-                                data.push({
-                                    text: gettext('unset'),
-                                    key: field.value.key,
-                                    value: ''
-                                });
+                            if (field.value.hasOwnProperty('edit')) {
+                                if (field.value.edit.hasOwnProperty('default')) {
+                                    choice_value = field.value.edit.default;
+                                    if (choice_value == null) {
+                                        choice_value = 'null';
+                                    }
+                                }
+
+                                if (field.value.edit.hasOwnProperty('allow_none')) {
+                                    data.push({
+                                        text: gettext('unset'),
+                                        key: field.value.key,
+                                        value: ''
+                                    });
+                                }
                             }
                         }
 
                         if (field.value.hasOwnProperty('map')) {
                             for (i in field.value.map) {
-                                if (!has_choice && (field.value.value == i)) {
-                                    has_choice = true;
-                                }
-
-                                if (required) {
-                                    input_class = required_class +  ' ' + input_class;
-                                }
-
-                                if (field.value.hasOwnProperty('edit')
-                                    && field.value.edit.hasOwnProperty('requires')) {
-                                    input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
-                                }
-
-                                data.push({
+                                input = {
                                     text: gettext(field.value.map[i]),
                                     key: field.value.key,
                                     value: i,
-                                    choice: (field.value.value == i) ? choice : '',
                                     class: input_class
-                                });
-                            }
-                        } else {
-                            for (i = 0; i < vartype.length; i += 1) {
-                                if (!has_choice && (String(field.value.value).toLowerCase() == vartype[i])) {
-                                    has_choice = true;
+                                };
+
+                                if (field.value.value == i
+                                    || (typeof choice_value !== 'undefined'
+                                        && choice_value == i)) {
+                                    input.choice =  choice;
                                 }
 
                                 if (required) {
-                                    input_class = required_class +  ' ' + input_class;
+                                    input.class = required_class +  ' ' + input.class;
                                 }
 
                                 if (field.value.hasOwnProperty('edit')
                                     && field.value.edit.hasOwnProperty('requires')) {
-                                    input_class = dependent_prefix + field.value.edit.requires + ' ' + input_class;
+                                    input.class = dependent_prefix + field.value.edit.requires + ' ' + input.class;
                                 }
 
-                                chosen = (((typeof field.value.value === 'object')
-                                           && $.isArray(field.value.value)
-                                           && $.inArray(vartype[i], field.value.value) >= 0)
-                                          || String(field.value.value).toLowerCase() == vartype[i]);
-                                
-                                data.push({
+                                data.push(input);
+                            }
+                        } else {
+                            for (i = 0; i < vartype.length; i += 1) {
+                                input = {
                                     text: gettext(vartype[i]),
                                     key: field.value.key,
                                     value: vartype[i],
-                                    choice: (chosen) ? choice : '',
                                     class: input_class,
                                     has_help: true,
                                     help: gettext(vartype[i] + '_help')
-                                });
-                            }
-                        }
+                                };
 
-                        if (!has_choice && (field.value.hasOwnProperty('edit')
-                                            && field.value.edit.hasOwnProperty('allow_none'))) {
-                            data[0].choice = choice;
+                                if (required) {
+                                    input.class = required_class +  ' ' + input.class;
+                                }
+
+                                if (field.value.hasOwnProperty('edit')
+                                    && field.value.edit.hasOwnProperty('requires')) {
+                                    input.class = dependent_prefix + field.value.edit.requires + ' ' + input.class;
+                                }
+
+                                if (((typeof field.value.value === 'object')
+                                           && $.isArray(field.value.value)
+                                           && $.inArray(vartype[i], field.value.value) >= 0)
+                                          || String(field.value.value).toLowerCase() == vartype[i]) {
+                                    input.choice = choice;
+                                }
+
+                                data.push(input);
+                            }
                         }
                     }
 
