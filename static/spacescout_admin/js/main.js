@@ -264,8 +264,8 @@ $(document).ready(function() {
                                 && field.value.edit.hasOwnProperty('allow_none')) {
                                 data.push({
                                     text: gettext('unset'),
-                                    key: field.value.key + ':',
-                                    value: field.value.key + ':'
+                                    key: field.value.key,
+                                    value: ''
                                 });
                             }
                         }
