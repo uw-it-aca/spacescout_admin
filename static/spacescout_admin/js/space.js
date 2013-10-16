@@ -51,6 +51,7 @@ $(document).ready(function() {
                     context['images'][0]['active'] = 'active';
                     context['images'][0]['description'] = gettext('defaultimage');
                 }
+                
                 html = $(Handlebars.compile($('#space-section-images').html())(context));
                 break;
             default:
@@ -62,6 +63,11 @@ $(document).ready(function() {
             }
 
             $('.space-content-loading').siblings(':last').after(html);
+
+            if (section.section == 'images' && context['images'].length < 2) {
+                $('#image-carousel .carousel-control').hide();
+                $('#image-carousel .carousel-indicators').hide();
+            }
         }
 
         // validation cues

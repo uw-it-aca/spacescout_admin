@@ -33,7 +33,11 @@
 <div id="space-editor"></div>
 
 <script id="space-edit-hours" type="text/html">
-    <h4>{% trans "normal_hours" %} <small>{% trans "normal_hours_help" %}</small></h4>
+    <h4  class="field-header">{% trans "normal_hours" %}
+      <div class="required-field" style="display:none;">
+        <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">{% trans "required" %}</span>
+      </div>
+      <small>{% trans "normal_hours_help" %}</small></h4>
     <div class="time-selector">
       <span class="third">Day(s)</span>
       <span class="two-thirds clearfix" style="display:inline-block;">
@@ -49,7 +53,7 @@
     <!-- repeat this row with each new "add new group"-->
     <div class="time-selector business-hours">
       <div class="day-select-container third">
-        <select multiple id="days"></select>
+        <select multiple id="days" class="required-field"></select>
         <div class="show-days">Select days</div>
       </div>
       <div class="hours-slider-container two-thirds clearfix">

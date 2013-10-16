@@ -66,8 +66,8 @@ $(document).ready(function() {
 
                 validate();
 
-                $('input, textarea').change(validate);
-                $('input').keydown(window.spacescout_admin.validateInput);
+                $('input, textarea, select').change(validate);
+                $('input').keypress(window.spacescout_admin.validateInput);
                 $('input[class*="required-limit-"]').click(limitChoiceCount);
                 $('a.btn').click(modifySpace);
 
@@ -269,6 +269,11 @@ $(document).ready(function() {
 
         editor_node.append(section_node);
 
+        if (context['images'].length < 2) {
+            $('#image-carousel .carousel-control').hide();
+            $('#image-carousel .carousel-indicators').hide();
+        }
+
         $('#upload_form').ajaxForm({
             type: 'POST',
             url : window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id + '/image/',
@@ -338,77 +343,100 @@ $(document).ready(function() {
 
     var wireLatLongPicker = function (section) {
         var latlng_input = $('input[name="location.latitude|location.longitude"]'),
-            node = $("#latlong-picker"),
-            map,
+            picker = $("#latlong-picker"),
+            map, marker, latlng, zoom, m, original_val,
             parseLatLongValue = function (s) {
                 return s.match(/^([-]?[\d\.]+)\s*,\s*([-]?[\d\.]+)$/);
             },
-            getLatLongValue = function () {
-                var m = parseLatLongValue(latlng_input.val()),
-                    latlng = new google.maps.LatLng(47.653787, -122.307808);
-
-                if (m && m.length) {
-                    latlng = new google.maps.LatLng(m[1],m[2]);
-                } else if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        latlng = new google.maps.LatLng(position.coords.latitude,
-                                                        position.coords.longitude);
-                    }, function () {
-                        console.log('problem getting lat/long');
-                    });
-                } else {
-                    console.log('browser does not support lat/long');
-                }
-
-                return latlng;
-            },
             setLatLongValue = function(latLng) {
                 latlng_input.val([latLng.lat(), latLng.lng()].join(', '));
+            },
+            setMarker = function (latlng) {
+                if (marker) {
+                    marker.setPosition(latlng);
+                } else {
+                    marker = new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    google.maps.event.addListener(marker, 'drag', function(e) {
+                        setLatLongValue(e.latLng);
+                    });
+                }
+
+                setLatLongValue(latlng);
+            },
+            centerMarker = function (ctr) {
+                map.setCenter(ctr);
+                setMarker(ctr);
             };
 
-        if (node.length) {
-            map = new google.maps.Map(node.get(0), {
+        if (picker.length) {
+            m = parseLatLongValue(latlng_input.val());
+            if (m && m.length) {
+                latlng = new google.maps.LatLng(m[1],m[2]);
+                zoom = 18;
+            } else {
+                latlng = new google.maps.LatLng(47.653787, -122.307808);
+                zoom = 16;
+            }
+
+            map = new google.maps.Map(picker.get(0), {
 			    mapTypeId: google.maps.MapTypeId.ROADMAP,
 			    mapTypeControl: false,
                 panControl: true,
-                draggableCursor: 'crosshair',
-			    disableDoubleClickZoom: true,
 			    zoomControlOptions: true,
 			    streetViewControl: false,
-                center: getLatLongValue(),
-                zoom: 18
+                center: latlng,
+                zoom: zoom
             });
 
-            node.append($('<img />').prop('src', window.spacescout_admin.static_url + 'spacescout_admin/img/cross-hairs.gif').addClass('cross-hair'));
-
-            google.maps.event.addListener(map, 'dblclick', function(e) {
-                setLatLongValue(e.latLng);
-                map.panTo(e.latLng);
-                map.setZoom(map.getZoom() + 1);
-            });  
+            if (m && m.length) {
+                setMarker(latlng);
+            }
 
             google.maps.event.addListener(map, 'click', function(e) {
-                setLatLongValue(e.latLng);
-                map.panTo(e.latLng);
-            });  
-
-            google.maps.event.addListener(map, 'drag', function(e) {
-                setLatLongValue(map.getCenter());
+                if (!marker) {
+                    setMarker(e.latLng);
+                }
             });
 
             latlng_input.prev().bind('displayed', function () {
-                var ctr = map.getCenter();
-
                 google.maps.event.trigger(map, 'resize');
-                map.setCenter(ctr);
+                if (marker) {
+                    map.setCenter(marker.getPosition());
+                } else if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        centerMarker(new google.maps.LatLng(position.coords.latitude,
+                                                            position.coords.longitude));
+                    }, function (perr) {
+                        map.setCenter(new google.maps.LatLng(47.653787, -122.307808));
+                        console.log('problem getting lat/long (' + perr.code + ') ' + perr.message);
+                    });
+                } else {
+                    map.setCenter(new google.maps.LatLng(47.653787, -122.307808));
+                }
             });
 
             latlng_input.change(function () {
                 var m = parseLatLongValue($(this).val());
 
                 if (m && m.length) {
-                    map.setCenter(new google.maps.LatLng(m[1],m[2]));
+                    centerMarker(new google.maps.LatLng(m[1], m[2]));
+                }
+            });
 
+            latlng_input.keypress(function (event) {
+                original_val = $(event.target).val();
+                var x = window.spacescout_admin.isNumberInput(event),
+                    y = [32,44,45].indexOf(event.keyCode);
+
+                if (!(window.spacescout_admin.isNumberInput(event)
+                      || [32, 44, 45, 46].indexOf(event.which) >= 0)) {
+                    event.preventDefault();
                 }
             });
         }

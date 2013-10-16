@@ -448,22 +448,27 @@ $(document).ready(function() {
 
     window.spacescout_admin.validateInput = function (event) {
         var el = $(event.target),
-            key = event.keyCode,
-            v = el.val(),
-            multi = ($.inArray('|') >= 0);
-
-        switch (el.prop('type')) {
+            key = event.which,
+            v = el.val().trim(),
+            min = el.attr('min') ? parseInt(el.attr('min')) : undefined;
+        
+        switch (el.attr('type')) {
         case 'number':
-            if (key == 8 || key == 9 || key == 27 || key == 13 || key == 16 || key == 17 || key == 18 || key == 91) {
-                return;
-            }
+            if (min && min < 0 && key == 189) {
+                if (v.charAt(0) != '-') {
+                    el.val('-' + v);
+                }
 
-            if (!(!event.shiftKey && ((key > 47 && key < 58) || (key > 95 && key < 106)))) {
+                event.preventDefault();
+            } else if (!window.spacescout_admin.isNumberInput(event)
+                       || (min != undefined && parseInt(v + String.fromCharCode(key)) < min)) {
                 event.preventDefault();
             }
 
         case 'text':
-            setInterval(window.spacescout_admin.validateFields, 100);
+            setInterval(function () {
+                window.spacescout_admin.validateFields();
+            }, 100);
             break;
         default:
             break;
@@ -503,6 +508,7 @@ $(document).ready(function() {
                 }
             };
 
+        // required fields
         $('.' + required_class).each(function () {
             var el = $(this);
 
@@ -530,12 +536,14 @@ $(document).ready(function() {
                 set_cue(el, (el.val().trim().length == 0));
                 break;
             case 'select':
+                set_cue(el, ($(this).find('option:selected').length == 0));
                 break;
             default :
                 break;
             };
         });
 
+        // fields that dependent on another
         $('input[class^="' + dependent_prefix + '"]:checked').each(function () {
             var el = $(this),
                 el_value = el.attr('value'),
@@ -561,6 +569,24 @@ $(document).ready(function() {
                 }
             }
         });
+
+        // fields with specific format
+        $('input[name="location.latitude|location.longitude"]').each (function () {
+            set_cue($(this), window.spacescout_admin.isValidLatLong($(this).val()) == null);
+        });
+    };
+
+    window.spacescout_admin.isValidLatLong = function (val) {
+        return val.trim().match(/^[-]?\d+(.\d+)?\s*,\s*[-]?\d+(.\d+)?$/);
+    };
+
+    window.spacescout_admin.isNumberInput = function (event) {
+        var key = event.which,
+            allowed = [8, 9, 27, 13, 16, 17, 18, 37, 39, 91, 188];
+
+        return (event.ctrlKey
+                || allowed.indexOf(key) >= 0
+                || (!event.shiftKey && (key > 47 && key < 58)));
     };
 
     window.spacescout_admin.collectInput = function () {
@@ -608,6 +634,11 @@ $(document).ready(function() {
             case 'text':
                 p = isMultiValueInput($(this));
                 if (p) {
+                    if ($(this).attr('name') == 'location.latitude|location.longitude'
+                        && !window.spacescout_admin.isValidLatLong($(this).val().trim())) {
+                        break;
+                    }
+
                     q = getMultiValues(p, $(this).val().trim());
                     for (i = 0; i < p.length; i += 1) {
                         data[p[i]] = q ? q[p[i]] : '';
