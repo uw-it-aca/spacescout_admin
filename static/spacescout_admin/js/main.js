@@ -446,6 +446,65 @@ $(document).ready(function() {
         };
     };
 
+    window.spacescout_admin.businessHours = function (available_hours) {
+        var periods = [],
+            runs = {},
+            context, h, i, l, n, r, d, s;
+
+        for (d = 0; d < 7; d += 1) {
+            if (available_hours[d].hasOwnProperty('hours')) {
+                h = available_hours[d].hours;
+
+                for (i = 0; i < h.length; i++) {
+                    if (h[i][0] == '00:00' && h[i][1] == '23:59') {
+                        s = gettext('allday');
+                    } else {
+                        s = window.spacescout_admin.prettyHours(h[i][0])
+                            + ' - ' + window.spacescout_admin.prettyHours(h[i][1]);
+                    }
+
+                    if (runs.hasOwnProperty(s)) {
+                        runs[s].push(d);
+                    } else {
+                        runs[s] = [d];
+                    }
+                }
+            }
+        }
+
+        for (r in runs) {
+            context = {
+                day: gettext(available_hours[runs[r][0]].day),
+                hours: r
+            };
+
+            l = runs[r].length;
+            n = runs[r][0] + 1;
+            h = 0;
+            for (i = 1; i <= l; i += 1) {
+                if (i < l && runs[r][i] == n) {
+                    n += 1;
+                    h += 1;
+                } else {
+                    if (h > 0) {
+                        context.day +=  ((h > 1) ? ' - ' : ', ')  + gettext(available_hours[runs[r][i-1]].day);
+                    }
+
+                    if (i < l) {
+                        context.day +=  ', ' + gettext(available_hours[runs[r][i]].day);
+                        n = runs[r][i] + 1;
+                    }
+
+                    h = 0;
+                }
+            }
+
+            periods.push(context);
+        }
+
+        return periods;
+    };
+
     window.spacescout_admin.validateInput = function (event) {
         var el = $(event.target),
             key = event.which,

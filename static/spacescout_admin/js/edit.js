@@ -109,11 +109,87 @@ $(document).ready(function() {
 
     var editHoursDetails = function (section, editor_node) {
         var section_node = newSectionEditor(section.section),
-            anchor_node, hours_node = null, key, days, hours, i, j;
+            help_node;
 
         section_node.append($(Handlebars.compile($('#space-edit-hours').html())({})));
 
-        anchor_node = section_node.find('a').parent();
+        help_node = section_node.find('a#hours-help').parent().parent().next();
+        section_node.find('a#hours-help').click(function (event) {
+            help_node.toggle();
+        });
+
+        $.ajax({
+            url: window.spacescout_admin.app_url_root + 'api/v1/space/',
+            dataType: 'json',
+            error: function (xhr) {
+                var json;
+
+                try {
+                    json = $.parseJSON(xhr.responseText);
+                    console.log('space search service error:' + json.error);
+                } catch (e) {
+                    console.log('Unknown space service error');
+                }
+            },
+            success: function (data) {
+                var hours = [],
+                    context = {
+                        inputs : []
+                    },
+                    d, i, j, h;
+
+                $.each(data, function (i) {
+                    $.each(data[i].sections, function(j) {
+                        if (data[i].sections[j].hasOwnProperty('available_hours')) {
+                            h = window.spacescout_admin.businessHours(data[i].sections[j].available_hours);
+
+                            if (h && h.length) {
+                                context.inputs.push({
+                                    text: data[i].name
+                                        + ' (' + Handlebars.compile($('#hours-editor-picker-hours').html())({ hours: h }) + ')',
+                                    value: i
+                                });
+                            }
+                        }
+                    });
+                });
+
+                help_node.append($(Handlebars.compile($('#hours-editor-picker').html())(context)));
+
+                help_node.click(function (event) {
+                    d = $(event.target).closest('div.hours-editor-choice');
+                    i = parseInt($('input', d).val());
+
+                    $('.hours-editor-selected',  d.closest('div.hours-editor-picker')).removeClass('hours-editor-selected');
+                    d.addClass('hours-editor-selected');
+
+                    $.each(data[i].sections, function(j) {
+                        if (data[i].sections[j].hasOwnProperty('available_hours')) {
+                            $('.business-hours').remove();
+                            insertBusinessHours(data[i].sections[j]);
+                        }
+                    });
+                });
+
+            }
+        });
+
+
+        appendSectionFields(section.fields, section_node);
+
+        editor_node.append(section_node);
+
+        insertBusinessHours(section);
+
+        $('#space-editor #add-hours').click(function (e) {
+            hoursNode().insertBefore($(e.target).parent());
+        });
+    };
+
+    var insertBusinessHours = function (section) {
+        var anchor_node = $('#add-hours').parent(),
+            anchor_node, hours_node = null, key, days, hours, i, j;
+
         if (section.hasOwnProperty('available_hours')
             && typeof section.available_hours === 'object'
             && $.isArray(section.available_hours)) {
@@ -146,14 +222,6 @@ $(document).ready(function() {
         if (!hours_node) {
             anchor_node.before(hoursNode());
         }
-
-        appendSectionFields(section.fields, section_node);
-
-        editor_node.append(section_node);
-
-        $('#space-editor #add-hours').click(function (e) {
-            hoursNode().insertBefore($(e.target).parent());
-        });
     };
 
     var hoursNode = function (t) {

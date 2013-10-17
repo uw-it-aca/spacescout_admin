@@ -37,7 +37,8 @@
       <div class="required-field" style="display:none;">
         <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">{% trans "required" %}</span>
       </div>
-      <small>{% trans "normal_hours_help" %}</small></h4>
+      <small>{% trans "normal_hours_help" %}<a id="hours-help" href="javascript:void(0);">{% trans "similar_hours" %}</a>?</small></h4>
+    <div class="well well-sm" style="display: none;"></div>
     <div class="time-selector">
       <span class="third">Day(s)</span>
       <span class="two-thirds clearfix" style="display:inline-block;">
@@ -46,6 +47,28 @@
       </span>
     </div>
     <div style="margin: 1em 0;"><a id="add-hours" href="javascript:void(0);" class="action-link">{% trans "add_hours_group" %}</a></div>
+</script>
+
+<script id="hours-editor-picker" type="text/html">
+{% verbatim %}
+  <div class="hours-editor-picker">
+    {{ #each inputs }}
+    <div class="hours-editor-choice">
+      <input type="hidden" value="{{ value }}">{{{ text }}}
+    </div>
+    {{ /each }}
+  </div>
+{% endverbatim %}
+</script>
+
+<script id="hours-editor-picker-hours" type="text/html">
+{% verbatim %}
+  <ul class="hours-list">
+  {{ #each hours }}
+    <li>{{ day }} {{ hours }}</li>
+  {{ /each }}
+  </ul>
+{% endverbatim %}
 </script>
 
 <script id="hours-editor" type="text/html">

@@ -372,7 +372,10 @@ msgid "latlong_link"
 msgstr "map below."
 
 msgid "normal_hours_help"
-msgstr "The hours that the space is accessible to all students"
+msgstr "The hours that the space is accessible to all students.  Perhaps these hours are "
+
+msgid "similar_hours"
+msgstr "similar to another space"
 
 # more help
 
