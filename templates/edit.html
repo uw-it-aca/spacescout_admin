@@ -52,7 +52,7 @@
   <div class="hours-editor-picker">
     {{ #each inputs }}
     <div class="hours-editor-choice">
-      <input type="hidden" value="{{ value }}">{{{ name }}} {{{ hours }}}
+      <input type="hidden" value="{{ value }}"><span class="space-name">{{{ name }}}</span><span class="space-hours">{{{ hours }}}</span>
     </div>
     {{ /each }}
   </div>

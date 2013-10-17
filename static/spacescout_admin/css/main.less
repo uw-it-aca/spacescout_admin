@@ -430,14 +430,22 @@ a.action-link { text-decoration: none; }
 }
 
 #space-editor {
+    
     .hours-editor-picker { max-height: 250px; overflow: auto; margin-left: -10px; margin-right: -10px; }
     .hours-editor-choice {padding: 3px 10px; cursor: pointer; 
-        
         &:hover { background: @gray-lighter; }
-    }
-    
-    .hours-editor-selected { background-color: #5cb85c; 
         
+        .space-name { display: block; font-weight: bold; 
+            @media screen and (min-width: 1024px) { display: inline-block; width: 30%;}
+        }
+        .space-hours { display: block; 
+            .hours-list { margin: 0; padding: 0; }
+            @media screen and (min-width: 1024px) { display: inline-block; width: 70%;}
+        }
+        
+        
+    }
+    .hours-editor-selected { background-color: #5cb85c; color: #fff; 
         &:hover { background: #5cb85c; }
     }
     
