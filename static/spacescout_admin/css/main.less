@@ -385,6 +385,12 @@ a.action-link { text-decoration: none; }
         max-width: 768px; margin: 1em auto; display: block;
     }
     
+    /* target ipad on landscape mode */
+    @media screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+        display: none;
+        background: red;
+    }
+    
     .fileupload-preview { display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  margin-left:5px;
         @media screen and (max-width: 320px) { 
             max-width: 160px;
