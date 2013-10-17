@@ -113,11 +113,29 @@ $(document).ready(function() {
 
         section_node.append($(Handlebars.compile($('#space-edit-hours').html())({})));
 
-        help_node = section_node.find('a#hours-help').parent().parent().next();
-        section_node.find('a#hours-help').click(function (event) {
+        $('a#hours-help', section_node).click(function (event) {
+            var help_node = $(event.target).parents().eq(1).next();
+
+            if (help_node.html().length == 0) {
+                help_node.append($(Handlebars.compile($('#space-edit-loading').html())({})));
+                showHoursExistingSpotPicker(help_node);
+            }
+
             help_node.toggle();
         });
 
+        appendSectionFields(section.fields, section_node);
+
+        editor_node.append(section_node);
+
+        insertBusinessHours(section);
+
+        $('#space-editor #add-hours').click(function (e) {
+            hoursNode().insertBefore($(e.target).parent());
+        });
+    };
+
+    var showHoursExistingSpotPicker = function (help_node) {
         $.ajax({
             url: window.spacescout_admin.app_url_root + 'api/v1/space/',
             dataType: 'json',
@@ -137,6 +155,8 @@ $(document).ready(function() {
                         inputs : []
                     },
                     d, i, j, h;
+
+                $('.space-content-loading', help_node).hide();
 
                 $.each(data, function (i) {
                     $.each(data[i].sections, function(j) {
@@ -172,17 +192,6 @@ $(document).ready(function() {
                 });
 
             }
-        });
-
-
-        appendSectionFields(section.fields, section_node);
-
-        editor_node.append(section_node);
-
-        insertBusinessHours(section);
-
-        $('#space-editor #add-hours').click(function (e) {
-            hoursNode().insertBefore($(e.target).parent());
         });
     };
 
@@ -595,4 +604,7 @@ $(document).ready(function() {
     var getFieldValue = function (v) {
         return window.spacescout_admin.getFieldValue(v);
     };
+
+    $('h2').before($(Handlebars.compile($('#space-edit-loading').html())({})));
+
 });

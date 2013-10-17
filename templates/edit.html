@@ -21,16 +21,18 @@
 
 {% include "input.html" %}
 
-<div class="space-content-loading">
+<h2><a id="space-name" href="{{ APP_URL_ROOT }}space/{{SPACE_ID}}"></a></h2>
+
+<div id="space-editor"></div>
+
+<script id="space-edit-loading" type="text/html">
+  <div class="space-content-loading">
     <div class="spinner" role="alert">
       <span></span><span></span><span></span>
     </div>
     <div class="loading">Loading</div>
-</div>
-
-<h2><a id="space-name" href="{{ APP_URL_ROOT }}space/{{SPACE_ID}}"></a></h2>
-
-<div id="space-editor"></div>
+  </div>
+</script>
 
 <script id="space-edit-hours" type="text/html">
     <h4  class="field-header">{% trans "normal_hours" %}
