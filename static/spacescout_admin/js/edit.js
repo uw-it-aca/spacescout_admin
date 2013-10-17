@@ -145,8 +145,8 @@ $(document).ready(function() {
 
                             if (h && h.length) {
                                 context.inputs.push({
-                                    text: data[i].name
-                                        + ' (' + Handlebars.compile($('#hours-editor-picker-hours').html())({ hours: h }) + ')',
+                                    name : data[i].name,
+                                    hours: Handlebars.compile($('#hours-editor-picker-hours').html())({ hours: h }),
                                     value: i
                                 });
                             }
@@ -285,6 +285,7 @@ $(document).ready(function() {
             }
         });
 
+        select_days.addClass('required-field');
         for (i = 0; i < weekdays.length; i += 1) {
             option = $('<option></option>').val(weekdays[i]).html(gettext(weekdays[i])).addClass('hours-value');
             if (t && t.hasOwnProperty('days') && $.inArray(weekdays[i], t.days) > -1) {

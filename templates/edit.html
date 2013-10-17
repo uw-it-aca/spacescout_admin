@@ -34,10 +34,8 @@
 
 <script id="space-edit-hours" type="text/html">
     <h4  class="field-header">{% trans "normal_hours" %}
-      <div class="required-field" style="display:none;">
-        <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">{% trans "required" %}</span>
-      </div>
-      <small>{% trans "normal_hours_help" %}<a id="hours-help" href="javascript:void(0);">{% trans "similar_hours" %}</a>?</small></h4>
+      <small>{% trans "normal_hours_help" %}<a id="hours-help" href="javascript:void(0);">{% trans "similar_hours" %}</a>?</small>
+    </h4>
     <div class="well well-sm" style="display: none;"></div>
     <div class="time-selector">
       <span class="third">Day(s)</span>
@@ -54,7 +52,7 @@
   <div class="hours-editor-picker">
     {{ #each inputs }}
     <div class="hours-editor-choice">
-      <input type="hidden" value="{{ value }}">{{{ text }}}
+      <input type="hidden" value="{{ value }}">{{{ name }}} {{{ hours }}}
     </div>
     {{ /each }}
   </div>
@@ -76,7 +74,7 @@
     <!-- repeat this row with each new "add new group"-->
     <div class="time-selector business-hours">
       <div class="day-select-container third">
-        <select multiple id="days" class="required-field"></select>
+        <select multiple id="days"></select>
         <div class="show-days">Select days</div>
       </div>
       <div class="hours-slider-container two-thirds clearfix">

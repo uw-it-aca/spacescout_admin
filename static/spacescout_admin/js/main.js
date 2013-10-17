@@ -536,12 +536,11 @@ $(document).ready(function() {
 
     window.spacescout_admin.validateFields = function () {
         var show_cue = function (n, s) {
-                var req_node = n.find('.' + required_class);
+                var req_node = $('.' + required_class, n);
 
                 if (!req_node.length) {
-                    var tpl = Handlebars.compile($('#space-edit-field-required').html());
-                    req_node = $(tpl());
-                    $(':first', n).prepend(req_node);
+                    $('small', n).before($(Handlebars.compile($('#space-edit-field-required').html())()));
+                    req_node = $('.' + required_class, n);
                 }
 
                 if (s) {
@@ -551,19 +550,15 @@ $(document).ready(function() {
                 }
             },
             set_cue = function (node, show) {
-                var i, n, s, h = node.prevAll('.field-header');
+                var h = node.prevAll('.field-header');
 
                 if (h.length) {
                     show_cue(h.eq(0), show);
                 } else { 
-                    n = node.parents();
-                    for (i = 0; i < 8; i += 1) {
-                        s = n.eq(i).prevAll('.field-header');
-                        if (s.length) {
-                            show_cue(s.eq(0), show);
-                            break;
-                        }
-                    }
+                    node.parents().prevAll('.field-header').each(function () {
+                        show_cue($(this), show);
+                        return false;
+                    });
                 }
             };
 
