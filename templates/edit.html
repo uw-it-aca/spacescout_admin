@@ -50,25 +50,27 @@
 </script>
 
 <script id="hours-editor-picker" type="text/html">
+  <div>
+    {% trans 'hours_picker_more_help' %}
 {% verbatim %}
-  <div class="hours-editor-picker">
-    {{ #each inputs }}
-    <div class="hours-editor-choice">
-      <input type="hidden" value="{{ value }}"><span class="space-name">{{{ name }}}</span><span class="space-hours">{{{ hours }}}</span>
-    </div>
+    {{ #each attributes }}
+    <div><label><input type="checkbox" name="{{ key }}" value="{{ value }}">{{ text }}</label></div>
     {{ /each }}
+    <div class="hours-editor-picker">
+      {{ #each spaces }}
+      <div class="hours-editor-choice">
+        <input type="hidden" value="{{ value }}"><span class="space-name">{{ name }}</span><span class="space-hours">
+          <ul class="hours-list">
+            {{ #each hours }}
+            <li>{{ day }} {{ hours }}</li>
+            {{ /each }}
+          </ul>
+        </span>
+      </div>
+      {{ /each }}
+    </div>
+{% endverbatim %}
   </div>
-{% endverbatim %}
-</script>
-
-<script id="hours-editor-picker-hours" type="text/html">
-{% verbatim %}
-  <ul class="hours-list">
-  {{ #each hours }}
-    <li>{{ day }} {{ hours }}</li>
-  {{ /each }}
-  </ul>
-{% endverbatim %}
 </script>
 
 <script id="hours-editor" type="text/html">

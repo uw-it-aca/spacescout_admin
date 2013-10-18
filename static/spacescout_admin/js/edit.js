@@ -152,23 +152,39 @@ $(document).ready(function() {
             success: function (data) {
                 var hours = [],
                     context = {
-                        inputs : []
+                        attributes: [],
+                        spaces: []
                     },
-                    d, i, j, h;
+                    i;
 
                 $('.space-content-loading', help_node).hide();
 
                 $.each(data, function (i) {
-                    $.each(data[i].sections, function(j) {
-                        if (data[i].sections[j].hasOwnProperty('available_hours')) {
-                            h = window.spacescout_admin.businessHours(data[i].sections[j].available_hours);
+                    var space = this;
+
+                    $.each(space.sections, function() {
+                        var section = this,
+                            h;
+
+                        if (section.hasOwnProperty('available_hours')) {
+                            h = window.spacescout_admin.businessHours(section.available_hours);
 
                             if (h && h.length) {
-                                context.inputs.push({
-                                    name : data[i].name,
-                                    hours: Handlebars.compile($('#hours-editor-picker-hours').html())({ hours: h }),
+                                context.spaces.push({
+                                    name : space.name,
+                                    hours: h,
                                     value: i
                                 });
+
+                                if (context.attributes.length == 0) {
+                                    $.each(section.fields, function () {
+                                        context.attributes.push({
+                                            key: 'copy_' + this.value.key,
+                                            value: this.value.hasOwnProperty('value') ? this.value.value : '',
+                                            text: 'Copy ' + gettext(this.name)
+                                        });
+                                    });
+                                }
                             }
                         }
                     });
@@ -176,17 +192,23 @@ $(document).ready(function() {
 
                 help_node.append($(Handlebars.compile($('#hours-editor-picker').html())(context)));
 
-                help_node.click(function (event) {
-                    d = $(event.target).closest('div.hours-editor-choice');
-                    i = parseInt($('input', d).val());
+                $('.hours-editor-picker', help_node).click(function (event) {
+                    var d = $(event.target).closest('div.hours-editor-choice');
 
                     $('.hours-editor-selected',  d.closest('div.hours-editor-picker')).removeClass('hours-editor-selected');
                     d.addClass('hours-editor-selected');
 
-                    $.each(data[i].sections, function(j) {
-                        if (data[i].sections[j].hasOwnProperty('available_hours')) {
+                    $.each(data[parseInt($('input', d).val())].sections, function() {
+                        var section = this;
+
+                        if (section.hasOwnProperty('available_hours')) {
                             $('.business-hours').remove();
-                            insertBusinessHours(data[i].sections[j]);
+                            insertBusinessHours(section);
+                            $('input[type="checkbox"]',  d.closest('div.hours-editor-picker').parent()).each(function () {
+                                if ($(this).is(':checked')) {
+                                    insertHoursAttribute(section, this.name.substr(5));
+                                }
+                            });
                         }
                     });
                 });
@@ -231,6 +253,45 @@ $(document).ready(function() {
         if (!hours_node) {
             anchor_node.before(hoursNode());
         }
+    };
+
+    var insertHoursAttribute = function (section, key) {
+        $.each(section.fields, function () {
+            if (this.hasOwnProperty('value')
+                && this.value.hasOwnProperty('key')
+                && key == this.value.key
+                && this.value.hasOwnProperty('value')) {
+                 var element = $('[name="' + key + '"]'),
+                    value = this.value.value ? this.value.value : '';
+
+                switch (element.prop('tagName')) {
+                case 'SELECT':
+                    break;
+                case 'TEXTAREA':
+                    element.text(value);
+                    break;
+                case 'INPUT':
+                    switch (element.prop('type')) {
+                    case 'text':
+                        element.val(value);
+                        break;
+                    case 'checkbox':
+                        element.attr('checked', value != false);
+                        break;
+                    case 'radio':
+                        $('input[name="' + key + '"][value="' + value + '"]').attr('checked', true);
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+                }
+
+                return false;
+            }
+        });
     };
 
     var hoursNode = function (t) {

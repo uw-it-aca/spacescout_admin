@@ -426,6 +426,10 @@ msgstr "<h6>Examples:</h6>\
             <li>Reservations can be made at the circulation desk.</li>\
         </ul>"
 
+msgid "hours_picker_more_help"
+msgstr "Select a space below to apply its hours to this space."
+
+
 # placeholders
 
 msgid "default_placeholder"

@@ -291,7 +291,7 @@ class SpaceManager(RESTDispatch):
         #        args.append("{0}={1}".format(urllib.quote(key), urllib.quote(options[key])))
 
         #url = "{0}/api/v1/spot/search?{1}".format(settings.SS_WEB_SERVER_HOST, "&".join(search_args))
-        url = "{0}/api/v1/spot/all".format(settings.SS_WEB_SERVER_HOST, "&".join(search_args))
+        url = "{0}/api/v1/spot/all".format(settings.SS_WEB_SERVER_HOST)
 
         resp, content = client.request(url, 'GET')
 
