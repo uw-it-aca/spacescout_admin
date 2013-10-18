@@ -360,17 +360,23 @@ a.action-link { text-decoration: none; }
 
 /*** details ***/
 
-.carousel { margin-top: 1em; max-width: 768px; 
+.carousel { margin-top: 1em; max-width: 768px;
      @media screen and (min-width: 1024px) {
         margin: 1em auto;
      } 
 }
 
-.carousel-inner { min-height: 193px; background: @gray-lighter;
-    @media screen and (min-width: 480px) { min-height: 299px; }
-    @media screen and (min-width: 768px) { min-height: 457px; }
-    @media screen and (min-width: 1024px) { min-height: 511px; }
+.carousel-inner {  background: @gray-dark; min-height: 190px;
+    
+    /*@media screen and (min-width: 480px) { max-height: 299px; }
+    @media screen and (min-width: 768px) { max-height: 457px; }
+    @media screen and (min-width: 1024px) { max-height: 511px; }*/
+    
+    .item { text-align: center;
+        img { display: inline-block; width: 100%;}
+    }
 }
+
 
 .carousel-control.right { background-image: none;}
 .carousel-control.left  { background-image: none;}
