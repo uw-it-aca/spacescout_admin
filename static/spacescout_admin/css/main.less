@@ -472,10 +472,17 @@ a.action-link { text-decoration: none; }
 	    h3 { font-family: 'Dosis', sans-serif; text-transform: uppercase; font-weight: 500; font-size: 1.1em; }
     }
     
-    h4 { font-weight: 700; font-size: 1em; margin-top: 1.5em; word-spacing: -0.26em; //get rid of whitespace 
-        span { display: inline-block; word-spacing: 0;}
-        .required-field { margin-left: 5px; word-spacing: 0; }
-        small { color: @gray; font-size: .9em; padding-left: 1em; font-family: 'Lato', sans-serif; font-weight: 100; word-spacing: 0;  }
+    h4 { font-weight: 700; font-size: 1em; margin-top: 1.5em; 
+        span { display: inline-block; }
+        .required-field { margin-left: 5px; }
+        small { color: @gray; font-size: .9em; padding-left: 1em; font-family: 'Lato', sans-serif; font-weight: 100; }
+    }
+    
+    /* handle editing fields... remove whitespace */
+    h4.field-header { word-spacing: -0.26em; 
+        span { word-spacing: 0; }
+        .required-field { word-spacing: 0; }
+        small { word-spacing: 0; }
     }
     
     .space-types-panel { border-color: @gray-lightest; padding: .3em 1em; box-shadow: none; }
