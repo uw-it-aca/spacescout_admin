@@ -426,9 +426,11 @@ msgstr "<h6>Examples:</h6>\
             <li>Reservations can be made at the circulation desk.</li>\
         </ul>"
 
-msgid "hours_picker_more_help"
-msgstr "Select a space below to apply its hours to this space."
+msgid "hours_picker_fields_more_help"
+msgstr "<p>Select the fields you wish to copy.</p>"
 
+msgid "hours_picker_spaces_more_help"
+msgstr "<p style=\"margin-top:1em;\">Select a space below to apply its hours to this space.</p>"
 
 # placeholders
 

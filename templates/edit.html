@@ -35,7 +35,7 @@
 </script>
 
 <script id="space-edit-hours" type="text/html">
-    <h4  class="field-header">{% trans "normal_hours" %}
+    <h4  class="field-header"><span>{% trans "normal_hours" %}</span>
       <small>{% trans "normal_hours_help" %}<a id="hours-help" href="javascript:void(0);">{% trans "similar_hours" %}</a>?</small>
     </h4>
     <div class="well well-sm" style="display: none;"></div>
@@ -50,26 +50,34 @@
 </script>
 
 <script id="hours-editor-picker" type="text/html">
-  <div>
-    {% trans 'hours_picker_more_help' %}
-{% verbatim %}
-    {{ #each attributes }}
-    <div><label><input type="checkbox" name="{{ key }}" value="{{ value }}">{{ text }}</label></div>
-    {{ /each }}
-    <div class="hours-editor-picker">
-      {{ #each spaces }}
-      <div class="hours-editor-choice">
-        <input type="hidden" value="{{ value }}"><span class="space-name">{{ name }}</span><span class="space-hours">
-          <ul class="hours-list">
-            {{ #each hours }}
-            <li>{{ day }} {{ hours }}</li>
-            {{ /each }}
-          </ul>
-        </span>
-      </div>
-      {{ /each }}
-    </div>
-{% endverbatim %}
+  <div class="copy-space-hours">
+    
+    {% trans 'hours_picker_fields_more_help' %}
+    
+    {% verbatim %}
+        {{ #each attributes }}
+        <div><label><input type="checkbox" name="{{ key }}" value="{{ value }}">{{ text }}</label></div>
+        {{ /each }}
+    {% endverbatim %}
+    
+    {% trans 'hours_picker_spaces_more_help' %}
+
+    {% verbatim %}    
+        <div class="hours-editor-picker">
+          {{ #each spaces }}
+          <div class="hours-editor-choice">
+            <input type="hidden" value="{{ value }}"><span class="space-name">{{ name }}</span><span class="space-hours">
+              <ul class="hours-list">
+                {{ #each hours }}
+                <li>{{ day }} {{ hours }}</li>
+                {{ /each }}
+              </ul>
+            </span>
+          </div>
+          {{ /each }}
+        </div>
+    {% endverbatim %}
+    
   </div>
 </script>
 

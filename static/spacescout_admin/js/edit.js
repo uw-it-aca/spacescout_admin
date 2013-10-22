@@ -181,7 +181,7 @@ $(document).ready(function() {
                                         context.attributes.push({
                                             key: 'copy_' + this.value.key,
                                             value: this.value.hasOwnProperty('value') ? this.value.value : '',
-                                            text: 'Copy ' + gettext(this.name)
+                                            text: gettext(this.name)
                                         });
                                     });
                                 }
