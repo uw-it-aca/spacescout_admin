@@ -23,9 +23,20 @@ $(document).ready(function() {
         }
 
         validate();
-        $('input, textarea').change(validate);
+
+        $('input, textarea, select').change(validate);
+        $('input[class*="required-limit-"]').click(limitChoiceCount);
         $('input').keydown(validateInput);
         $('a.btn').click(createSpace);
+    };
+
+    var limitChoiceCount = function (e) {
+        var m = $(e.target).prop('class').match(/required-limit-(\d+)/);
+
+        if (m && $('input[name="' + $(e.target).prop('name') + '"]:checked').length > m[1]
+            && $(e.target).is(':checked')) {
+            e.preventDefault();
+        }
     };
 
     var createSpace = function (event) {
