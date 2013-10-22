@@ -72,22 +72,42 @@ class SpaceMap(object):
                     section['available_hours'].append(hrs)
             elif secdef['section'] == 'images':
                 section['images'] = [];
+                images = []
+
                 if space.spot_id:
+                    n = 0;
                     for img in spot['images']:
-                        section['images'].append({
-                            'description': img.get('description'),
-                            'url': "{0}api/v1/space/{1}/image/-{2}".format(settings.APP_URL_ROOT, space.id, img.get('id'))
-                        })
-                try:
-                    for img in SpaceImage.objects.filter(space=space):
-                        section['images'].append({
-                            'description': img.description,
-                            'url': "{0}api/v1/space/{1}/image/{2}".format(settings.APP_URL_ROOT, space.id, img.id)
-                        })
+                        n += 1
+                        try:
+                            link = SpotImageLink.objects.get(space=space.id,
+                                                            spot_id=space.spot_id,
+                                                            image_id=img.get('id'))
+                            if link.is_deleted:
+                                continue
+                        except SpotImageLink.DoesNotExist:
+                            link = SpotImageLink(space=space,
+                                                 spot_id=space.spot_id,
+                                                 image_id=img.get('id'),
+                                                 display_index=n)
+                            link.save()
 
-                except SpaceImage.DoesNotExist:
-                    pass
+                        images.append({
+                                'order': link.display_index,
+                                'description': img.get('description'),
+                                'url': "{0}api/v1/space/{1}/image/-{2}".format(settings.APP_URL_ROOT,
+                                                                               space.id, link.id)})
 
+                for i in SpaceImage.objects.filter(space=space):
+                    images.append({
+                            'order': i.display_index,
+                            'description': i.description,
+                            'url': "{0}api/v1/space/{1}/image/{2}".format(settings.APP_URL_ROOT, space.id, i.id)})
+
+                for i in sorted(images, key=lambda k: k['order']):
+                    section['images'].append({
+                            'description': i.get('description'),
+                            'url': i.get('url')})
+                            
             if 'fields' in secdef:
                 section['fields'] = []
         

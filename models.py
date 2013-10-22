@@ -27,6 +27,16 @@ class Space(models.Model):
         }
 
 
+class SpotImageLink(models.Model):
+    """ Images associated with a space or spot
+    """
+    space = models.ForeignKey(Space)
+    spot_id = models.SmallIntegerField()
+    image_id = models.SmallIntegerField(unique=True)
+    is_deleted = models.NullBooleanField()
+    display_index = models.PositiveIntegerField(null=True)
+
+
 class SpaceImage(models.Model):
     """ An image of a Space. Multiple images can be associated
     with a Space, and Space objects have a 'Space.spotimage_set'
@@ -44,6 +54,7 @@ class SpaceImage(models.Model):
     content_type = models.CharField(max_length=40)
     width = models.IntegerField()
     height = models.IntegerField()
+    display_index = models.SmallIntegerField()
     creation_date = models.DateTimeField(auto_now_add=True)
     modification_date = models.DateTimeField(auto_now=True)
     upload_user = models.CharField(max_length=40)
@@ -62,6 +73,7 @@ class SpaceImage(models.Model):
             "content-type": self.content_type,
             "width": self.width,
             "height": self.height,
+            "display_index": self.display_index,
             "creation_date": self.creation_date.isoformat(),
             "modification_date": self.modification_date.isoformat(),
             "upload_user": self.upload_user,

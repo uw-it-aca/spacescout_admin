@@ -103,7 +103,9 @@ $(document).ready(function() {
             success: function (data) {
                 window.location.href = window.spacescout_admin.app_url_root + 'space/' + window.spacescout_admin.space_id;
             },
-            error: XHRError
+            error: function (xhr, textStatus, errorThrown) {
+                XHRError(xhr);
+            }
         });
     };
 
@@ -438,7 +440,7 @@ $(document).ready(function() {
 
         $('#delete_button').click(function (e) {
             var img_src = $('#image-carousel .active img').prop('src'),
-                id = img_src.match(/\/(\d+)$/)[1];
+                id = img_src.match(/\/[-]?(\d+)$/)[1];
 
             $.ajax({
                 url: img_src,
@@ -448,6 +450,24 @@ $(document).ready(function() {
                 },
                 error: function () {
                     console.log('ERROR');
+                }
+            });
+        });
+
+        $('#make_default_button').click(function (e) {
+            var img_src = $('#image-carousel .active img').prop('src');
+
+            $.ajax({
+                url: img_src,
+                type: "PUT",
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify({ display_index : 0 }),
+                success: function (data) {
+                    window.location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    XHRError(xhr);
                 }
             });
         });

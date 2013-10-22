@@ -40,7 +40,7 @@ class SpaceImageManager(RESTDispatch):
         try:
             space = Space.objects.get(id=space_id)
 
-            if image_id[:1] == '-':
+            if image_id[0] == '-':
                 return self._spot_image(space.spot_id, image_id[1:])
 
             img = SpaceImage.objects.get(pk=image_id)
@@ -62,11 +62,15 @@ class SpaceImageManager(RESTDispatch):
                 self.error404_response()  # no return
 
     def _spot_image(self, spot_id, image_id):
+        try:
+            link = SpotImageLink.objects.get(id=image_id)
+        except:
+            self.error404_response()  # no return
+
         # Required settings for the client
         consumer, client = oauth_initialization()
-
         url = "{0}/api/v1/spot/{1}/image/{2}".format(settings.SS_WEB_SERVER_HOST,
-                                                     spot_id, image_id)
+                                                     spot_id, link.image_id)
 
         resp, content = client.request(url, 'GET')
 
@@ -77,37 +81,56 @@ class SpaceImageManager(RESTDispatch):
 
     def PUT(self, request, space_id, image_id):
         try:
-            img = SpaceImage.objects.get(pk=image_id)
-            space = img.space
+            if image_id[0] == '-':
+                img = SpotImageLink.objects.get(id=image_id[1:])
+                links = SpotImageLink.objects.filter(space=space_id).exclude(id=img.id)
+                imgs = SpaceImage.objects.filter(space=space_id)
+            else:
+                img = SpaceImage.objects.get(pk=image_id)
+                imgs = SpaceImage.objects.filter(space=space_id).exclude(id=img.id)
+                links = SpotImageLink.objects.filter(space=space_id)
+                space = img.space
 
-            if int(space.pk) != int(space_id):
-                raise SpaceImage.DoesNotExist()
+                if int(space.pk) != int(space_id):
+                    raise SpaceImage.DoesNotExist()
 
-            space = Space.objects.get(id=space_id)
-            Permitted().edit(request.user, space, {})
+                space = Space.objects.get(id=space_id)
+                Permitted().edit(request.user, space, {})
+
         except PermittedException:
             return self.error_response(401, "Unauthorized")
         except (Space.DoesNotExist, SpaceImage.DoesNotExist):
             if e.args[0]['status_code'] == 404:
                 self.error404_response()  # no return
 
-        # This trick was taken from piston
-        request.method = "POST"
-        request._load_post_and_files()
-        request.method = "PUT"
+        body = json.loads(request.body)
 
-        if "image" in request.FILES:
-            img.image = request.FILES["image"]
-        if "description" in request.POST:
-            img.description = request.POST["description"]
+        if "display_index" in body:
+            img.display_index = body["display_index"]
+            for n in range(len(links) + len(imgs)):
+                for l in links:
+                    if l.display_index >= img.display_index:
+                        l.display_index += 1
+                        l.save()
+
+                for i in imgs:
+                    if i.display_index >= img.display_index:
+                        i.display_index += 1
+                        i.save()
+
+        if "description" in body and 'description' in img:
+            img.description = body["description"]
+
         img.save()
 
-        return self.GET(request, space_id, image_id)
+        return self.json_response(json.dumps({ 'id': img.id }))
 
     def POST(self, request, space_id):
         try:
             space = Space.objects.get(id=space_id)
             Permitted().edit(request.user, space, {})
+            links = SpotImageLink.objects.filter(space=space_id)
+            imgs = SpaceImage.objects.filter(space=space_id)
         except PermittedException:
             return self.error_response(401, "Unauthorized")
         except Space.DoesNotExist:
@@ -116,6 +139,7 @@ class SpaceImageManager(RESTDispatch):
         img = SpaceImage(
             description="",
             space=space,
+            display_index=len(links) + len(imgs),
             upload_user=request.user,
             upload_application="admin"
         )
@@ -131,19 +155,24 @@ class SpaceImageManager(RESTDispatch):
 
     def DELETE(self, request, space_id, image_id):
         try:
-            img = SpaceImage.objects.get(pk=image_id)
-            space = img.space
+            if image_id[0] == '-':
+                link = SpotImageLink.objects.get(id=image_id[1:])
+                link.is_deleted = True
+                link.save()
+            else:
+                img = SpaceImage.objects.get(pk=image_id)
+                space = img.space
+                Permitted().edit(request.user, space, {})
+                if int(space.pk) != int(space_id):
+                    raise SpaceImage.DoesNotExist()
 
-            if int(space.pk) != int(space_id):
-                raise SpaceImage.DoesNotExist()
-
-            space = Space.objects.get(id=space_id)
-            Permitted().edit(request.user, space, {})
+                space = Space.objects.get(id=space_id)
+                img.delete()
         except PermittedException:
             return self.error_response(401, "Unauthorized")
-        except (Space.DoesNotExist, SpaceImage.DoesNotExist):
+            self.error404_response()  # no return
+        except (Space.DoesNotExist, SpaceImage.DoesNotExist, SpotImageLink.DoesNotExist):
             self.error404_response()  # no return
 
-        img.delete()
 
         return HttpResponse(status=200)
