@@ -107,7 +107,7 @@ class SpaceMap(object):
                     section['images'].append({
                             'description': i.get('description'),
                             'url': i.get('url')})
-                            
+
             if 'fields' in secdef:
                 section['fields'] = []
         
@@ -197,5 +197,4 @@ class SpaceMap(object):
             if s[0] in d:
                 return self.set_by_key('.'.join(s[1:]), v, d[s[0]])
         else:
-            if k in d:
-                d[k] = v
+            d[k] = v
