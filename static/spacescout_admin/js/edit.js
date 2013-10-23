@@ -487,17 +487,9 @@ $(document).ready(function() {
     };
 
     var appendSectionFields = function (fields, section) {
-        var i;
-
-        for (i = 0; i < fields.length; i += 1) {
-            if (typeof fields[i].value === 'object') {
-                if ($.isArray(fields[i].value)) {
-                    window.spacescout_admin.appendFieldList(fields[i], getFieldValue, section);
-                } else {
-                    window.spacescout_admin.appendFieldValue(fields[i], getFieldValue, section);
-                }
-            }
-        }
+        $.each(fields, function () {
+            window.spacescout_admin.appendFieldValue(this, getFieldValue, section);
+        });
     };
 
     var wireLatLongPicker = function (section) {

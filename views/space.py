@@ -251,9 +251,11 @@ class SpaceManager(RESTDispatch):
                                       is_complete=True)
                         space.save()
 
-                    Permitted().view(self._request.user, space, spot)
-                    seen[str(spot_id)] = 1
-                    json_rep.append(self._spacemap.space_rep(space, spot, schema))
+                    if str(spot_id) not in seen:
+                        Permitted().view(self._request.user, space, spot)
+                        seen[str(spot_id)] = 1
+                        json_rep.append(self._spacemap.space_rep(space, spot, schema))
+
                 except PermittedException:
                     pass
                 except SpaceMapException as e:

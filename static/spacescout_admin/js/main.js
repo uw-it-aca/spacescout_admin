@@ -168,12 +168,22 @@ $(document).ready(function() {
     };
 
     window.spacescout_admin.appendFieldValue = function (field, getval, section) {
+        if (typeof field.value === 'object') {
+            appendFieldHeader(field, section);
+
+            if ($.isArray(field.value)) {
+                window.spacescout_admin.appendFieldValueList(field, getval, section);
+            } else {
+                window.spacescout_admin.appendFieldValueItem(field, getval, section);
+            }
+        }
+    };
+
+    window.spacescout_admin.appendFieldValueItem = function (field, getval, section) {
         var required = (field.hasOwnProperty('required') && field.required),
             context = {},
             input, choice, choice_value,
             input_class = '', tpl, vartype, varedit, data, i, node, src;
-
-        appendFieldHeader(field, section);
 
         // fields we know about
         switch (field.value.key) {
@@ -371,7 +381,7 @@ $(document).ready(function() {
         }
     };
 
-    window.spacescout_admin.appendFieldList = function(field, getval, section) {
+    window.spacescout_admin.appendFieldValueList = function(field, getval, section) {
         var vartype, i,
             values = [],
             values_length,
@@ -381,8 +391,6 @@ $(document).ready(function() {
             context = {},
             src_selector,
             required = (field.hasOwnProperty('required') && field.required);
-
-        appendFieldHeader(field, section);
 
         for (i = 0; i < field.value.length; i += 1) {
             if (i == 0 && typeof field.value[i].value === 'boolean') {
@@ -554,7 +562,7 @@ $(document).ready(function() {
 
                 if (h.length) {
                     show_cue(h.eq(0), show);
-                } else { 
+                } else {
                     node.parents().prevAll('.field-header').each(function () {
                         show_cue($(this), show);
                         return false;
