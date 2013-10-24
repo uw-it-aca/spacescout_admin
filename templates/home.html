@@ -63,7 +63,10 @@
           
           {{ #if is_modified }}
           <span class="item-modified glyphicon glyphicon-bookmark"></span>
+          {{else}}
+          <span class="item-pending glyphicon glyphicon-bookmark"></span>
           {{ /if }}
+          
       </a>
     </li>
     {{/each}}

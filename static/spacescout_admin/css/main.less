@@ -306,6 +306,12 @@ a.action-link { text-decoration: none; }
     		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { top: -3px; }
 		}
 		
+		.item-pending { position: absolute; top:-2px; right: 7px; border-radius: 0; color: @danger; font-size: 1.2em; 
+    		/* tweak for retina displays */
+    		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { top: -3px; }
+		}
+		
+		
 		.item-incomplete { 
     		a { display: inline-block !important; }
 		}
