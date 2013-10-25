@@ -94,7 +94,7 @@ msgid "outdoor"
 msgstr "Outdoor area"
 
 msgid "studio"
-msgstr "Portfolio studio"
+msgstr "Production studio"
 
 msgid "study_area"
 msgstr "Study area"
