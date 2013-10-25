@@ -613,6 +613,7 @@ $(document).ready(function() {
                         var option;
 
                         select.find('option').remove();
+                        select.append('<option></option>'); // The first entry should be blank.
 
                         if (typeof data === 'object' && $.isArray(data)) {
                             for (i = 0; i < data.length; i += 1) {
