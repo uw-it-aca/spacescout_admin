@@ -20,11 +20,18 @@
 {% block content %}
 
 
+<div style="position:relative;">
 <ul id="myTab" class="nav nav-pills">
     <li class="active"><a href="#published" data-toggle="tab">Published</a></li>
     <li><a href="#unpublished" data-toggle="tab">Unpublished</a></li>
     <li><a href="#incomplete" data-toggle="tab">Incomplete</a></li>
 </ul>
+
+<ul class="flags-key">
+    <li><span class="item-modified glyphicon glyphicon-stop"></span> modified</li>
+    <li><span class="item-pending glyphicon glyphicon-stop"></span> publish requested</li>
+</ul>
+</div>
 
 <div class="tab-content" id="tab_content">
     
