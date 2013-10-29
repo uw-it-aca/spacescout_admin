@@ -171,39 +171,48 @@
     <div style="margin-top: 2em;">
       <p>Last updated on {{last_modified}} by <strong>{{ modified_by }}</strong></p>
       <div>
-        {{ #if is_published }}
-          {{ #if is_modified }}
+        {{ #if is_modified }}
         <div style="position:relative;">
-          <span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085; position:absolute; top: 24px; left:10px;"></span> 
+          <!-- <span class="item-modified glyphicon glyphicon-bookmark" style="color:#16A085; position:absolute; top: 24px; left:10px;"></span> -->
           <p style="color:#aaa; text-transform:uppercase; margin-bottom:5px;">Changes differ from production</p>
-          <a href="/space" class="btn btn-success btn-lg btn-block">Publish changes</a>
-          <p><a href="">Show modified changes?</a></p>
+          <!-- <a href="/space" class="btn btn-success btn-lg btn-block">Publish changes</a> -->
+          <!-- <p><a href="javascript:void(0);">Show modified changes?</a></p> -->
         </div>
-          {{ /if }}
-{% endverbatim %}
-          {% if IS_ADMIN %}
-          <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block unpublish-button">Un-publish</a>
-          {% endif %}
-{% verbatim %}
-        {{ else }} <!-- unpublished -->
-{% endverbatim %}
-          {% if IS_ADMIN %}
-{% verbatim %}
-            <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block publish-button">Publish</a>
-{% endverbatim %}
-          {% else %}
-{% verbatim %}
-            {{ #if is_pending_publication }}
-            <div class="space-pending">
-              <span>Space publication is pending</span>
-            </div>
-            {{ else }}
-            <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block submit-button">Submit For Publication</a>
-            {{ /if }}
-{% endverbatim %}
-          {% endif %}
-{% verbatim %}
+        {{ /if }} <!-- is_modified -->
+
+        <!-- anyone can unpublish -->
+        {{ #if is_published }}
+        <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block unpublish-button">Un-publish</a>
         {{ /if }}
+
+{% endverbatim %}
+        {% if IS_ADMIN %}
+{% verbatim %}
+
+          {{ #if is_complete }}
+            {{ #if is_pending_publication }}
+            <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block publish-button">Publish</a>
+            {{ /if }} <!-- is_pending_publication -->
+          {{ /if }} <!-- is_complete -->
+
+{% endverbatim %}
+        {% else %} <!-- NOT IS_ADMIN -->
+{% verbatim %}
+
+          {{ #if is_pending_publication }} <!-- is_pending -->
+          <div class="space-pending">
+            <span>Space publication is pending</span>
+          </div>
+          {{ else }} <!-- NOT is_pending_publication -->
+            {{ #if is_complete }}
+            <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block submit-button">Submit For Publication</a>
+            {{ /if }} <!-- is_complete -->
+          {{ /if }} <!-- is_pending_publication -->
+
+{% endverbatim %}
+        {% endif %} <!-- IS_ADMIN -->
+{% verbatim %}
+
       </div>
     </div>
 {% endverbatim %}

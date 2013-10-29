@@ -27,6 +27,7 @@ import simplejson as json
 import math
 import datetime
 
+import datetime
 
 class SpaceManager(RESTDispatch):
     """ Performs query of Admin models at /api/v1/admins/?.
@@ -34,6 +35,18 @@ class SpaceManager(RESTDispatch):
     """
     def __init__(self):
         self._spacemap = SpaceMap()
+
+
+        self._f = open('/tmp/debugme', 'a')
+
+    def __del__(self):
+        self._f.close()
+
+    def _debug(self, x):
+        self._f.write('%s: %s\n' % (datetime.datetime.now(), x))
+        self._f.flush()
+
+
 
     def GET(self, args, **kwargs):
         if 'space_id' in kwargs:
@@ -73,15 +86,22 @@ class SpaceManager(RESTDispatch):
 
             if 'is_published' in data:
                 if data.get('is_published') == True:
-                    spot = self._spacemap.apply_pending(spot, space)
-                    for f in ['_missing_fields', 'is_modified', 'is_published', 'modified_by', 'images']:
-                        try:
-                            spot.pop(f)
-                        except KeyError:
-                            pass
+                    if space.is_complete and (space.pending and len(space.pending) != 0
+                                              or len(SpaceImage.objects.filter(space=space.id))
+                                              or len(SpotImageLink.objects.filter(space=space.id,
+                                                                                  is_deleted__isnull=False))):
+                        spot = self._spacemap.apply_pending(spot, space)
+                        for f in ['_missing_fields', 'is_modified', 'is_published', 'modified_by', 'images']:
+                            try:
+                                spot.pop(f)
+                            except KeyError:
+                                pass
 
-                    self._write_spot(spot)
-                    self._save_spot_images(spot, space)
+                        self._write_spot(spot)
+                        self._save_spot_images(spot, space)
+                else:
+                    #self._delete_spot(spot)
+                    pass
             elif 'is_pending_publication' in data:
                 if data.get('is_pending_publication') == True:
                     if space.is_pending_publication != True:
@@ -96,8 +116,8 @@ class SpaceManager(RESTDispatch):
                                       settings.SS_PUBLISHER_FROM,
                                       settings.SS_PUBLISHER_EMAIL,
                                       fail_silently=False)
-                else:
-                    space.is_pending_publication = False
+            else:
+                space.is_pending_publication = False
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
@@ -371,6 +391,8 @@ class SpaceManager(RESTDispatch):
             url += str(spot.id)
         else:
             verb = 'POST'
+
+        self._debug("%s : %s" % (verb, json.dumps(spot)))
 
         resp, content = client.request(url,
                                        verb,

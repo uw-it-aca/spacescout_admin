@@ -30,11 +30,11 @@ $(document).ready(function() {
                 };
 
                 showSpaceDetails(data);
-                /*
+
                 $('.publish-button').click(function (event) {
                     next_action('is_published', true);
                 });
-
+                /*
                 $('.unpublish-button').click(function (event) {
                     next_action('is_published', false);
                 });
@@ -119,7 +119,7 @@ $(document).ready(function() {
         // actions
         html = $(Handlebars.compile($('#space-actions').html())({
             is_complete: !(incomplete && incomplete.length),
-            is_modified: false,
+            is_modified: details.is_modified,
             is_published: details.is_published,
             is_pending_publication: details.is_pending_publication,
             modified_by: (details.modified_by.length) ? details.modified_by : gettext('unknown'),
