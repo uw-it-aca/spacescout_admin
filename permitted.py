@@ -13,28 +13,24 @@
     limitations under the License.
 """
 
+from django.db.models import Q
+
 
 class PermittedException(Exception): pass
 
 
 class Permitted(object):
-    def view(self, user, space, spot):
-        try:
-            return self.edit(user, space, spot)
-        except:
-            raise PermittedException('User not allowed to view')
-
-    def edit(self, user, space, spot):
-        if not (self.is_admin(user)
-                or space.manager == user
-                or spot.get('manager', '') == user):
-            # or user in editors
+    def is_admin(self, user):
+        if not (user.groups.filter(name='spacescout_admins').count() > 0):
             raise PermittedException('User not allowed to edit')
 
-    def create(self, user):
-        # look for user in blessed groups
-        return self.is_admin(user) # in access group
+    def can_create(self, user):
+        if not (user.groups.filter(Q(name='spacescout_admins') | Q(name='spacescout_creators')).count() > 0):
+            raise PermittedException('User not allowed to edit')
 
-    def is_admin(self, user):
-        # look for user in admin group
-        return True
+    def can_edit(self, user, space, spot):
+        if not (user.groups.filter(name='spacescout_admins').count() != 0
+                or (user.is_authenticated()
+                    and (user.username == space.manager)
+                         or (user.username == spot.get('manager')))):
+            raise PermittedException('User not allowed to edit')

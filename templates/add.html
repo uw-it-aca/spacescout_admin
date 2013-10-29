@@ -14,10 +14,14 @@
 {% block userid %}{{ remote_user }}{% endblock %}
 
 {% block extra_js %}
+{% if CAN_CREATE %}
 <script src="{{ STATIC_URL }}spacescout_admin/js/add.js"></script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
+
+{% if CAN_CREATE %}
 
 {% include "input.html" %}
 
@@ -33,6 +37,12 @@
 <div class="save-discard">
   <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block" disabled>Add Space</a>
 </div>
+{% else %}
+<div class="no-space">
+  <i class="icon-frown icon-3x"></i><span>You are not allowed to create spaces</span>
+</div>
+{% endif %}
+
 
 <script type="text/javascript">
 window.spacescout_admin = window.spacescout_admin || {};

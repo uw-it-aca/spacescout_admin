@@ -58,7 +58,9 @@
             <div class="container">
                 <div class="navbar-header clearfix" style="width:100%;">
                     <a class="navbar-brand pull-left" href="{{ APP_URL_ROOT }}"><h1>{% block title %}{% endblock %}</h1></a> <span class="space-owner">{% block userid %}{% endblock %}</span>
+                    {% if CAN_CREATE %}
                     <button type="button" class="navbar-toggle" onclick="location.href='{{ APP_URL_ROOT }}add'"><span class="glyphicon glyphicon-plus"></span></button>
+                    {% endif %}
                   </div>
             </div>
         </nav>

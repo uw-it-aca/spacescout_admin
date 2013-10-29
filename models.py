@@ -12,6 +12,7 @@ class Space(models.Model):
     """
     spot_id = models.SmallIntegerField(unique=True, null=True)
     is_complete = models.NullBooleanField()
+    is_pending_publication = models.NullBooleanField()
     manager = models.CharField(max_length=50, blank=True)
     modified_by = models.CharField(max_length=50, blank=True)
     modified_date = models.DateTimeField(auto_now=True, auto_now_add=True)
@@ -22,6 +23,7 @@ class Space(models.Model):
             'id': self.id,
             'manager': self.manager,
             'is_complete': self.is_complete,
+            'is_pending_publication': self.is_pending_publication,
             'modified_by': self.modified_by,
             'modified_date' : self.modified_date.isoformat()
         }

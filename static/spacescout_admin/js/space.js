@@ -1,11 +1,47 @@
 $(document).ready(function() {
+    // prep for api post/put
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": window.spacescout_admin.csrf_token }
+    });
 
     (function () {
         $.ajax({
             url: window.spacescout_admin.app_url_root + 'api/v1/space/' + window.spacescout_admin.space_id,
             dataType: 'json',
             success: function (data) {
+                var next_action = function (key, value) {
+                    var json_rep = {};
+
+                    json_rep[key] = value;
+
+                    $.ajax({
+                        url: window.spacescout_admin.app_url_root + "api/v1/space/" + window.spacescout_admin.space_id + '/',
+                        dataType: 'json',
+                        contentType: "application/json",
+                        data: JSON.stringify(json_rep),
+                        type: "PUT",
+                        success: function (data) {
+                            window.location.href = window.spacescout_admin.app_url_root + 'space/' + window.spacescout_admin.space_id;
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            console.log('textStatus: ' + textStatus + ' thrown: ' + errorThrown);
+                        }
+                    });
+                };
+
                 showSpaceDetails(data);
+                /*
+                $('.publish-button').click(function (event) {
+                    next_action('is_published', true);
+                });
+
+                $('.unpublish-button').click(function (event) {
+                    next_action('is_published', false);
+                });
+                */
+                $('.submit-button').click(function (event) {
+                    next_action('is_pending_publication', true);
+                });
             },
             error: function (xhr, textStatus, errorThrown) {
                 var json;
@@ -84,7 +120,8 @@ $(document).ready(function() {
         html = $(Handlebars.compile($('#space-actions').html())({
             is_complete: !(incomplete && incomplete.length),
             is_modified: false,
-            is_published: false,
+            is_published: details.is_published,
+            is_pending_publication: details.is_pending_publication,
             modified_by: (details.modified_by.length) ? details.modified_by : gettext('unknown'),
             last_modified: window.spacescout_admin.modifiedTime(new Date(details.last_modified))
         }));

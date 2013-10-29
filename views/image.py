@@ -95,7 +95,7 @@ class SpaceImageManager(RESTDispatch):
                     raise SpaceImage.DoesNotExist()
 
                 space = Space.objects.get(id=space_id)
-                Permitted().edit(request.user, space, {})
+                Permitted().can_edit(request.user, space, {})
 
         except PermittedException:
             return self.error_response(401, "Unauthorized")
@@ -128,7 +128,7 @@ class SpaceImageManager(RESTDispatch):
     def POST(self, request, space_id):
         try:
             space = Space.objects.get(id=space_id)
-            Permitted().edit(request.user, space, {})
+            Permitted().can_edit(request.user, space, {})
             links = SpotImageLink.objects.filter(space=space_id)
             imgs = SpaceImage.objects.filter(space=space_id)
         except PermittedException:
@@ -162,7 +162,7 @@ class SpaceImageManager(RESTDispatch):
             else:
                 img = SpaceImage.objects.get(pk=image_id)
                 space = img.space
-                Permitted().edit(request.user, space, {})
+                Permitted().can_edit(request.user, space, {})
                 if int(space.pk) != int(space_id):
                     raise SpaceImage.DoesNotExist()
 

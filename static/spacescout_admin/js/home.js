@@ -140,6 +140,7 @@ $(document).ready(function() {
                     modified_by: (space.hasOwnProperty('modified_by') && space.modified_by && space.modified_by.length) ? space.modified_by : gettext('unknown'),
                     manager: (space.manager.length > 0) ? space.manager : gettext('unknown'),
                     is_modified: space.is_modified,
+                    is_pending: space.is_pending,
                     is_published: space.is_published
                 };
 

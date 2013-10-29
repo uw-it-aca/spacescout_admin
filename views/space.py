@@ -15,6 +15,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
+from django.core.mail import send_mail
 from spacescout_admin.models import *
 from spacescout_admin.spot import Spot, SpotException
 from spacescout_admin.space_map import SpaceMap, SpaceMapException
@@ -52,7 +53,8 @@ class SpaceManager(RESTDispatch):
             else:
                 spot = self._spacemap.pending_spot(space, schema)
 
-            Permitted().edit(self._request.user, space, spot)
+            Permitted().can_edit(self._request.user, space, spot)
+
             data = json.loads(self._request.read())
             fields, missing_fields = self._validate(spot, data)
 
@@ -63,10 +65,39 @@ class SpaceManager(RESTDispatch):
 
             if len(missing_fields) > 0:
                 space.is_complete = None
+                space.is_pending_publication = None
                 pending['_missing_fields'] = []
                 pending['_missing_fields'] = missing_fields
             else:
                 space.is_complete = True
+
+            if 'is_published' in data:
+                if data.get('is_published') == True:
+                    spot = self._spacemap.apply_pending(spot, space)
+                    for f in ['_missing_fields', 'is_modified', 'is_published', 'modified_by', 'images']:
+                        try:
+                            spot.pop(f)
+                        except KeyError:
+                            pass
+
+                    self._write_spot(spot)
+                    self._save_spot_images(spot, space)
+            elif 'is_pending_publication' in data:
+                if data.get('is_pending_publication') == True:
+                    if space.is_pending_publication != True:
+                        space.is_pending_publication = True
+                        if hasattr(settings, 'SS_PUBLISHER_EMAIL'):
+                            send_mail('Space Publishing Request',
+                                      'A request has been made to publish space\n\t http%s://%s%sspace/%s/' \
+                                          % ('s' if self._request.is_secure() else '',
+                                             self._request.get_host(),
+                                             settings.APP_URL_ROOT,
+                                             space.id),
+                                      settings.SS_PUBLISHER_FROM,
+                                      settings.SS_PUBLISHER_EMAIL,
+                                      fail_silently=False)
+                else:
+                    space.is_pending_publication = False
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
@@ -80,10 +111,12 @@ class SpaceManager(RESTDispatch):
         except (SpaceMapException, SpotException, SpotSchemaException) as e:
             return self.error_response(e.args[0]['status_code'],
                                        e.args[0]['status_text'])
+        except:
+            return self.error_response(400, "Unknown error")
 
     def POST(self, args, **kwargs):
         try:
-            Permitted().create(self._request.user)
+            Permitted().can_create(self._request.user)
             schema = SpotSchema().get()
             space = Space(manager=self._request.user,
                           modified_by=self._request.user)
@@ -190,13 +223,14 @@ class SpaceManager(RESTDispatch):
             else:
                 spot = self._spacemap.pending_spot(space_model, schema)
 
-            Permitted().view(self._request.user, space_model, spot)
+            Permitted().can_edit(self._request.user, space_model, spot)
 
             return self.json_response(json.dumps(self._spacemap.space_rep(space_model, spot, schema)))
-        except Space.DoesNotExist:
-            self.error404_response()
+
         except PermittedException:
             return self.error_response(401, "Unauthorized")
+        except Space.DoesNotExist:
+            self.error404_response()
         except (SpaceMapException, SpotException, SpotSchemaException) as e:
             return self.error_response(e.args[0]['status_code'],
                                        e.args[0]['status_text'])
@@ -207,6 +241,12 @@ class SpaceManager(RESTDispatch):
         complete = True
         json_rep = []
         seen = {}
+        permitted = Permitted()
+
+        try:
+            is_admin = permitted.is_admin(self._request.user)
+        except PermittedException:
+            is_admin = False
 
         try:
             schema = SpotSchema().get()
@@ -251,8 +291,10 @@ class SpaceManager(RESTDispatch):
                                       is_complete=True)
                         space.save()
 
+                    if not is_admin:
+                        permitted.can_edit(self._request.user, space, spot)
+
                     if str(spot_id) not in seen:
-                        Permitted().view(self._request.user, space, spot)
                         seen[str(spot_id)] = 1
                         json_rep.append(self._spacemap.space_rep(space, spot, schema))
 
@@ -272,7 +314,9 @@ class SpaceManager(RESTDispatch):
                 else:
                     spot = self._spacemap.pending_spot(space, schema)
 
-                Permitted().view(self._request.user, space, spot)
+                if not is_admin:
+                    permitted.can_edit(self._request.user, space, spot)
+
                 json_rep.append(self._spacemap.space_rep(space, spot, schema))
             except PermittedException:
                 pass
@@ -281,6 +325,9 @@ class SpaceManager(RESTDispatch):
                                            e.args[0]['status_text'])
 
         return self.json_response(json.dumps(json_rep))
+
+    def _spot_value(self, key, spot):
+        return self._spacemap.get_by_keylist(key.split('.'), spot)
 
     def _get_spots(self, search_args):
         consumer, client = oauth_initialization()
@@ -298,26 +345,40 @@ class SpaceManager(RESTDispatch):
         resp, content = client.request(url, 'GET')
 
         if resp.status != 200:
-            Exception("Unable to load spots")
+            raise Exception("Unable to load spots")
 
         i18n_json = []
-        permitted = Permitted()
         for spot in json.loads(content):
-            try:
-                permitted.view(self._request.user, {}, spot)
-                string_val = ''
-                for x in range(0, len(spot['type'])):
-                    if x is 0:
-                        string_val = _(spot['type'][x])
-                    else:
-                        string_val = string_val + ', ' + _(spot['type'][x])
-    
-                    spot['type'] = string_val
-                    i18n_json.append(spot)
-            except PermittedException:
-                pass
+            string_val = ''
+            for x in range(0, len(spot['type'])):
+                if x is 0:
+                    string_val = _(spot['type'][x])
+                else:
+                    string_val = string_val + ', ' + _(spot['type'][x])
+
+                spot['type'] = string_val
+                i18n_json.append(spot)
 
         return i18n_json
 
-    def _spot_value(self, key, spot):
-        return self._spacemap.get_by_keylist(key.split('.'), spot)
+    def _write_spot(self, spot):
+        consumer, client = oauth_initialization()
+
+        url = "{0}/api/v1/spot/".format(settings.SS_WEB_SERVER_HOST)
+
+        if hasattr(spot, 'id') and spot.id >= 0:
+            verb = 'PUT'
+            url += str(spot.id)
+        else:
+            verb = 'POST'
+
+        resp, content = client.request(url,
+                                       verb,
+                                       json.dumps(spot),
+                                       headers={'Content-Type': 'application/json'})
+
+        if resp.status != 200:
+            raise Exception("Unable to post spot")
+
+    def _save_spot_images(self, spot, space):
+        pass

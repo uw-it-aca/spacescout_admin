@@ -70,10 +70,11 @@
           
           {{ #if is_modified }}
           <span class="item-modified glyphicon glyphicon-bookmark"></span>
-          {{else}}
+          {{ /if }}
+
+          {{ #if is_pending_publication }}
           <span class="item-pending glyphicon glyphicon-bookmark"></span>
           {{ /if }}
-          
       </a>
     </li>
     {{/each}}
@@ -116,7 +117,9 @@
   <li class="">
     <div class="no-space">
       <i class="icon-frown icon-3x"></i><span>You have no spaces</span>
+      {% if CAN_CREATE %}
       <p><a href="{{ APP_URL_ROOT }}add">+ add a space</a></p>
+      {% endif %}
     </div>
   </li>
 </script>

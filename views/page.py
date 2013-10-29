@@ -4,52 +4,54 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.utils.safestring import SafeString
 import simplejson as json
+from spacescout_admin.permitted import Permitted, PermittedException
 
 
 # Create your views here.
 @login_required
 def home(request):
    return render_to_response('home.html',
-                             {
-                                  'remote_user': request.user,
-                                  'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
-                                  'IS_MOBILE': request.MOBILE,
-                              },
+                             page_context(request, {}),
                              context_instance=RequestContext(request))
 
 @login_required
 def space(request, space_id):
    return render_to_response('space.html',
-                             {
-                                  'remote_user': request.user,
-                                  'SPACE_ID': space_id,
-                                  'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
-                                  'IS_MOBILE': request.MOBILE,
-                             },
+                             page_context(request, { 'SPACE_ID': space_id }),
                              context_instance=RequestContext(request))
 
 @login_required
 def edit(request, space_id):
    return render_to_response('edit.html',
-                             {
-                                  'remote_user': request.user,
-                                  'SPACE_ID': space_id,
-                                  'IS_MOBILE': request.MOBILE,
-                                  'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT
-                             },
+                             page_context(request, { 'SPACE_ID': space_id }),
                              context_instance=RequestContext(request))
 
 @login_required
 def add(request):
    return render_to_response('add.html',
-                             {
-                                  'remote_user': request.user,
-                                  'SPACE_FIELDS': SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS)),
-                                  'STATIC_URL': settings.STATIC_URL,
-                                  'APP_URL_ROOT': settings.APP_URL_ROOT,
-                                  'IS_MOBILE': request.MOBILE,
-                             },
+                             page_context(request, {
+                                 'SPACE_FIELDS' : SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS))
+                             }),
                              context_instance=RequestContext(request))
+
+
+def page_context(request, context):
+   context['remote_user'] = request.user
+   context['IS_MOBILE'] = request.MOBILE
+   context['STATIC_URL'] = settings.STATIC_URL
+   context['APP_URL_ROOT'] = settings.APP_URL_ROOT
+
+   auth = Permitted()
+   try:
+      auth.is_admin(request.user)
+      context['IS_ADMIN'] = True
+   except PermittedException:
+      context['IS_ADMIN'] = False
+
+   try:
+      auth.can_create(request.user)
+      context['CAN_CREATE'] = True
+   except PermittedException:
+      context['CAN_CREATE'] = False
+
+   return context

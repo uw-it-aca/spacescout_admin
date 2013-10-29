@@ -30,16 +30,18 @@ class SpaceMap(object):
         # overlay a spot copy with modifications
         if space.pending and len(space.pending) > 0:
             spot = copy.deepcopy(spot)
-            pending = json.loads(space.pending)
-            for p in pending:
-                self.set_by_key(p, pending.get(p), spot)
+            self.apply_pending(spot, space)
 
             if not json_rep.get('is_complete') and '_missing_fields' in pending:
                 json_rep['missing_fields'] = pending.get('_missing_fields')
 
 
         json_rep['is_published'] = (space.spot_id is not None)
-        json_rep['is_modified'] = (space.pending and len(space.pending) != 0)
+        json_rep['is_modified'] = (space.pending and len(space.pending) != 0
+                                   or len(SpaceImage.objects.filter(space=space.id))
+                                   or len(SpotImageLink.objects.filter(space=space.id,
+                                                                       is_deleted__isnull=False)))
+        json_rep['is_pending_publication'] = json_rep['is_pending_publication']
         json_rep['name'] = spot.get('name', '')
         json_rep['type'] = spot.get('type', '')
         json_rep['manager'] = spot.get('manager', space.manager)
@@ -174,6 +176,14 @@ class SpaceMap(object):
                 data[k] = ''
                 
         return data
+
+    def apply_pending(self, spot, space):
+        if hasattr(space, 'pending'):
+            pending = json.loads(space.pending)
+            for p in pending:
+                self.set_by_key(p, pending.get(p), spot)
+
+        return spot
 
     def get_value(self, key, src_dict, schema):
         kl = key.split('.')
