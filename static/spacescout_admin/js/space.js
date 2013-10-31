@@ -48,10 +48,12 @@ $(document).ready(function() {
 
                 try {
                     json = $.parseJSON(xhr.responseText);
-                    console.log('space query service error:' + json.error);
+                    alert('Unable to load space:' + json.error);
                 } catch (e) {
-                    console.log('Unknown space service error: ' + xhr.responseText);
+                    alert('Unable to load space: ' + xhr.responseText);
                 }
+
+                window.location.href = window.spacescout_admin.app_url_root;
             }
         });
     }());

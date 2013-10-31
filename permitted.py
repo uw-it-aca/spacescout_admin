@@ -14,6 +14,7 @@
 """
 
 from django.db.models import Q
+import simplejson as json
 
 
 class PermittedException(Exception): pass
@@ -30,7 +31,16 @@ class Permitted(object):
 
     def can_edit(self, user, space, spot):
         if not (user.groups.filter(name='spacescout_admins').count() != 0
-                or (user.is_authenticated()
-                    and (user.username == space.manager)
-                         or (user.username == spot.get('manager')))):
+                or self._user_is_manager(user, space, spot)
+                or self._user_is_editor(user, space, spot)):
             raise PermittedException('User not allowed to edit')
+
+    def _user_is_manager(self, user, space, spot):
+        return (user.is_authenticated()
+                and (user.username == space.manager
+                     or user.username == spot.get('manager')))
+
+    def _user_is_editor(self, user, space, spot):
+        pending = json.loads(space.pending)
+        editors = pending['editors'] if 'editors' in pending else ''
+        return user.username in editors.split(',') and user.is_authenticated()
