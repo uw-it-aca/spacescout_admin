@@ -119,6 +119,8 @@ class SpaceManager(RESTDispatch):
             else:
                 space.is_pending_publication = False
 
+            space.modified_by = self._request.user.username
+
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
             return self.json_response(json.dumps('{"id": "%s"}' % space.id))

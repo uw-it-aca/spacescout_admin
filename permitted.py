@@ -42,5 +42,5 @@ class Permitted(object):
 
     def _user_is_editor(self, user, space, spot):
         pending = json.loads(space.pending)
-        editors = pending['editors'] if 'editors' in pending else ''
+        editors = pending['editors'].replace(' ', '') if 'editors' in pending else ''
         return user.username in editors.split(',') and user.is_authenticated()
