@@ -393,7 +393,7 @@ and end with the most precise (&quot;Room 201,&quot; &quot;NW corner,&quot; etc.
 </ul>"
 
 msgid "latlong_more_help"
-msgstr "<p>Click or drag map below to position cross hairs over desired location.</p><div id=\"latlong-picker\"></div>"
+msgstr "<p>Drag the map to your desired location and click to drop a pin on the location of your space.</p><div id=\"latlong-picker\"></div>"
 
 msgid "cafe_hours_more_help"
 msgstr "<h6>Examples:</h6>\

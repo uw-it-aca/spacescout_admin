@@ -15,6 +15,7 @@
 
 from django.db.models import Q
 import simplejson as json
+import re
 
 
 class PermittedException(Exception): pass
@@ -42,5 +43,5 @@ class Permitted(object):
 
     def _user_is_editor(self, user, space, spot):
         pending = json.loads(space.pending)
-        editors = pending['editors'].replace(' ', '') if 'editors' in pending else ''
+        editors = re.sub(r'\s+', '', pending['editors']) if 'editors' in pending else ''
         return user.username in editors.split(',') and user.is_authenticated()

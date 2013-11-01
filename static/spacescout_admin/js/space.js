@@ -203,7 +203,8 @@ $(document).ready(function() {
     };
 
     var getFieldValue = function (f) {
-        var v;
+        var v,
+            quote = true;
 
         if (f.hasOwnProperty('value') && typeof f.value === 'object') {
             v = window.spacescout_admin.getFieldValue(f.value);
@@ -214,10 +215,11 @@ $(document).ready(function() {
 
             if (((typeof v != 'string') || v.length > 0) && f.value.hasOwnProperty('format')) {
                 v = f.value.format.replace('\{0\}', v);
+                quote = false;
             }
 
             if (v.length) {
-                return v;
+                return quote ? $('<div />').text(v).html() : v;
             }
         }
 
