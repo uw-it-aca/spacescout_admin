@@ -42,6 +42,9 @@ class Permitted(object):
                      or user.username == spot.get('manager')))
 
     def _user_is_editor(self, user, space, spot):
-        pending = json.loads(space.pending)
-        editors = re.sub(r'\s+', '', pending['editors']) if 'editors' in pending else ''
-        return user.username in editors.split(',') and user.is_authenticated()
+        if space and hasattr(space, 'pending') and space.pending:
+            pending = json.loads(space.pending)
+            if 'editors' in pending:
+                return user.username in re.sub(r'\s+', '', pending['editors']).split(',') and user.is_authenticated()
+
+        return None

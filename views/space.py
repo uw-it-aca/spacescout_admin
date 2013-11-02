@@ -25,9 +25,7 @@ from spacescout_admin.permitted import Permitted, PermittedException
 from spacescout_admin.views.schema import SpotSchema, SpotSchemaException
 import simplejson as json
 import math
-import datetime
 
-import datetime
 
 class SpaceManager(RESTDispatch):
     """ Performs query of Admin models at /api/v1/admins/?.
@@ -35,18 +33,6 @@ class SpaceManager(RESTDispatch):
     """
     def __init__(self):
         self._spacemap = SpaceMap()
-
-
-        self._f = open('/tmp/debugme', 'a')
-
-    def __del__(self):
-        self._f.close()
-
-    def _debug(self, x):
-        self._f.write('%s: %s\n' % (datetime.datetime.now(), x))
-        self._f.flush()
-
-
 
     def GET(self, args, **kwargs):
         if 'space_id' in kwargs:
