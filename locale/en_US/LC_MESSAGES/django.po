@@ -273,6 +273,9 @@ msgstr "Room Number"
 msgid "hours_access"
 msgstr "Hours & Access"
 
+msgid "location_alias"
+msgstr "Location Aliases"
+
 # help 
 
 msgid "space_type_help"
@@ -322,6 +325,9 @@ msgstr "Format like an elevator button. Examples: B, LL, 1, M, 2."
 
 msgid "room_number_help"
 msgstr "Include only if the physical space is labeled with this number. Do not include room numbers that appear only on floor plans but not in the space. Examples: 322, C620, 401B, T317A."
+
+msgid "location_alias_help"
+msgstr ""
 
 msgid "hours_notes_help"
 msgstr "Describe any predictable exceptions to the open hours of the space. Example: First Thursday of each month, open until 8pm."
