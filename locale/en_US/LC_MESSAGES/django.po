@@ -274,7 +274,10 @@ msgid "hours_access"
 msgstr "Hours & Access"
 
 msgid "location_alias"
-msgstr "Location Aliases"
+msgstr "Alternate Location Name"
+
+msgid "location_alias_link"
+msgstr "See examples"
 
 # help 
 
@@ -327,7 +330,9 @@ msgid "room_number_help"
 msgstr "Include only if the physical space is labeled with this number. Do not include room numbers that appear only on floor plans but not in the space. Examples: 322, C620, 401B, T317A."
 
 msgid "location_alias_help"
-msgstr ""
+msgstr "Use this field when a space could be described as belonging in more than one location. Both the building name and this alternate location name will appear in the list for students to select as they use the filters. <br />\
+<br />\
+Do NOT use this to provide an alternate name for the same building. That is, if the building is Mary Gates Hall, do NOT use this field to include &quot;MGH.&quot;"
 
 msgid "hours_notes_help"
 msgstr "Describe any predictable exceptions to the open hours of the space. Example: First Thursday of each month, open until 8pm."
@@ -437,6 +442,14 @@ msgstr "<p>Select the fields you wish to copy.</p>"
 
 msgid "hours_picker_spaces_more_help"
 msgstr "<p style=\"margin-top:1em;\">Select a space below to apply its hours to this space.</p>"
+
+msgid "location_alias_more_help"
+msgstr "<h6>Examples:</h6>\
+        <ul>\
+            <li>The space called Red B is in the Research Commons, which is in Allen Library. Allen Library is the building, but the alternate location name is Research Commons.</li>\
+            <li>The space called Overlook Lounge is in the Foster Library, which is in Paccar Hall. The building is Paccar Hall, but the alternate location name is Foster Library.</li>\
+            <li>Other examples of alternate location names: Health Science Library (in Magnuson Health Science Building); Magnuson Health Science Building (comprised of A-Wing, B-Wing, etc.); UW Bothell's LB1, LB2, LBA (comprised of the &quot;building&quot; known just as the Library); Mathematics Library (in Padelford Hall).</li>\
+        </ul>"
 
 # placeholders
 
