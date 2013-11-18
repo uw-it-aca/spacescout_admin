@@ -3,6 +3,8 @@ django-compressor
 django-verbatim
 django-mobility
 oauth2
+urllib3
+poster
 PIL
 simplejson
 south

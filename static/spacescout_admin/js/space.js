@@ -21,7 +21,7 @@ $(document).ready(function() {
                         data: JSON.stringify(json_rep),
                         type: "PUT",
                         success: function (data) {
-                            window.location.href = window.spacescout_admin.app_url_root + 'space/' + window.spacescout_admin.space_id;
+                            window.location.href = window.spacescout_admin.app_url_root + '#published-spaces';
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             console.log('textStatus: ' + textStatus + ' thrown: ' + errorThrown);

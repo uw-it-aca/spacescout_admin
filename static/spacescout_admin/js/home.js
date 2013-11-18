@@ -67,7 +67,7 @@ $(document).ready(function() {
             dataType: 'json',
             error: ajaxSpaceError,
             success: function (data) {
-                var tpl_src, context, i, j;
+                var tpl_src, context, i;
 
                 if (data.length) {
                     tpl_src = $('#incomplete-spaces').html();
@@ -75,25 +75,25 @@ $(document).ready(function() {
                         spaces: []
                     };
 
-                    $.each(data, function (i) {
+                    $.each(data, function () {
                         var unfinished = [];
 
-                        for (j in data[i].missing_fields) {
+                        for (i in this.missing_fields) {
                             unfinished.push({
-                                id: data[i].id,
-                                field: gettext(data[i].missing_fields[j].field),
-                                section: data[i].missing_fields[j].section
+                                id: this.id,
+                                field: gettext(this.missing_fields[i].field),
+                                section: this.missing_fields[i].section
                             });
                         }
 
                         context.spaces.push({
-                            id: data[i].id,
-                            name: data[i].name,
+                            id: this.id,
+                            name: this.name,
                             unfinished: unfinished,
-                            last_modified: window.spacescout_admin.modifiedTime(new Date(data[i].last_modified)),
-                            modified_by: (data[i].hasOwnProperty('modified_by') && data[i].modified_by && data[i].modified_by.length) ?
-                                data[i].modified_by : gettext('unknown'),
-                            manager: data[i].manager
+                            last_modified: window.spacescout_admin.modifiedTime(new Date(this.last_modified)),
+                            modified_by: (this.hasOwnProperty('modified_by') && this.modified_by && this.modified_by.length) ?
+                                this.modified_by : gettext('unknown'),
+                            manager: this.manager
                         });
                     });
                 } else {
@@ -129,19 +129,19 @@ $(document).ready(function() {
             },
             i;
 
-        $.each(data, function (i) {
-            var space = data[i],
-                group = space.group,
+        $.each(data, function () {
+            var group = this.group,
                 space_data = {
-                    id: space.id,
-                    name: space.name,
-                    description: space.description,
-                    last_modified: window.spacescout_admin.modifiedTime(new Date(space.last_modified)),
-                    modified_by: (space.hasOwnProperty('modified_by') && space.modified_by && space.modified_by.length) ? space.modified_by : gettext('unknown'),
-                    manager: (space.manager.length > 0) ? space.manager : gettext('unknown'),
-                    is_modified: space.is_modified,
-                    is_pending: space.is_pending,
-                    is_published: space.is_published
+                    id: this.id,
+                    name: this.name,
+                    description: this.description,
+                    last_modified: window.spacescout_admin.modifiedTime(new Date(this.last_modified)),
+                    modified_by: (this.hasOwnProperty('modified_by') && this.modified_by && this.modified_by.length) ? this.modified_by : gettext('unknown'),
+                    manager: (this.manager.length > 0) ? this.manager : gettext('unknown'),
+                    is_modified: this.is_modified,
+                    is_pending: this.is_pending,
+                    is_published: this.is_published,
+                    is_pending_publication: this.is_pending_publication
                 };
 
             if (group in spaces) {

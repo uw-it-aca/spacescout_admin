@@ -182,7 +182,9 @@
 
         <!-- anyone can unpublish -->
         {{ #if is_published }}
+<!-- uncomment when supported
         <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block unpublish-button">Un-publish</a>
+-->
         {{ /if }}
 
 {% endverbatim %}
@@ -190,9 +192,7 @@
 {% verbatim %}
 
           {{ #if is_complete }}
-            {{ #if is_pending_publication }}
             <a href="javascript:void(0);" class="btn btn-success btn-lg btn-block publish-button">Publish</a>
-            {{ /if }} <!-- is_pending_publication -->
           {{ /if }} <!-- is_complete -->
 
 {% endverbatim %}

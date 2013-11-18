@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from spacescout_admin.models import *
-from spacescout_admin.spot import Spot, SpotException
+from spacescout_admin.spot import Spot, Image, SpotException
 from spacescout_admin.space_map import SpaceMap, SpaceMapException
 from spacescout_admin.rest_dispatch import RESTDispatch
 from spacescout_admin.oauth import oauth_initialization
@@ -28,8 +28,11 @@ import math
 
 
 class SpaceManager(RESTDispatch):
-    """ Performs query of Admin models at /api/v1/admins/?.
-        GET returns 200 with Admin models
+    """ Performs actions on Space models at api/v1/space/(?P<space_id>\d+)/
+        Space models are a layer on top of spotseeker_server Spot models.
+        GET returns requested Space model(s)
+        PUT modifies a Space model, conditionally modifies the Spot model supporting it
+        POST creates a Space model
     """
     def __init__(self):
         self._spacemap = SpaceMap()
@@ -42,8 +45,6 @@ class SpaceManager(RESTDispatch):
 
     def PUT(self, args, **kwargs):
         try:
-            # partial representation allowed
-            # only space.pending is written
             schema = SpotSchema().get()
             space_id = kwargs['space_id']
             space = Space.objects.get(id=space_id)
@@ -65,29 +66,57 @@ class SpaceManager(RESTDispatch):
             if len(missing_fields) > 0:
                 space.is_complete = None
                 space.is_pending_publication = None
-                pending['_missing_fields'] = []
                 pending['_missing_fields'] = missing_fields
             else:
                 space.is_complete = True
 
             if 'is_published' in data:
                 if data.get('is_published') == True:
+                    space_images = SpaceImage.objects.filter(space=space.id)
+                    image_links = SpotImageLink.objects.filter(space=space.id,
+                                                              is_deleted__isnull=False)
                     if space.is_complete and (space.pending and len(space.pending) != 0
-                                              or len(SpaceImage.objects.filter(space=space.id))
-                                              or len(SpotImageLink.objects.filter(space=space.id,
-                                                                                  is_deleted__isnull=False))):
-                        spot = self._spacemap.apply_pending(spot, space)
-                        for f in ['_missing_fields', 'is_modified', 'is_published', 'modified_by', 'images']:
-                            try:
-                                spot.pop(f)
-                            except KeyError:
-                                pass
+                                              or len(space_images) or len(image_links)):
 
-                        self._write_spot(spot)
-                        self._save_spot_images(spot, space)
-                else:
-                    #self._delete_spot(spot)
+                        # create/update modified spot
+                        spot = self._spacemap.apply_pending(spot, space)
+
+                        if space.spot_id:
+                            Spot().put(spot)
+                        else:
+                            spot = Spot().post(spot)
+                            space.spot_id = spot.get('id')
+
+                        # fix up images, adding new, updating spot images
+                        for img in image_links:
+                            if img.is_deleted:
+                                Image(space.spot_id).delete(img.image_id)
+                                img.delete()
+                            else:
+                                Image(space.spot_id).put(img.image_id,
+                                                         { 'display_index' : img.display_index })
+
+                        for img in space_images:
+                            spotimage = Image(space.spot_id).post(img.image.path,
+                                                                  img.description,
+                                                                  self._request.user)
+                            link = SpotImageLink(space=space,
+                                                 spot_id=space.spot_id,
+                                                 image_id=spotimage.get('id'),
+                                                 display_index=img.display_index)
+                            link.save()
+                            img.delete()
+
+                    pending = {}
+                    space.is_complete = None
+                    space.is_pending_publication = None
+                else: # unpublish
+                    # pull spot data into space.pending
+                    # remove spot from spot server
+                    # spot().delete(spot.id)
+                    # images?
                     pass
+                    
             elif 'is_pending_publication' in data:
                 if data.get('is_pending_publication') == True:
                     if space.is_pending_publication != True:
@@ -106,7 +135,6 @@ class SpaceManager(RESTDispatch):
                 space.is_pending_publication = False
 
             space.modified_by = self._request.user.username
-
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
             return self.json_response(json.dumps('{"id": "%s"}' % space.id))
@@ -138,7 +166,6 @@ class SpaceManager(RESTDispatch):
 
             if len(missing_fields) > 0:
                 space.is_complete = None
-                pending['_missing_fields'] = []
                 pending['_missing_fields'] = missing_fields
             else:
                 space.is_complete = True
@@ -190,7 +217,7 @@ class SpaceManager(RESTDispatch):
                         else:
                             for i in range(opn, cls):
                                 if i % 100 < 60:
-                                    hours[i] = 1;
+                                    hours[i] = 1
                     else:
                         valid_hours = False
 
@@ -368,27 +395,3 @@ class SpaceManager(RESTDispatch):
                 i18n_json.append(spot)
 
         return i18n_json
-
-    def _write_spot(self, spot):
-        consumer, client = oauth_initialization()
-
-        url = "{0}/api/v1/spot/".format(settings.SS_WEB_SERVER_HOST)
-
-        if hasattr(spot, 'id') and spot.id >= 0:
-            verb = 'PUT'
-            url += str(spot.id)
-        else:
-            verb = 'POST'
-
-        self._debug("%s : %s" % (verb, json.dumps(spot)))
-
-        resp, content = client.request(url,
-                                       verb,
-                                       json.dumps(spot),
-                                       headers={'Content-Type': 'application/json'})
-
-        if resp.status != 200:
-            raise Exception("Unable to post spot")
-
-    def _save_spot_images(self, spot, space):
-        pass

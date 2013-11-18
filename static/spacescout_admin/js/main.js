@@ -639,7 +639,7 @@ $(document).ready(function() {
     };
 
     window.spacescout_admin.isValidLatLong = function (val) {
-        return val.trim().match(/^[-]?\d+(.\d+)?\s*,\s*[-]?\d+(.\d+)?$/);
+        return val.trim().match(/^([-]?\d+)(.\d{0,6})?\d*?\s*,\s*([-]?\d+)(.\d{0,6})?\d*?$/);
     };
 
     window.spacescout_admin.isNumberInput = function (event) {
@@ -696,14 +696,17 @@ $(document).ready(function() {
             case 'text':
                 p = isMultiValueInput($(this));
                 if (p) {
-                    if ($(this).attr('name') == 'location.latitude|location.longitude'
-                        && !window.spacescout_admin.isValidLatLong($(this).val().trim())) {
-                        break;
-                    }
-
-                    q = getMultiValues(p, $(this).val().trim());
-                    for (i = 0; i < p.length; i += 1) {
-                        data[p[i]] = q ? q[p[i]] : '';
+                    if ($(this).attr('name') == 'location.latitude|location.longitude') {
+                        value = window.spacescout_admin.isValidLatLong($(this).val().trim());
+                        if (value) {
+                            data['location.latitude'] = value[1] + ((value[2]) ? value[2] : '');
+                            data['location.longitude'] = value[3] + ((value[4]) ? value[4] : '');
+                        }
+                    } else {
+                        q = getMultiValues(p, $(this).val().trim());
+                        for (i = 0; i < p.length; i += 1) {
+                            data[p[i]] = q ? q[p[i]] : '';
+                        }
                     }
 
                     break;

@@ -83,6 +83,7 @@ class SpaceMap(object):
                                                             image_id=img.get('id'))
                             if link.is_deleted:
                                 continue
+
                         except SpotImageLink.DoesNotExist:
                             link = SpotImageLink(space=space,
                                                  spot_id=space.spot_id,
@@ -173,7 +174,7 @@ class SpaceMap(object):
         return data
 
     def apply_pending(self, spot, space):
-        if hasattr(space, 'pending'):
+        if hasattr(space, 'pending') and space.pending:
             pending = json.loads(space.pending)
             for p in pending:
                 self.set_by_key(p, pending.get(p), spot)
@@ -200,6 +201,7 @@ class SpaceMap(object):
         s = k.split('.')
         if len(s) > 1:
             if s[0] in d:
-                return self.set_by_key('.'.join(s[1:]), v, d[s[0]])
+                self.set_by_key('.'.join(s[1:]), v, d[s[0]])
         else:
-            d[k] = v
+            if k in d:
+                d[k] = v

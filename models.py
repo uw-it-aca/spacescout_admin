@@ -23,6 +23,7 @@ class Space(models.Model):
             'id': self.id,
             'manager': self.manager,
             'is_complete': self.is_complete,
+            'is_published': self.pending and len(self.pending) != 0,
             'is_pending_publication': self.is_pending_publication,
             'modified_by': self.modified_by,
             'modified_date' : self.modified_date.isoformat()
@@ -80,7 +81,6 @@ class SpaceImage(models.Model):
             "modification_date": self.modification_date.isoformat(),
             "upload_user": self.upload_user,
             "upload_application": self.upload_application,
-            "thumbnail_root": reverse('spot-image-thumb', kwargs={'spot_id': self.spot.pk, 'image_id': self.pk}).rstrip('/'),
             "description": self.description
         }
 
@@ -107,4 +107,4 @@ class SpaceImage(models.Model):
         super(SpaceImage, self).delete(*args, **kwargs)
 
     def rest_url(self):
-        return reverse('spot-image', kwargs={'spot_id': self.spot.pk, 'image_id': self.pk})
+        return reverse('space-image', kwargs={'space_id': self.space.pk, 'image_id': self.pk})

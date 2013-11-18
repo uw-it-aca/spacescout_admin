@@ -28,3 +28,6 @@ def oauth_initialization():
     client = oauth2.Client(consumer)
 
     return consumer, client
+
+def oauth_nonce():
+    return oauth2.generate_nonce()

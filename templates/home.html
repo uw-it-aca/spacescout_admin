@@ -98,6 +98,10 @@
     </div>
     
     <span class="item-modified-by">{{ last_modified }} by {{ modified_by }}</span>
+
+    {{ #if is_pending_publication }}
+    <span class="item-pending glyphicon glyphicon-bookmark"></span>
+    {{ /if }}
  
 </li>
 {{/each}}
