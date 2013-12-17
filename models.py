@@ -18,6 +18,9 @@ class Space(models.Model):
     modified_date = models.DateTimeField(auto_now=True, auto_now_add=True)
     pending = models.TextField(max_length=8192, null=True)
 
+    def __unicode__(self):
+        return u"id {0}".format(self.spot_id)
+
     def json_data_structure(self):
         return {
             'id': self.id,
