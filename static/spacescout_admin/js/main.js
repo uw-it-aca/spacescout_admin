@@ -192,6 +192,11 @@ $(document).ready(function() {
             context.name = field.value.key;
             context.options = [];
             node = $(tpl(context));
+
+            if (required) {
+                node.addClass(required_class);
+            }
+
             if (field.value.hasOwnProperty('edit') && field.value.edit.hasOwnProperty('dependency')) {
                 node.addClass('campus-buildings');
             }
@@ -572,7 +577,8 @@ $(document).ready(function() {
 
         // required fields
         $('.' + required_class).each(function () {
-            var el = $(this);
+            var el = $(this),
+                selected;
 
             switch (el.prop('tagName').toLowerCase()) {
             case 'input':
@@ -598,7 +604,8 @@ $(document).ready(function() {
                 set_cue(el, (el.val().trim().length == 0));
                 break;
             case 'select':
-                set_cue(el, ($(this).find('option:selected').length == 0));
+                selected = $(this).find('option:selected');
+                set_cue(el, (selected.length == 0 || selected.val().length == 0));
                 break;
             default :
                 break;
