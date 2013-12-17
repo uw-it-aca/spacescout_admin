@@ -147,8 +147,8 @@ class SpaceManager(RESTDispatch):
         except (SpaceMapException, SpotException, SpotSchemaException) as e:
             return self.error_response(e.args[0]['status_code'],
                                        e.args[0]['status_text'])
-        except:
-            return self.error_response(400, "Unknown error")
+        except Exception as ex:
+            return self.error_response(400, "Unknown error: %s" % ex)
 
     def POST(self, args, **kwargs):
         try:
