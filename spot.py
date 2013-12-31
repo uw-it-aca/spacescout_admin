@@ -39,23 +39,27 @@ class SpotAccess(object):
         raise SpotException({'status_code': resp.status,
                              'status_text': "Error loading spot"})
 
-    def _push(self, method, spot_url, spot):
+    def _push(self, method, spot_url, spot, user):
         consumer, client = oauth_initialization()
 
-        headers = {'Content-Type': 'application/json'}
+        headers = {
+            "XOAUTH_USER": "%s" % user,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
 
-        if 'etag' in spot:
+        if 'etag' in spot and len(spot.get('etag')):
             headers['If-Match'] = spot.get('etag')
 
         resp, content = client.request(spot_url,
-                                       method,
-                                       json.dumps(spot),
+                                       method=method,
+                                       body=json.dumps(spot),
                                        headers=headers)
 
         if resp.status == 200 or resp.status == 201:
             return resp, json.loads(content) if content else {}
 
-        raise Exception("Unable to {0} spot".format(method))
+        raise Exception("Unable to {0} spot: Server resopnse {1}".format(method, resp.status))
 
 
 class Spot(SpotAccess):
@@ -64,11 +68,11 @@ class Spot(SpotAccess):
     def get(self, spot_id):
         return self._pull("GET", self._service_url(spot_id))
 
-    def put(self, spot):
-        self._push("PUT", self._service_url(spot.get('id')), spot)
+    def put(self, spot, user):
+        self._push("PUT", self._service_url(spot.get('id')), spot, user)
 
-    def post(self, spot):
-        resp, content = self._push("POST", self._service_url(), spot)
+    def post(self, spot, user):
+        resp, content = self._push("POST", self._service_url(), spot, user)
         return self._pull("GET", resp.get('location'))
 
     def delete(self, spot_id):
@@ -88,8 +92,8 @@ class Image(SpotAccess):
     def get(self, image_id):
         return self._pull("GET", self._service_url(image_id))
 
-    def put(self, image):
-        self._push("PUT", self._service_url(image.get('id')), image)
+    def put(self, image, user):
+        self._push("PUT", self._service_url(image.get('id')), image, user)
 
     def post(self, image_path, description, user):
         consumer, client = oauth_initialization()

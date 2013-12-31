@@ -82,9 +82,9 @@ class SpaceManager(RESTDispatch):
                         spot = self._spacemap.apply_pending(spot, space)
 
                         if space.spot_id:
-                            Spot().put(spot)
+                            Spot().put(spot, self._request.user)
                         else:
-                            spot = Spot().post(spot)
+                            spot = Spot().post(spot, self._request.user)
                             space.spot_id = spot.get('id')
 
                         # fix up images, adding new, updating spot images
@@ -94,7 +94,8 @@ class SpaceManager(RESTDispatch):
                                 img.delete()
                             else:
                                 Image(space.spot_id).put(img.image_id,
-                                                         { 'display_index' : img.display_index })
+                                                         { 'display_index' : img.display_index },
+                                                         self._request.user)
 
                         for img in space_images:
                             spotimage = Image(space.spot_id).post(img.image.path,
