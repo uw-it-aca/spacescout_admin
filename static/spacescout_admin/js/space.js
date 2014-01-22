@@ -24,6 +24,7 @@ $(document).ready(function() {
                             window.location.href = window.spacescout_admin.app_url_root + '#published-spaces';
                         },
                         error: function (xhr, textStatus, errorThrown) {
+                            alert('Error saving space: ' + textStatus + ' (' + errorThrown + ')');
                             console.log('textStatus: ' + textStatus + ' thrown: ' + errorThrown);
                         }
                     });

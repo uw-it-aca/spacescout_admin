@@ -162,10 +162,12 @@ class SpaceMap(object):
         data = copy.deepcopy(data_src)
         for k in data:
             if isinstance(data[k], list):
-                if data[k][0] == 'true':
-                    data[k] = None
+                if len(data[k]) == 1 and data[k][0] == 'true':
+                    data[k] = None              # boolean
+                elif k == 'type':
+                    data[k] = []                # known list 
                 else:
-                    data[k] = []
+                    data[k] = ''                # constrained choice
             elif isinstance(data[k], dict):
                 data[k] = self._init_spot(data[k])
             else:

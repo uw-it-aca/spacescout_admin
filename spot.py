@@ -59,7 +59,7 @@ class SpotAccess(object):
         if resp.status == 200 or resp.status == 201:
             return resp, json.loads(content) if content else {}
 
-        raise Exception("Unable to {0} spot: Server resopnse {1}".format(method, resp.status))
+        raise Exception("Unable to {0} spot: Server response {1}".format(method, resp.status))
 
 
 class Spot(SpotAccess):
