@@ -51,8 +51,13 @@ $(document).ready(function() {
                 var json;
 
                 try {
-                    json = $.parseJSON(xhr.responseText);
-                    alert('Unable to load space:' + json.error);
+                    if (xhr.status == 404) {
+                        alert(gettext('space_not_found'));
+                    }
+                    else {
+                        json = $.parseJSON(xhr.responseText);
+                        alert('Unable to load space:' + json.error);
+                    }
                 } catch (e) {
                     alert('Unable to load space: ' + xhr.responseText);
                 }

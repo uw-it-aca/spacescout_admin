@@ -480,3 +480,6 @@ msgid "required"
 msgstr "Required"
 
 
+# space request 404
+msgid "space_not_found"
+msgstr "The requested space could not be found.\n\nClick OK to return to the Space List."
