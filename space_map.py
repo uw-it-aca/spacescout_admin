@@ -42,7 +42,6 @@ class SpaceMap(object):
         json_rep['name'] = spot.get('name', '')
         json_rep['type'] = spot.get('type', '')
         json_rep['manager'] = spot.get('manager', space.manager)
-        json_rep['editors'] = spot.get('editors', [])
         json_rep['modified_by'] = space.modified_by
         json_rep['last_modified'] = spot.get('last_modified', space.modified_date)
         json_rep['group'] = spot.get('location').get('building_name')
@@ -180,6 +179,10 @@ class SpaceMap(object):
             pending = json.loads(space.pending)
             for p in pending:
                 self.set_by_key(p, pending.get(p), spot)
+
+            # until spot gets "editors"
+            if 'editors' not in spot:
+                spot['editors'] = pending.get('editors', '')
 
         return spot
 
