@@ -33,14 +33,17 @@ $(document).ready(function() {
                 showSpaceDetails(data);
 
                 $('.publish-button').click(function (event) {
+                    $(event.target).unbind('click');
                     next_action('is_published', true);
                 });
                 /*
                 $('.unpublish-button').click(function (event) {
+                    $(event.target).unbind('click');
                     next_action('is_published', false);
                 });
                 */
                 $('.submit-button').click(function (event) {
+                    $(event.target).unbind('click');
                     next_action('is_pending_publication', true);
                 });
             },
