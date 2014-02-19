@@ -151,11 +151,12 @@ $(document).ready(function() {
                 name: gettext(field.name),
                 has_name: (field.name.length > 0),
                 value: value,
-                is_missing: (field.hasOwnProperty('required')
-                             && field.required
-                             && (!value
-                                 || value == ''
-                                 || value.toLowerCase() == gettext('noinfo').toLowerCase()))
+                is_missing: (!(value
+                               && value.length
+                               && value.toLowerCase() != gettext('noinfo').toLowerCase())
+                             && ((field.hasOwnProperty('required')
+                                  && field.required)
+                                 || hasRequiredDependencyInSection(field, fields)))
             });
         }
 
@@ -215,7 +216,7 @@ $(document).ready(function() {
         var v,
             quote = true;
 
-        if (f.hasOwnProperty('value') && typeof f.value === 'object') {
+        if (f && f.hasOwnProperty('value') && typeof f.value === 'object') {
             v = window.spacescout_admin.getFieldValue(f.value);
 
             if (f.value.hasOwnProperty('map') && f.value.map.hasOwnProperty(v)) {
@@ -233,6 +234,27 @@ $(document).ready(function() {
         }
 
         return gettext('noinfo');
+    };
+
+    var hasRequiredDependencyInSection = function(field, fields) {
+        var i, f, key, v;
+
+        if (field.hasOwnProperty('value') && field.value.hasOwnProperty('key')) {
+            key = field.value.key;
+            for (i = 0; i < fields.length; i += 1) {
+                f = fields[i];
+                if (f.hasOwnProperty('value')
+                    && f.value.hasOwnProperty('edit')
+                    && f.value.edit.hasOwnProperty('requires')
+                    && key == f.value.edit.requires) {
+                    v = window.spacescout_admin.getFieldValue(f.value);
+                    return (v && (typeof v == 'string'
+                                  && !(v.length == 0 || v == 'null' || v.toLowerCase() == 'false')));
+                }
+            }
+        }
+
+        return false;
     };
 
 });

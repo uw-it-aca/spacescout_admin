@@ -99,7 +99,13 @@
       {{# each fields }}
       <div class="space-detail-item">
         {{ #if has_name }} 
-        <h4>{{ name }}</h4>
+        <h4>{{ name }}
+        {{#if is_missing }}
+            <div class="required-field">
+                <span class="glyphicon glyphicon-asterisk required-field-icon"></span><span class="required-field-text">Required</span>
+            </div>
+        {{ /if }}
+        </h4>
         {{ /if }}
         <p>{{{ value }}}</p>
       </div>
