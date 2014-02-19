@@ -626,6 +626,8 @@ $(document).ready(function() {
                                 select.append(option);
                             }
                         }
+
+                        validate();
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         XHRError(xhr);
