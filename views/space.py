@@ -61,6 +61,22 @@ class SpaceManager(RESTDispatch):
             pending = json.loads(space.pending) if space.pending else {}
 
             for field in fields:
+                if field == 'editors':
+                    import pdb; pdb.set_trace()
+                    try:
+                        for editor in SpaceEditor.objects.filter(space=space):
+                            editor.delete()
+                    except SpaceEditor.DoesNotExist:
+                        pass
+
+                    for username in fields[field].split(','):
+                        editor = username.strip()
+                        if len(editor):
+                            space_editor = SpaceEditor(editor=username.strip(),space=space)
+                            space_editor.save()
+                else:
+                    pending[field] = fields[field]
+
                 pending[field] = fields[field]
 
             if len(missing_fields) > 0:
@@ -108,7 +124,7 @@ class SpaceManager(RESTDispatch):
                             link.save()
                             img.delete()
 
-                    pending = {}
+                    pending = self._spacemap.reset_pending()
                     space.is_complete = None
                     space.is_pending_publication = None
                 else: # unpublish
@@ -163,7 +179,14 @@ class SpaceManager(RESTDispatch):
             fields, missing_fields = self._validate(spot, data)
             pending = {}
             for field in fields:
-                pending[field] = fields[field]
+                if field == 'editors':
+                    for username in fields[field].split(','):
+                        editor = username.strip()
+                        if len(editor):
+                            space_editor = SpaceEditor(editor=username.strip(),space=space)
+                            space_editor.save()
+                else:
+                    pending[field] = fields[field]
 
             if len(missing_fields) > 0:
                 space.is_complete = None
