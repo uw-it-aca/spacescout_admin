@@ -62,7 +62,6 @@ class SpaceManager(RESTDispatch):
 
             for field in fields:
                 if field == 'editors':
-                    import pdb; pdb.set_trace()
                     try:
                         for editor in SpaceEditor.objects.filter(space=space):
                             editor.delete()
