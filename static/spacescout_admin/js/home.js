@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+    // prep for api delete
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": window.spacescout_admin.csrf_token }
+    });
+
     /* home tabs */
     $('#myTab a').click(function (e) {
         e.preventDefault();
@@ -102,6 +107,23 @@ $(document).ready(function() {
                 }
 
                 $(selector).html(Handlebars.compile(tpl_src)(context));
+
+                $('.delete-space').click(function (e) {
+                    var t = $(e.target),
+                        id = t.prop('id').match(/space_([0-9]+)/)[1],
+                        name = t.prev().find('span').text();
+
+                    if (confirm('Really delete space "' + name + '"?')) {
+                        $.ajax({
+                            url: window.spacescout_admin.app_url_root + 'api/v1/space/' + id + '/',
+                            type: 'DELETE',
+                            success: function (data) {
+                                window.location.reload();
+                            },
+                            error: ajaxSpaceError
+                        });
+                    }
+                });
             }
         });
     };

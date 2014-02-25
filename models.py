@@ -12,6 +12,7 @@ class Space(models.Model):
     """
     spot_id = models.SmallIntegerField(unique=True, null=True)
     is_complete = models.NullBooleanField()
+    is_deleted = models.NullBooleanField()
     is_pending_publication = models.NullBooleanField()
     manager = models.CharField(max_length=50, blank=True)
     modified_by = models.CharField(max_length=50, blank=True)

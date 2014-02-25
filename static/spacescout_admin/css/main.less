@@ -308,8 +308,9 @@ a.action-link { text-decoration: none; }
     }
 
 	.space-list-item { padding: 0px; line-height: 1.7em; border-top: 1px solid @gray-light; font-weight: 300; font-size: .9em; position: relative;
-		
-		a { display: block;	background: #fff; padding: 8px 16px; }
+        .delete-space { display: none; position: absolute; }
+        a:hover + .delete-space { display: inline; top: 12px; left: 2px; cursor: pointer; }
+		a { display: block;	background: #fff; padding: 8px 16px 8px 20px; }
 		
 		.item-name { font-size: 1.2em; color: @blue-primary !important; font-weight: 400;  }
 		.item-unnamed { font-style: italic; }
