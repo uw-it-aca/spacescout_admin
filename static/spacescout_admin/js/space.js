@@ -219,8 +219,12 @@ $(document).ready(function() {
         if (f && f.hasOwnProperty('value') && typeof f.value === 'object') {
             v = window.spacescout_admin.getFieldValue(f.value);
 
-            if (f.value.hasOwnProperty('map') && f.value.map.hasOwnProperty(v)) {
-                v = gettext(f.value.map[v]);
+            if (f.value.hasOwnProperty('map')){
+                $.each(f.value.map, function(i, o) {
+                    if (o.value == v) {
+                        v = gettext(o.display);
+                    }
+                });
             }
 
             if (((typeof v != 'string') || v.length > 0) && f.value.hasOwnProperty('format')) {
