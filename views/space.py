@@ -126,7 +126,7 @@ class SpaceManager(RESTDispatch):
                             link.save()
                             img.delete()
 
-                    pending = self._spacemap.reset_pending()
+                    pending = {}
                     space.is_complete = None
                     space.is_pending_publication = None
                 else: # unpublish
