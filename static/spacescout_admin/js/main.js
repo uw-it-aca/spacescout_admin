@@ -274,36 +274,30 @@ $(document).ready(function() {
                         } else {
                             src = '#space-edit-radio';
                             choice = 'checked';
-                            if (field.value.hasOwnProperty('edit')) {
-                                if (field.value.edit.hasOwnProperty('default')) {
-                                    choice_value = field.value.edit.default;
-                                    if (choice_value == null) {
-                                        choice_value = 'null';
-                                    }
-                                }
-
-                                if (field.value.edit.hasOwnProperty('allow_none')) {
-                                    data.push({
-                                        text: gettext('unset'),
-                                        key: field.value.key,
-                                        value: ''
-                                    });
+                            if (field.value.hasOwnProperty('edit')
+                               && field.value.edit.hasOwnProperty('default')) {
+                                choice_value = field.value.edit.default;
+                                if (choice_value == null) {
+                                    choice_value = '';
                                 }
                             }
                         }
 
                         if (field.value.hasOwnProperty('map')) {
                             for (i in field.value.map) {
+                                var value = field.value.map[i].value,
+                                    display = field.value.map[i].display;
+
                                 input = {
-                                    text: gettext(field.value.map[i]),
+                                    text: gettext(display),
                                     key: field.value.key,
-                                    value: i,
+                                    value: value,
                                     class: input_class
                                 };
 
-                                if (field.value.value == i
+                                if (field.value.value == value
                                     || (typeof choice_value !== 'undefined'
-                                        && choice_value == i)) {
+                                        && choice_value == value)) {
                                     input.choice =  choice;
                                 }
 
@@ -573,43 +567,51 @@ $(document).ready(function() {
                         return false;
                     });
                 }
+            },
+            set_cue_by_element_type = function(el) {
+                var cue, selected;
+
+                switch (el.prop('tagName').toLowerCase()) {
+                case 'input':
+                    switch (el.attr('type')) {
+                    case 'radio':
+                        cue = ($('input[name="' + el.attr('name') + '"]:checked').length <= 0);
+                        break;
+                    case 'checkbox':
+                        cue = (el.closest('div.panel').find('input:checked').length <= 0);
+                        break;
+                    case 'number':
+                    case 'text':
+                        if (el.attr('name').indexOf('|') >= 0) {
+                            cue = (multiValueInput(el) == null);
+                            break;
+                        }
+
+                        cue = (el.val().trim().length == 0);
+                        break;
+                    };
+                    break;
+                case 'textarea':
+                    cue = (el.val().trim().length == 0);
+                    break;
+                case 'select':
+                    selected = $(this).find('option:selected');
+                    cue = (selected.length == 0 || selected.val().length == 0);
+                    break;
+                default :
+                    break;
+                };
+
+                if (cue !== undefined) {
+                    set_cue(el, cue);
+                }
+
+                return cue;
             };
 
         // required fields
         $('.' + required_class).each(function () {
-            var el = $(this),
-                selected;
-
-            switch (el.prop('tagName').toLowerCase()) {
-            case 'input':
-                switch (el.attr('type')) {
-                case 'radio':
-                    set_cue(el, ($('input[name="' + el.attr('name') + '"]:checked').length <= 0));
-                    break;
-                case 'checkbox':
-                    set_cue(el, (el.closest('div.panel').find('input:checked').length <= 0));
-                    break;
-                case 'number':
-                case 'text':
-                    if (el.attr('name').indexOf('|') >= 0) {
-                        set_cue(el, (multiValueInput(el) == null));
-                        break;
-                    }
-
-                    set_cue(el, (el.val().trim().length == 0));
-                    break;
-                };
-                break;
-            case 'textarea':
-                set_cue(el, (el.val().trim().length == 0));
-                break;
-            case 'select':
-                selected = $(this).find('option:selected');
-                set_cue(el, (selected.length == 0 || selected.val().length == 0));
-                break;
-            default :
-                break;
-            };
+            set_cue_by_element_type($(this));
         });
 
         // fields that dependent on another
@@ -617,20 +619,26 @@ $(document).ready(function() {
             var el = $(this),
                 el_value = el.attr('value'),
                 m = el.attr('class').slice(dependent_prefix.length).match(/([^\s]+)(\s|$)/),
-                target_el;
+                target_el, has_cue;
 
             if (m) {
                 target_el = $('*[name="' + m[1] + '"]');
                 if (typeof el_value !== 'undefined' && el_value !== false) {
-                    if (el_value == 'null' || el_value.toLowerCase() == 'false') {
+                    if (el_value.length == 0 || el_value == 'null' || el_value.toLowerCase() == 'false') {
                         set_cue(target_el, false);
                         if (target_el.hasClass(required_class)) {
                             target_el.removeClass(required_class);
                         }
-                    } else if (target_el.val().trim().length == 0) {
-                        set_cue(target_el, true);
-                        if (!target_el.hasClass(required_class)) {
-                            target_el.addClass(required_class);
+                    } else {
+                        has_cue = set_cue_by_element_type(target_el);
+                        if (has_cue == true) {
+                            if (!target_el.hasClass(required_class)) {
+                                target_el.addClass(required_class);
+                            }
+                        } else if (has_cue == false) {
+                            if (target_el.hasClass(required_class)) {
+                                target_el.removeClass(required_class);
+                            }
                         }
                     }
                 } else {

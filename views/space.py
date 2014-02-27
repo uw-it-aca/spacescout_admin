@@ -48,6 +48,9 @@ class SpaceManager(RESTDispatch):
             schema = SpotSchema().get()
             space_id = kwargs['space_id']
             space = Space.objects.get(id=space_id)
+            if space.is_deleted:
+                self.error404_response()
+
             if space.spot_id:
                 spot = Spot().get(space.spot_id)
             else:
@@ -61,6 +64,21 @@ class SpaceManager(RESTDispatch):
             pending = json.loads(space.pending) if space.pending else {}
 
             for field in fields:
+                if field == 'editors':
+                    try:
+                        for editor in SpaceEditor.objects.filter(space=space):
+                            editor.delete()
+                    except SpaceEditor.DoesNotExist:
+                        pass
+
+                    for username in fields[field].split(','):
+                        editor = username.strip()
+                        if len(editor):
+                            space_editor = SpaceEditor(editor=username.strip(),space=space)
+                            space_editor.save()
+                else:
+                    pending[field] = fields[field]
+
                 pending[field] = fields[field]
 
             if len(missing_fields) > 0:
@@ -108,7 +126,7 @@ class SpaceManager(RESTDispatch):
                             link.save()
                             img.delete()
 
-                    pending = {}
+                    pending = self._spacemap.reset_pending()
                     space.is_complete = None
                     space.is_pending_publication = None
                 else: # unpublish
@@ -163,7 +181,14 @@ class SpaceManager(RESTDispatch):
             fields, missing_fields = self._validate(spot, data)
             pending = {}
             for field in fields:
-                pending[field] = fields[field]
+                if field == 'editors':
+                    for username in fields[field].split(','):
+                        editor = username.strip()
+                        if len(editor):
+                            space_editor = SpaceEditor(editor=username.strip(),space=space)
+                            space_editor.save()
+                else:
+                    pending[field] = fields[field]
 
             if len(missing_fields) > 0:
                 space.is_complete = None
@@ -183,6 +208,26 @@ class SpaceManager(RESTDispatch):
             return self.json_response(json.dumps('{"id": "%s"}' % space.id))
         except PermittedException:
             return self.error_response(401, "Unauthorized")
+
+    def DELETE(self, args, **kwargs):
+        try:
+            space_id = kwargs['space_id']
+            schema = SpotSchema().get()
+            space = Space.objects.get(id=space_id)
+            if space.is_deleted:
+                raise Space.DoesNotExist
+
+            if space.spot_id:
+                spot = Spot().get(space.spot_id)
+            else:
+                spot = self._spacemap.pending_spot(space, schema)
+
+            Permitted().can_edit(self._request.user, space, spot)
+            space.is_deleted = True
+            space.save()
+            return self.json_response(json.dumps('{}'))
+        except Space.DoesNotExist:
+            self.error404_response()
 
     def _validate(self, spot, data):
         fields = {}
@@ -254,6 +299,9 @@ class SpaceManager(RESTDispatch):
         try:
             schema = SpotSchema().get()
             space_model = Space.objects.get(id=space_id)
+            if space_model.is_deleted:
+                raise Space.DoesNotExist
+
             if space_model.spot_id:
                 spot = Spot().get(space_model.spot_id)
             else:
@@ -321,6 +369,8 @@ class SpaceManager(RESTDispatch):
                     spot_id = spot.get('id')
                     try:
                         space = Space.objects.get(spot_id=spot_id)
+                        if space.is_deleted:
+                            continue
                     except Space.DoesNotExist:
                         space = Space(spot_id=spot_id,
                                       manager=spot.get('manager'),
@@ -341,7 +391,7 @@ class SpaceManager(RESTDispatch):
                                                e.args[0]['status_text'])
 
         for space in Space.objects.filter(**filter):
-            if str(space.spot_id) in seen:
+            if space.is_deleted or str(space.spot_id) in seen:
                 continue
 
             try:

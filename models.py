@@ -12,6 +12,7 @@ class Space(models.Model):
     """
     spot_id = models.SmallIntegerField(unique=True, null=True)
     is_complete = models.NullBooleanField()
+    is_deleted = models.NullBooleanField()
     is_pending_publication = models.NullBooleanField()
     manager = models.CharField(max_length=50, blank=True)
     modified_by = models.CharField(max_length=50, blank=True)
@@ -22,15 +23,31 @@ class Space(models.Model):
         return u"id {0}".format(self.spot_id)
 
     def json_data_structure(self):
+        editors = ''
+        try:
+            for editor in SpaceEditor.objects.filter(space=self.id):
+                if len(editors):
+                    editors += ', '
+
+                editors += editor.editor
+        except SpaceEditor.DoesNotExist:
+            pass
+
         return {
             'id': self.id,
             'manager': self.manager,
+            'editors': editors,
             'is_complete': self.is_complete,
             'is_published': self.pending and len(self.pending) != 0,
             'is_pending_publication': self.is_pending_publication,
             'modified_by': self.modified_by,
             'modified_date' : self.modified_date.isoformat()
         }
+
+
+class SpaceEditor(models.Model):
+    space = models.ForeignKey(Space)
+    editor = models.CharField(max_length=50, blank=True)
 
 
 class SpotImageLink(models.Model):

@@ -14,8 +14,7 @@
 """
 
 from django.db.models import Q
-import simplejson as json
-import re
+from spacescout_admin.models import SpaceEditor
 
 
 class PermittedException(Exception): pass
@@ -42,9 +41,10 @@ class Permitted(object):
                      or user.username == spot.get('manager')))
 
     def _user_is_editor(self, user, space, spot):
-        if space and hasattr(space, 'pending') and space.pending:
-            pending = json.loads(space.pending)
-            if 'editors' in pending:
-                return user.username in re.sub(r'\s+', '', pending['editors']).split(',') and user.is_authenticated()
+        try:
+            SpaceEditor.objects.get(editor=user.username,space=space)
+            return user.is_authenticated()
+        except:
+            pass
 
         return None

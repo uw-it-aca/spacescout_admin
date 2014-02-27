@@ -124,7 +124,10 @@ class SpaceMap(object):
                     if 'value' in f:
                         if isinstance(f['value'], dict):
                             value = copy.deepcopy(f['value'])
-                            value['value'] = self.get_value(value['key'], spot, schema)
+                            if value.get('key') in json_rep:
+                                value['value'] = json_rep[value.get('key')]
+                            else:
+                                value['value'] = self.get_value(value['key'], spot, schema)
                         else:
                             vals = []
                             for v in f['value']:
@@ -179,10 +182,6 @@ class SpaceMap(object):
             pending = json.loads(space.pending)
             for p in pending:
                 self.set_by_key(p, pending.get(p), spot)
-
-            # until spot gets "editors"
-            if 'editors' not in spot:
-                spot['editors'] = pending.get('editors', '')
 
         return spot
 
