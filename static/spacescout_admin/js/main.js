@@ -717,6 +717,13 @@ $(document).ready(function() {
                             data['location.latitude'] = value[1] + ((value[2]) ? value[2] : '');
                             data['location.longitude'] = value[3] + ((value[4]) ? value[4] : '');
                         }
+                        else {
+                            // Just drop bad data?  this works for an empty field
+                            // value, but if they enter 12.1234, what's their
+                            // expectation?
+                            data['location.latitude'] = null;
+                            data['location.longitude'] = null;
+                        }
                     } else {
                         q = getMultiValues(p, $(this).val().trim());
                         for (i = 0; i < p.length; i += 1) {
