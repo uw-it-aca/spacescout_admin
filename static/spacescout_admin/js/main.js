@@ -101,6 +101,15 @@ $(document).ready(function() {
         return hours;
     };
 
+    window.spacescout_admin.positive_number_change = function(ev) {
+        var value = ev.target.value;
+        value = value.replace(/[^0-9]/g, '');
+        ev.target.value = value;
+    };
+
+    $(document).delegate("input[type='number']", "change", window.spacescout_admin.positive_number_change);
+    $(document).delegate("input[type='number']", "keyup", window.spacescout_admin.positive_number_change);
+
     var schemaVal = function (key) {
         var schema = window.spacescout_admin.spot_schema,
             keys = key.split('.'),
