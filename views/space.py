@@ -24,8 +24,10 @@ from spacescout_admin.oauth import oauth_initialization
 from spacescout_admin.permitted import Permitted, PermittedException
 from spacescout_admin.views.schema import SpotSchema, SpotSchemaException
 import simplejson as json
+import logging
 import math
 
+logger = logging.getLogger(__name__)
 
 class SpaceManager(RESTDispatch):
     """ Performs actions on Space models at api/v1/space/(?P<space_id>\d+)/
@@ -396,7 +398,11 @@ class SpaceManager(RESTDispatch):
 
             try:
                 if space.spot_id:
-                    spot = Spot().get(space.spot_id)
+                    try:
+                        spot = Spot().get(space.spot_id)
+                    except SpotException as se:
+                        logger.error("No Spot for %s.  Error: %s" % (space.spot_id, se.args[0]))
+                        continue
                 else:
                     spot = self._spacemap.pending_spot(space, schema)
 
