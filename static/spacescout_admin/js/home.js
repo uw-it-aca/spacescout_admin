@@ -118,7 +118,11 @@ $(document).ready(function() {
                             url: window.spacescout_admin.app_url_root + 'api/v1/space/' + id + '/',
                             type: 'DELETE',
                             success: function (data) {
-                                window.location.reload();
+                                if (t.parent().parent().children().length > 1) {
+                                    t.parent().slideUp('fast');
+                                } else {
+                                    window.location.reload();
+                                }
                             },
                             error: ajaxSpaceError
                         });

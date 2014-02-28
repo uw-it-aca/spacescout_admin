@@ -462,6 +462,14 @@ $(document).ready(function() {
         };
     };
 
+    var checkedToSchemaValue = function (o) {
+        if (typeof o === 'boolean') {
+            return o ? 'True' : '';
+        }
+
+        return o;
+    };
+
     window.spacescout_admin.businessHours = function (available_hours) {
         var periods = [],
             runs = {},
@@ -701,7 +709,7 @@ $(document).ready(function() {
                         }
                     }
                 } else {
-                    data[key] = checked;
+                    data[key] = checkedToSchemaValue(checked);
                 }
 
                 break;
@@ -712,7 +720,7 @@ $(document).ready(function() {
                     if (typeof value !== 'undefined' && value !== false) {
                         data[key] = value;
                     } else {
-                        data[key] = checked;
+                        data[key] = checkedToSchemaValue(checked);
                     }
                 }
 
