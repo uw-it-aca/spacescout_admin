@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.utils.safestring import SafeString
 import simplejson as json
 from spacescout_admin.permitted import Permitted, PermittedException
+from spacescout_admin.fields import space_definitions, space_creation_fields
 
 
 # Create your views here.
@@ -30,7 +31,7 @@ def edit(request, space_id):
 def add(request):
    return render_to_response('add.html',
                              page_context(request, {
-                                 'SPACE_FIELDS' : SafeString(json.dumps(settings.SS_SPACE_CREATION_FIELDS))
+                                 'SPACE_FIELDS' : SafeString(json.dumps(space_creation_fields()))
                              }),
                              context_instance=RequestContext(request))
 

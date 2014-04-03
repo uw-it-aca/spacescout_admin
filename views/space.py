@@ -21,6 +21,7 @@ from spacescout_admin.spot import Spot, Image, SpotException
 from spacescout_admin.space_map import SpaceMap, SpaceMapException
 from spacescout_admin.rest_dispatch import RESTDispatch
 from spacescout_admin.oauth import oauth_initialization
+from spacescout_admin.fields import space_definitions, space_creation_fields
 from spacescout_admin.permitted import Permitted, PermittedException
 from spacescout_admin.views.schema import SpotSchema, SpotSchemaException
 import simplejson as json
@@ -198,7 +199,7 @@ class SpaceManager(RESTDispatch):
             else:
                 space.is_complete = True
 
-            for field in settings.SS_SPACE_CREATION_FIELDS:
+            for field in space_creation_fields():
                 if 'value' in field and 'key' in field['value']:
                     key = field['value']['key']
                     if 'required' in field and (key not in data or bool(data[key]) == False):
@@ -235,7 +236,7 @@ class SpaceManager(RESTDispatch):
         fields = {}
         missing_fields = []
         seen_fields = {}
-        for section in settings.SS_SPACE_DEFINITIONS:
+        for section in space_definitions():
             for field in section['fields'] if 'fields' in section else []:
                 for value in field['value'] if isinstance(field['value'], list) else [field['value']]:
                     key = value['key']

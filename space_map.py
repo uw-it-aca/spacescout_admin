@@ -14,6 +14,7 @@
 """
 from django.conf import settings
 from spacescout_admin.models import *
+from spacescout_admin.fields import space_definitions
 import simplejson as json
 import copy
 
@@ -50,7 +51,7 @@ class SpaceMap(object):
         if settings.SS_SPACE_DESCRIPTION:
             json_rep['description'] = self.get_value(settings.SS_SPACE_DESCRIPTION, spot, schema)
 
-        for secdef in settings.SS_SPACE_DEFINITIONS:
+        for secdef in space_definitions():
             section = {
                 'section': secdef['section']
             }
