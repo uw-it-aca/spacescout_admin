@@ -1,0 +1,21 @@
+<form method="post">
+{% csrf_token %}
+
+{% if not reviews %}
+No unpublished reviews.
+{% else %}
+{% for review in reviews %}
+<h2>{{ review.space_name }}</h2>
+By: {{ review.reviewer }} <br />
+Rating: {{ review.rating }} out of 5<br />
+<textarea name="review_{{ review.id }}" style="width: 300px; height:200px;">{{ review.original_review }}</textarea>
+<br/>
+<label><input type="checkbox" name="publish_{{review.id}}"> Publish</label> <br />
+<label><input type="checkbox" name="delete_{{review.id}}"> Delete</label> <br />
+
+{% endfor %}
+<br/>
+<input type="submit" value="Update"/>
+{% endif %}
+
+</form>
