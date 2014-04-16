@@ -41,7 +41,6 @@
         <!-- Font Awesome -->
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-        {% compress js %}
             <script src="{{ STATIC_URL }}spacescout_admin/js/bootstrap-select.min.js"></script>
             <script src="{{ STATIC_URL }}spacescout_admin/js/bootstrap-fileupload.min.js"></script>
             <script src="{{ STATIC_URL }}spacescout_admin/lib/handlebars.js"></script>
@@ -49,7 +48,6 @@
             <script src="{{ STATIC_URL }}spacescout_admin/lib/jquery.nouislider.min.js"></script>
             <script src="{{ STATIC_URL }}spacescout_admin/js/main.js"></script>
             {% block extra_js %}{% endblock %}
-        {% endcompress %}
         
     </head>
     

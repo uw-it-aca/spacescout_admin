@@ -37,12 +37,10 @@
              
         <script type="text/javascript" src="{{ APP_URL_ROOT }}jsi18n/"></script>
  
-        {% compress js %}
             <script src="{{ STATIC_URL }}spacescout_admin/js/bootstrap-select.min.js"></script>
             <script src="{{ STATIC_URL }}spacescout_admin/js/bootstrap-fileupload.min.js"></script>
             <script src="{{ STATIC_URL }}spacescout_admin/js/main.js"></script>
             {% block extra_js %}{% endblock %}
-        {% endcompress %}
     
     </head>
 
