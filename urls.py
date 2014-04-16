@@ -8,7 +8,7 @@ js_info_dict = {
 
 urlpatterns = patterns('',
     #url(r'upload/$', 'upload.upload'),
-    url(r'^$', 'spacescout_admin.views.page.home'),
+    url(r'^/?$', 'spacescout_admin.views.page.home'),
     url(r'api/v1/space/$', SpaceManager().run),
     url(r'api/v1/space/(?P<space_id>\d+)/$', SpaceManager().run),
     url(r'api/v1/space/(?P<space_id>\d+)/image/$', SpaceImageManager().run),
