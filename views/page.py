@@ -11,25 +11,25 @@ from spacescout_admin.fields import space_definitions, space_creation_fields
 # Create your views here.
 @login_required
 def home(request):
-   return render_to_response('home.html',
+   return render_to_response('spacescout_admin/home.html',
                              page_context(request, {}),
                              context_instance=RequestContext(request))
 
 @login_required
 def space(request, space_id):
-   return render_to_response('space.html',
+   return render_to_response('spacescout_admin/space.html',
                              page_context(request, { 'SPACE_ID': space_id }),
                              context_instance=RequestContext(request))
 
 @login_required
 def edit(request, space_id):
-   return render_to_response('edit.html',
+   return render_to_response('spacescout_admin/edit.html',
                              page_context(request, { 'SPACE_ID': space_id }),
                              context_instance=RequestContext(request))
 
 @login_required
 def add(request):
-   return render_to_response('add.html',
+   return render_to_response('spacescout_admin/add.html',
                              page_context(request, {
                                  'SPACE_FIELDS' : SafeString(json.dumps(space_creation_fields()))
                              }),

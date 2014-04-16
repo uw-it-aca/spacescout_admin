@@ -36,7 +36,7 @@ def _show_unpublished(request):
 
     reviews = json.loads(content)
 
-    return render_to_response('reviews/unpublished.html',
+    return render_to_response('spacescout_admin/reviews/unpublished.html',
                              { "reviews": reviews},
                              context_instance=RequestContext(request))
 
