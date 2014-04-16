@@ -75,7 +75,7 @@ class SpaceImageManager(RESTDispatch):
         resp, content = client.request(url, 'GET')
 
         if resp.status != 200:
-            return self.error_response(resp.status_code, msg="Error loading image")
+            return self.error_response(resp.status, msg="Error loading image")
 
         return self.json_response(content)
 
