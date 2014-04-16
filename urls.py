@@ -18,6 +18,6 @@ urlpatterns = patterns('',
     url(r'space/(?P<space_id>\d+)/$', 'spacescout_admin.views.page.space'),
     url(r'edit/(?P<space_id>\d+)/$', 'spacescout_admin.views.page.edit'),
     url(r'add/$', 'spacescout_admin.views.page.add'),
-    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
-    url(r'^reviews$', 'spacescout_admin.views.reviews.unpublished'),
+    url(r'jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+    url(r'reviews$', 'spacescout_admin.views.reviews.unpublished'),
 )
