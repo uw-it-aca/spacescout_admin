@@ -102,7 +102,17 @@ class Image(SpotAccess):
         i += len('oauth_signature=')
         signature = resp['content-location'][i:]
 
-        authorization = 'OAuth oauth_version="1.0",oauth_nonce="%s",oauth_timestamp="%d",oauth_consumer_key="%s",oauth_signature_method="HMAC-SHA1",oauth_signature="%s"' % (oauth_nonce(), int(time.time()), settings.SS_WEB_OAUTH_KEY, signature)
+        oauth_key = ""
+        if hasattr(settings, "SS_ADMIN_OAUTH_KEY"):
+            oauth_key = settings.SS_ADMIN_OAUTH_KEY
+        elif hasattr(settings, "SS_WEB_OAUTH_KEY"):
+            oauth_key = settings.SS_WEB_OAUTH_KEY
+        else:
+            raise(Exception("Required setting missing: SS_ADMIN_OAUTH_KEY"))
+
+
+
+        authorization = 'OAuth oauth_version="1.0",oauth_nonce="%s",oauth_timestamp="%d",oauth_consumer_key="%s",oauth_signature_method="HMAC-SHA1",oauth_signature="%s"' % (oauth_nonce(), int(time.time()), oauth_key, signature)
 
         register_openers()
 

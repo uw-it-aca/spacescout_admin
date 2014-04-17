@@ -19,12 +19,25 @@ import oauth2
 def oauth_initialization():
     if not hasattr(settings, 'SS_WEB_SERVER_HOST'):
         raise(Exception("Required setting missing: SS_WEB_SERVER_HOST"))
-    if not hasattr(settings, 'SS_WEB_OAUTH_KEY'):
-        raise(Exception("Required setting missing: SS_WEB_OAUTH_KEY"))
-    if not hasattr(settings, 'SS_WEB_OAUTH_SECRET'):
-        raise(Exception("Required setting missing: SS_WEB_OAUTH_SECRET"))
+    if not hasattr(settings, "SS_ADMIN_OAUTH_KEY") and not hasattr(settings, 'SS_WEB_OAUTH_KEY'):
+        raise(Exception("Required setting missing: SS_ADMIN_OAUTH_KEY"))
+    if not hasattr(settings, "SS_ADMIN_OAUTH_SECRET") and not hasattr(settings, 'SS_WEB_OAUTH_SECRET'):
+        raise(Exception("Required setting missing: SS_ADMIN_OAUTH_SECRET"))
 
-    consumer = oauth2.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
+    oauth_key = ""
+    if hasattr(settings, "SS_ADMIN_OAUTH_KEY"):
+        oauth_key = settings.SS_ADMIN_OAUTH_KEY
+    else:
+        oauth_key = settings.SS_WEB_OAUTH_KEY
+
+    oauth_secret = ""
+    if hasattr(settings, "SS_ADMIN_OAUTH_SECRET"):
+        oauth_secret = settings.SS_ADMIN_OAUTH_SECRET
+    else:
+        oauth_secret = settings.SS_WEB_OAUTH_SECRET
+
+
+    consumer = oauth2.Consumer(key=oauth_key, secret=oauth_secret)
     client = oauth2.Client(consumer)
 
     return consumer, client
