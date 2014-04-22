@@ -29,7 +29,7 @@ def _show_unpublished(request):
         'Accept': 'application/json'
     }
 
-    resp, content = client.request(url, 'GET')
+    resp, content = client.request(url, 'GET', headers=headers)
 
     if resp.status != 200:
         raise Exception("Error loading reviews: %s" % content)
