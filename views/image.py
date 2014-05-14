@@ -57,9 +57,8 @@ class SpaceImageManager(RESTDispatch):
             response["Content-type"] = img.content_type
             return response
 
-        except Space.DoesNotExist:
-            if e.args[0]['status_code'] == 404:
-                self.error404_response()  # no return
+        except Space.DoesNotExist as e:
+            self.error404_response()  # no return
 
     def _spot_image(self, spot_id, image_id):
         try:
@@ -100,8 +99,7 @@ class SpaceImageManager(RESTDispatch):
         except PermittedException:
             return self.error_response(401, "Unauthorized")
         except (Space.DoesNotExist, SpaceImage.DoesNotExist):
-            if e.args[0]['status_code'] == 404:
-                self.error404_response()  # no return
+            self.error404_response()  # no return
 
         body = json.loads(request.body)
 
