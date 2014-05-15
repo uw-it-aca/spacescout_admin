@@ -1,9 +1,11 @@
 from django.db import models
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import UploadedFile
 from PIL import Image
 import hashlib
+import os
 from functools import wraps
 
 
@@ -109,8 +111,9 @@ class SpaceImage(models.Model):
             if isinstance(self.image, UploadedFile) and self.image.file.multiple_chunks():
                 img = Image.open(self.image.file.temporary_file_path())
             else:
-                img = Image.open(self.image)
-        except:
+                fullname = os.path.join(settings.MEDIA_ROOT, self.image.path)
+                img = Image.open(fullname)
+        except Exception as ex:
             raise ValidationError('Not a valid image format')
 
         if not img.format in SpaceImage.CONTENT_TYPES:
