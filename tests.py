@@ -15,7 +15,7 @@
 
 from django.utils import unittest
 
-# from spacescout_admin.test.spot_1277 import Spot1277
+from spacescout_admin.test.spot_1277 import Spot1277
 from spacescout_admin.test.spot_1871 import Spot1871
 from spacescout_admin.test.spot_1872 import Spot1872
 
