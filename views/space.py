@@ -159,7 +159,7 @@ class SpaceManager(RESTDispatch):
             space.modified_by = self._request.user.username
             space.pending = json.dumps(pending) if len(pending) > 0 else None
             space.save()
-            return self.json_response(json.dumps('{"id": "%s"}' % space.id))
+            return self.json_response('{"id": "%s"}' % space.id)
         except PermittedException:
             return self.error_response(401, "Unauthorized")
         except Space.DoesNotExist:
