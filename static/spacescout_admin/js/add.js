@@ -46,9 +46,7 @@ $(document).ready(function() {
             contentType: "application/json",
             data: JSON.stringify(window.spacescout_admin.collectInput()),
             type: "POST",
-            success: function (data) {
-                var json = $.parseJSON(data);
-
+            success: function (json) {
                 window.location.href = window.spacescout_admin.app_url_root + 'space/' + json.id;
             },
             error: XHRError

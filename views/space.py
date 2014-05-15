@@ -179,6 +179,7 @@ class SpaceManager(RESTDispatch):
             space = Space(manager=self._request.user,
                           modified_by=self._request.user)
             spot = self._spacemap.pending_spot(space, schema)
+
             data = json.loads(self._request.read())
 
             fields, missing_fields = self._validate(spot, data)
@@ -208,7 +209,7 @@ class SpaceManager(RESTDispatch):
             space.pending = json.dumps(pending) if len(pending) > 0 else None
 
             space.save()
-            return self.json_response(json.dumps('{"id": "%s"}' % space.id))
+            return self.json_response('{"id": "%s"}' % space.id)
         except PermittedException:
             return self.error_response(401, "Unauthorized")
 
