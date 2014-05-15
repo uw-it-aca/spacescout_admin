@@ -356,7 +356,7 @@ msgid "reservation_notes_help"
 msgstr "Instruct students on how to reserve a space. They should be able to take action to reserve the space based on this description. Include a URL if the space can be reserved online."
 
 msgid "resources_help"
-msgstr "Select all that apply."
+msgstr "Select all resources available in this space. Select \"printing\" if printing is available in the building."
 
 msgid "capacity_help"
 msgstr "Only include if less than 25."
