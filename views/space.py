@@ -245,6 +245,9 @@ class SpaceManager(RESTDispatch):
                     orig_val = self._spot_value(key, spot)
                     if key in data and val != orig_val:
                         fields[key] = val
+                        # SPOT-1277
+                        if val == None or val == "":
+                            orig_val = None
 
                     if 'required' in field and bool(val) == False and bool(orig_val) == False:
                         s = section.get('section')
