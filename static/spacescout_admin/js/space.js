@@ -49,6 +49,7 @@ $(document).ready(function() {
             },
             error: function (xhr, textStatus, errorThrown) {
                 var json;
+                console.log("In error");
 
                 try {
                     if (xhr.status == 404) {
@@ -56,10 +57,14 @@ $(document).ready(function() {
                     }
                     else {
                         json = $.parseJSON(xhr.responseText);
-                        alert('Unable to load space:' + json.error);
+                        if (window.console && window.console.log) {
+                            window.console.log('Unable to load space:' + json.error);
+                        }
                     }
                 } catch (e) {
-                    alert('Unable to load space: ' + xhr.responseText);
+                    if (window.console && window.console.log) {
+                        window.console.log('Unable to load space:' + xhr.responseText);
+                    }
                 }
 
                 window.location.href = window.spacescout_admin.app_url_root;

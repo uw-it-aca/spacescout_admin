@@ -93,15 +93,7 @@ class SpaceManager(RESTDispatch):
 
             # SPOT-1303
             if 'manager' in data:
-                try:
-                    Permitted().is_admin(self._request.user)
-                except PermittedException as pe:
-                    del pending["manager"]
-
-                try:
-                    space.manager = data['manager']
-                except Exception as ex:
-                    pass
+                space.manager = data['manager']
 
             if 'is_published' in data:
                 if data.get('is_published') == True:
