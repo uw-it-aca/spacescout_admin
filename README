@@ -17,3 +17,23 @@ The purpose of this client is to assist in the management, addition, and modific
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+  
+  
+Below are the settings that should be placed in settings.py and local_settings.py. Fill in the value for your own specific app.
+
+/*** Settings ***/
+
+SPACE_TABLE_KEYS = { 
+    'FIXED': ('id', 'name',),
+    'SCROLLABLE': ('type',),
+}
+
+#Django Compressor - LessCSS Compiler
+COMPRESS_ENABLED = True
+COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
+
+/*** Local Settings ***/
+
+SS_WEB_SERVER_HOST = ''
+SS_WEB_OAUTH_KEY = ''
+SS_WEB_OAUTH_SECRET = ''
