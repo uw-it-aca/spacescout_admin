@@ -37,3 +37,11 @@ COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 SS_WEB_SERVER_HOST = ''
 SS_WEB_OAUTH_KEY = ''
 SS_WEB_OAUTH_SECRET = ''
+
+
+In '/djangoadmin':
+
+Set two user groups: spacescout_admins and spacescout_creators.
+
+Adding a user to admins gives superuser access.
+Adding a user to the creators group gives permissions to add new spaces. 
