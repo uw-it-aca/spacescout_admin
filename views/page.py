@@ -35,6 +35,12 @@ def add(request):
                              }),
                              context_instance=RequestContext(request))
 
+@login_required
+def page_not_found(request):
+    return render_to_response('spacescout_admin/404.html',
+                              page_context(request, {}),
+                              context_instance=RequestContext(request))
+
 
 def page_context(request, context):
    context['remote_user'] = request.user
