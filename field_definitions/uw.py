@@ -215,7 +215,7 @@ def space_definitions():
                             'text': 'access_notes_more_help',
                             'link': 'See Examples'
                         }
-                    },                
+                    },
                     'value': {
                         'key': 'extended_info.access_notes',
                         'edit': {
@@ -309,7 +309,6 @@ def space_definitions():
                     'value': {
                         'key': 'capacity',
                         'format': 'Seats {0}'
-    
                     }
                 },
                 {
@@ -327,7 +326,6 @@ def space_definitions():
                             'link': 'See Examples'
                         }
                     },
-                    'required': True,
                     'value': {
                         'key': 'extended_info.noise_level'
                     }
