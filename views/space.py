@@ -48,6 +48,7 @@ class SpaceManager(RESTDispatch):
 
     def PUT(self, args, **kwargs):
         try:
+            import pdb; pdb.set_trace()
             schema = SpotSchema().get()
             space_id = kwargs['space_id']
             space = Space.objects.get(id=space_id)
@@ -62,6 +63,10 @@ class SpaceManager(RESTDispatch):
             Permitted().can_edit(self._request.user, space, spot)
 
             data = json.loads(self._request.read())
+
+            for field in data:
+                if field and field.startswith("extended_info.has_"):
+                    data[field] = data[field].lower()
             fields, missing_fields = self._validate(spot, data)
 
             pending = json.loads(space.pending) if space.pending else {}
@@ -177,6 +182,7 @@ class SpaceManager(RESTDispatch):
             return self.error_response(400, "Unknown error: %s" % ex)
 
     def POST(self, args, **kwargs):
+        import pdb; pdb.set_trace()
         try:
             Permitted().can_create(self._request.user)
             schema = SpotSchema().get()
@@ -211,6 +217,7 @@ class SpaceManager(RESTDispatch):
                         return self.error_response(400, "Bad Request")
 
             space.pending = json.dumps(pending) if len(pending) > 0 else None
+
 
             space.save()
             return self.json_response('{"id": "%s"}' % space.id)
