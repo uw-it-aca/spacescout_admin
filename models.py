@@ -111,8 +111,7 @@ class SpaceImage(models.Model):
             if isinstance(self.image, UploadedFile) and self.image.file.multiple_chunks():
                 img = Image.open(self.image.file.temporary_file_path())
             else:
-                fullname = os.path.join(settings.MEDIA_ROOT, self.image.path)
-                img = Image.open(fullname)
+                img = Image.open(self.image)
         except Exception as ex:
             raise ValidationError('Not a valid image format')
 
