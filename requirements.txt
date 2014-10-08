@@ -5,6 +5,6 @@ django-mobility
 oauth2
 urllib3
 poster
-PIL
+Pillow
 simplejson
 south
