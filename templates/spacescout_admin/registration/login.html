@@ -18,7 +18,7 @@
 {% endif %}
 
 <div style="margin-top:2em;">
-    <form class="form-signin" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    <form class="form-signin" method="post" action="{% url django.contrib.auth.views.login %}">
 
         {% csrf_token %}
 
