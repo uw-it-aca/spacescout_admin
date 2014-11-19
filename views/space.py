@@ -48,7 +48,6 @@ class SpaceManager(RESTDispatch):
 
     def PUT(self, args, **kwargs):
         try:
-            import pdb; pdb.set_trace()
             schema = SpotSchema().get()
             space_id = kwargs['space_id']
             space = Space.objects.get(id=space_id)
@@ -182,7 +181,6 @@ class SpaceManager(RESTDispatch):
             return self.error_response(400, "Unknown error: %s" % ex)
 
     def POST(self, args, **kwargs):
-        import pdb; pdb.set_trace()
         try:
             Permitted().can_create(self._request.user)
             schema = SpotSchema().get()
