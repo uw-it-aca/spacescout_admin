@@ -343,7 +343,14 @@ def upload_data(request, data):
             if method == 'POST':
                 for image in images:
                     try:
-                        img = urllib2.urlopen(image)
+                        # Stopgap 404 catching, this should be added to warning_descs in a smart way eventually.
+                        print '-' * 20
+                        print "attempting to open image..."
+                        try:
+                            img = urllib2.urlopen(image)
+                        except urllib2.HTTPError, err:
+                            print "Error {0}: {1}".format(err.code, image)
+
                         f = open('image.jpg', 'w')
                         f.write(img.read())
                         f.close()
