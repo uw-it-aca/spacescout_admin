@@ -415,7 +415,7 @@ class SpaceManager(RESTDispatch):
                     try:
                         spot = Spot().get(space.spot_id)
                     except SpotException as se:
-                        logger.error("No Spot for %s.  Error: %s" % (space.spot_id, se.args[0]))
+                        logger.info("No Spot for %s.  Error: %s" % (space.spot_id, se.args[0]))
                         continue
                 else:
                     spot = self._spacemap.pending_spot(space, schema)
