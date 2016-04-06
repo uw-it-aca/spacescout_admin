@@ -43,7 +43,7 @@ class SpotAccess(object):
         consumer, client = oauth_initialization()
 
         headers = {
-            "XOAUTH_USER": "%s" % user,
+            "X-OAuth-User": "%s" % user,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
@@ -123,7 +123,7 @@ class Image(SpotAccess):
             'image': f
         })
 
-        headers["XOAUTH_USER"] = "%s" % user
+        headers["X-OAuth-User"] = "%s" % user
         headers["Authorization"] = authorization
         req = urllib2.Request(self._service_url(), datagen, headers)
         try:
