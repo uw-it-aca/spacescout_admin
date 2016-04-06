@@ -24,7 +24,7 @@ def _show_unpublished(request):
     url = "{0}/api/v1/reviews/unpublished".format(settings.SS_WEB_SERVER_HOST)
 
     headers = {
-        "XOAUTH_USER": "%s" % request.user.username,
+        "X-OAuth-User": "%s" % request.user.username,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
@@ -59,7 +59,7 @@ def _update_reviews(request):
             url = "{0}/api/v1/reviews/unpublished".format(settings.SS_WEB_SERVER_HOST)
 
             headers = {
-                "XOAUTH_USER": "%s" % request.user.username,
+                "X-OAuth-User": "%s" % request.user.username,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
