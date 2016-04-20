@@ -324,7 +324,7 @@ def _is_deleted(space_datum, is_a_manager, can_publish, user, spot_id, client):
         if is_a_manager and can_publish:
             spot_url = "%s/api/v1/spot/%s" % (settings.SS_WEB_SERVER_HOST, space_datum['id'])
             spot_headers = {
-                "XOAUTH_USER": "%s" % user,
+                "X-OAuth-User": "%s" % user,
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "If_Match": space_datum['space_etag'],
