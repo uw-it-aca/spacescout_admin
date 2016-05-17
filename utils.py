@@ -130,7 +130,7 @@ def write_csv(spots):
 
 def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
-        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read(1024))
+        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read())
         docfile.open()
         data = csv.DictReader(codecs.EncodedFile(docfile, "utf-8"), dialect=dialect)
     elif docfile.content_type == 'application/vnd.ms-excel' or docfile.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
