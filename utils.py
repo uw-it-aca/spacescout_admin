@@ -130,7 +130,7 @@ def write_csv(spots):
 
 def file_to_json(docfile):
     if docfile.content_type == 'text/csv':
-        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read(1024))
+        dialect = csv.Sniffer().sniff(codecs.EncodedFile(docfile, "utf-8").read())
         docfile.open()
         data = csv.DictReader(codecs.EncodedFile(docfile, "utf-8"), dialect=dialect)
     elif docfile.content_type == 'application/vnd.ms-excel' or docfile.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
@@ -276,7 +276,7 @@ def upload_data(request, data):
         client = oauth.Client(consumer)
         url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
 
-        spot_headers = {"XOAUTH_USER": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
+        spot_headers = {"X-OAuth-User": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
         spot_url = url
         method = 'POST'
         #use PUT when spot id is prodived to update the spot
@@ -362,7 +362,7 @@ def upload_data(request, data):
                         #poster code
                         register_openers()
                         datagen, headers = multipart_encode(body)
-                        headers["XOAUTH_USER"] = "%s" % request.user
+                        headers["X-OAuth-User"] = "%s" % request.user
                         headers["Authorization"] = authorization
                         req = urllib2.Request(url1, datagen, headers)
                         response = urllib2.urlopen(req)
