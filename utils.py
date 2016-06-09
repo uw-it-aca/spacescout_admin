@@ -342,14 +342,19 @@ def upload_data(request, data):
             #there is no language for if the url doesn't work
             if method == 'POST':
                 for image in images:
+                    print '-' * 20
+                    print image
                     try:
                         # Stopgap 404 catching, this should be added to warning_descs in a smart way eventually.
-                        print '-' * 20
                         print "attempting to open image..."
                         try:
                             img = urllib2.urlopen(image)
-                        except urllib2.HTTPError, err:
-                            print "Error {0}: {1}".format(err.code, image)
+                            print "img type: {0}".format(img.info().type)
+                        except Exception as err:
+                            if err.code:
+                                print "Error code {0}".format(err.code)
+                            if err.reason:
+                                print "Error reason {0}".format(err.reason)
 
                         f = open('image.jpg', 'w')
                         f.write(img.read())
@@ -373,6 +378,8 @@ def upload_data(request, data):
                             'freason': "invalid image",
                         }
                         warning_descs.append(hold)
+                    print '-' * 20
+                    print '\n'
 
                 # 'image.jpg' being saved in admin_proj may just be a bug that only happens in development
                 # this may end up being unneccessary
