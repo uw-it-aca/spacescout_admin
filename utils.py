@@ -274,7 +274,7 @@ def upload_data(request, data):
             spot_name = 'NO NAME'
 
         client = oauth.Client(consumer)
-        url = "%s/api/v1/schema" % settings.SS_WEB_SERVER_HOST
+        url = "%s/api/v1/spot" % settings.SS_WEB_SERVER_HOST
 
         spot_headers = {"X-OAuth-User": "%s" % request.user, "Content-Type": "application/json", "Accept": "application/json"}
         spot_url = url
@@ -334,7 +334,7 @@ def upload_data(request, data):
             #jury rigging the oauth_signature
             consumer = oauth.Consumer(key=settings.SS_WEB_OAUTH_KEY, secret=settings.SS_WEB_OAUTH_SECRET)
             client = oauth.Client(consumer)
-            resp, content = client.request(url, 'GET')
+            resp, content = client.request(spot_url, 'GET')
             i = resp['content-location'].find('oauth_signature=')
             i += len('oauth_signature=')
             signature = resp['content-location'][i:]
