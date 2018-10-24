@@ -1,3 +1,6 @@
+NOTE: SpaceScout Admin has been retired. Please see Scout Manager as a replacement - https://github.com/uw-it-aca/scout-manager
+
+
 SpaceScout™ is a project from the University of Washington.
 
 This is the repository for the SpaceScout Admin client. It connects to services provided by https://github.com/uw-it-aca/spotseeker_server
